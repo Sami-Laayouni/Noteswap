@@ -1,3 +1,23 @@
 {
-  "extends": "next/core-web-vitals"
+  "plugins": ["prettier"],
+  "extends": [
+    "next",
+    "next/core-web-vitals",
+    "google",
+    "plugin:prettier/recommended"
+  ],
+  "rules": {
+    "semi": ["error", "always"],
+    "quotes": ["error", "double"],
+    "no-var": "error",
+    "no-unused-vars": "error",
+    "no-console": "warn",
+    "no-alert": "error",
+    "object-curly-spacing": "off",
+    "indent": ["error", 2],
+    "eol-last": ["error", "always"]
+  },
+  "globals": {
+    "React": "readonly"
+  }
 }

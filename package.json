@@ -8,18 +8,28 @@
     "npm": "please-use-yarn"
   },
   "scripts": {
-    "dev": "next dev",
+    "dev": "cross-env NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prettier": "prettier --write .",
+    "prepare": "husky install"
   },
   "dependencies": {
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "next": "13.4.4",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.6.5",
+    "@commitlint/config-conventional": "^17.6.5",
+    "cross-env": "^7.0.3",
     "eslint": "8.42.0",
-    "eslint-config-next": "13.4.4"
+    "eslint-config-next": "13.4.4",
+    "husky": "^8.0.3",
+    "prettier": "^2.8.8"
   }
 }
