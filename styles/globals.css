@@ -14,13 +14,21 @@ a {
 * {
   box-sizing: border-box;
 }
+:root {
+  --accent-color: green;
+  --button-acent-color: rgb(106, 255, 0);
+  --button-hover-color: darkgreen;
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-  body {
-    color: white;
-    background: black;
-  }
+  --success-color: green;
+  --danger-color: red;
+  --light-grey-color: rgb(227, 227, 227);
+
+  --input-border-color: lightgrey;
+
+  --primary-font: "Lato", "Noto Sans", "Helvetica", "sans-serif";
+
+  --card-border-radious: 8px;
+  --third-party-login-card-radius: 4px;
+
+  --header-height: 70px;
 }

@@ -1,0 +1,12 @@
+/* Lato */
+@font-face {
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local("Lato"),
+    /* Super Modern Browsers */ url("/assets/fonts/Lato/Lato-Regular.woff2")
+      format("woff2"),
+    /* IE6-IE8 */ url("/assets/fonts/Lato/Lato-Regular.woff") format("woff"),
+    /* Others */ url("/assets/fonts/Lato/Lato-Regular.ttf") format("ttf");
+}

@@ -1,4 +1,7 @@
 import "../styles/globals.css";
+import "../styles/fonts.css";
+import Head from "next/head";
+import DefaultLayout from "../layouts/DefaultLayout";
 
 /**
  * Custom App component for Next.js.
@@ -18,7 +21,22 @@ import "../styles/globals.css";
  * @license MIT
  */
 function NoteSwap({ Component, pageProps }) {
-  return <Component {...pageProps} />;
+  const headers = (
+    <>
+      <Head>
+        <title>Noteswap</title>
+      </Head>
+    </>
+  );
+  return (
+    <>
+      {headers}
+
+      <DefaultLayout>
+        <Component {...pageProps} />
+      </DefaultLayout>
+    </>
+  );
 }
 
 export default NoteSwap;

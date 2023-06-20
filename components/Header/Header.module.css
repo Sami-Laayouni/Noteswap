@@ -1,0 +1,12 @@
+.header_main_container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  height: var(--header-height);
+}
+
+.header_nav {
+  display: flex;
+  gap: 1rem;
+}

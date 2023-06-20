@@ -1,0 +1,194 @@
+/* =========== Background =========== */
+.background {
+  width: 100%;
+  height: 100vh;
+  background-color: var(--accent-color);
+  position: absolute;
+}
+
+/* =========== Container =========== */
+.container {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  width: 900px;
+  height: 500px;
+  background-color: white;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: var(--card-border-radious);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+/* =========== Left =========== */
+.left {
+  background-color: rgb(23, 23, 69);
+  border-top-left-radius: var(--card-border-radious);
+  border-bottom-left-radius: var(--card-border-radious);
+  color: white;
+  padding-left: 20px;
+  font-family: var(--primary-font);
+}
+/* =========== Form =========== */
+.form {
+  width: 65%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 30px;
+}
+
+/* =========== Login =========== */
+.labelForInput {
+  font-family: var(--primary-font);
+  display: block;
+  margin-top: 7px;
+  margin-bottom: 7px;
+}
+.input {
+  outline: none;
+  box-shadow: none;
+  font-weight: 400;
+  font-family: var(--primary-font);
+  line-height: 20px;
+  border-radius: var(--third-party-login-card-radius);
+  font-size: 16px;
+  border: 1px solid var(--input-border-color);
+  padding-left: 15px;
+  height: 32px;
+  width: 100%;
+  transition: border-color 0.3s ease-in-out;
+}
+.input:focus {
+  border-color: var(--accent-color);
+}
+.inputContainer {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--input-border-color);
+  height: 32px;
+  width: 100%;
+  border-radius: var(--third-party-login-card-radius);
+  margin: 0;
+  transition: border-color 0.3s ease-in-out;
+  margin-bottom: 7px;
+}
+.inputBlank {
+  flex: 1;
+  outline: none;
+  box-shadow: none;
+  font-weight: 400;
+  font-family: var(--primary-font);
+  line-height: 20px;
+  font-size: 16px;
+  padding-left: 15px;
+  height: 26px;
+  border: none;
+  width: 100%;
+  background-color: transparent;
+}
+
+.toggleButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  align-items: center;
+}
+.loginBtn {
+  width: 100%;
+  padding: 10px 0px;
+  cursor: pointer;
+  background-color: var(--button-acent-color);
+  font-family: var(--primary-font);
+  color: white;
+  border: none;
+  border-radius: var(--third-party-login-card-radius);
+}
+.loginBtn:hover {
+  outline: 2px solid var(--button-acent-color);
+  outline-offset: 2px;
+}
+.error {
+  color: var(--danger-color);
+  font-style: italic;
+}
+.forgotpassword {
+  font-family: var(--primary-font);
+  font-weight: 400;
+  font-size: 15px;
+}
+.forgotpassword:hover {
+  text-decoration: underline;
+}
+.orText {
+  text-align: center;
+  color: black;
+  font-stretch: expanded;
+}
+.thirdpartyloginBtn {
+  width: 100%;
+  padding: 11px 0px;
+  margin-bottom: 6px;
+  border: 1px solid black;
+  background-color: white;
+  border-radius: var(--third-party-login-card-radius);
+  cursor: pointer;
+}
+.thirdpartyloginBtn:hover {
+  background-color: var(--light-grey-color);
+}
+.accountContainer {
+  width: 100%;
+  height: 30px;
+  text-align: center;
+  align-items: center;
+  margin-top: 10px;
+}
+.createNewAccount {
+  font-family: var(--primary-font);
+  font-weight: 400;
+  font-size: 15px;
+}
+.createNewAccount:hover {
+  text-decoration: underline;
+}
+/* =========== Signup =========== */
+.roles {
+  list-style: none;
+  text-decoration: none;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  width: 100%;
+  height: 33px;
+}
+.roles li {
+  display: flex;
+  cursor: pointer;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--primary-font);
+}
+.roles li:first-child {
+  border-top-left-radius: var(--third-party-login-card-radius);
+  border-bottom-left-radius: var(--third-party-login-card-radius);
+  border-left: 1px solid black;
+}
+.roles li:last-child {
+  border-top-right-radius: var(--third-party-login-card-radius);
+  border-bottom-right-radius: var(--third-party-login-card-radius);
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+}
+
+.roles li:hover {
+  background-color: var(--accent-color);
+  color: white;
+}
+.labelCenter {
+  font-family: var(--primary-font);
+  text-align: center;
+}
