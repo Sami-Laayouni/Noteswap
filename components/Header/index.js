@@ -38,16 +38,30 @@ export default function Header() {
         {loggedIn ? (
           <>
             {/* User is logged in */}
-            <Link href="/">A</Link>
-            <Link href="/">B</Link>
-            <Link href="/">C</Link>
+            <Link className={style.header_nav_a} href="/">
+              A
+            </Link>
+            <Link className={style.header_nav_a} href="/">
+              B
+            </Link>
+            <Link className={style.header_nav_a} href="/">
+              C
+            </Link>
           </>
         ) : (
           <>
             {/* User is not logged in */}
-            <Link href="/login">Log in</Link>
-            <Link href="/">E</Link>
-            <Link href="/">F</Link>
+            <Link className={style.header_nav_a} href="/">
+              Notes
+            </Link>
+            <Link className={style.header_nav_a} href="/login">
+              Login
+            </Link>
+            <div style={{ display: "inline-block" }}>
+              <Link className={style.header_nav_button} href="/signup">
+                Sign up
+              </Link>
+            </div>
           </>
         )}
       </nav>

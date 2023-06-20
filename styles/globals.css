@@ -16,19 +16,33 @@ a {
 }
 :root {
   --accent-color: green;
-  --button-acent-color: rgb(106, 255, 0);
+  --secondary-color: lightgreen;
+  --tertiary-color: rgb(26, 174, 26);
+
+  --button-accent-color: rgb(106, 255, 0);
   --button-hover-color: darkgreen;
+  --button-default-padding: 12px 32px;
+  --button-default-border-radius: 2px;
+
+  --default-white-color: white;
+  --default-black-color: black;
+  --default-grey-color: grey;
+  --default-light-grey-color: lightgray;
 
   --success-color: green;
+  --neutral-color: yellow;
   --danger-color: red;
-  --light-grey-color: rgb(227, 227, 227);
 
   --input-border-color: lightgrey;
+  --input-color: white;
 
+  --text-primary-color: black;
+  --text-muted-color: lightgrey;
   --primary-font: "Lato", "Noto Sans", "Helvetica", "sans-serif";
 
   --card-border-radious: 8px;
   --third-party-login-card-radius: 4px;
 
   --header-height: 70px;
+  --header-item-margin: 0 16px;
 }

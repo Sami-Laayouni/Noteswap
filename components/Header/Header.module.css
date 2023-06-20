@@ -1,3 +1,4 @@
+/* ========== Header ========== */
 .header_main_container {
   display: flex;
   align-items: center;
@@ -5,8 +6,48 @@
   padding: 1rem;
   height: var(--header-height);
 }
-
 .header_nav {
   display: flex;
   gap: 1rem;
+}
+
+/* ========= Header Nav Links ========== */
+
+.header_nav_a {
+  cursor: pointer;
+  text-decoration: none;
+  user-select: none;
+  color: var(--default-black-color);
+  margin: var(--header-item-margin);
+  line-height: 45.33px; /*Line height set to height of button to vertically align it*/
+}
+.header_nav_a::after {
+  content: "";
+  height: 2px;
+  margin: auto;
+  display: block;
+  background-color: var(--secondary-color);
+  width: 0;
+  position: relative;
+  bottom: 10px;
+  transition: 1s ease-in-out;
+}
+.header_nav_a:hover::after {
+  width: 100%;
+}
+
+/* ========= Header Nav Buttons ========== */
+.header_nav_button {
+  background-color: transparent;
+  padding: var(--button-default-padding);
+  outline: 1px solid var(--default-black-color);
+  border-radius: var(--button-default-border-radius);
+  transition: all 1s ease;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.header_nav_button:hover {
+  outline: 1px solid var(--button-accent-color);
+  background-color: var(--button-accent-color);
 }

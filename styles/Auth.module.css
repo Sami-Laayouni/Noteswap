@@ -99,14 +99,14 @@
   width: 100%;
   padding: 10px 0px;
   cursor: pointer;
-  background-color: var(--button-acent-color);
+  background-color: var(--button-accent-color);
   font-family: var(--primary-font);
   color: white;
   border: none;
   border-radius: var(--third-party-login-card-radius);
 }
 .loginBtn:hover {
-  outline: 2px solid var(--button-acent-color);
+  outline: 2px solid var(--button-accent-color);
   outline-offset: 2px;
 }
 .error {
@@ -136,7 +136,7 @@
   cursor: pointer;
 }
 .thirdpartyloginBtn:hover {
-  background-color: var(--light-grey-color);
+  background-color: var(--default-light-grey-color);
 }
 .accountContainer {
   width: 100%;
