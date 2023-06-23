@@ -5,8 +5,29 @@
   font-weight: 400;
   font-display: swap;
   src: local("Lato"),
-    /* Super Modern Browsers */ url("/assets/fonts/Lato/Lato-Regular.woff2")
-      format("woff2"),
-    /* IE6-IE8 */ url("/assets/fonts/Lato/Lato-Regular.woff") format("woff"),
-    /* Others */ url("/assets/fonts/Lato/Lato-Regular.ttf") format("ttf");
+    url("/assets/fonts/Lato/Lato-Regular.woff2") format("woff2"),
+    url("/assets/fonts/Lato/Lato-Regular.woff") format("woff"),
+    url("/assets/fonts/Lato/Lato-Regular.ttf") format("ttf");
+}
+/* Manrope */
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local("Manrope"),
+    url("/assets/fonts/Manrope/Manrope-Regular.woff2") format("woff2"),
+    url("/assets/fonts/Manrope/Manrope-Regular.woff") format("woff"),
+    url("/assets/fonts/Manrope/Manrope-Regular.ttf") format("ttf");
+}
+/* Manrope Bold */
+@font-face {
+  font-family: "Manrope-Bold";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local("Manrope-Bold"),
+    url("/assets/fonts/Manrope/Manrope-Bold.woff2") format("woff2"),
+    url("/assets/fonts/Manrope/Manrope-Bold.woff") format("woff"),
+    url("/assets/fonts/Manrope/Manrope-Bold.ttf") format("ttf");
 }

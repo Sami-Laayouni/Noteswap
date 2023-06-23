@@ -134,9 +134,18 @@
   background-color: white;
   border-radius: var(--third-party-login-card-radius);
   cursor: pointer;
+  position: relative;
 }
 .thirdpartyloginBtn:hover {
   background-color: var(--default-light-grey-color);
+}
+.thirdpartyloginBtn img {
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translate(0, -50%);
+  vertical-align: middle;
 }
 .accountContainer {
   width: 100%;
@@ -191,4 +200,21 @@
 .labelCenter {
   font-family: var(--primary-font);
   text-align: center;
+}
+.footer {
+  position: absolute;
+  margin-top: 100vh;
+}
+
+@media all and (max-width: 767px) {
+  .container {
+    grid-template-columns: 100%;
+    width: 400px;
+  }
+  .left {
+    display: none;
+  }
+  .form {
+    width: 80%;
+  }
 }

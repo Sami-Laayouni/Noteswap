@@ -1,4 +1,3 @@
-import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { connectDB } from "../../../utils/db";
 import User from "../../../models/User";
@@ -6,38 +5,34 @@ import User from "../../../models/User";
 const jwtSecret = process.env.NEXT_PUBLIC_JWT_SECRET;
 
 /**
- * Handle user registration and create a new user with the provided data.
+ * Handle user registration and create a new user with the provided Metamask data.
  *
  * @export
  * @async
- * @route POST /api/auth/create_user
+ * @route POST /api/auth/create_user_with_metamask
  * @param {object} req - The request object.
  * @param {object} res - The response object.
  */
-export default async function createUser(req, res) {
+export default async function createUserWithMetamask(req, res) {
   if (req.method === "POST") {
-    const { email, password, first, last, role } = req.body;
+    const { address, first, last, role } = req.body;
     try {
       await connectDB();
 
-      // Check if user with the same email already exists
-      const existingUser = await User.findOne({ email: email });
+      // Check if user with the same address already exists
+      const existingUser = await User.findOne({ metamask_address: address });
       if (existingUser) {
-        res
-          .status(400)
-          .json({ error: "User with the same email already exists" });
+        res.status(400).json({
+          error: "User with the same Metamask address already exists",
+        });
         return;
       }
-
-      // Hash the password using bcrypt
-      const hashedPassword = await bcrypt.hash(password, 10);
 
       // Create a new user
       const newUser = new User({
         first_name: first,
         last_name: last,
-        email: email,
-        password: hashedPassword,
+        metamask_address: address,
         role: role,
         createdAt: Date.now(),
       });

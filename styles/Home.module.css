@@ -1,0 +1,210 @@
+/* ========== Hero Section ========== */
+.hero {
+  width: 100%;
+  height: calc(100vh - var(--header-height));
+  background-color: var(--default-white-color);
+  display: grid;
+  grid-template-columns: 50% 50%;
+}
+.hero_left {
+  padding-left: 80px;
+  padding-right: 38px;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+.hero_left h1 {
+  color: var(--accent-color);
+  font-family: var(--manrope-bold-font);
+  font-size: 4.325rem;
+  line-height: 0px;
+}
+.hero_left h2 {
+  color: var(--text-primary-color);
+  font-family: var(--manrope-font);
+  font-size: 2.25rem;
+}
+.hero_left h3 {
+  color: var(--text-muted-color);
+  font-family: var(--manrope-font);
+  font-size: 1rem;
+  line-height: 150%;
+}
+.hero_left button {
+  background-color: var(--accent-color);
+  outline: none;
+  border: none;
+  padding: 10px 30px;
+  cursor: pointer;
+  color: var(--default-white-color);
+  font-family: var(--manrope-font);
+  line-height: 150%;
+}
+
+.hero_right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 80px;
+}
+.hero_right img {
+  width: 39vw;
+  margin-left: auto;
+  margin-right: auto;
+}
+/* ========== Here students can Section ========== */
+.here_students_can {
+  background-color: black;
+  width: 100%;
+  padding: 120px 80px;
+}
+.here_students_can h1 {
+  color: var(--default-white-color);
+  font-family: var(--manrope-bold-font);
+  text-align: center;
+  font-size: 2.25rem;
+}
+.here_students_can ul {
+  display: grid;
+  grid-template-columns: 25% 25% 25% 25%;
+  gap: 50px;
+  padding-right: 160px;
+  color: var(--default-white-color);
+  list-style: none;
+  margin-top: 80px;
+}
+.here_students_can ul li h2 {
+  font-size: 1.45rem;
+  font-family: var(--manrope-font);
+}
+.here_students_can ul li p {
+  font-family: var(--manrope-font);
+  line-height: 150%;
+  align-self: stretch;
+  font-size: 0.95rem;
+}
+/* ========== User ========== */
+.user {
+  position: relative;
+  width: 100%;
+  height: 600px;
+}
+.user_img {
+  width: 100%;
+  object-fit: cover;
+  height: 600px;
+}
+.user_img2 {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.user h1 {
+  position: absolute;
+  font-family: var(--manrope-bold-font);
+  font-size: 5rem;
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, -50%);
+}
+.user h2 {
+  position: absolute;
+  font-family: var(--manrope-bold-font);
+  font-size: 1.5rem;
+  left: 50%;
+  top: 62%;
+  transform: translate(-50%, -50%);
+}
+/* ========== FAQ ========== */
+.faq_section {
+  padding-top: 120px;
+  padding-bottom: 120px;
+  padding-left: 80px;
+  padding-right: 80px;
+}
+.faq_section h1 {
+  color: var(--default-black-color);
+  font-family: var(--manrope-font);
+  font-size: 2.25rem;
+  text-align: center;
+}
+.faq_section ul {
+  list-style: none;
+  margin-top: 80px;
+}
+.faq_section ul li {
+  position: relative;
+}
+.faq_section ul li h2 {
+  color: var(--default-black-color);
+  font-family: var(--manrope-font);
+  font-size: 1.15rem;
+}
+.faq_section ul li img {
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+}
+.faq_section ul li div p {
+  color: var(--default-black-color);
+  font-family: var(--manrope-font);
+  font-size: 0.97rem;
+  line-height: 125%;
+  display: none;
+}
+.borderLine {
+  width: 100%;
+  height: 1.5px;
+  background-color: var(--accent-color);
+}
+
+/* Media Queries */
+
+@media all and (max-width: 767px) {
+  /* ========== Hero ========== */
+
+  .hero {
+    grid-template-columns: 100%;
+  }
+  .hero_left {
+    text-align: center;
+  }
+  .hero_right {
+    display: none;
+  }
+
+  /* ========== Here students can Section ========== */
+
+  .here_students_can ul {
+    grid-template-columns: 100%;
+    gap: 50px;
+    padding-right: 0px;
+  }
+  .here_students_can ul li {
+    text-align: center;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  /* ========== User ========== */
+  .user_img {
+    height: 500px;
+  }
+  .user h1 {
+    font-size: 4rem;
+    width: 100%;
+    text-align: center;
+  }
+  .user h2 {
+    top: 55%;
+    text-align: center;
+  }
+  /* ========== FAQ ========== */
+  .faq_section {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+}

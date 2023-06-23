@@ -13,12 +13,12 @@ const userSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    required: true,
+    required: false,
     unique: true,
   },
   password: {
     type: String,
-    required: true,
+    required: false,
   },
   profile_picture: {
     type: String,
@@ -31,6 +31,10 @@ const userSchema = new mongoose.Schema({
   google_id: {
     type: String,
     required: false,
+  },
+  metamask_address: {
+    type: String,
+    reuired: false,
   },
   createdAt: {
     type: Date,
