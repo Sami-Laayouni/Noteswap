@@ -1,0 +1,9 @@
+.button {
+  padding: 10px 10px;
+  cursor: pointer;
+  background-color: var(--accent-color);
+  font-family: var(--primary-font);
+  color: white;
+  border: none;
+  border-radius: var(--third-party-login-card-radius);
+}

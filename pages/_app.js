@@ -1,5 +1,7 @@
 import "../styles/globals.css";
 import "../styles/fonts.css";
+import "../styles/quill.css";
+
 import Head from "next/head";
 import DefaultLayout from "../layouts/DefaultLayout";
 
@@ -21,22 +23,28 @@ import DefaultLayout from "../layouts/DefaultLayout";
  * @license MIT
  */
 function NoteSwap({ Component, pageProps }) {
+  // Headers in every single page
   const headers = (
     <>
       <Head>
         <title>Noteswap</title>
+        <link
+          rel="icon"
+          type="image/x-icon"
+          href="/assets/icons/favicons/main.ico"
+        />
       </Head>
     </>
   );
+  // Return the JSX element
   return (
     <>
-      {headers}
-
+      {headers} {/* Headers */}
       <DefaultLayout>
         <Component {...pageProps} />
       </DefaultLayout>
     </>
   );
 }
-
+// Export the Noteswap app
 export default NoteSwap;

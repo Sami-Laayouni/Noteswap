@@ -3,17 +3,20 @@ import { useRouter } from "next/router";
 import AuthService from "../services/AuthService";
 import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
-
 /**
- * Create Google User Page
+ * Login Google User Page
  * @date 6/23/2023 - 9:37:13 PM
  *
  * @return {JSX.Element} The rendered page
  */
-function CreateGoogleUserPage() {
-  const auth = useContext(AuthContext);
+function LoginGoogleUserPage() {
   const router = useRouter();
-  const AuthServices = new AuthService(auth);
+  const { isLoggedIn } = useContext(AuthContext);
+  const [loggedIn, setLoggedIn] = isLoggedIn;
+  const AuthServices = new AuthService(setLoggedIn);
+  const { errorLogin } = useContext(AuthContext);
+
+  const [error, setError] = errorLogin;
 
   useEffect(() => {
     /**
@@ -23,12 +26,25 @@ function CreateGoogleUserPage() {
      * @param {*} data
      */
     async function loginUser(data) {
-      const response = await AuthServices.login_with_google(data.sub);
-      if (response.token) {
-        // Store the token in local storage
-        localStorage.setItem("token", response.token);
-        // Redirect to the dashboard page after successful login
-        router.push("/dashboard");
+      try {
+        const response = await AuthServices.login_with_google(data.sub);
+        if (response.token) {
+          // Store the token in local storage
+          localStorage.setItem("userInfo", JSON.stringify(response.user));
+          localStorage.setItem("token", response.token);
+          // Redirect to the dashboard page after successful login
+          router.push("/dashboard");
+        } else {
+          // An error has occured
+          setError(response.error);
+          // Redirect to the login page
+          router.push("/login");
+        }
+      } catch (error) {
+        // An error has occured
+        setError(error.message);
+        // Redirect to the login page
+        router.push("/login");
       }
     }
     // Retrieve the query string from the URL
@@ -38,10 +54,17 @@ function CreateGoogleUserPage() {
     const profileDataString = queryParams.get("");
     const decodedProfileDataString = decodeURIComponent(profileDataString);
     const parsedProfileData = JSON.parse(decodedProfileDataString);
-
-    loginUser(parsedProfileData);
+    try {
+      loginUser(parsedProfileData);
+    } catch (error) {
+      // An error has occured
+      setError(error.message);
+      // Redirect to the login page
+      router.push("/login");
+    }
   }, []);
 
+  // Return the JSX
   return (
     <div
       style={{
@@ -51,9 +74,13 @@ function CreateGoogleUserPage() {
         position: "absolute",
         top: 0,
         left: 0,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        color: "white",
       }}
-    />
+    ></div>
   );
 }
 
-export default CreateGoogleUserPage;
+export default LoginGoogleUserPage;

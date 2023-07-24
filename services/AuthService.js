@@ -1,8 +1,8 @@
 // AuthService.js
 
 class AuthService {
-  constructor(authContext) {
-    this.authContext = authContext;
+  constructor(setLoggedIn) {
+    this.setLoggedIn = setLoggedIn;
     this.API_URL = "/api/auth";
     this.role = "";
   }
@@ -26,7 +26,7 @@ class AuthService {
         body: JSON.stringify({ email, password }),
       });
       const data = await response.json();
-      this.authContext.setLoggedIn(true);
+      this.setLoggedIn(true);
       return data;
     } catch (error) {
       console.error("Login failed", error);
@@ -49,10 +49,10 @@ class AuthService {
       });
 
       const data = await response.json();
-      this.authContext.setLoggedIn(true);
+      this.setLoggedIn(true);
       return data;
     } catch (error) {
-      console.error("Login with Metamask failed", error);
+      console.error("Login with Google failed", error);
       throw error;
     }
   }
@@ -72,7 +72,7 @@ class AuthService {
       });
 
       const data = await response.json();
-      this.authContext.setLoggedIn(true);
+      this.setLoggedIn(true);
       return data;
     } catch (error) {
       console.error("Login with Metamask failed", error);
@@ -109,7 +109,7 @@ class AuthService {
       });
 
       const data = await response.json();
-      this.authContext.setLoggedIn(true);
+      this.setLoggedIn(true);
       return data;
     } catch (error) {
       console.error("Create user failed", error);
@@ -136,7 +136,7 @@ class AuthService {
       );
 
       const data = await response.json();
-      this.authContext.setLoggedIn(true);
+      this.setLoggedIn(true);
       return data;
     } catch (error) {
       console.error("Create user failed", error);
@@ -164,7 +164,7 @@ class AuthService {
       });
 
       const data = await response.json();
-      this.authContext.setLoggedIn(true);
+      this.setLoggedIn(true);
       return data;
     } catch (error) {
       console.error("Create user failed", error);
@@ -204,9 +204,10 @@ class AuthService {
 
       // Clear the token from localStorage
       localStorage.removeItem("token");
+      localStorage.removeItem("userInfo");
 
       // Update the authentication status
-      this.authContext.setLoggedIn(false);
+      this.setLoggedIn(false);
     } catch (error) {
       console.error("Logout failed", error);
       throw error;

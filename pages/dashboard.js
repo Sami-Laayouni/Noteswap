@@ -1,9 +1,8 @@
 import { requireAuthentication } from "../middleware/authenticate";
-import AuthService from "../services/AuthService";
-import { useRouter } from "next/router";
-import AuthContext from "../context/AuthContext";
 import Head from "next/head";
-import { useContext } from "react";
+import style from "../styles/Dashboard.module.css";
+import NoteSwapBot from "../components/NoteSwapBot";
+import { useState, useEffect } from "react";
 
 /**
  * Dashboard
@@ -14,23 +13,19 @@ import { useContext } from "react";
  * @license MIT
  */
 const Dashboard = () => {
-  const authContext = useContext(AuthContext);
-  const AuthServices = new AuthService(authContext);
-  const router = useRouter();
+  const [userData, setUserData] = useState();
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      setUserData(JSON.parse(localStorage.getItem("userInfo")));
+    }
+  }, []);
   return (
-    <>
+    <main className={style.background}>
       <Head>
-        <title>Dashboard | Noteswap</title>
+        <title>Dashboard | Noteswap</title> {/* Title page */}
       </Head>
-      <button
-        onClick={() => {
-          AuthServices.logout();
-          router.push("/login");
-        }}
-      >
-        Logout
-      </button>
-    </>
+      <NoteSwapBot /> {/* The noteswap bot*/}
+    </main>
   );
 };
 

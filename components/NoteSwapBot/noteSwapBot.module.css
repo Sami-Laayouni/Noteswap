@@ -1,0 +1,48 @@
+.container {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: var(--accent-color);
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.5s all ease-in-out;
+}
+.container:hover {
+  width: 70px;
+  height: 70px;
+}
+/*========= Chat box ==========*/
+.chatbox {
+  position: absolute;
+  bottom: 70px;
+  right: 0px;
+  width: 353px;
+  height: 400px;
+  background-color: var(--default-white-color);
+  border-radius: 15px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  display: grid;
+  grid-template-rows: 15% 70% 30%;
+}
+.header {
+  width: 100%;
+  height: 100%;
+  padding-top: 18px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  background-color: var(--accent-color);
+  color: var(--default-white-color);
+  padding-left: 30px;
+  font-family: var(--manrope-bold-font);
+  font-size: 1.1rem;
+}
+.box {
+  width: 100%;
+  background-color: whitesmoke;
+  height: 100%;
+}

@@ -8,13 +8,20 @@
   ],
   "rules": {
     "semi": ["error", "always"],
-    "quotes": ["error", "double"],
+    "quotes": ["warn", "double"],
     "no-var": "error",
-    "no-unused-vars": "error",
+    "no-unused-vars": "warn",
+    "valid-jsdoc": "warn",
+    "spaced-comment": "warn",
     "no-console": "warn",
     "no-alert": "error",
+    "new-cap": "off",
+    "camelcase": "off",
+    "require-jsdoc": "warn",
     "object-curly-spacing": "off",
-    "indent": ["error", 2],
+    "react-hooks/exhaustive-deps": "off",
+    "@next/next/no-img-element": "off",
+    "indent": ["warn", 2],
     "eol-last": ["error", "always"]
   },
   "globals": {

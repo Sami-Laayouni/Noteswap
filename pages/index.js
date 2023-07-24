@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Footer from "../components/Footer";
 /**
- * Home Page
+ * Home Page (Landing page)
  *
  * @return {JSX.Element} The rendered page.
  * @date 6/4/2023 - 3:02:38 PM
@@ -11,6 +11,7 @@ import Footer from "../components/Footer";
  * @license MIT
  */
 export default function Home() {
+  // Return the JSX
   return (
     <>
       {/* ========== Hero Section ========= */}
@@ -178,7 +179,7 @@ export default function Home() {
           </li>
         </ul>
       </section>
-      <Footer />
+      <Footer /> {/* Footer component */}
     </>
   );
 }

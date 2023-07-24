@@ -39,14 +39,18 @@ export default async function createUser(req, res) {
         email: email,
         password: hashedPassword,
         role: role,
+        profile_picture: "https://api.dicebear.com/6.x/shapes/png?seed=Jasmine",
         createdAt: Date.now(),
+        points: 0,
+        tutor_hours: 0,
+        notes: [],
       });
       const savedUser = await newUser.save();
 
       // Generate JWT token
       const token = jwt.sign({ userId: savedUser._id }, jwtSecret);
       // Return the token
-      res.status(200).json({ token });
+      res.status(200).json({ token: token, user: savedUser });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

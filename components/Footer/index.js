@@ -32,7 +32,7 @@ export default function Footer() {
       <div className={style.borderLine}></div>
       <section className={style.footer_bottom}>
         <Image
-          src="assets/icons/Logo_dark.svg"
+          src="/assets/icons/Logo_dark.svg"
           alt="Logo_dark"
           width={166}
           height={51}

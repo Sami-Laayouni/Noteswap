@@ -1,6 +1,6 @@
 // models/User.js
 
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const userSchema = new mongoose.Schema({
   first_name: {
@@ -28,6 +28,34 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+  points: {
+    type: Number,
+    required: true,
+  },
+  tutor_hours: {
+    type: Number,
+    required: true,
+  },
+  notes: {
+    type: Schema.Types.Array,
+    required: false,
+  },
+  bio: {
+    type: String,
+    required: false,
+  },
+  classList: {
+    type: Array,
+    required: false,
+  },
+  rating: {
+    type: String,
+    required: false,
+  },
+  background_image: {
+    type: String,
+    required: false,
+  },
   google_id: {
     type: String,
     required: false,
@@ -36,6 +64,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     reuired: false,
   },
+  schoolCode: {
+    type: String,
+    default: "123456",
+  },
+
   createdAt: {
     type: Date,
     default: Date.now,

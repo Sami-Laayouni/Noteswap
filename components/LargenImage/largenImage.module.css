@@ -1,0 +1,13 @@
+.button {
+  width: 40px;
+  height: 40px;
+  outline: none;
+  border-radius: 50%;
+  outline: none;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  cursor: pointer;
+}

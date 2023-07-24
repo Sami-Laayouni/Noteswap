@@ -31,7 +31,7 @@ a {
 
   --success-color: green;
   --neutral-color: yellow;
-  --danger-color: red;
+  --danger-color: rgb(230, 66, 66);
 
   --input-border-color: lightgrey;
   --input-color: white;

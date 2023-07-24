@@ -23,7 +23,7 @@ export default async function createUserWithGoogle(req, res) {
       const existingUser = await User.findOne({ google_id: googleId });
       if (existingUser) {
         res.status(400).json({
-          error: "User with the same Google account already exists",
+          error: "User with the same Google account or email already exists",
         });
         return;
       }
@@ -37,6 +37,9 @@ export default async function createUserWithGoogle(req, res) {
         email: email,
         role: role,
         createdAt: Date.now(),
+        points: 0,
+        tutor_hours: 0,
+        notes: [],
       });
       const savedUser = await newUser.save();
 
@@ -44,7 +47,7 @@ export default async function createUserWithGoogle(req, res) {
       const token = jwt.sign({ userId: savedUser._id }, jwtSecret);
 
       // Return the token
-      res.status(200).json({ token });
+      res.status(200).json({ token: token, user: savedUser });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

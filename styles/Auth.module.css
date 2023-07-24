@@ -32,6 +32,12 @@
   font-family: var(--primary-font);
 }
 /* =========== Form =========== */
+.right {
+  background-color: white;
+  border-top-right-radius: var(--card-border-radious);
+  border-bottom-right-radius: var(--card-border-radious);
+  font-family: var(--primary-font);
+}
 .form {
   width: 65%;
   margin-left: auto;

@@ -35,7 +35,7 @@ export default async function loginUser(req, res) {
       }
 
       const token = jwt.sign({ userId: user._id }, jwtSecret);
-      res.status(200).json({ token });
+      res.status(200).json({ token: token, user: user });
     } catch (error) {
       res.status(500).json({ error: `User authentication error: ${error}` });
     }

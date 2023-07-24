@@ -34,14 +34,18 @@ export default async function createUserWithMetamask(req, res) {
         last_name: last,
         metamask_address: address,
         role: role,
+        profile_picture: "https://api.dicebear.com/6.x/identicon/png?seed=Abby",
         createdAt: Date.now(),
+        points: 0,
+        tutor_hours: 0,
+        notes: [],
       });
       const savedUser = await newUser.save();
 
       // Generate JWT token
       const token = jwt.sign({ userId: savedUser._id }, jwtSecret);
       // Return the token
-      res.status(200).json({ token });
+      res.status(200).json({ token: token, user: savedUser });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

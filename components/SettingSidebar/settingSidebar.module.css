@@ -1,0 +1,12 @@
+.nav {
+  list-style: none;
+  height: calc(100vh - var(--header-height));
+  background-color: var(--default-white);
+  width: 260px;
+  display: inline-block;
+  border-left: 5px solid var(--default-black);
+}
+.nav li {
+  margin-top: 20px;
+  cursor: pointer;
+}

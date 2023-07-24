@@ -1,0 +1,49 @@
+.noteContainer {
+  margin-left: auto;
+  margin-right: auto;
+  width: 800px;
+  max-width: 800px;
+  word-break: break-all;
+  margin-top: 30px;
+  margin-bottom: 100px;
+  font-family: var(--manrope-font);
+}
+.noteContainer h1 {
+  font-family: var(--manrope-bold-font);
+  font-size: 2.7rem;
+  line-height: 200%;
+  display: inline;
+  font-style: italic;
+}
+.noteContainer h2 {
+  font-size: 1.1rem;
+  line-height: 150%;
+  margin-top: 20px;
+  display: inline;
+}
+.noteContainer h2 span {
+  text-decoration: underline;
+}
+.noteContainer h2 span:hover {
+  text-decoration: none;
+}
+.noteContainer h3 {
+  display: inline;
+  font-size: 0.8rem;
+  line-height: 350%;
+}
+.back {
+  margin-top: 40px;
+  margin-left: 90px;
+  cursor: pointer;
+}
+@media all and (max-width: 767px) {
+  .back {
+    margin-top: 30px;
+    margin-left: 20px;
+  }
+  .noteContainer {
+    width: 80%;
+    word-break: normal;
+  }
+}
