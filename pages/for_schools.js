@@ -79,7 +79,7 @@ const ForSchools = () => {
     const result = {};
 
     for (let i = 0; i < elements.length; i++) {
-      let element = elements[i];
+      const element = elements[i];
       if (
         (element.tagName === "INPUT" && element.type == "text") ||
         element.type == "email"
