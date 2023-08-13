@@ -731,7 +731,7 @@ export default function NotesModal() {
               try {
                 handleChatRequest(content);
               } catch (error) {
-                //An error has occured
+                // An error has occured
               }
             } else {
               document.getElementById("nextButton").style.display = "none";

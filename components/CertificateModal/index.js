@@ -1,31 +1,15 @@
-import { useRef, useState, useEffect } from "react";
-import html2canvas from "html2canvas";
+import { useState, useEffect } from "react";
 import Modal from "../Modal";
 import { useContext } from "react";
 import ModalContext from "../../context/ModalContext";
-import style from "./CertificateModal.module.css";
+import CertificateDownload from "../Certificate";
+import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 
 const Certificate = () => {
-  const certificateRef = useRef(null);
-  const [certificateUrl, setCertificateUrl] = useState(null);
   const { certificateModal } = useContext(ModalContext);
-  const [userData, setUserData] = useState();
   const [open, setOpen] = certificateModal;
-
-  const downloadCertificate = () => {
-    html2canvas(certificateRef.current).then((canvas) => {
-      canvas.toBlob((blob) => {
-        const url = URL.createObjectURL(blob);
-        setCertificateUrl(url);
-
-        // Trigger download
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = "NoteSwap_Certificate.png";
-        link.click();
-      });
-    });
-  };
+  const [userData, setUserData] = useState();
+  const [current, setCurrent] = useState(1);
 
   useEffect(() => {
     if (localStorage) {
@@ -33,24 +17,64 @@ const Certificate = () => {
     }
   }, []);
 
+  if (!open) {
+    return null;
+  }
   return (
     <Modal
       isOpen={open}
       onClose={() => setOpen(false)}
-      title="Download Noteswap Certificate"
+      title="Download Noteswap Certificates"
     >
-      <div ref={certificateRef}>
-        <h2>Certificate of Achievement</h2>
-        <p>
-          This is to certify that {userData?.first_name} {userData?.last_name}{" "}
-          has successfully completed {userData?.community_minutes} hours of
-          community service hours.
-        </p>
-      </div>
+      {current == 1 && (
+        <CertificateDownload main={true} userData={userData} url={""} />
+      )}
+      {current != 1 && (
+        <CertificateDownload
+          main={false}
+          userData={userData}
+          url={userData?.certificates[current - 2]}
+        />
+      )}
 
-      <button className={style.button} onClick={downloadCertificate}>
-        Download
-      </button>
+      <p
+        style={{
+          fontFamily: "var(--manrope-font)",
+          position: "relative",
+          bottom: "55px",
+          left: "50%",
+        }}
+      >
+        <AiOutlineLeft
+          onClick={() => {
+            if (current == 1) {
+              setCurrent(1 + userData?.certificates.length);
+            } else {
+              setCurrent(current - 1);
+            }
+          }}
+          style={{
+            verticalAlign: "middle",
+            cursor: "pointer",
+            marginRight: "5px",
+          }}
+        />
+        {current}/{1 + userData?.certificates.length}
+        <AiOutlineRight
+          onClick={() => {
+            if (current == 1 + userData?.certificates.length) {
+              setCurrent(1);
+            } else {
+              setCurrent(current + 1);
+            }
+          }}
+          style={{
+            verticalAlign: "middle",
+            cursor: "pointer",
+            marginLeft: "5px",
+          }}
+        />
+      </p>
     </Modal>
   );
 };

@@ -8,6 +8,25 @@ import { useRouter } from "next/router";
 import Head from "next/head";
 import NoteCard from "../components/NoteCard";
 import LoadingCircle from "../components/LoadingCircle";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
+
+/**
+ * Get static props
+ * @date 8/13/2023 - 4:57:08 PM
+ *
+ * @export
+ * @async
+ * @param {{ locale: any; }} { locale }
+ * @return {unknown}
+ */
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
+}
 
 /**
  * Notes page
@@ -27,6 +46,8 @@ export default function Notes() {
   const [notes, setNotes] = useState();
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+
+  const { t } = useTranslation("common");
 
   // Add path to the route
   function addRoutePath(route, value) {
@@ -178,7 +199,7 @@ export default function Notes() {
               id="date"
             ></input>
 
-            <button type="submit">Search</button>
+            <button type="submit">{t("search")}</button>
             <p
               className={style.clearStyle}
               onClick={() => {
@@ -189,14 +210,18 @@ export default function Notes() {
                 document.getElementById("date").value = "";
               }}
             >
-              Clear search
+              {t("clear_search")}
             </p>
           </form>
         </section>
         <section className={style.notes}>
           <ul>
-            <li onClick={() => addRoutePath("type", "popular")}>Popular</li>
-            <li onClick={() => addRoutePath("type", "latest")}>Latest</li>
+            <li onClick={() => addRoutePath("type", "popular")}>
+              {t("popular")}
+            </li>
+            <li onClick={() => addRoutePath("type", "latest")}>
+              {t("latest")}
+            </li>
           </ul>
           <p className={style.results}>
             {notes?.length} result{notes?.length == 1 ? "" : "s"} found

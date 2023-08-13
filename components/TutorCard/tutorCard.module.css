@@ -1,0 +1,44 @@
+.container {
+  width: 100%;
+  height: 240px;
+  border-radius: 16px;
+  background-color: var(--default-white-color);
+  display: grid;
+  grid-template-columns: 25% 50% 25%;
+  position: relative;
+  margin-top: 30px;
+}
+.imageContainer {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.name {
+  font-family: var(--manrope-font);
+  line-height: 5px;
+  margin-top: 30px;
+}
+.subject {
+  font-family: var(--manrope-font);
+  font-size: 1rem;
+  color: var(--default-light-grey-color);
+}
+.button {
+  width: 200px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-family: var(--manrope-font);
+  padding: 10px 30px;
+  position: absolute;
+}
+.textBox {
+  width: 100%;
+  white-space: normal;
+  word-break: break-all;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  height: 110px;
+  padding-right: 20px;
+}

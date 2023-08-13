@@ -1,5 +1,7 @@
 import style from "./loading.module.css";
 import LoadingCircle from "../LoadingCircle";
+import { useTranslation } from "next-i18next";
+
 /**
  * Loading screen
  *
@@ -9,6 +11,8 @@ import LoadingCircle from "../LoadingCircle";
  * @license MIT
  */
 const LoadingPage = () => {
+  const { t } = useTranslation("common");
+
   return (
     <div className={style.background}>
       <div className={style.container}>
@@ -17,7 +21,9 @@ const LoadingPage = () => {
           <h1 style={{ marginLeft: "10px" }}>Noteswap</h1>
         </div>
         <p style={{ paddingLeft: "40px" }}>
-          Loading...Just kidding just wasting your time
+          {t("loading_message") != "loading_message"
+            ? t("loading_message")
+            : "Loading...Just kidding just wasting your time"}
         </p>
       </div>
     </div>

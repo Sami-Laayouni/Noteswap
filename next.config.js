@@ -1,7 +1,11 @@
 /** @type {import('next').NextConfig} */
+
+const { i18n } = require("./next-i18next.config");
+
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+
   serverRuntimeConfig: {
     // Increase the payload size limit to 30MB
     maxPayloadSize: 30 * 1024 * 1024,
@@ -13,8 +17,8 @@ const nextConfig = {
       "lh3.googleusercontent.com",
       "storage.googleapis.com",
     ],
-    cacheDuration: 172800,
   },
+  i18n,
 };
 
 module.exports = nextConfig;

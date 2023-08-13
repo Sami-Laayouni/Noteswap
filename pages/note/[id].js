@@ -3,6 +3,7 @@ import Footer from "../../components/Footer";
 import style from "../../styles/Note.module.css";
 import Link from "next/link";
 import { BiArrowBack } from "react-icons/bi";
+import Image from "next/image";
 
 /**
  * Note page
@@ -64,6 +65,23 @@ export default function Note(note) {
           style={{ lineHeight: "200%" }}
           dangerouslySetInnerHTML={{ __html: note?.note?.notes }}
         ></section>
+        {note?.note?.images && (
+          <section>
+            {note?.note?.images.map(function (value) {
+              return (
+                <Image
+                  style={{ borderRadius: "8px", display: "block" }}
+                  src={value}
+                  key={value}
+                  alt="Notes"
+                  width={520}
+                  height={600}
+                />
+              );
+            })}
+          </section>
+        )}
+        <section></section>
       </section>
 
       <Footer />

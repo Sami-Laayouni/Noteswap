@@ -13,6 +13,8 @@ import { LuGlasses } from "react-icons/lu";
 import { CgProfile } from "react-icons/cg";
 import AuthService from "../../services/AuthService";
 import ModalContext from "../../context/ModalContext";
+import { useTranslation } from "next-i18next";
+
 /**
  * Header component
  *
@@ -31,6 +33,7 @@ export default function Header() {
   const [userData, setUserData] = useState();
   const router = useRouter();
   const AuthServices = new AuthService(setLoggedIn);
+  const { t } = useTranslation("common");
 
   /*
      This function checks if the current user is logged in
@@ -67,9 +70,10 @@ export default function Header() {
         "/api/profile/get_user_profile",
         requestOptions
       );
-      const data = await response.json();
-
-      localStorage.setItem("userInfo", JSON.stringify(data));
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem("userInfo", JSON.stringify(data));
+      }
     }
 
     /*
@@ -92,14 +96,16 @@ export default function Header() {
     const handleClickOutside = (event) => {
       const dropdown = document.getElementById("dropdown");
       if (dropdown.style.display != "none") {
-        if (
-          dropdown.style.display != "none" &&
-          !dropdown.contains(event.target) &&
-          !document.getElementById("userInfo").contains(event.target)
-        ) {
-          dropdown.style.display = "none";
-          document.getElementById("dropdownArrow").style.transform =
-            "rotateX(0deg)";
+        if (document.getElementById("userInfo")) {
+          if (
+            dropdown.style.display != "none" &&
+            !dropdown.contains(event.target) &&
+            !document.getElementById("userInfo").contains(event.target)
+          ) {
+            dropdown.style.display = "none";
+            document.getElementById("dropdownArrow").style.transform =
+              "rotateX(0deg)";
+          }
         }
       }
     };
@@ -134,11 +140,11 @@ export default function Header() {
               <Link className={style.header_nav_a} href="/notes">
                 Notes
               </Link>
-              <Link className={style.header_nav_a} href="/events">
-                Events
-              </Link>
               <Link className={style.header_nav_a} href="/tutor">
                 Tutor
+              </Link>
+              <Link className={style.header_nav_a} href="/event">
+                Events
               </Link>
               {/* User info (Profile pic + name)*/}
               {userData && (
@@ -201,15 +207,15 @@ export default function Header() {
           ) : (
             <>
               {/* User is not logged in */}
-              <Link className={style.header_nav_a} href="/">
-                Notes
+              <Link className={style.header_nav_a} href="/notes">
+                {t("note")}
               </Link>
               <Link className={style.header_nav_a} href="/login">
-                Login
+                {t("login")}
               </Link>
               <div style={{ display: "inline-block" }}>
                 <Link className={style.header_nav_button} href="/signup">
-                  Sign up
+                  {t("signup")}
                 </Link>
               </div>
             </>
@@ -291,7 +297,7 @@ export default function Header() {
                       "none";
                   }}
                 >
-                  Notes
+                  {t("note")}
                   <div className={style.borderLine} />
                 </li>
               </Link>
@@ -304,7 +310,7 @@ export default function Header() {
                       "none";
                   }}
                 >
-                  Login
+                  {t("login")}
                   <div className={style.borderLine} />
                 </li>
               </Link>
@@ -317,7 +323,7 @@ export default function Header() {
                       "none";
                   }}
                 >
-                  Signup
+                  {t("signup")}
                   <div className={style.borderLine} />
                 </li>
               </Link>
@@ -337,19 +343,6 @@ export default function Header() {
                   <div className={style.borderLine} />
                 </li>
               </Link>
-              <Link href="/events">
-                <li
-                  onClick={() => {
-                    document.getElementById("hamburger_menu").style.display =
-                      "none";
-                    document.getElementById("hamburger_overlay").style.display =
-                      "none";
-                  }}
-                >
-                  Events
-                  <div className={style.borderLine} />
-                </li>
-              </Link>
               <Link href="/tutor">
                 <li
                   onClick={() => {
@@ -360,6 +353,19 @@ export default function Header() {
                   }}
                 >
                   Tutor
+                  <div className={style.borderLine} />
+                </li>
+              </Link>
+              <Link href="/event">
+                <li
+                  onClick={() => {
+                    document.getElementById("hamburger_menu").style.display =
+                      "none";
+                    document.getElementById("hamburger_overlay").style.display =
+                      "none";
+                  }}
+                >
+                  Events
                   <div className={style.borderLine} />
                 </li>
               </Link>
@@ -384,7 +390,7 @@ export default function Header() {
             </Link>
           </li>
           <li>
-            <Link href="/settings">
+            <Link href="/settings/account">
               <FiSettings size={21} style={{ verticalAlign: "middle" }} />
               <span>Settings</span>
             </Link>
@@ -392,7 +398,7 @@ export default function Header() {
           {userData?.role == "student" && (
             <li onClick={() => setCertificate(true)}>
               <FiAward size={21} style={{ verticalAlign: "middle" }} />
-              <span>Certificate </span>
+              <span>Certificates </span>
             </li>
           )}
           {userData?.role != "student" && (

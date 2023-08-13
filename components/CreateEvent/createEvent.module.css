@@ -1,0 +1,60 @@
+.container {
+  width: 75vw;
+}
+.labelForInput {
+  font-family: var(--primary-font);
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.input {
+  outline: none;
+  box-shadow: none;
+  font-weight: 400;
+  font-family: var(--primary-font);
+  line-height: 20px;
+  border-radius: var(--third-party-login-card-radius);
+  font-size: 16px;
+  border: 1px solid var(--input-border-color);
+  padding-left: 15px;
+  height: 32px;
+  width: 100%;
+  transition: border-color 0.3s ease-in-out;
+}
+.input:focus {
+  border-color: var(--accent-color);
+}
+.date {
+  font-family: var(--manrope-font);
+  margin-right: 20px;
+  outline: none;
+  padding: 10px;
+  border: 1px solid var(--default-black-color);
+  border-radius: 3px;
+  margin-top: 5px;
+}
+.date:focus {
+  border: 1px solid var(--accent-color);
+}
+.button {
+  cursor: pointer;
+  padding: var(--button-default-padding);
+  border-radius: var(--button-default-border-radius);
+  background-color: var(--accent-color);
+  outline: none;
+  border: none;
+  color: var(--default-white-color);
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+.back {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  font-family: var(--manrope-font);
+  cursor: pointer;
+}
+.back:hover {
+  text-decoration: underline;
+}

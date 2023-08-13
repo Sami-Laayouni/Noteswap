@@ -1,0 +1,57 @@
+/* Hero */
+.heroSection {
+  width: 100%;
+  height: calc(100vh - var(--header-height));
+  display: grid;
+  grid-template-columns: 50% 50%;
+  padding: 0px 100px;
+  background-color: var(--accent-color);
+  color: var(--default-white-color);
+}
+.heroText {
+  font-family: var(--manrope-bold-font);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: left;
+  font-size: 4.4rem;
+}
+/* Effective */
+
+.effective {
+  width: 100%;
+  height: 100px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.1rem;
+  background-color: var(--default-black-color);
+  color: var(--default-white-color);
+  font-family: var(--manrope-font);
+}
+/* Main Text */
+.container {
+  padding-left: 100px;
+  padding-right: 100px;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  line-height: 200%;
+}
+.container h1 {
+  font-family: var(--manrope-bold-font);
+}
+.container p {
+  font-family: var(--manrope-font);
+}
+.container p a {
+  color: var(--accent-color);
+}
+.container p a:hover {
+  text-decoration: underline;
+}
+.line {
+  width: 100%;
+  height: 1px;
+  background-color: var(--input-border-color);
+}

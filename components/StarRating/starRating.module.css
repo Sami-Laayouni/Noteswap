@@ -1,0 +1,13 @@
+.starRating {
+  display: inline-block;
+  font-size: 2.3rem; /* Adjust size as needed */
+  line-height: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+}
+
+.star {
+  color: #f5d440; /* Color for the stars */
+  line-height: 10px;
+}

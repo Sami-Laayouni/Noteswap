@@ -4,6 +4,24 @@ import { requireAuthentication } from "../middleware/authenticate";
 import Footer from "../components/Footer";
 import { useState } from "react";
 import SchoolService from "../services/SchoolService";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+
+/**
+ * Get static props
+ * @date 8/13/2023 - 4:54:42 PM
+ *
+ * @export
+ * @async
+ * @param {{ locale: any; }} { locale }
+ * @return {unknown}
+ */
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
+}
 
 /**
  * Page for people to create schools

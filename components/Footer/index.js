@@ -1,6 +1,7 @@
 import style from "./Footer.module.css";
 import Link from "next/link";
 import Image from "next/image";
+import { useTranslation } from "next-i18next";
 
 /**
  * Footer
@@ -17,16 +18,14 @@ import Image from "next/image";
  * @license MIT
  */
 export default function Footer() {
+  const { t } = useTranslation("common");
   return (
     <footer className={style.footer}>
       <section className={style.footer_top}>
-        <h1>Ready to get started?</h1>
-        <h2>
-          If you have a general inquiry and would like to speak to our expert
-          team, you can contact us via email at: noteswap@gmail.com
-        </h2>
+        <h1>{t("ready_get_started")}</h1>
+        <h2>{t("send_support_email")}</h2>
         <Link href="/signup">
-          <button>Get Started</button>
+          <button>{t("get_started")}</button>
         </Link>
       </section>
       <div className={style.borderLine}></div>
@@ -37,7 +36,9 @@ export default function Footer() {
           width={166}
           height={51}
         />
-        <p>© 2023 All Rights Reserved. </p>
+        <p>
+          © {new Date().getFullYear()} {t("all_rights_reserved")}
+        </p>
         <div>
           <Image
             src="/assets/images/footer/Facebook.svg"

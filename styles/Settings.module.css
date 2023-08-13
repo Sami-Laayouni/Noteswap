@@ -1,0 +1,72 @@
+.title {
+  font-family: var(--manrope-font);
+}
+.labelForInput {
+  font-family: var(--primary-font);
+  display: block;
+  margin-top: 7px;
+  margin-bottom: 7px;
+}
+.input {
+  outline: none;
+  box-shadow: none;
+  font-weight: 400;
+  font-family: var(--primary-font);
+  line-height: 20px;
+  border-radius: var(--third-party-login-card-radius);
+  font-size: 16px;
+  border: 1px solid var(--input-border-color);
+  padding-left: 15px;
+  height: 32px;
+  width: 300px;
+  transition: border-color 0.3s ease-in-out;
+}
+.input:focus {
+  border-color: var(--accent-color);
+}
+.saveButton {
+  padding: var(--button-default-padding);
+  background-color: var(--accent-color);
+  color: var(--default-white-color);
+  border: none;
+  border-radius: var(--button-default-border-radius);
+  margin-top: 20px;
+  cursor: pointer;
+  display: block;
+}
+.line {
+  width: 80%;
+  margin-top: 20px;
+  height: 1px;
+  background-color: var(--default-light-grey-color);
+}
+.profile {
+  border-radius: 50%;
+  position: absolute;
+  bottom: 10px;
+  width: 290px;
+  height: 290px;
+  right: 200px;
+  cursor: pointer;
+}
+.delete {
+  padding: var(--button-default-padding);
+  background-color: var(--danger-color);
+  color: var(--default-white-color);
+  border: none;
+  border-radius: var(--button-default-border-radius);
+  margin-top: 20px;
+  cursor: pointer;
+  display: block;
+  margin-bottom: 30px;
+}
+.selectLanguage {
+  font-family: var(--manrope-font);
+}
+.select {
+  padding: 10px;
+  cursor: pointer;
+  outline: none;
+  border-radius: 4px;
+  border: 1px solid var(--accent-color);
+}

@@ -9,7 +9,17 @@ import {
 import { BsBookmark } from "react-icons/bs";
 import { useEffect, useState } from "react";
 
-export default function Profile({ data }) {
+import NoteCard from "../../components/NoteCard";
+
+/**
+ * Profile
+ * @date 8/13/2023 - 4:58:02 PM
+ *
+ * @export
+ * @param {{ data: any; notes: any; }} { data, notes }
+ * @return {*}
+ */
+export default function Profile({ data, notes }) {
   const [usersId, setUsersId] = useState();
   useEffect(() => {
     if (localStorage) {
@@ -63,8 +73,11 @@ export default function Profile({ data }) {
             <span>
               {data?.points ? Math.floor(data?.points / 20) : "0"} minutes
             </span>{" "}
-            · Tutor hours:{" "}
-            <span>{data?.tutor_hours ? data?.tutor_hours : "0"} hours</span>
+            · Tutor minutes:{" "}
+            <span>
+              {data?.tutor_hours ? Math.floor(data?.tutor_hours / 60) : "0"}{" "}
+              minutes
+            </span>
           </h2>
         </div>
       </section>
@@ -86,24 +99,29 @@ export default function Profile({ data }) {
                 {data?.email ? data?.email : data?.metamask_address}
               </p>
             </div>
-            <BsBookmark size={15} style={{ verticalAlign: "middle" }} />
-            <p
-              style={{
-                display: "inline-block",
-                marginLeft: "5px",
-                fontFamily: "var(--manrope-font)",
-              }}
-            >
-              {data?.role}
-            </p>
+            <div style={{ display: "block", height: "fit-content" }}>
+              <BsBookmark size={15} style={{ verticalAlign: "middle" }} />
+              <p
+                style={{
+                  display: "inline-block",
+                  marginLeft: "5px",
+                  fontFamily: "var(--manrope-font)",
+                  textTransform: "capitalize",
+                  marginTop: "35px",
+                  lineHeight: "0px",
+                }}
+              >
+                {data?.role}
+              </p>
+            </div>
           </section>
 
           <div className={style.vertical_line} />
         </div>
         <div className={style.right}>
           <h1>Latest notes</h1>
-          {data?.notes.length == 0 && (
-            <div>
+          {notes?.notes.length == 0 && (
+            <span>
               <MdOutlineSpeakerNotesOff
                 size={70}
                 style={{
@@ -113,13 +131,28 @@ export default function Profile({ data }) {
                 }}
               />
               <h3>No notes posted yet</h3>
-            </div>
+            </span>
+          )}
+          {notes?.notes.length > 0 && (
+            <section>
+              {notes?.notes.map(function (value, index) {
+                value["userInfo"] = notes?.user;
+                return <NoteCard key={index} data={value} />;
+              })}
+            </section>
           )}
         </div>
       </section>
     </main>
   );
 }
+/**
+ * Get static props
+ * @date 8/13/2023 - 4:58:02 PM
+ *
+ * @async
+ * @return {unknown}
+ */
 export const getStaticPaths = async () => {
   return {
     paths: [], // indicates that no page needs be created at build time
@@ -127,14 +160,23 @@ export const getStaticPaths = async () => {
   };
 };
 
+/**
+ * Get static props
+ * @date 8/13/2023 - 4:58:02 PM
+ *
+ * @export
+ * @async
+ * @param {*} context
+ * @returns {unknown}
+ */
 export async function getStaticProps(context) {
   const { params } = context;
 
   const information = params.id;
   try {
     // Pass the information to the API
-    const apiUrl = `${process.env.NEXT_PUBLIC_URL}api/profile/get_user_profile`; // Replace with your API endpoint
-
+    const apiUrl = `${process.env.NEXT_PUBLIC_URL}api/profile/get_user_profile`;
+    const secondApiUrl = `${process.env.NEXT_PUBLIC_URL}api/notes/get_user_notes`;
     const requestOptions = {
       method: "POST",
       headers: {
@@ -151,13 +193,25 @@ export async function getStaticProps(context) {
 
     const apiData = await response.json();
 
+    const secondRequestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id: apiData._id }),
+    };
+
+    const secondResponse = await fetch(secondApiUrl, secondRequestOptions);
+    const secondData = await secondResponse.json();
+    // Add one-day cache to the static page
+
     return {
       props: {
         data: apiData,
+        notes: secondData,
       },
     };
   } catch (error) {
-    console.error(error);
     return {
       props: {
         data: null,

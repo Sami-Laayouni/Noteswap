@@ -13,7 +13,7 @@ import ModalContext from "../../context/ModalContext";
  *
  * @export
  * @param {*} data
- * @returns {*}
+ * @return {*}
  */
 export default function NoteCard(data) {
   const { imageModal, imageUrl } = useContext(ModalContext);
@@ -81,47 +81,61 @@ export default function NoteCard(data) {
       <h1>{data?.data?.title}</h1>
 
       <div dangerouslySetInnerHTML={{ __html: data?.data?.notes }}></div>
-      <div
-        className={style.imageScroll}
-        ref={containerRef}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        id="containerRef"
-      >
-        {data?.data?.images?.map(function (value, index) {
-          return (
+      {data?.data?.images.length > 0 && (
+        <div
+          className={style.imageScroll}
+          ref={containerRef}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          id="containerRef"
+        >
+          {data?.data?.images?.map(function (value, index) {
+            return (
+              <>
+                <Image
+                  className={style.image}
+                  onError={() => {
+                    document.getElementById(`${index}${value}`).src =
+                      "/assets/fallback/noNotes.png";
+                    document.getElementById(`${index}${value}`).error = null;
+                  }}
+                  src={value ? value : "/assets/fallback/noNotes.png"}
+                  alt="Images"
+                  id={`${index}${value}`}
+                  width={260}
+                  height={300}
+                  onClick={() => {
+                    setOpen(true);
+                    setUrl(value);
+                  }}
+                />
+              </>
+            );
+          })}
+          {showArrows == true && (
             <>
-              <Image
-                className={style.image}
-                onError={() => {
-                  document.getElementById(`${index}${value}`).src =
-                    "/assets/fallback/noNotes.png";
-                  document.getElementById(`${index}${value}`).error = null;
+              <button
+                className={style.left}
+                onClick={(e) => {
+                  e.preventDefault(), scrollLeft();
                 }}
-                src={value ? value : "/assets/fallback/noNotes.png"}
-                alt="Images"
-                id={`${index}${value}`}
-                width={270}
-                height={340}
-                onClick={() => {
-                  setOpen(true);
-                  setUrl(value);
+                id="right1"
+              >
+                <BiLeftArrow size={16} id="left" />
+              </button>
+              <button
+                className={style.right}
+                onClick={(e) => {
+                  e.preventDefault(), scrollRight();
                 }}
-              />
+                id="left1"
+              >
+                <BiRightArrow size={16} id="right" />
+              </button>
             </>
-          );
-        })}
-        {showArrows == true && (
-          <>
-            <button className={style.left} onClick={scrollLeft} id="right1">
-              <BiLeftArrow size={16} id="left" />
-            </button>
-            <button className={style.right} onClick={scrollRight} id="left1">
-              <BiRightArrow size={16} id="right" />
-            </button>
-          </>
-        )}
-      </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

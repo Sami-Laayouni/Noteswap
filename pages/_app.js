@@ -4,6 +4,7 @@ import "../styles/quill.css";
 
 import Head from "next/head";
 import DefaultLayout from "../layouts/DefaultLayout";
+import { appWithTranslation } from "next-i18next";
 
 /**
  * Custom App component for Next.js.
@@ -47,4 +48,4 @@ function NoteSwap({ Component, pageProps }) {
   );
 }
 // Export the Noteswap app
-export default NoteSwap;
+export default appWithTranslation(NoteSwap);

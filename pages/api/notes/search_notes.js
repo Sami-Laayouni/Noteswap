@@ -17,7 +17,7 @@ export default async function handler(req, res) {
 
   const body = req.body;
   const { title, desc, date, classes, type } = body;
-  res.setHeader("Cache-Control", `public, max-age=120`);
+  res.setHeader("Cache-Control", "public, max-age=120");
 
   if (title) {
     options = {

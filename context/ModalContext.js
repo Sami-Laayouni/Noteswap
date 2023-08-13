@@ -10,6 +10,12 @@ export const ModalProvider = ({ children }) => {
   const [error, setError] = useState("");
   const [image, setImage] = useState(false);
   const [imageUrl, setImageUrl] = useState();
+  const [tutor, setTutor] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [bookSession, setBookSession] = useState(false);
+  const [bookSessionInfo, setBookSessionInfo] = useState();
+  const [eventStatus, setEventStatus] = useState(false);
+  const [eventdata, setEventData] = useState("");
   return (
     <ModalContext.Provider
       value={{
@@ -20,6 +26,12 @@ export const ModalProvider = ({ children }) => {
         imageError: [error, setError],
         imageModal: [image, setImage],
         imageUrl: [imageUrl, setImageUrl],
+        tutor: [tutor, setTutor],
+        deleteModal: [deleteModal, setDeleteModal],
+        bookSession: [bookSession, setBookSession],
+        bookSessionInfo: [bookSessionInfo, setBookSessionInfo],
+        eventStatus: [eventStatus, setEventStatus],
+        eventdata: [eventdata, setEventData],
       }}
     >
       {children}

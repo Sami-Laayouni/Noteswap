@@ -1,6 +1,24 @@
 import style from "../styles/AI.module.css";
 import { useState } from "react";
 import Head from "next/head";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+
+/**
+ * Get static props
+ * @date 8/13/2023 - 4:52:59 PM
+ *
+ * @export
+ * @async
+ * @param {{ locale: any; }} { locale }
+ * @return {unknown}
+ */
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
+}
 /**
  * Detect AI in text
  * @date 7/24/2023 - 7:12:48 PM

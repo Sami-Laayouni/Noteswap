@@ -2,12 +2,12 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 
 /**
- * Profile picture
- * @date 7/24/2023 - 7:34:24 PM
+ * Profile Picture
+ * @date 8/13/2023 - 5:13:11 PM
  *
  * @export
  * @param {{ src: any; alt: any; id: any; }} { src, alt, id }
- * @return {*}
+ * @returns {*}
  */
 export default function ProfilePicture({ src, alt, id }) {
   const router = useRouter();

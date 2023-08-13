@@ -9,6 +9,16 @@ import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
 import Image from "next/image";
 import Footer from "../components/Footer";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
+}
 /**
  * Signup Page
  *
@@ -35,6 +45,7 @@ const Signup = () => {
   const [loggedIn, setLoggedIn] = isLoggedIn;
   const [error, setError] = errorSignup;
   const AuthServices = new AuthService(setLoggedIn);
+  const { t } = useTranslation("common");
 
   /**
    * Handle Toggle Password
@@ -125,13 +136,13 @@ const Signup = () => {
     <>
       <div className={style.background}>
         <Head>
-          <title>Signup | Noteswap</title> {/* Title of the page */}
+          <title>{t("signup")} | Noteswap</title> {/* Title of the page */}
         </Head>
         <div className={style.container}>
           <section className={style.left}>
-            <h1>Sign up to Noteswap</h1>
+            <h1>{t("sign_up_to_noteswap")}</h1>
 
-            <p>Swap your way to success with Noteswap!</p>
+            <p>{t("slogan")}</p>
 
             <p>
               By signing up to Noteswap, you agree to our{" "}
@@ -158,14 +169,14 @@ const Signup = () => {
             >
               {!selectedRole && (
                 <>
-                  <p className={style.labelCenter}>I am joining as a</p>
+                  <p className={style.labelCenter}>{t("i_am_joining_as")}</p>
 
                   <ul className={style.roles}>
                     <li id="student" onClick={() => setSelectedRole("student")}>
-                      Student
+                      {t("student")}
                     </li>
                     <li id="teacher" onClick={() => setSelectedRole("teacher")}>
-                      Teacher
+                      {t("teacher")}
                     </li>
                   </ul>
                   <p className={style.error}>{error}</p>
@@ -179,7 +190,7 @@ const Signup = () => {
                       className={style.labelForInput}
                       htmlFor="emailSignup"
                     >
-                      Email or username
+                      {t("email_username")}
                     </label>
                     <input
                       id="emailSignup"
@@ -197,7 +208,7 @@ const Signup = () => {
                       className={style.labelForInput}
                       htmlFor="passwordSignup"
                     >
-                      Password
+                      {t("password")}
                     </label>
                     <div className={style.inputContainer}>
                       <input
@@ -220,9 +231,9 @@ const Signup = () => {
                     </div>
                     <p className={style.error}>{error}</p>
                     <button type="submit" className={style.loginBtn}>
-                      Next
+                      {t("next")}
                     </button>
-                    <p className={style.orText}>-or-</p>
+                    <p className={style.orText}>-{t("or")}-</p>
                     <button
                       id="login_with_google_btn"
                       type="button"
@@ -235,7 +246,7 @@ const Signup = () => {
                         width={24}
                         height={24}
                       />
-                      Continue with Google
+                      {t("continue_with")} Google
                     </button>
                     <button
                       type="submit"
@@ -258,7 +269,7 @@ const Signup = () => {
                         width={24}
                         height={24}
                       />
-                      Continue with Metamask
+                      {t("continue_with")} Metamask
                     </button>
                     <button type="button" className={style.thirdpartyloginBtn}>
                       <Image
@@ -267,13 +278,13 @@ const Signup = () => {
                         width={24}
                         height={24}
                       />
-                      Continue with Facebook (Boomer)
+                      {t("continue_with")} Facebook (Boomer)
                     </button>
                   </>
                 ) : (
                   <>
                     <label className={style.labelForInput} htmlFor="nameSignup">
-                      First name
+                      {t("first_name")}
                     </label>
                     <input
                       id="nameSignup"
@@ -291,7 +302,7 @@ const Signup = () => {
                       className={style.labelForInput}
                       htmlFor="namelSignup"
                     >
-                      Last name
+                      {t("last_name")}
                     </label>
                     <input
                       id="namelSignup"
@@ -311,14 +322,14 @@ const Signup = () => {
                       className={style.loginBtn}
                       id="createAccount"
                     >
-                      Create account
+                      {t("create")}
                     </button>
                   </>
                 ))}
 
               <div className={style.accountContainer}>
                 <Link href="/login" className={style.createNewAccount}>
-                  Already have an account?
+                  {t("already_have_account")}
                 </Link>
               </div>
               {selectedRole && (
@@ -335,7 +346,7 @@ const Signup = () => {
                     }
                   }}
                 >
-                  Back
+                  {t("back")}
                 </p>
               )}
             </form>
@@ -348,5 +359,5 @@ const Signup = () => {
     </>
   );
 };
-//Export default Signup page
+// Export default Signup page
 export default Signup;

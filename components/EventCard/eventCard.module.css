@@ -1,0 +1,50 @@
+.container {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 25% 50% 25%;
+  margin-top: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+.container h1 {
+  font-family: var(--manrope-font);
+  font-size: 1.5rem;
+  line-height: 10px;
+}
+.container h2 {
+  font-family: var(--manrope-font);
+  font-size: 1rem;
+  background-color: var(--accent-color);
+  border-radius: 8px;
+  width: 60%;
+  text-align: center;
+  color: white;
+  padding: 4px 5px;
+}
+.container h3 {
+  line-height: 10px;
+  font-family: var(--manrope-font);
+}
+.container p {
+  font-family: var(--manrope-font);
+  width: 100%;
+  word-break: normal;
+  height: 100%;
+  padding-right: 10px;
+  height: 100px;
+  max-height: 100px;
+  white-space: pre-line;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.button {
+  width: 95%;
+  padding: 15px 10px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  border-radius: 8px;
+  position: absolute;
+  font-family: var(--manrope-font);
+}

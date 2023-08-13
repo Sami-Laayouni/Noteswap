@@ -49,7 +49,7 @@ const userSchema = new mongoose.Schema({
     required: false,
   },
   rating: {
-    type: String,
+    type: Array,
     required: false,
   },
   background_image: {
@@ -68,7 +68,19 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "123456",
   },
-
+  is_tutor: {
+    type: Boolean,
+    default: false,
+    required: false,
+  },
+  bio: {
+    type: String,
+    required: false,
+  },
+  certificates: {
+    type: Array,
+    required: false,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

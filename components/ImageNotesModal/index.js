@@ -457,6 +457,18 @@ export default function ImageNotesModal() {
                     })
                   );
                 }
+                if (
+                  JSON.parse(localStorage.getItem("dailyImageTimer")).date !=
+                  new Date().toUTCString().slice(5, 16)
+                ) {
+                  localStorage.setItem(
+                    "dailyImageTimer",
+                    JSON.stringify({
+                      date: new Date().toUTCString().slice(5, 16),
+                      time: 0,
+                    })
+                  );
+                }
                 const currentTime = JSON.parse(
                   localStorage.getItem("dailyImageTimer")
                 ).time;
@@ -477,6 +489,7 @@ export default function ImageNotesModal() {
                       time: currentTime + imagesUploaded,
                     })
                   );
+
                   await fetch("/api/profile/add_community_minutes", {
                     method: "POST",
                     headers: {
@@ -494,14 +507,13 @@ export default function ImageNotesModal() {
                   setCurrent(4);
                 }
               } else {
-                console.log(await response.json());
+                setCurrent(4);
               }
             } catch (error) {
               setError(error);
             }
           }
           if (current == 4) {
-            console.log(imageArray);
             setOpen(false);
             setCurrent(1);
             setImageArray([]);

@@ -41,6 +41,10 @@ const schoolSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  upcoming_events_url: {
+    type: String,
+    required: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

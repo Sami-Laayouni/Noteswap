@@ -1,0 +1,136 @@
+.container {
+  width: 75vw;
+}
+
+.dropdown {
+  cursor: pointer;
+  margin-top: 10px;
+  font-family: var(--manrope-font);
+  padding: 5px 15px;
+  border: 1px solid var(--input-border-color);
+  border-radius: 5px;
+  user-select: none;
+  width: 50%;
+  height: 32px;
+}
+.dropdownMenu {
+  position: absolute;
+  left: 25px;
+  top: 220px;
+  width: 203px;
+  background-color: white;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  height: 250px;
+  border-radius: 5px;
+}
+
+.dropdownMenu ul {
+  list-style: none;
+  width: 193px;
+  padding: 0;
+}
+.dropdownMenu ul span {
+  width: 100%;
+  background-color: green;
+  text-align: center;
+}
+.dropdownMenu ul li {
+  width: 100%;
+  cursor: pointer;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: center;
+}
+.line {
+  width: 100%;
+  height: 1px;
+  background-color: var(--default-light-grey-color);
+  margin-top: 20px;
+}
+.labelForInput {
+  font-family: var(--primary-font);
+  display: block;
+  margin-bottom: 7px;
+  margin-top: 15px;
+}
+.input {
+  outline: none;
+  box-shadow: none;
+  font-weight: 400;
+  font-family: var(--primary-font);
+  line-height: 20px;
+  border-radius: var(--third-party-login-card-radius);
+  font-size: 16px;
+  border: 1px solid var(--input-border-color);
+  padding-left: 15px;
+  height: 32px;
+  width: 50%;
+  transition: border-color 0.3s ease-in-out;
+}
+.input:focus {
+  border-color: var(--accent-color);
+}
+.dates {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.dates li label {
+  font-size: 1rem;
+}
+.dates li label span {
+  margin-left: 5px;
+}
+.dates li label input {
+  cursor: pointer;
+}
+.button {
+  padding: var(--button-default-padding);
+  border-radius: 5px;
+  color: var(--default-white-color);
+  border: none;
+  background-color: var(--accent-color);
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+.time {
+  font-family: var(--manrope-font);
+  user-select: none;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid black;
+}
+.time:focus {
+  border-bottom: 1px solid var(--accent-color);
+}
+.error {
+  color: var(--accent-color);
+  font-family: var(--manrope-font);
+}
+.textarea {
+  margin-top: 10px;
+  margin-left: 5px;
+  resize: none;
+  width: 75vw;
+  height: 300px;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  outline: none;
+  font-family: var(--manrope-font);
+}
+.back {
+  color: var(--accent-color);
+  font-family: var(--manrope-font);
+  cursor: pointer;
+  position: absolute;
+  bottom: 0px;
+}
+.back:hover {
+  text-decoration: underline;
+}

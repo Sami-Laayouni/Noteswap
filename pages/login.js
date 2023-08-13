@@ -10,6 +10,25 @@ import AuthContext from "../context/AuthContext";
 import Image from "next/image";
 import Footer from "../components/Footer";
 import initFacebookSDK from "../utils/facebook";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+
+/**
+ * Get static props
+ * @date 8/13/2023 - 4:56:06 PM
+ *
+ * @export
+ * @async
+ * @param {{ locale: any; }} { locale }
+ * @return {unknown}
+ */
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
+}
 
 /**
  * Login Page
@@ -29,6 +48,7 @@ const Login = () => {
   const [error, setError] = errorLogin;
   const [loggedIn, setLoggedIn] = isLoggedIn;
   const AuthServices = new AuthService(setLoggedIn);
+  const { t } = useTranslation("common");
 
   useEffect(() => {
     // Load the Facebook SDK
@@ -69,7 +89,7 @@ const Login = () => {
         }
       } else if (type === "google") {
         // Login with Google
-        const data = await AuthServices.get_google_continue_url("login"); //Get login with Google link
+        const data = await AuthServices.get_google_continue_url("login"); // Get login with Google link
         // Redirect to the page
         window.location.href = data.url;
       } else if (type === "facebook") {
@@ -131,11 +151,11 @@ const Login = () => {
     <>
       <div className={style.background}>
         <Head>
-          <title>Login | Noteswap</title> {/* Title of the page */}
+          <title>{t("login")} | Noteswap</title> {/* Title of the page */}
         </Head>
         <div className={style.container}>
           <section className={style.left}>
-            <h1>Log in to Noteswap</h1>
+            <h1>{t("log_in_to_noteswap")}</h1>
           </section>
           <section className={style.right}>
             <form
@@ -146,7 +166,7 @@ const Login = () => {
               }}
             >
               <label className={style.labelForInput} htmlFor="emailLogin">
-                Email or username
+                {t("email_username")}
               </label>
               <input
                 id="emailLogin"
@@ -162,7 +182,7 @@ const Login = () => {
                 autoFocus
               />
               <label className={style.labelForInput} htmlFor="passwordLogin">
-                Password
+                {t("password")}
               </label>
               <div className={style.inputContainer}>
                 <input
@@ -185,13 +205,13 @@ const Login = () => {
                 </button>
               </div>
               <Link href="/forgotpassword" className={style.forgotpassword}>
-                Forgot password?
+                {t("forgot_password")}
               </Link>
               <p className={style.error}>{error}</p>
               <button type="submit" className={style.loginBtn}>
-                Log in
+                {t("log_in")}
               </button>
-              <p className={style.orText}>-or-</p>
+              <p className={style.orText}>-{t("or")}-</p>
               <button
                 type="button"
                 className={style.thirdpartyloginBtn}
@@ -203,7 +223,7 @@ const Login = () => {
                   width={24}
                   height={24}
                 />
-                Continue with Google
+                {t("continue_with")} Google
               </button>
               <button
                 type="button"
@@ -216,7 +236,7 @@ const Login = () => {
                   width={24}
                   height={24}
                 />
-                Continue with Metamask
+                {t("continue_with")} Metamask
               </button>
               <button
                 type="button"
@@ -229,12 +249,12 @@ const Login = () => {
                   width={24}
                   height={24}
                 />
-                Continue with Facebook (Boomer)
+                {t("continue_with")} Facebook (Boomer)
               </button>
 
               <div className={style.accountContainer}>
                 <Link href="/signup" className={style.createNewAccount}>
-                  Create a new account
+                  {t("create_account")}
                 </Link>
               </div>
             </form>

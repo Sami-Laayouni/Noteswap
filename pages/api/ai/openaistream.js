@@ -7,7 +7,7 @@ import { createParser } from "eventsource-parser";
  * @export
  * @async
  * @param {*} payload
- * @returns {unknown}
+ * @return {unknown}
  */
 export async function OpenAIStream(payload) {
   const encoder = new TextEncoder();
