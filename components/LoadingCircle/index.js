@@ -1,4 +1,4 @@
-import style from "./LoadingCircle.module.css";
+import style from "./loadingCircle.module.css";
 
 const LoadingCircle = () => {
   return (
