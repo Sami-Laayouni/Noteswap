@@ -31,18 +31,19 @@ export default function Connect() {
   const [rated, setRated] = useState(false);
   let speech = "Speech: ";
 
-  socket.on("join", () => {
-    if (data?.isTutor) {
-      startTimer();
-      speechToText();
-      setStarted(true);
-    }
-  });
+  if (socket) {
+    socket.on("join", () => {
+      if (data?.isTutor) {
+        startTimer();
+        speechToText();
+        setStarted(true);
+      }
+    });
 
-  socket.on("end", () => {
-    setEnded(true);
-  });
-
+    socket.on("end", () => {
+      setEnded(true);
+    });
+  }
   function formatTime(totalSeconds) {
     const totalMinutes = Math.floor(totalSeconds / 60);
 
