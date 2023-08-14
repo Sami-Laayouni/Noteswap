@@ -71,12 +71,13 @@ export default function Profile({ data, notes }) {
             {data?.bio ? data?.bio : "No bios available"} · Community service
             minutes:{" "}
             <span>
-              {data?.points ? Math.floor(data?.points / 20) : "0"} minutes
+              {data?.points ? Math.floor(data?.points / 20) : "0"} minute
+              {Math.floor(data?.points / 20) == 1 ? "" : "s"}
             </span>{" "}
             · Tutor minutes:{" "}
             <span>
               {data?.tutor_hours ? Math.floor(data?.tutor_hours / 60) : "0"}{" "}
-              minutes
+              minute{Math.floor(data?.points / 20) == 1 ? "" : "s"}
             </span>
           </h2>
         </div>

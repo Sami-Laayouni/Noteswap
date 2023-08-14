@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://noteswap.org</loc>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://noteswap.org/dashboard</loc>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://noteswap.org/signup</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://noteswap.org/login</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://noteswap.org/notes</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://noteswap.org/event</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://noteswap.org/tutor</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://noteswap.org/detect_ai</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://noteswap.org/verify</loc>
+    <priority>0.6</priority>
+   </url>
+   <url>
+    <loc>https://noteswap.org/settings/account</loc>
+    <priority>0.6</priority>
+   </url>
+   <url>
+    <loc>https://noteswap.org/settings/language</loc>
+    <priority>0.6</priority>
+   </url>
+   <url>
+    <loc>https://noteswap.org/boring/privacy-policy</loc>
+    <priority>0.4</priority>
+   </url>
+   <url>
+    <loc>https://noteswap.org/boring/terms-of-service</loc>
+    <priority>0.4</priority>
+   </url>
+   
+   
+</urlset>

@@ -1,10 +1,13 @@
-import SettingSidebar from "../../components/SettingSidebar";
 import style from "../../styles/Settings.module.css";
-import { useEffect, useState } from "react";
-import { useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import ModalContext from "../../context/ModalContext";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "../../middleware/authenticate";
+import dynamic from "next/dynamic";
+const SettingSidebar = dynamic(() => import("../../components/SettingSidebar"));
+const DeleteAccount = dynamic(() =>
+  import("../../components/DeleteAccountModal")
+);
 
 /**
  * Get static props
@@ -69,6 +72,7 @@ const Setting = () => {
   return (
     <div style={{ display: "grid", gridTemplateColumns: "25% 75%" }}>
       <SettingSidebar />
+      <DeleteAccount />
       <div>
         <h2 className={style.title}>Account</h2>
         <div style={{ marginTop: "60px", position: "relative" }}>

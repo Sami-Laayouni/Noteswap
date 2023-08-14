@@ -442,7 +442,7 @@ export default function ImageNotesModal() {
                   publisherId: JSON.parse(localStorage.getItem("userInfo"))._id,
                   upvotes: 0,
                   downvotes: 0,
-                  aiRating: 100,
+                  aiRating: 60,
                   type: "images",
                   images: imageArray,
                 }),

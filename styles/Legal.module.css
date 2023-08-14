@@ -55,3 +55,40 @@
   height: 1px;
   background-color: var(--input-border-color);
 }
+/* List */
+.listContainer {
+  display: grid;
+  grid-template-columns: 25% 75%;
+  padding-top: 60px;
+}
+.listContainer ul {
+  list-style: none;
+  padding: 0px;
+}
+.listContainer ul li {
+  font-family: var(--manrope-font);
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: grey;
+  transition: 1s ease-in-out all;
+}
+.listContainer ul li:hover {
+  color: var(--accent-color);
+  padding-left: 20px;
+}
+.section section h1 {
+  font-family: var(--manrope-bold-font);
+  font-size: 3rem;
+  line-height: 10px;
+  color: var(--accent-color);
+}
+.section section h2 {
+  font-family: var(--manrope-font);
+  font-size: 1.7rem;
+  line-height: 30px;
+}
+.section section p {
+  padding: 0px;
+  margin: 0px;
+  padding-right: 30px;
+}

@@ -15,7 +15,7 @@ export default async function handler(req, res) {
   const { id } = body;
   res.setHeader("Cache-Control", "public, max-age=120");
   try {
-    const response = await Events.find({ _id: id });
+    const response = await Events.findOne({ _id: id });
 
     res.status(200).send(response);
   } catch (error) {

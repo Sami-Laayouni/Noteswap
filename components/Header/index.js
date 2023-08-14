@@ -207,9 +207,7 @@ export default function Header() {
           ) : (
             <>
               {/* User is not logged in */}
-              <Link className={style.header_nav_a} href="/notes">
-                {t("note")}
-              </Link>
+
               <Link className={style.header_nav_a} href="/login">
                 {t("login")}
               </Link>
@@ -288,19 +286,6 @@ export default function Header() {
           {/* User is not logged in*/}
           {!loggedIn ? (
             <>
-              <Link href="/">
-                <li
-                  onClick={() => {
-                    document.getElementById("hamburger_menu").style.display =
-                      "none";
-                    document.getElementById("hamburger_overlay").style.display =
-                      "none";
-                  }}
-                >
-                  {t("note")}
-                  <div className={style.borderLine} />
-                </li>
-              </Link>
               <Link href="/login">
                 <li
                   onClick={() => {

@@ -72,17 +72,19 @@ const Connect = () => {
     };
 
     const { query } = router;
-    const { tutoringSessionId, isTheTutor, joinCode } = parseQueryString(
-      query.id
-    );
-    fetchTutorData(tutoringSessionId);
-    setData({
-      tutoringSessionId: tutoringSessionId,
-      isTheTutor: isTheTutor,
-      joinCode: joinCode,
-    });
-    socketInitializer(tutoringSessionId);
-  }, []);
+    if (query.id) {
+      const { tutoringSessionId, isTheTutor, joinCode } = parseQueryString(
+        query.id
+      );
+      fetchTutorData(tutoringSessionId);
+      setData({
+        tutoringSessionId: tutoringSessionId,
+        isTheTutor: isTheTutor,
+        joinCode: joinCode,
+      });
+      socketInitializer(tutoringSessionId);
+    }
+  }, [router]);
 
   const requestMicrophoneAccess = async () => {
     try {

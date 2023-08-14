@@ -131,6 +131,10 @@ export default function CreateEvent() {
         return "th";
     }
   }
+  if (!open) {
+    return null;
+  }
+
   return (
     <Modal
       isOpen={open}

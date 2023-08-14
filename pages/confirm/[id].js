@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
  */
 const Confirm = () => {
   const router = useRouter();
+
   const [ran, setRan] = useState(false);
   function parseQueryString(queryString) {
     const keyValuePairs = queryString.split("&");
@@ -53,13 +54,16 @@ const Confirm = () => {
         );
       }
     }
-    const { query } = router;
-    const { email, emailId, senderEmail, senderEmailId, date, time } =
-      parseQueryString(query.id);
-    if (!ran) {
-      reserve(email, emailId, senderEmail, senderEmailId, date, time);
+    const { id } = router.query;
+    if (id) {
+      const { email, emailId, senderEmail, senderEmailId, date, time } =
+        parseQueryString(id);
+      if (!ran) {
+        console.log(email);
+        reserve(email, emailId, senderEmail, senderEmailId, date, time);
+      }
     }
-  }, []);
+  }, [router]);
   return (
     <div
       style={{

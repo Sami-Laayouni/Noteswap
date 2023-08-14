@@ -43,9 +43,10 @@ export default function BookASession() {
           className={style.container}
           onSubmit={async (e) => {
             e.preventDefault();
+
             if (
-              info?.data?.userInfo[0].email ==
-              JSON.parse(localStorage.getItem("userInfo")).email
+              info?.data?.userInfo[0]._id !=
+              JSON.parse(localStorage.getItem("userInfo"))._id
             ) {
               document.getElementById("book").innerText = "Booking...";
               const response = await fetch("api/email/send_email", {
@@ -149,7 +150,7 @@ export default function BookASession() {
             {info?.data?.userInfo[0].last_name}
           </h1>
           <h2 className={style.subTitle}>
-            Please ensure you check your email or Noteswap for comfirmation
+            Please ensure to check your email for comfirmation
           </h2>
           <div
             style={{

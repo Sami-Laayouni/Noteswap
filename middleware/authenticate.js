@@ -45,11 +45,12 @@ export const requireAuthentication = (WrappedComponent) => {
       return () => clearTimeout(delay); // Clean up the timeout if the component unmounts
     }, []);
 
-    if (isLoading) {
-      return <LoadingPage />; // Display loading page while authentication status is being determined
-    } else {
-      return <WrappedComponent {...props} />;
-    }
+    return (
+      <>
+        {isLoading && <LoadingPage />}
+        <WrappedComponent {...props} />
+      </>
+    );
 
     // Render the wrapped component with its original props
   };

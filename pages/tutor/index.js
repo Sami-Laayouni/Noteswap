@@ -7,6 +7,8 @@ import Head from "next/head";
 import LoadingCircle from "../../components/LoadingCircle";
 import TutorCard from "../../components/TutorCard";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import dynamic from "next/dynamic";
+const BecomeTutor = dynamic(() => import("../../components/BecomeTutor"));
 
 /**
  * Get static props
@@ -139,8 +141,11 @@ export default function Tutor() {
         id: JSON.parse(localStorage.getItem("userInfo"))._id,
       }),
     });
-    const tutor = await userTutor.json();
-    setPaused(tutor.paused);
+    if (userTutor.status == 200) {
+      const tutor = await userTutor.json();
+      setPaused(tutor.paused);
+    }
+
     if (response.ok) {
       const data = await response.json();
       setLoading(false);
@@ -160,9 +165,10 @@ export default function Tutor() {
       <Head>
         <title>Noteswap | Tutor</title>
       </Head>
+      <BecomeTutor />
       <img
         className={style.background}
-        src="/assets/images/users/Background-Image.png"
+        src="/assets/images/users/Background-Image.webp"
         alt="Background image"
       ></img>
       <h1 className={style.title}>Noteswap Tutor</h1>

@@ -3,6 +3,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 /**
  * Get static paths
@@ -45,7 +46,6 @@ export default function SignUps() {
   const [data, setData] = useState([]);
   const [volunteersData, setVolunteersData] = useState([]);
   const router = useRouter();
-  const { id } = router.query;
 
   useEffect(() => {
     async function getUserData(userId) {
@@ -60,7 +60,8 @@ export default function SignUps() {
       });
 
       if (response.ok) {
-        return response.json();
+        const data = await response.json();
+        return data;
       }
       return null;
     }
@@ -79,9 +80,8 @@ export default function SignUps() {
       if (response.ok) {
         const eventData = await response.json();
         setData(eventData);
-
-        if (eventData[0]?.volunteers) {
-          const volunteerDataPromises = eventData[0].volunteers.map(
+        if (eventData?.volunteers) {
+          const volunteerDataPromises = eventData.volunteers.map(
             async (value) => {
               return await getUserData(value);
             }
@@ -94,11 +94,12 @@ export default function SignUps() {
         }
       }
     }
+    const { id } = router.query;
 
     if (id) {
       fetchData();
     }
-  }, [id]);
+  }, [router]);
 
   async function giveCertificate(id) {
     const response = await fetch("/api/events/give_certificate", {
@@ -108,7 +109,7 @@ export default function SignUps() {
       },
       body: JSON.stringify({
         userId: id,
-        certificate: data[0].certificate_link,
+        certificate: data.certificate_link,
       }),
     });
     if (response.ok) {
@@ -122,18 +123,21 @@ export default function SignUps() {
       <ul className={style.list}>
         {volunteersData.map((volunteer, index) => (
           <li key={index}>
-            <Image
-              src={volunteer.profile_picture}
-              alt="Profile Picture"
-              width={45}
-              height={45}
-              style={{
-                marginTop: "auto",
-                marginBottom: "auto",
-                display: "inline-block",
-                verticalAlign: "middle",
-              }}
-            />
+            <Link href={`/profile/${volunteer._id}`}>
+              <Image
+                src={volunteer.profile_picture}
+                alt="Profile Picture"
+                width={45}
+                height={45}
+                style={{
+                  marginTop: "auto",
+                  marginBottom: "auto",
+                  display: "inline-block",
+                  verticalAlign: "middle",
+                }}
+              />
+            </Link>
+
             <p
               style={{
                 display: "inline",
@@ -150,7 +154,7 @@ export default function SignUps() {
               className={style.button}
               id={`give_certificate_${volunteer._id}`}
             >
-              {volunteer?.certificates?.includes(data[0].certificate_link)
+              {volunteer?.certificates?.includes(data.certificate_link)
                 ? "Already received"
                 : "Give Certificate"}
             </button>

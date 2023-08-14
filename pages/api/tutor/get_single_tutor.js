@@ -16,7 +16,11 @@ export default async function handler(req, res) {
   try {
     await connectDB();
     const foundTutor = await Tutor.findOne({ user_id: id });
-    res.status(200).send(foundTutor);
+    if (foundTutor) {
+      res.status(200).send(foundTutor);
+    } else {
+      res.status(201).send({});
+    }
   } catch (error) {
     res.status(500).send(error);
   }

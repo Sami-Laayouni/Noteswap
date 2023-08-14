@@ -26,7 +26,9 @@ class AuthService {
         body: JSON.stringify({ email, password }),
       });
       const data = await response.json();
-      this.setLoggedIn(true);
+      if (data.token) {
+        this.setLoggedIn(true);
+      }
       return data;
     } catch (error) {
       console.error("Login failed", error);

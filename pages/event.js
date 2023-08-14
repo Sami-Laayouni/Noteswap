@@ -6,6 +6,8 @@ import ModalContext from "../context/ModalContext";
 import LoadingCircle from "../components/LoadingCircle";
 import EventCard from "../components/EventCard";
 import Head from "next/head";
+import dynamic from "next/dynamic";
+const CreateEvent = dynamic(() => import("../components/CreateEvent"));
 
 /**
  * Get Static props
@@ -90,10 +92,11 @@ export default function Event() {
       <Head>
         <title>Noteswap | Events</title>
       </Head>
+      <CreateEvent />
       <img
         className={style.background}
         alt="Background Image"
-        src="/assets/images/users/Background-Image.png"
+        src="/assets/images/users/Background-Image.webp"
       ></img>
       <h1 className={style.title}>Events</h1>
       <h2 className={style.subTitle}>
@@ -145,7 +148,7 @@ export default function Event() {
           </div>
         )}
       </section>
-      {data?.role == "student" && (
+      {data?.role != "student" && (
         <section
           onClick={() => {
             setOpen(true);

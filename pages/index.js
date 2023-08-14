@@ -50,7 +50,7 @@ export default function Home() {
         </section>
         <section className={style.hero_right}>
           <img
-            src="/assets/images/Hero/Hero-Image.png"
+            src="/assets/images/hero/Hero-Image.webp"
             alt="Hero Image"
             loading="eager"
           ></img>
@@ -111,8 +111,9 @@ export default function Home() {
       <section className={style.user}>
         <img
           className={style.user_img}
-          src="/assets/images/users/Background-Image.png"
+          src="/assets/images/users/Background-Image.webp"
           alt="Background Image"
+          loading="lazy"
         ></img>
         <Image
           className={style.user_img2}

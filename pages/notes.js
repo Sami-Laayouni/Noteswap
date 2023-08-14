@@ -10,6 +10,9 @@ import NoteCard from "../components/NoteCard";
 import LoadingCircle from "../components/LoadingCircle";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
+import dynamic from "next/dynamic";
+const Notes = dynamic(() => import("../components/NotesModal"));
+const ImageNotesModal = dynamic(() => import("../components/ImageNotesModal"));
 
 /**
  * Get static props
@@ -35,13 +38,14 @@ export async function getStaticProps({ locale }) {
  * @export
  * @return {*}
  */
-export default function Notes() {
+export default function Note() {
   const { notesModal, imageNotesModal, imagesUrl, imageError } =
     useContext(ModalContext);
   const [open, setOpen] = notesModal;
   const [openImage, setOpenImage] = imageNotesModal;
   const [url, setUrl] = imagesUrl;
   const [error, setError] = imageError;
+  const [title, setTitle] = useState("");
 
   const [notes, setNotes] = useState();
   const [loading, setLoading] = useState(true);
@@ -64,6 +68,14 @@ export default function Notes() {
       }
     );
   }
+
+  useEffect(() => {
+    if (title) {
+      addRoutePath("title", title);
+    } else {
+      addRoutePath("title", "");
+    }
+  }, [title]);
 
   useEffect(() => {
     updateValue();
@@ -127,16 +139,14 @@ export default function Notes() {
       <Head>
         <title>Noteswap | Notes</title>
       </Head>
+      <Notes />
+      <ImageNotesModal />
       <main className={style.grids}>
         <section className={style.searchContainer} id="searchBar">
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              if (document.getElementById("title").value) {
-                addRoutePath("title", document.getElementById("title").value);
-              } else {
-                addRoutePath("title", "");
-              }
+
               if (document.getElementById("desc").value) {
                 addRoutePath("desc", document.getElementById("desc").value);
               } else {
@@ -149,6 +159,9 @@ export default function Notes() {
               id="title"
               min={5}
               placeholder="Search by title"
+              onChange={(e) => {
+                setTitle(e.target.value);
+              }}
             ></input>
             <textarea id="desc" placeholder="Notes must include"></textarea>
             <select

@@ -9,6 +9,39 @@ export default function TutoringEmail({
   message,
   url,
 }) {
+  function formatDate(inputDate) {
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+
+    const [year, month, day] = inputDate.split("-").map(Number);
+    const monthName = months[month - 1];
+
+    const daySuffix = (() => {
+      if (day === 1 || day === 21 || day === 31) {
+        return "st";
+      } else if (day === 2 || day === 22) {
+        return "nd";
+      } else if (day === 3 || day === 23) {
+        return "rd";
+      } else {
+        return "th";
+      }
+    })();
+
+    return `${monthName} ${day}${daySuffix} ${year}`;
+  }
   return (
     <section>
       <section
@@ -48,7 +81,7 @@ export default function TutoringEmail({
           Student’s Email:{" "}
           <span style={{ color: "#40b385" }}>{senderEmail}</span> <br></br>
           Preferred Tutoring Schedule:{" "}
-          <span style={{ color: "#40b385" }}>{date}</span> from{" "}
+          <span style={{ color: "#40b385" }}>{formatDate(date)}</span> from{" "}
           <span style={{ color: "#40b385" }}>{time}</span>
         </p>
         <p>

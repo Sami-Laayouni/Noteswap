@@ -28,12 +28,55 @@ function NoteSwap({ Component, pageProps }) {
   const headers = (
     <>
       <Head>
+        <meta charset="UTF-8" />
         <title>Noteswap</title>
+
+        <meta
+          name="description"
+          content="World’s leading online educational platform for earning community service hours using AI to validate. Discover a new way to earn your community service hours."
+        />
+        <meta
+          name="keywords"
+          content="community service, education, AI, online"
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="robots" content="index, follow" />
+        <meta name="language" content="en" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="theme-color" content="#40b385" />
+
+        <meta property="og:title" content="Noteswap" />
+        <meta
+          property="og:description"
+          content="World’s leading online educational platform for earning community service hours using AI to validate. Discover a new way to earn your community service hours."
+        />
+        <meta
+          property="og:image"
+          content="https://storage.googleapis.com/noteswap-images/circle.png"
+        />
+        <meta property="og:url" content="https://noteswap.org" />
+
+        <meta name="twitter:title" content="Noteswap" />
+        <meta
+          name="twitter:description"
+          content="World’s leading online educational platform for earning community service hours using AI to validate. Discover a new way to earn your community service hours."
+        />
+        <meta
+          name="twitter:image"
+          content="https://storage.googleapis.com/noteswap-images/circle.png"
+        />
+        <meta name="twitter:card" content="Noteswap Icon" />
+        <link rel="manifest" href="/manifest.json" />
+
         <link
           rel="icon"
           type="image/x-icon"
           href="/assets/icons/favicons/main.ico"
         />
+        <link
+          rel="apple-touch-icon"
+          href="/assets/icons/icons/circle.png"
+        ></link>
       </Head>
     </>
   );

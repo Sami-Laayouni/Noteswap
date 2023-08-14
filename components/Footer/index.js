@@ -22,10 +22,22 @@ export default function Footer() {
   return (
     <footer className={style.footer}>
       <section className={style.footer_top}>
-        <h1>{t("ready_get_started")}</h1>
-        <h2>{t("send_support_email")}</h2>
+        <h1>
+          {t("ready_get_started") == "ready_get_started"
+            ? "Ready to get started?"
+            : t("ready_get_started")}
+        </h1>
+        <h2>
+          {t("send_support_email") == "send_support_email"
+            ? "If you have a general inquiry and would like to speak to our expert team, you can contact us via email at: support@noteswap.org"
+            : t("send_support_email")}
+        </h2>
         <Link href="/signup">
-          <button>{t("get_started")}</button>
+          <button>
+            {t("get_started") == "get_started"
+              ? "Get started"
+              : t("get_started")}
+          </button>
         </Link>
       </section>
       <div className={style.borderLine}></div>
@@ -37,7 +49,10 @@ export default function Footer() {
           height={51}
         />
         <p>
-          © {new Date().getFullYear()} {t("all_rights_reserved")}
+          © {new Date().getFullYear()}{" "}
+          {t("all_rights_reserved") == "all_rights_reserved"
+            ? "All Rights Reserved."
+            : t("all_rights_reserved")}
         </p>
         <div>
           <Image

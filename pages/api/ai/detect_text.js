@@ -9,6 +9,8 @@
  * @return {*}
  */
 export default async function aiDetection(req, res) {
+  res.setHeader("Cache-Control", "s-maxage=10");
+
   if (req.method.toLowerCase() !== "post") {
     res.status(405).json({ error: "Method Not Allowed" });
     return;

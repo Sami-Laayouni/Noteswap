@@ -12,6 +12,8 @@ import Certificate from "../../../models/Certificate";
  * @return {*}
  */
 export default async function handler(req, res) {
+  res.setHeader("Cache-Control", "s-maxage=10");
+
   const { sha256 } = req.body;
   try {
     await connectDB();

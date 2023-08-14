@@ -144,10 +144,19 @@ const Signup = () => {
 
             <p>{t("slogan")}</p>
 
-            <p>
+            <p style={{ paddingRight: "20px" }}>
               By signing up to Noteswap, you agree to our{" "}
-              <Link href="/boring/terms-of-service">Terms and conditions</Link>{" "}
-              and <Link href="/boring/privacy-policy">Privacy Policy</Link>
+              <Link href="/boring/terms-of-service">
+                <span style={{ textDecoration: "underline" }}>
+                  Terms of Service
+                </span>
+              </Link>{" "}
+              and <span></span>
+              <Link href="/boring/privacy-policy">
+                <span style={{ textDecoration: "underline" }}>
+                  Privacy Policy
+                </span>
+              </Link>
             </p>
           </section>
           <section className={style.right}>
