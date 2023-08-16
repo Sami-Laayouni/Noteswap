@@ -64,13 +64,18 @@ export default function TutorCard({ data }) {
         <p className={style.textBox}>{data?.desc}</p>
       </span>
       <div>
-        <StarRating rating={ratings} />
-        <p
-          className={style.center}
-          style={{ fontFamily: "var(--manrope-font)", lineHeight: "10px" }}
-        >
-          Rating: {roundToDecimal(ratings, 1)}/5
-        </p>
+        {ratings && (
+          <>
+            <StarRating rating={ratings} />
+            <p
+              className={style.center}
+              style={{ fontFamily: "var(--manrope-font)", lineHeight: "10px" }}
+            >
+              Rating: {roundToDecimal(ratings, 1)}/5
+            </p>
+          </>
+        )}
+        {!ratings && <p>No ratings yet</p>}
         <button
           className={style.button}
           style={{
