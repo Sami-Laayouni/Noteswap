@@ -65,7 +65,10 @@ export default function TutorCard({ data }) {
       </span>
       <div>
         <StarRating rating={ratings} />
-        <p style={{ fontFamily: "var(--manrope-font)", lineHeight: "10px" }}>
+        <p
+          className={style.center}
+          style={{ fontFamily: "var(--manrope-font)", lineHeight: "10px" }}
+        >
           Rating: {roundToDecimal(ratings, 1)}/5
         </p>
         <button

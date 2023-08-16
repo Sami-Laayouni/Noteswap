@@ -207,7 +207,7 @@
   padding-top: 10px;
   margin-left: 50px;
 }
-@media all and (max-width: 767px) {
+@media all and (max-width: 808px) {
   .grids {
     grid-template-columns: 100%;
   }

@@ -88,7 +88,7 @@ export default function EventCard({ data }) {
       <section style={{ position: "relative" }}>
         <span
           onClick={async () => {
-            const response = await fetch("/api/events/signup_event", {
+            await fetch("/api/events/signup_event", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",

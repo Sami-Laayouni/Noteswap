@@ -24,7 +24,7 @@
 }
 .container {
   height: 75px;
-  width: 300px;
+  width: 100%;
   display: inline-block;
   vertical-align: middle;
   border-radius: 10px;
@@ -164,4 +164,29 @@
 }
 .result {
   font-family: var(--manrope-font);
+}
+@media all and (max-width: 808px) {
+  .title {
+    text-align: center;
+    top: 35%;
+    width: 100%;
+  }
+  .subTitle {
+    text-align: center;
+    top: 50%;
+    width: 100%;
+  }
+  .search {
+    width: 90%;
+    grid-template-columns: 49% 1% 49% 1%;
+  }
+  .container {
+    width: 100%;
+  }
+  .container:last-child {
+    display: none;
+  }
+  .result {
+    text-align: center;
+  }
 }

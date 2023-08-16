@@ -1,3 +1,9 @@
+.container {
+  width: 75vw;
+  height: 78vh;
+  display: grid;
+  grid-template-columns: 50% 50%;
+}
 .button {
   padding: 10px 10px;
   cursor: pointer;
@@ -25,4 +31,18 @@
 }
 .detail h2 b {
   font-family: var(--manrope-bold-font);
+}
+@media all and (max-width: 767px) {
+  .container {
+    grid-template-columns: 100%;
+  }
+  .detail h1 {
+    display: none;
+  }
+  .detail h2 {
+    display: none;
+  }
+  .detail i {
+    display: none;
+  }
 }

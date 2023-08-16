@@ -116,14 +116,7 @@ export default function CertificateDownload({ main, userData, url }) {
     return (
       <div>
         {error}
-        <div
-          style={{
-            width: "75vw",
-            height: "78vh",
-            display: "grid",
-            gridTemplateColumns: "50% 50%",
-          }}
-        >
+        <div className={style.container}>
           <div
             style={{
               display: "flex",
@@ -222,14 +215,7 @@ export default function CertificateDownload({ main, userData, url }) {
     return (
       <div>
         {error}
-        <div
-          style={{
-            width: "75vw",
-            height: "78vh",
-            display: "grid",
-            gridTemplateColumns: "50% 50%",
-          }}
-        >
+        <div className={style.container}>
           <div
             style={{
               display: "flex",

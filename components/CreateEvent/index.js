@@ -464,8 +464,8 @@ export default function CreateEvent() {
                     style={{
                       position: "absolute",
                       top: "84%", // Adjust this value to position the <p> tag below the line
-                      left: "50%",
-                      width: "50%", // Adjust this value to control the width of the <p> tag
+                      left: "500px",
+                      width: "500px", // Adjust this value to control the width of the <p> tag
                       padding: "10px",
                       transform: "translate(-50%, -50%)",
                       textAlign: "center",
@@ -486,8 +486,8 @@ export default function CreateEvent() {
                       style={{
                         position: "absolute",
                         top: "100%", // Adjust this value to position the <p> tag below the line
-                        left: "50%",
-                        width: "50%", // Adjust this value to control the width of the <p> tag
+                        left: "500px",
+                        width: "500px", // Adjust this value to control the width of the <p> tag
                         padding: "10px",
                         transform: "translate(-50%, -50%)",
                         textAlign: "center",
@@ -505,8 +505,8 @@ export default function CreateEvent() {
                       style={{
                         position: "absolute",
                         top: "100%", // Adjust this value to position the <p> tag below the line
-                        left: "50%",
-                        width: "50%", // Adjust this value to control the width of the <p> tag
+                        left: "500px",
+                        width: "500px", // Adjust this value to control the width of the <p> tag
                         padding: "10px",
                         transform: "translate(-50%, -50%)",
                         textAlign: "center",

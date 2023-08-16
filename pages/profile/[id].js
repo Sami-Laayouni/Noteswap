@@ -120,7 +120,7 @@ export default function Profile({ data, notes }) {
           <div className={style.vertical_line} />
         </div>
         <div className={style.right}>
-          <h1>Latest notes</h1>
+          <h2>Latest notes</h2>
           {notes?.notes.length == 0 && (
             <span>
               <MdOutlineSpeakerNotesOff

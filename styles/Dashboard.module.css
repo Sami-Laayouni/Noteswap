@@ -21,6 +21,10 @@
   padding-left: 20px;
   line-height: 10px;
 }
+.list {
+  height: 100%;
+  background-color: whitesmoke;
+}
 .left {
   position: absolute;
   top: 50%;
@@ -48,4 +52,13 @@
   color: var(--default-white-color);
   background-color: var(--accent-color);
   display: none;
+}
+@media all and (max-width: 767px) {
+  .title {
+    line-height: 140%;
+    text-align: center;
+  }
+  .subTitle {
+    text-align: center;
+  }
 }

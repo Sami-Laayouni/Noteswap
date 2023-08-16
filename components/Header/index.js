@@ -354,6 +354,64 @@ export default function Header() {
                   <div className={style.borderLine} />
                 </li>
               </Link>
+              <Link href="/settings/account">
+                <li
+                  onClick={() => {
+                    document.getElementById("hamburger_menu").style.display =
+                      "none";
+                    document.getElementById("hamburger_overlay").style.display =
+                      "none";
+                  }}
+                >
+                  Settings
+                  <div className={style.borderLine} />
+                </li>
+              </Link>
+              {userData?.role == "student" && (
+                <li
+                  onClick={() => {
+                    setCertificate(true);
+                    document.getElementById("hamburger_menu").style.display =
+                      "none";
+                    document.getElementById("hamburger_overlay").style.display =
+                      "none";
+                  }}
+                >
+                  Certificates
+                  <div className={style.borderLine} />
+                </li>
+              )}
+              {userData?.role != "student" && (
+                <Link href="/detect_ai">
+                  <li
+                    onClick={() => {
+                      document.getElementById("hamburger_menu").style.display =
+                        "none";
+                      document.getElementById(
+                        "hamburger_overlay"
+                      ).style.display = "none";
+                    }}
+                  >
+                    Detect AI Text
+                    <div className={style.borderLine} />
+                  </li>
+                </Link>
+              )}
+
+              <li
+                onClick={() => {
+                  document.getElementById("dropdown").style.display = "none";
+                  AuthServices.logout();
+                  router.push("/login");
+                  document.getElementById("hamburger_menu").style.display =
+                    "none";
+                  document.getElementById("hamburger_overlay").style.display =
+                    "none";
+                }}
+              >
+                Log out
+                <div className={style.borderLine} />
+              </li>
             </>
           )}
         </ul>

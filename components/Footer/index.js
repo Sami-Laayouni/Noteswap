@@ -55,13 +55,19 @@ export default function Footer() {
             : t("all_rights_reserved")}
         </p>
         <div>
-          <Image
-            src="/assets/images/footer/Facebook.svg"
-            alt="Facebook"
-            width={33}
-            height={33}
-          />
-          <Link href="https://twitter.com/NoteSwap_Ifrane">
+          <Link
+            href="https://www.facebook.com/profile.php?id=61550215144348"
+            target="_blank"
+          >
+            <Image
+              src="/assets/images/footer/Facebook.svg"
+              alt="Facebook"
+              width={33}
+              height={33}
+            />
+          </Link>
+
+          <Link href="https://twitter.com/NoteSwap_Ifrane" target="_blank">
             <Image
               src="/assets/images/footer/Twitter.svg"
               alt="Twitter"
@@ -70,7 +76,10 @@ export default function Footer() {
             />
           </Link>
 
-          <Link href="https://www.linkedin.com/in/note-swap-837707280/">
+          <Link
+            href="https://www.linkedin.com/company/noteswap/about/"
+            target="_blank"
+          >
             <Image
               src="/assets/images/footer/Linkedin.svg"
               alt="Linkedin"

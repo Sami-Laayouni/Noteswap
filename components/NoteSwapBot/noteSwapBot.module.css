@@ -3,7 +3,7 @@
   height: 60px;
   border-radius: 50%;
   background-color: var(--accent-color);
-  position: absolute;
+  position: fixed;
   bottom: 30px;
   right: 30px;
   cursor: pointer;

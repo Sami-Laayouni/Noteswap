@@ -42,3 +42,34 @@
   height: 110px;
   padding-right: 20px;
 }
+@media all and (max-width: 808px) {
+  .container {
+    height: 100%;
+    grid-template-columns: 100%;
+  }
+  .imageContainer {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+  }
+  .name {
+    text-align: center;
+  }
+  .subject {
+    text-align: center;
+  }
+  .textBox {
+    text-align: center;
+    padding-left: 20px;
+  }
+  .center {
+    text-align: center;
+  }
+  .button {
+    position: inherit;
+    width: 45%;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+  }
+}

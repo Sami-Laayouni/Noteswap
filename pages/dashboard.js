@@ -124,6 +124,7 @@ const Dashboard = () => {
           </button>
           <ul
             ref={containerRef}
+            className={style.list}
             style={{
               paddingLeft: "20px",
               listStyle: "none",

@@ -11,3 +11,9 @@
   color: #f5d440; /* Color for the stars */
   line-height: 10px;
 }
+@media all and (max-width: 808px) {
+  .starRating {
+    text-align: center;
+    width: 100%;
+  }
+}

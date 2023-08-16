@@ -4,6 +4,15 @@ if (!process.env.NEXT_PUBLIC_OPENAI_KEY) {
   throw new Error("Missing env var from OpenAI");
 }
 
+function truncateString(inputString, maxLength) {
+  if (inputString.length > maxLength) {
+    const truncatedString = inputString.slice(0, maxLength) + "..."; // Adding ellipsis to indicate truncation
+    return truncatedString;
+  } else {
+    return inputString;
+  }
+}
+
 /**
  * Have AI validate a tutoring session
  * @date 7/24/2023 - 6:49:46 PM
@@ -38,7 +47,10 @@ export default async function handler(req, res) {
         },
         {
           role: "user",
-          content: `This is the text recorded from a tutoring session: ${speech} return true or false`,
+          content: `This is the text recorded from a tutoring session: ${truncateString(
+            speech,
+            700
+          )} return true or false`,
         },
       ],
     });
