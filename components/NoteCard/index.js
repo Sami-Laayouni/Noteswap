@@ -80,7 +80,14 @@ export default function NoteCard(data) {
       </h2>
       <h1>{data?.data?.title}</h1>
 
-      <div dangerouslySetInnerHTML={{ __html: data?.data?.notes }}></div>
+      <div
+        style={{
+          wordBreak: "normal",
+          overflow: "hidden",
+          height: "95px",
+        }}
+        dangerouslySetInnerHTML={{ __html: data?.data?.notes }}
+      ></div>
       {data?.data?.images.length > 0 && (
         <div
           className={style.imageScroll}

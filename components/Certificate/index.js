@@ -169,7 +169,7 @@ export default function CertificateDownload({ main, userData, url }) {
                 tutoring other students.
               </p>
               <img
-                src="/assets/images/Certificate/Noteswap.png"
+                src="/assets/images/certificate/Noteswap.png"
                 alt="Certificate"
                 width={500}
                 height={350}

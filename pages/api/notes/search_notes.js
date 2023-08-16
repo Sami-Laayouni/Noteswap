@@ -1,5 +1,6 @@
 import Notes from "../../../models/Notes";
 import User from "../../../models/User";
+import { connectDB } from "../../../utils/db";
 
 /**
  * Search notes
@@ -18,7 +19,7 @@ export default async function handler(req, res) {
   const body = req.body;
   const { title, desc, date, classes, type } = body;
   res.setHeader("Cache-Control", "public, max-age=120");
-
+  await connectDB();
   if (title) {
     options = {
       $match: {

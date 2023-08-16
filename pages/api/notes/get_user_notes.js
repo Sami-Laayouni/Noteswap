@@ -1,3 +1,5 @@
+import { connectDB } from "../../../utils/db";
+
 import Notes from "../../../models/Notes";
 import User from "../../../models/User";
 
@@ -13,6 +15,8 @@ import User from "../../../models/User";
  */
 export default async function handler(req, res) {
   const { id } = req.body;
+
+  await connectDB();
 
   try {
     const response = await Notes.find({ publisherId: id });

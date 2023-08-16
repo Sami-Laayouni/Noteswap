@@ -2,14 +2,6 @@
 
 const { i18n } = require("./next-i18next.config");
 
-const withPWA = require("next-pwa")({
-  dest: "public",
-  register: true,
-  skipWaiting: true,
-  disable: process.env.NODE_ENV === "development",
-  exclude: ["'/api/*'"],
-});
-
 const securityHeaders = [
   //Informs the browser that this page should only access pages using HTTPS
   //Blocks access to websites that can only be served over HTTP
@@ -63,4 +55,4 @@ const nextConfig = {
   },
 };
 
-module.exports = withPWA(nextConfig);
+module.exports = nextConfig;

@@ -28,7 +28,7 @@ function NoteSwap({ Component, pageProps }) {
   const headers = (
     <>
       <Head>
-        <meta charset="UTF-8" />
+        <meta charSet="UTF-8" />
         <title>Noteswap</title>
 
         <meta

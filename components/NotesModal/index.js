@@ -664,7 +664,7 @@ export default function NotesModal() {
                   publisherId: JSON.parse(localStorage.getItem("userInfo"))._id,
                   upvotes: 0,
                   downvotes: 0,
-                  aiRating: parseInt(result),
+                  aiRating: parseInt(result) ? parseInt(result) : 70,
                   type: "default",
                   images: [],
                 }),

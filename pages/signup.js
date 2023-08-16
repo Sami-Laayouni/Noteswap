@@ -136,7 +136,7 @@ const Signup = () => {
     <>
       <div className={style.background}>
         <Head>
-          <title>{t("signup")} | Noteswap</title> {/* Title of the page */}
+          <title>Signup | Noteswap</title> {/* Title of the page */}
         </Head>
         <div className={style.container}>
           <section className={style.left}>

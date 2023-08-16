@@ -8,6 +8,7 @@ import {
 } from "react-icons/md";
 import { BsBookmark } from "react-icons/bs";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 import NoteCard from "../../components/NoteCard";
 
@@ -19,13 +20,41 @@ import NoteCard from "../../components/NoteCard";
  * @param {{ data: any; notes: any; }} { data, notes }
  * @return {*}
  */
-export default function Profile({ data, notes }) {
+export default function Profile() {
   const [usersId, setUsersId] = useState();
+  const [ran, setRan] = useState(false);
+  const [data, setData] = useState(null);
+  const [notes, setNotes] = useState(null);
+  const router = useRouter();
   useEffect(() => {
+    async function getData(id) {
+      const response = await fetch("/api/profile/get_user_profile", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ information: id }),
+      });
+      const apiData = await response.json();
+      setData(apiData);
+      const secondRequestOptions = await fetch("/api/notes/get_user_notes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: apiData._id }),
+      });
+      setRan(true);
+      setNotes(await secondRequestOptions.json());
+    }
     if (localStorage) {
       setUsersId(JSON.parse(localStorage.getItem("userInfo"))._id);
     }
-  }, []);
+    const { id } = router.query;
+    if (id && !ran) {
+      getData(id);
+    }
+  }, [router]);
   return (
     <main className={style.background}>
       <div className={style.image_container}>
@@ -146,77 +175,4 @@ export default function Profile({ data, notes }) {
       </section>
     </main>
   );
-}
-/**
- * Get static props
- * @date 8/13/2023 - 4:58:02 PM
- *
- * @async
- * @return {unknown}
- */
-export const getStaticPaths = async () => {
-  return {
-    paths: [], // indicates that no page needs be created at build time
-    fallback: true, // indicates the type of fallback
-  };
-};
-
-/**
- * Get static props
- * @date 8/13/2023 - 4:58:02 PM
- *
- * @export
- * @async
- * @param {*} context
- * @returns {unknown}
- */
-export async function getStaticProps(context) {
-  const { params } = context;
-
-  const information = params.id;
-  try {
-    // Pass the information to the API
-    const apiUrl = `${process.env.NEXT_PUBLIC_URL}api/profile/get_user_profile`;
-    const secondApiUrl = `${process.env.NEXT_PUBLIC_URL}api/notes/get_user_notes`;
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ information }),
-    };
-
-    const response = await fetch(apiUrl, requestOptions);
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch API data");
-    }
-
-    const apiData = await response.json();
-
-    const secondRequestOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ id: apiData._id }),
-    };
-
-    const secondResponse = await fetch(secondApiUrl, secondRequestOptions);
-    const secondData = await secondResponse.json();
-    // Add one-day cache to the static page
-
-    return {
-      props: {
-        data: apiData,
-        notes: secondData,
-      },
-    };
-  } catch (error) {
-    return {
-      props: {
-        data: null,
-      },
-    };
-  }
 }
