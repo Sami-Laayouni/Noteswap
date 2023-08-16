@@ -80,13 +80,13 @@ define(['./workbox-bfa558ca'], (function (workbox) { 'use strict';
    */
   workbox.precacheAndRoute([{
     "url": "/_next/build-manifest.json",
-    "revision": "d322f246c2561a942e6b8fd8ea8b933b"
+    "revision": "1a9afdcc12088ad026797196fd1a19ec"
   }, {
     "url": "/_next/react-loadable-manifest.json",
     "revision": "9ea365a6ec4eeea810b14833f3088317"
   }, {
     "url": "/_next/server/middleware-build-manifest.js",
-    "revision": "e9634c0218ea9b765cc1ff2bfab2e181"
+    "revision": "98446e9a783b246a91629942b8edc836"
   }, {
     "url": "/_next/server/middleware-react-loadable-manifest.js",
     "revision": "611bae50e8a84b98573ca46f21471261"
@@ -109,9 +109,6 @@ define(['./workbox-bfa558ca'], (function (workbox) { 'use strict';
     "url": "/_next/static/chunks/pages/_error.js",
     "revision": "655e0beb2cf532a786ca4d1470236920"
   }, {
-    "url": "/_next/static/chunks/pages/detect_ai.js",
-    "revision": "15f24bc71622991970c0926908752e99"
-  }, {
     "url": "/_next/static/chunks/polyfills.js",
     "revision": "837c0df77fd5009c9e46d446188ecfd0"
   }, {
@@ -119,18 +116,18 @@ define(['./workbox-bfa558ca'], (function (workbox) { 'use strict';
     "revision": "27ae59e69cda6c79795d811dedbd002a"
   }, {
     "url": "/_next/static/chunks/webpack.js",
-    "revision": "abca6285505a05c7e7deb4808a1c5333"
+    "revision": "0942e575f3b02ba84b8d02fbdc5e3a67"
   }, {
     "url": "/_next/static/development/_buildManifest.js",
-    "revision": "787408f50583016d5ad489e9ddecbff0"
+    "revision": "8dbc74d32d6f78dff8f75b53fcf924be"
   }, {
     "url": "/_next/static/development/_ssgManifest.js",
     "revision": "abee47769bf307639ace4945f9cfd4ff"
   }, {
-    "url": "/_next/static/webpack/54f15b37a76a6c31.webpack.hot-update.json",
+    "url": "/_next/static/webpack/7492db962d90aa57.webpack.hot-update.json",
     "revision": "development"
   }, {
-    "url": "/_next/static/webpack/webpack.54f15b37a76a6c31.hot-update.js",
+    "url": "/_next/static/webpack/webpack.7492db962d90aa57.hot-update.js",
     "revision": "development"
   }], {
     "ignoreURLParametersMatching": [/ts/]

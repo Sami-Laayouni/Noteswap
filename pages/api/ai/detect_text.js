@@ -18,7 +18,7 @@ export default async function aiDetection(req, res) {
 
   // Assuming you have an API endpoint for AI text detection
   const apiUrl =
-    "https://api-inference.huggingface.co/models/roberta-large-openai-detector";
+    "https://piratexx-chatgpt-content-detector.hf.space/run/predict";
 
   try {
     const { texts } = req.body;
@@ -26,11 +26,8 @@ export default async function aiDetection(req, res) {
     // Make a POST request to the AI detection API
     const apiResponse = await fetch(apiUrl, {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${process.env.HUGGING_FACE_API}`,
-      },
-      method: "POST",
-      body: JSON.stringify({ text: texts }),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ data: [texts] }),
     });
 
     if (!apiResponse.ok) {

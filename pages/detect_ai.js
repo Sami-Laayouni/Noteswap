@@ -2,7 +2,7 @@ import style from "../styles/AI.module.css";
 import { useState } from "react";
 import Head from "next/head";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-
+import Link from "next/link";
 /**
  * Get static props
  * @date 8/13/2023 - 4:52:59 PM
@@ -57,14 +57,16 @@ export default function DetectAI() {
                     texts: document.getElementById("detectText").value,
                   }),
                 });
-                const result = await apiResponse.json();
-                const data = result[0];
-                setTexts(document.getElementById("detectText").value);
-                setLikely(data.label);
-                document.getElementById("right").style.display = "block";
-                document.getElementById("detectButton").innerText = "Detect";
+                if (apiResponse.ok) {
+                  const result = await apiResponse.json();
+                  const data = result;
+                  setTexts(document.getElementById("detectText").value);
+                  setLikely(data.data[0].Label);
+                  document.getElementById("right").style.display = "block";
+                  document.getElementById("detectButton").innerText = "Detect";
+                }
               } catch (error) {
-                // An error has occued
+                console.log(error);
               }
             }}
           >
@@ -84,8 +86,21 @@ export default function DetectAI() {
           <div className={style.text}>{texts}</div>
           <div className={style.likely}>
             The following text is likely{" "}
-            {likely == "LABEL_0" ? "human" : "AI generated"}
+            {likely == "Human" ? "human" : "AI generated"}
           </div>
+          <p style={{ fontFamily: "var(--manrope-font)", marginLeft: "5px" }}>
+            Looking for more accurate results?{" "}
+            <Link href="https://originality.ai/?lmref=8FQ9wA" target="_blank">
+              <span
+                style={{
+                  color: "var(--accent-color)",
+                  textDecoration: "underline",
+                }}
+              >
+                Try out this one!
+              </span>
+            </Link>{" "}
+          </p>
         </section>
       </div>
     </>
