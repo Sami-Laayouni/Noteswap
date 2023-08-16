@@ -34,6 +34,7 @@ export default async function loginUserWithGoogle(req, res) {
       const token = jwt.sign({ userId: user._id }, jwtSecret);
       res.status(200).json({ token: token, user: user });
     } catch (error) {
+      console.log(error);
       res.status(500).json({ error: "User authentication error" });
     }
   } else {

@@ -145,6 +145,7 @@
 .thirdpartyloginBtn:hover {
   background-color: var(--default-light-grey-color);
 }
+
 .thirdpartyloginBtn img {
   display: inline-block;
   position: absolute;

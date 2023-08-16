@@ -241,7 +241,8 @@ const Login = () => {
               <button
                 type="button"
                 className={style.thirdpartyloginBtn}
-                onClick={() => handleLogin("facebook")}
+                style={{ cursor: "not-allowed" }}
+                onClick={() => setError("Method not supported yet")}
               >
                 <Image
                   src="/assets/icons/Facebook_Icon.svg"

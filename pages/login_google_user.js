@@ -79,7 +79,9 @@ function LoginGoogleUserPage() {
         justifyContent: "center",
         color: "white",
       }}
-    ></div>
+    >
+      Logging in...
+    </div>
   );
 }
 

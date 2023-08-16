@@ -126,7 +126,10 @@ export default function Profile() {
                   lineHeight: "0px",
                 }}
               >
-                {data?.email ? data?.email : data?.metamask_address}
+                {data?.email
+                  ? data?.email
+                  : data?.metamask_address.slice(0, 25)}
+                ...
               </p>
             </div>
             <div style={{ display: "block", height: "fit-content" }}>

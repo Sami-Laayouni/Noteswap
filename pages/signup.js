@@ -280,7 +280,12 @@ const Signup = () => {
                       />
                       {t("continue_with")} Metamask
                     </button>
-                    <button type="button" className={style.thirdpartyloginBtn}>
+                    <button
+                      type="button"
+                      style={{ cursor: "not-allowed" }}
+                      onClick={() => setError("Method not supported yet")}
+                      className={style.thirdpartyloginBtn}
+                    >
                       <Image
                         src="/assets/icons/Facebook_Icon.svg"
                         alt="Continue with Facebook"
