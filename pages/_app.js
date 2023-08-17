@@ -5,6 +5,7 @@ import "../styles/quill.css";
 import Head from "next/head";
 import DefaultLayout from "../layouts/DefaultLayout";
 import { appWithTranslation } from "next-i18next";
+import Script from "next/script";
 
 /**
  * Custom App component for Next.js.
@@ -77,12 +78,12 @@ function NoteSwap({ Component, pageProps }) {
           rel="apple-touch-icon"
           href="/assets/icons/icons/circle.png"
         ></link>
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9167942144001417"
-          crossOrigin="anonymous"
-        ></script>
       </Head>
+      <Script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9167942144001417"
+        crossOrigin="anonymous"
+      />
     </>
   );
   // Return the JSX element

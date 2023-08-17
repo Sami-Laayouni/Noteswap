@@ -148,6 +148,7 @@ export default function BecomeTutor() {
               onChange={(e) => {
                 setDescription(e.target.value);
               }}
+              required
             ></textarea>
           </>
         )}

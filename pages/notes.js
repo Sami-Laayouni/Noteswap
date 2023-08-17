@@ -50,6 +50,10 @@ export default function Note() {
   const [notes, setNotes] = useState();
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const currentDate = new Date();
+  const nextDay = new Date(currentDate);
+  nextDay.setDate(currentDate.getDate() + 1);
+  const nextDayISO = nextDay.toISOString().split("T")[0];
 
   const { t } = useTranslation("common");
 
@@ -207,7 +211,7 @@ export default function Note() {
               onChange={(e) => {
                 addRoutePath("date", e.target.value);
               }}
-              max={new Date().toISOString().split("T")[0]}
+              max={nextDayISO}
               type="date"
               id="date"
             ></input>
