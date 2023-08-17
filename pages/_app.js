@@ -78,6 +78,21 @@ function NoteSwap({ Component, pageProps }) {
           rel="apple-touch-icon"
           href="/assets/icons/icons/circle.png"
         ></link>
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-QXR2R5FDM0"
+        ></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+
+                gtag('config', 'G-QXR2R5FDM0');
+              `,
+          }}
+        />
       </Head>
       <Script
         async
