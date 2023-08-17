@@ -29,7 +29,11 @@ export const requireAuthentication = (WrappedComponent) => {
         const token = localStorage.getItem("token"); // Retrieve the token from local storage or cookies
 
         if (!token) {
-          router.push("/login"); // Redirect to the login page if the user is not authenticated
+          {
+            /* Change this */
+          }
+          setIsLoading(false);
+          //router.push("/login"); // Redirect to the login page if the user is not authenticated
         } else {
           try {
             const decodedToken = verifyToken(token);

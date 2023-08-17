@@ -121,7 +121,7 @@ export default function Header() {
       <header className={style.header_main_container}>
         {/* Noteswap logo (redirects to /dashboard) */}
         <div className={style.header_logo}>
-          <Link href={loggedIn ? "/dashboard" : "/"}>
+          <Link href={!loggedIn ? "/dashboard" : "/"}>
             <Image
               src="/assets/icons/Logo_light.svg"
               alt="Noteswap Logo light"
@@ -134,7 +134,8 @@ export default function Header() {
 
         {/* Header nav bar (for tablets and desktops)*/}
         <nav className={style.header_nav}>
-          {loggedIn ? (
+          {/* Change this */}
+          {!loggedIn ? (
             <>
               {/* User is logged in */}
               <Link className={style.header_nav_a} href="/notes">
@@ -147,7 +148,8 @@ export default function Header() {
                 Events
               </Link>
               {/* User info (Profile pic + name)*/}
-              {userData && (
+              {/* Change this */}
+              {loggedIn && userData && (
                 <>
                   <div
                     id="userInfo"
@@ -222,7 +224,7 @@ export default function Header() {
         {/* Hamburger menu (mobile devices only) */}
         <div className={style.hamburger_menu}>
           {/* User is logged in*/}
-          {loggedIn && (
+          {!loggedIn && (
             <div
               style={{ display: "inline-block" }}
               onClick={() => {
