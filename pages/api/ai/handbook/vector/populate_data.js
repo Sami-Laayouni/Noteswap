@@ -1,68 +1,87 @@
 import { getPinecone } from "../../../../../utils/pinecone";
 import { getOpenAIInstance } from "../../../../../utils/openAI";
+async function splitTextAndGenerateSections(text) {
+  const paragraphs = text.split("\n").filter((word) => word.trim() !== "");
+  const sectionsList = [];
 
-const MAX_CONCURRENT_REQUESTS = 3; // You can adjust this value as needed
+  for (const paragraph of paragraphs) {
+    let remainingText = paragraph.trim();
+
+    while (remainingText.length > 0) {
+      const section = remainingText.substring(0, 512);
+      const dotIndex = section.lastIndexOf(".");
+      if (dotIndex !== -1) {
+        sectionsList.push(section.substring(0, dotIndex + 1));
+        remainingText = remainingText.substring(dotIndex + 1).trim();
+      } else {
+        sectionsList.push(section);
+        remainingText = remainingText.substring(512).trim();
+      }
+    }
+  }
+
+  return sectionsList;
+}
 
 export default async function PopulateData(req, res) {
   const { text } = req.body;
-  res.setHeader("Cache-Control", "s-maxage=10");
 
   const pinecone = await getPinecone();
   const openai = await getOpenAIInstance();
 
   async function getEmbedding(text) {
-    const strippedText = text.replace(/\n/g, " ");
-    const response = await openai
-      .createEmbedding({
-        input: strippedText,
-        model: "text-embedding-ada-002",
-      })
-      .then((response) => {
-        const embedding = response.data.data[0].embedding;
-        return embedding;
-      });
-
-    if (response.ok) {
-      const data = await response.json();
-      return data.data[0].embedding;
-    } else {
-      console.log(await response.text());
-      return null;
-    }
-  }
-
-  const paragraphs = text.split("\n").filter((input) => input.trim() !== "");
-
-  const vectors = [];
-  let currentIndex = 0;
-
-  async function processNextBatch() {
-    const batch = paragraphs.slice(
-      currentIndex,
-      currentIndex + MAX_CONCURRENT_REQUESTS
-    );
-    currentIndex += MAX_CONCURRENT_REQUESTS;
-
-    const batchResults = await Promise.all(
-      batch.map((line) => getEmbedding(line))
-    );
-
-    batchResults.forEach((result, index) => {
-      if (result !== null) {
-        vectors.push({
-          id: batch[index],
-          value: result,
-        });
-      }
+    const response = await openai.createEmbedding({
+      input: text,
+      model: "text-embedding-ada-002",
     });
 
-    if (currentIndex < paragraphs.length) {
-      await processNextBatch();
+    if (response.status == 200) {
+      const data = response.data;
+      return data;
     }
   }
 
-  await processNextBatch();
+  let paragraphs = await splitTextAndGenerateSections(text);
+  let embeddings = [];
+  while (paragraphs.length) {
+    let tokenCount = 0;
+    let bathcedInputs = [];
+    while (paragraphs.length && tokenCount < 4096) {
+      let input = paragraphs.shift();
+      bathcedInputs.push(input);
+      tokenCount += input.split(" ").length;
+    }
+    let embeddingResult = await getEmbedding(bathcedInputs);
+    embeddings = embeddings.concat(
+      embeddingResult.data.map((entry) => entry.embedding)
+    );
+  }
+  let words = await splitTextAndGenerateSections(text);
 
-  console.log(vectors);
-  res.status(200).send("Worked");
+  let vectors = words.map((paragraph, i) => {
+    return {
+      id: paragraph,
+      values: embeddings[i],
+    };
+  });
+  try {
+    let insertBatches = [];
+    while (vectors.length) {
+      let batchedVectors = vectors.splice(0, 250);
+
+      // Insert the batchedVectors into Pinecone
+      let pineconeResult = await pinecone.upsert({
+        upsertRequest: {
+          vectors: batchedVectors,
+          namespace: "noteswap-asi",
+        },
+      });
+
+      // Add the result to insertBatches
+      insertBatches.push(pineconeResult);
+    }
+    res.status(200).send("Worked");
+  } catch (error) {
+    res.status(500).send(error);
+  }
 }

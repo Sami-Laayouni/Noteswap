@@ -152,7 +152,7 @@ const ForSchools = () => {
                     text: text,
                   }),
                 });
-                /*
+
                 try {
                   const response = await school.create_school(
                     existingObject.School_full_name,
@@ -175,7 +175,7 @@ const ForSchools = () => {
                   }
                 } catch (error) {
                   // An error has occured
-                }*/
+                }
               }}
             >
               <section className={style.container}>

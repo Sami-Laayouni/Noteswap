@@ -47,11 +47,12 @@
   width: 100%;
   background-color: whitesmoke;
   height: 100%;
+  overflow-y: scroll;
 }
 .input {
   width: 100%;
   display: grid;
-  grid-template-columns: 80% 20%;
+  grid-template-columns: 85% 15%;
 }
 .input input {
   outline: none;
@@ -62,4 +63,17 @@
   line-height: 20px;
   font-size: 15px;
   font-family: var(--manrope-font);
+}
+.box ul {
+  list-style: none;
+  font-family: var(--manrope-font);
+}
+.box ul li {
+  line-height: 200%;
+}
+.error {
+  color: red;
+}
+.ai {
+  color: var(--accent-color);
 }
