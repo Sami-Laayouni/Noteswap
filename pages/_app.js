@@ -90,11 +90,6 @@ function NoteSwap({ Component, pageProps }) {
         async
         src="https://www.googletagmanager.com/gtag/js?id=G-QXR2R5FDM0"
       />
-      <Script
-        async
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9167942144001417"
-        crossOrigin="anonymous"
-      />
     </>
   );
   // Return the JSX element

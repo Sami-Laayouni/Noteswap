@@ -10,6 +10,8 @@ import NoteCard from "../components/NoteCard";
 import LoadingCircle from "../components/LoadingCircle";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
+import { isAuthenticated } from "../utils/auth";
+
 import dynamic from "next/dynamic";
 
 const Notes = dynamic(() => import("../components/NotesModal"));
@@ -47,6 +49,7 @@ export default function Note() {
   const [url, setUrl] = imagesUrl;
   const [error, setError] = imageError;
   const [title, setTitle] = useState("");
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const [notes, setNotes] = useState();
   const [loading, setLoading] = useState(true);
@@ -73,6 +76,11 @@ export default function Note() {
       }
     );
   }
+
+  useEffect(() => {
+    const isLoggedIn = isAuthenticated();
+    setLoggedIn(isLoggedIn);
+  }, [setLoggedIn]);
 
   useEffect(() => {
     if (title) {
@@ -286,13 +294,17 @@ export default function Note() {
       <div
         className={style.create_notes}
         onClick={() => {
-          if (
-            document.getElementById("select").style.display == "none" ||
-            !document.getElementById("select").style.display
-          ) {
-            document.getElementById("select").style.display = "block";
+          if (loggedIn) {
+            if (
+              document.getElementById("select").style.display == "none" ||
+              !document.getElementById("select").style.display
+            ) {
+              document.getElementById("select").style.display = "block";
+            } else {
+              document.getElementById("select").style.display = "none";
+            }
           } else {
-            document.getElementById("select").style.display = "none";
+            router.push("/login");
           }
         }}
       >

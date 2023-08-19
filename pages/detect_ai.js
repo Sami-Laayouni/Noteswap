@@ -3,6 +3,7 @@ import { useState } from "react";
 import Head from "next/head";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Link from "next/link";
+import Script from "next/script";
 /**
  * Get static props
  * @date 8/13/2023 - 4:52:59 PM
@@ -34,6 +35,11 @@ export default function DetectAI() {
       <Head>
         <title>Detect AI Text | Noteswap</title>
       </Head>
+      <Script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9167942144001417"
+        crossOrigin="anonymous"
+      />
       <div className={style.grid}>
         <section className={style.left}>
           <h1 className={style.title}>Detect AI Generated Text</h1>

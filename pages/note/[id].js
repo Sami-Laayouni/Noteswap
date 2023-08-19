@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import LoadingCircle from "../../components/LoadingCircle";
+import Script from "next/script";
 
 /**
  * Note page
@@ -71,6 +72,11 @@ export default function Note() {
   });
   return (
     <>
+      <Script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9167942144001417"
+        crossOrigin="anonymous"
+      />
       <BiArrowBack
         onClick={() => {
           window.history.back();
