@@ -41,36 +41,36 @@ export default async function PopulateData(req, res) {
     }
   }
 
-  let paragraphs = await splitTextAndGenerateSections(text);
+  const paragraphs = await splitTextAndGenerateSections(text);
   let embeddings = [];
   while (paragraphs.length) {
     let tokenCount = 0;
-    let bathcedInputs = [];
+    const bathcedInputs = [];
     while (paragraphs.length && tokenCount < 4096) {
-      let input = paragraphs.shift();
+      const input = paragraphs.shift();
       bathcedInputs.push(input);
       tokenCount += input.split(" ").length;
     }
-    let embeddingResult = await getEmbedding(bathcedInputs);
+    const embeddingResult = await getEmbedding(bathcedInputs);
     embeddings = embeddings.concat(
       embeddingResult.data.map((entry) => entry.embedding)
     );
   }
-  let words = await splitTextAndGenerateSections(text);
+  const words = await splitTextAndGenerateSections(text);
 
-  let vectors = words.map((paragraph, i) => {
+  const vectors = words.map((paragraph, i) => {
     return {
       id: paragraph,
       values: embeddings[i],
     };
   });
   try {
-    let insertBatches = [];
+    const insertBatches = [];
     while (vectors.length) {
-      let batchedVectors = vectors.splice(0, 250);
+      const batchedVectors = vectors.splice(0, 250);
 
       // Insert the batchedVectors into Pinecone
-      let pineconeResult = await pinecone.upsert({
+      const pineconeResult = await pinecone.upsert({
         upsertRequest: {
           vectors: batchedVectors,
           namespace: "noteswap-asi",

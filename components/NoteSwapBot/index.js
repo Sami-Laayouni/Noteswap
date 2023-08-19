@@ -14,7 +14,7 @@ import { BsFillChatSquareQuoteFill } from "react-icons/bs";
  * @return {*}
  */
 export default function NoteSwapBot() {
-  let messages = [
+  const messages = [
     {
       role: "system",
       content: `You are a professional, kind AI trained on a school's handbook. Answer questions with the data given to you. If you cannot infer the answer from the data provided say Sorry I don't know that. If the question doesn't require data just respond to it.`,
