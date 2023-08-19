@@ -32,7 +32,7 @@ export default function Footer() {
             ? "If you have a general inquiry and would like to speak to our expert team, you can contact us via email at: support@noteswap.org"
             : t("send_support_email")}
         </h2>
-        <Link href="/signup">
+        <Link title="Signup to Noteswap" href="/signup">
           <button>
             {t("get_started") == "get_started"
               ? "Get started"
@@ -56,6 +56,7 @@ export default function Footer() {
         </p>
         <div>
           <Link
+            title="Visit our Facebook"
             href="https://www.facebook.com/profile.php?id=61550215144348"
             target="_blank"
           >
@@ -67,7 +68,11 @@ export default function Footer() {
             />
           </Link>
 
-          <Link href="https://twitter.com/NoteSwap_Ifrane" target="_blank">
+          <Link
+            title="Visit our Twitter/X"
+            href="https://twitter.com/NoteSwap_Ifrane"
+            target="_blank"
+          >
             <Image
               src="/assets/images/footer/Twitter.svg"
               alt="Twitter"
@@ -77,6 +82,7 @@ export default function Footer() {
           </Link>
 
           <Link
+            title="Visit our Linkedin"
             href="https://www.linkedin.com/company/noteswap/about/"
             target="_blank"
           >

@@ -64,7 +64,7 @@ export default function TutorCard({ data }) {
         <p className={style.textBox}>{data?.desc}</p>
       </span>
       <div>
-        {ratings && (
+        {ratings != 0 && (
           <>
             <StarRating rating={ratings} />
             <p
@@ -75,7 +75,16 @@ export default function TutorCard({ data }) {
             </p>
           </>
         )}
-        {!ratings && <p>No ratings yet</p>}
+        {!ratings && (
+          <p
+            style={{
+              fontFamily: "var(--manrope-font)",
+              paddingTop: "30px",
+            }}
+          >
+            No ratings yet
+          </p>
+        )}
         <button
           className={style.button}
           style={{

@@ -31,7 +31,6 @@ function NoteSwap({ Component, pageProps }) {
       <Head>
         <meta charSet="UTF-8" />
         <title>Noteswap</title>
-
         <meta
           name="description"
           content="Online educational platform for earning community service hours using AI to validate. Discover a new way to earn your community service hours."
@@ -45,7 +44,6 @@ function NoteSwap({ Component, pageProps }) {
         <meta name="language" content="en" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="theme-color" content="#40b385" />
-
         <meta property="og:title" content="Noteswap" />
         <meta
           property="og:description"
@@ -56,7 +54,6 @@ function NoteSwap({ Component, pageProps }) {
           content="https://storage.googleapis.com/noteswap-images/circle.png"
         />
         <meta property="og:url" content="https://noteswap.org" />
-
         <meta name="twitter:title" content="Noteswap" />
         <meta
           name="twitter:description"
@@ -68,7 +65,6 @@ function NoteSwap({ Component, pageProps }) {
         />
         <meta name="twitter:card" content="Noteswap Icon" />
         <link rel="manifest" href="/manifest.json" />
-
         <link
           rel="icon"
           type="image/x-icon"
@@ -78,10 +74,6 @@ function NoteSwap({ Component, pageProps }) {
           rel="apple-touch-icon"
           href="/assets/icons/icons/circle.png"
         ></link>
-        <script
-          async
-          src="https://www.googletagmanager.com/gtag/js?id=G-QXR2R5FDM0"
-        ></script>
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -94,6 +86,10 @@ function NoteSwap({ Component, pageProps }) {
           }}
         />
       </Head>
+      <Script
+        async
+        src="https://www.googletagmanager.com/gtag/js?id=G-QXR2R5FDM0"
+      />
       <Script
         async
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9167942144001417"

@@ -73,7 +73,7 @@ const Dashboard = () => {
       const currentTime = new Date().toISOString();
       const API_KEY = process.env.NEXT_PUBLIC_CALENDAR_KEY;
       const response = await fetch(
-        `https://www.googleapis.com/calendar/v3/calendars/${id}/events?key=${API_KEY}&timeMin=${currentTime}&maxResults=20&fields=items(summary,description,start,end,location,htmlLink)`
+        `https://www.googleapis.com/calendar/v3/calendars/${id}/events?key=${API_KEY}&timeMin=${currentTime}&maxResults=40&fields=items(summary,description,start,end,location,htmlLink)`
       );
       if (response.ok) {
         const data = await response.json();

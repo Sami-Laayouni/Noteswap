@@ -141,7 +141,9 @@ export default function BecomeTutor() {
       >
         {current == 2 && (
           <>
-            <label className={style.labelForInput}>Description</label>
+            <label className={style.labelForInput}>
+              Description (Tell us a little bit about yourself){" "}
+            </label>
             <textarea
               className={style.textarea}
               value={description}

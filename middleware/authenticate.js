@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import LoadingPage from "../components/LoadingPage";
-import jwt from "jsonwebtoken";
+import dynamic from "next/dynamic";
+const LoadingPage = dynamic(() => import("../components/LoadingPage"));
+import { verify } from "jsonwebtoken";
 
 export const requireAuthentication = (WrappedComponent) => {
   // Create a higher-order component (HOC) that enforces authentication
@@ -14,7 +15,7 @@ export const requireAuthentication = (WrappedComponent) => {
 
     const verifyToken = (token) => {
       try {
-        const decoded = jwt.verify(token, process.env.NEXT_PUBLIC_JWT_SECRET);
+        const decoded = verify(token, process.env.NEXT_PUBLIC_JWT_SECRET);
         return decoded;
       } catch (error) {
         localStorage.removeItem("token");
@@ -29,11 +30,7 @@ export const requireAuthentication = (WrappedComponent) => {
         const token = localStorage.getItem("token"); // Retrieve the token from local storage or cookies
 
         if (!token) {
-          {
-            /* Change this */
-          }
-          setIsLoading(false);
-          //router.push("/login"); // Redirect to the login page if the user is not authenticated
+          router.push("/login"); // Redirect to the login page if the user is not authenticated
         } else {
           try {
             const decodedToken = verifyToken(token);
@@ -44,7 +41,7 @@ export const requireAuthentication = (WrappedComponent) => {
             router.push("/login");
           }
         }
-      }, 2000); // Delay of 2 seconds (2000 milliseconds)
+      }, 1500); // Delay of 2 seconds (2000 milliseconds)
 
       return () => clearTimeout(delay); // Clean up the timeout if the component unmounts
     }, []);

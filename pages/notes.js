@@ -11,6 +11,7 @@ import LoadingCircle from "../components/LoadingCircle";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import dynamic from "next/dynamic";
+
 const Notes = dynamic(() => import("../components/NotesModal"));
 const ImageNotesModal = dynamic(() => import("../components/ImageNotesModal"));
 

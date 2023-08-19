@@ -57,7 +57,7 @@
   width: 100%;
   padding: 120px 80px;
 }
-.here_students_can h1 {
+.here_students_can h2 {
   color: var(--default-white-color);
   font-family: var(--manrope-bold-font);
   text-align: center;
@@ -72,7 +72,7 @@
   list-style: none;
   margin-top: 80px;
 }
-.here_students_can ul li h2 {
+.here_students_can ul li h3 {
   font-size: 1.45rem;
   font-family: var(--manrope-font);
 }
@@ -99,7 +99,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
-.user h1 {
+.user h2 {
   position: absolute;
   font-family: var(--manrope-bold-font);
   font-size: 5rem;
@@ -107,7 +107,7 @@
   top: 40%;
   transform: translate(-50%, -50%);
 }
-.user h2 {
+.user h3 {
   position: absolute;
   font-family: var(--manrope-bold-font);
   font-size: 1.5rem;
@@ -122,7 +122,7 @@
   padding-left: 80px;
   padding-right: 80px;
 }
-.faq_section h1 {
+.faq_section h2 {
   color: var(--default-black-color);
   font-family: var(--manrope-font);
   font-size: 2.25rem;

@@ -9,7 +9,7 @@ import TutorCard from "../../components/TutorCard";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import dynamic from "next/dynamic";
 const BecomeTutor = dynamic(() => import("../../components/BecomeTutor"));
-
+const BookASession = dynamic(() => import("../../components/BookASession"));
 /**
  * Get static props
  * @date 8/13/2023 - 5:02:47 PM
@@ -166,6 +166,7 @@ export default function Tutor() {
         <title>Noteswap | Tutor</title>
       </Head>
       <BecomeTutor />
+      <BookASession />
       <img
         className={style.background}
         src="/assets/images/users/Background-Image.webp"

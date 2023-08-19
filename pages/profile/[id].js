@@ -22,7 +22,6 @@ import NoteCard from "../../components/NoteCard";
  */
 export default function Profile() {
   const [usersId, setUsersId] = useState();
-  const [ran, setRan] = useState(false);
   const [data, setData] = useState(null);
   const [notes, setNotes] = useState(null);
   const router = useRouter();
@@ -44,17 +43,16 @@ export default function Profile() {
         },
         body: JSON.stringify({ id: apiData._id }),
       });
-      setRan(true);
       setNotes(await secondRequestOptions.json());
     }
     if (localStorage) {
       setUsersId(JSON.parse(localStorage.getItem("userInfo"))._id);
     }
     const { id } = router.query;
-    if (id && !ran) {
+    if (id) {
       getData(id);
     }
-  }, [router]);
+  }, [router.query.id]);
   return (
     <main className={style.background}>
       <div className={style.image_container}>
@@ -128,8 +126,7 @@ export default function Profile() {
               >
                 {data?.email
                   ? data?.email
-                  : data?.metamask_address.slice(0, 25)}
-                ...
+                  : `${data?.metamask_address.slice(0, 25)}...`}
               </p>
             </div>
             <div style={{ display: "block", height: "fit-content" }}>

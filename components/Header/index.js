@@ -121,7 +121,7 @@ export default function Header() {
       <header className={style.header_main_container}>
         {/* Noteswap logo (redirects to /dashboard) */}
         <div className={style.header_logo}>
-          <Link href={!loggedIn ? "/dashboard" : "/"}>
+          <Link href={loggedIn ? "/dashboard" : "/"}>
             <Image
               src="/assets/icons/Logo_light.svg"
               alt="Noteswap Logo light"
@@ -134,22 +134,32 @@ export default function Header() {
 
         {/* Header nav bar (for tablets and desktops)*/}
         <nav className={style.header_nav}>
-          {/* Change this */}
-          {!loggedIn ? (
+          {loggedIn ? (
             <>
               {/* User is logged in */}
-              <Link className={style.header_nav_a} href="/notes">
+              <Link
+                title="Visit notes"
+                className={style.header_nav_a}
+                href="/notes"
+              >
                 Notes
               </Link>
-              <Link className={style.header_nav_a} href="/tutor">
+              <Link
+                title="Visit Tutor"
+                className={style.header_nav_a}
+                href="/tutor"
+              >
                 Tutor
               </Link>
-              <Link className={style.header_nav_a} href="/event">
+              <Link
+                title="Visit events"
+                className={style.header_nav_a}
+                href="/event"
+              >
                 Events
               </Link>
               {/* User info (Profile pic + name)*/}
-              {/* Change this */}
-              {loggedIn && userData && (
+              {userData && (
                 <>
                   <div
                     id="userInfo"

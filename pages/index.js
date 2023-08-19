@@ -42,7 +42,7 @@ export default function Home() {
           <h1>NoteSwap</h1>
           <h2>{t("slogan") ? t("slogan") : "Swap your way to success"}</h2>
           <h3>{t("desc")}</h3>
-          <Link href="/signup">
+          <Link title="Signup to Noteswap" href="/signup">
             <button>
               {t("get_started") ? t("get_started") : "Get Started"}
             </button>
@@ -58,11 +58,11 @@ export default function Home() {
       </section>
       {/* ========== Here Students Can Section ========= */}
       <section className={style.here_students_can}>
-        <h1>
+        <h2>
           {t("here_students_can")
             ? t("here_students_can")
             : "Here Students Can"}
-        </h1>
+        </h2>
         <ul>
           <li>
             <Image
@@ -71,7 +71,7 @@ export default function Home() {
               src="/assets/images/here_students_can/share_notes.svg"
               alt="Share Notes"
             />
-            <h2>{t("share_notes") ? t("share_notes") : "Share Notes"}</h2>
+            <h3>{t("share_notes") ? t("share_notes") : "Share Notes"}</h3>
             <p>{t("students_can_share_notes")}</p>
           </li>
           <li>
@@ -81,7 +81,7 @@ export default function Home() {
               src="/assets/images/here_students_can/tutor.svg"
               alt="Tutor"
             />
-            <h2>{t("tutor")}</h2>
+            <h3>{t("tutor")}</h3>
             <p>{t("students_can_tutor")}</p>
           </li>
           <li>
@@ -91,7 +91,7 @@ export default function Home() {
               src="/assets/images/here_students_can/chat.svg"
               alt="Chat"
             />
-            <h2>{t("ask")}</h2>
+            <h3>{t("ask")}</h3>
             <p>{t("students_can_ask")}</p>
           </li>
 
@@ -102,7 +102,7 @@ export default function Home() {
               src="/assets/images/here_students_can/fun.svg"
               alt="Have Fun"
             />
-            <h2>{t("earn")}</h2>
+            <h3>{t("earn")}</h3>
             <p>{t("students_can_earn")}</p>
           </li>
         </ul>
@@ -122,12 +122,12 @@ export default function Home() {
           width={152}
           height={132}
         />
-        <h1>{t("over_50k")}</h1>
-        <h2>{t("ilograms_of_user")}</h2>
+        <h2>{t("over_50k")}</h2>
+        <h3>{t("ilograms_of_user")}</h3>
       </section>
       {/* ========== FAQ Section ========= */}
       <section className={style.faq_section}>
-        <h1>{t("faq")}</h1>
+        <h2>{t("faq")}</h2>
         <ul>
           <li>
             <Image
