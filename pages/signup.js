@@ -258,7 +258,7 @@ const Signup = () => {
                       {t("continue_with")} Google
                     </button>
                     <button
-                      type="submit"
+                      type="button"
                       className={style.thirdpartyloginBtn}
                       onClick={async () => {
                         setMethod("metamask");

@@ -135,7 +135,7 @@
 .faq_section ul li {
   position: relative;
 }
-.faq_section ul li h2 {
+.faq_section ul li h3 {
   color: var(--default-black-color);
   font-family: var(--manrope-font);
   font-size: 1.15rem;

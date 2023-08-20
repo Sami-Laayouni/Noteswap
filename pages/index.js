@@ -146,7 +146,7 @@ export default function Home() {
                 }
               }}
             />
-            <h2>{t("question1")} </h2>
+            <h3>{t("question1")} </h3>
             <div>
               <p id="answer1">{t("answer1")}</p>
             </div>
@@ -169,7 +169,7 @@ export default function Home() {
                 }
               }}
             />
-            <h2>{t("question2")}</h2>
+            <h3>{t("question2")}</h3>
             <div>
               <p id="answer2">{t("answer2")}</p>
             </div>
@@ -193,7 +193,7 @@ export default function Home() {
                 }
               }}
             />
-            <h2>{t("question3")}</h2>
+            <h3>{t("question3")}</h3>
             <div>
               <p id="answer3">{t("answer3")}</p>
             </div>
@@ -217,7 +217,7 @@ export default function Home() {
                 }
               }}
             />
-            <h2>{t("question4")}</h2>
+            <h3>{t("question4")}</h3>
             <div>
               <p id="answer4">{t("answer4")}</p>
             </div>
