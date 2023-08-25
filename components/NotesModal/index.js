@@ -113,6 +113,10 @@ export default function NotesModal() {
 
     setTimer(
       setInterval(() => {
+        localStorage.setItem(
+          "autosave_time",
+          JSON.stringify(prevElapsedTime + 1)
+        );
         setElapsedTime((prevElapsedTime) => prevElapsedTime + 1);
       }, 1000)
     );
@@ -204,6 +208,10 @@ export default function NotesModal() {
     const savedTitle = localStorage.getItem("autosave_title");
     if (savedTitle && savedTitle.trim() != "undefined") {
       setTitle(savedTitle);
+    }
+    const savedTime = localStorage.getItem("autosave_time");
+    if (savedTime && savedTime.trim() != "undefined") {
+      setElapsedTime(parseInt(savedTime));
     }
   }, []);
 

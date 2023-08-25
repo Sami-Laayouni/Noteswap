@@ -1,6 +1,5 @@
 import Notes from "../../../../models/Notes";
 import { connectDB } from "../../../../utils/db";
-
 /**
  * Search notes
  * @date 7/24/2023 - 7:04:51 PM
@@ -11,7 +10,33 @@ import { connectDB } from "../../../../utils/db";
  * @param {*} res
  * @return {*}
  */
+function findFavorite(userData) {
+  const categoryScores = {};
+
+  userData.forEach((entry) => {
+    const { category, score } = entry;
+
+    if (!categoryScores[category]) {
+      categoryScores[category] = 0;
+    }
+
+    categoryScores[category] += score;
+  });
+
+  const sortedCategories = Object.keys(categoryScores).sort(
+    (a, b) => categoryScores[b] - categoryScores[a]
+  );
+
+  const favoriteAuthors = userData.map((entry) => entry.user);
+
+  return sortedCategories.map((category, index) => ({
+    category: category,
+    author: favoriteAuthors[index],
+  }));
+}
 export default async function handler(req, res) {
+  res.setHeader("Cache-Control", "public, max-age=120");
+
   try {
     const { userId } = req.body; // User ID from the request body
 
@@ -27,10 +52,6 @@ export default async function handler(req, res) {
       },
     ]).exec();
 
-    // Create sets to keep track of unique users and notes
-    const users = new Set();
-    const noteSet = new Set();
-
     // Initialize the scores matrix
     const scores = [];
 
@@ -41,51 +62,95 @@ export default async function handler(req, res) {
       // Iterate through ratings within the note
       note?.scores?.forEach((score) => {
         // Add user and note to their respective sets
-        users.add(score.user);
-        noteSet.add(note._id.toString());
-
-        // Find indices for user and note in sets
-        const userIndex = [...users].indexOf(score.user);
-        const noteIndex = [...noteSet].indexOf(note._id.toString());
-        // Initialize the scores matrix if needed
-        if (!scores[userIndex]) {
-          scores[userIndex] = [];
+        const noteScoreUser = score.user;
+        if (noteScoreUser == userId) {
+          scores.push({
+            user: note.userInfo[0]._id,
+            score: score.score,
+            category: note.category,
+          });
         }
-
-        // Store the score in the ratings matrix
-        scores[userIndex][noteIndex] = score.score;
       });
     });
 
-    // Calculate predicted ratings for the user
-    const userIndex = [...users].indexOf(userId);
-    if (userIndex === -1) {
-      res.status(400).json({ error: "User not found" });
-      return;
-    }
+    const favorites = findFavorite(scores);
+    const first_results = await Notes.aggregate([
+      {
+        $match: {
+          publisherId: favorites[0].author,
+          category: favorites[0].category,
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "publisherId",
+          foreignField: "_id",
+          as: "userInfo",
+        },
+      },
+      { $sort: { aiRating: -1, createdAt: -1 } },
+      { $limit: 15 },
+    ]);
 
-    // Calculate predicted ratings for the user
-    const userPredictedRatings = [];
-    for (let i = 0; i < noteSet.size; i++) {
-      const sum = scores.reduce((acc, cur) => acc + (cur[i] || 0), 0);
-      const avgRating = sum / users.size;
-      userPredictedRatings.push({ noteIndex: i, predictedRating: avgRating });
-    }
+    const second_results = await Notes.aggregate([
+      {
+        $match: {
+          publisherId: { $ne: favorites[0].author },
+          category: favorites[0].category,
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "publisherId",
+          foreignField: "_id",
+          as: "userInfo",
+        },
+      },
+      { $sort: { aiRating: -1, createdAt: -1 } },
+      { $limit: 5 },
+    ]);
+    const knownAuthor = second_results[0].publisherId;
+    const third_results = await Notes.aggregate([
+      {
+        $match: {
+          publisherId: favorites[0].author,
+          category: { $ne: favorites[0].category },
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "publisherId",
+          foreignField: "_id",
+          as: "userInfo",
+        },
+      },
+      { $sort: { aiRating: -1, createdAt: -1 } },
+      { $limit: 5 },
+    ]);
+    const fouth_results = await Notes.aggregate([
+      {
+        $match: {
+          publisherId: knownAuthor,
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "publisherId",
+          foreignField: "_id",
+          as: "userInfo",
+        },
+      },
+      { $sort: { aiRating: -1, createdAt: -1 } },
+      { $limit: 10 },
+    ]);
 
-    // Sort user's predicted ratings in descending order
-    userPredictedRatings.sort((a, b) => b.predictedRating - a.predictedRating);
-    // Get recommended notes that the user hasn't seen yet
-    const recommendedNotes = userPredictedRatings.map(
-      (item) => [...noteSet][item.noteIndex]
-    );
-
-    // Retrieve the actual notes based on recommendedNotes
-    const recommendedNoteObjects = recommendedNotes.map((noteId) =>
-      notes.find((note) => note._id.toString() === noteId)
-    );
-
-    // Send recommended notes as a JSON response
-    res.status(200).json(recommendedNoteObjects);
+    res
+      .status(200)
+      .send([first_results, second_results, third_results, fouth_results]);
   } catch (error) {
     res.status(500).json({ error: error });
   }

@@ -50,6 +50,7 @@ export default function Note() {
   const [error, setError] = imageError;
   const [title, setTitle] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
+  const [role, setRole] = useState(null);
 
   const [notes, setNotes] = useState();
   const [loading, setLoading] = useState(true);
@@ -80,6 +81,9 @@ export default function Note() {
   useEffect(() => {
     const isLoggedIn = isAuthenticated();
     setLoggedIn(isLoggedIn);
+    if (localStorage) {
+      setRole(JSON.parse(localStorage?.getItem("userInfo")).role);
+    }
   }, [setLoggedIn]);
 
   useEffect(() => {
@@ -115,6 +119,7 @@ export default function Note() {
     });
     const data = await response.json();
     setLoading(false);
+    console.log(data);
     setNotes(data.notes);
   }
 
@@ -292,25 +297,27 @@ export default function Note() {
           <span id="uploadNotes">Image of notes</span>
         </li>
       </ul>
-      <div
-        className={style.create_notes}
-        onClick={() => {
-          if (loggedIn) {
-            if (
-              document.getElementById("select").style.display == "none" ||
-              !document.getElementById("select").style.display
-            ) {
-              document.getElementById("select").style.display = "block";
+      {role && role != "teacher" && (
+        <div
+          className={style.create_notes}
+          onClick={() => {
+            if (loggedIn) {
+              if (
+                document.getElementById("select").style.display == "none" ||
+                !document.getElementById("select").style.display
+              ) {
+                document.getElementById("select").style.display = "block";
+              } else {
+                document.getElementById("select").style.display = "none";
+              }
             } else {
-              document.getElementById("select").style.display = "none";
+              router.push("/login");
             }
-          } else {
-            router.push("/login");
-          }
-        }}
-      >
-        <IoIosCreate color="white" size={31} />
-      </div>
+          }}
+        >
+          <IoIosCreate color="white" size={31} />
+        </div>
+      )}
       <input
         type="file"
         id="imageUploadInput"

@@ -96,7 +96,9 @@ export default async function handler(req, res) {
 
   if (type == "latest") {
     query.push({ $sort: { createdAt: -1 } }, { $limit: 15 });
-  } else if (type == "foryou") {
+  } else if (type == "popular") {
+    query.push({ $sort: { hot: -1, createdAt: -1 } }, { $limit: 15 });
+  } else {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_URL}api/ai/filtering/collaborative`,
       {
@@ -109,15 +111,25 @@ export default async function handler(req, res) {
         }),
       }
     );
+    const array = [];
+    const data = await response.json();
+    array.push(data[0]);
+    data[1].map(function (value) {
+      array[0].push(value);
+    });
+    data[2].map(function (value) {
+      array[0].push(value);
+    });
+    data[3].map(function (value) {
+      array[0].push(value);
+    });
     const final = {
-      notes: await response.json(),
+      notes: array[0],
     };
     if (response.ok) {
       res.status(200).send(final);
       return;
     }
-  } else {
-    query.push({ $sort: { hot: -1, createdAt: -1 } }, { $limit: 15 });
   }
 
   try {
