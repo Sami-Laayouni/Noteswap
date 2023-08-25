@@ -366,7 +366,7 @@ export default function Header() {
                   <div className={style.borderLine} />
                 </li>
               </Link>
-              {userData.role != "teacher" && (
+              {userData?.role != "teacher" && (
                 <Link href="/tutor">
                   <li
                     onClick={() => {
@@ -408,22 +408,20 @@ export default function Header() {
                   <div className={style.borderLine} />
                 </li>
               </Link>
-              {userData?.role == "student" ||
-                (userData?.role == "admin" && (
-                  <li
-                    onClick={() => {
-                      setCertificate(true);
-                      document.getElementById("hamburger_menu").style.display =
-                        "none";
-                      document.getElementById(
-                        "hamburger_overlay"
-                      ).style.display = "none";
-                    }}
-                  >
-                    Certificates
-                    <div className={style.borderLine} />
-                  </li>
-                ))}
+              {userData?.role == "student" && (
+                <li
+                  onClick={() => {
+                    setCertificate(true);
+                    document.getElementById("hamburger_menu").style.display =
+                      "none";
+                    document.getElementById("hamburger_overlay").style.display =
+                      "none";
+                  }}
+                >
+                  Certificates
+                  <div className={style.borderLine} />
+                </li>
+              )}
               {userData?.role != "student" && (
                 <Link href="/detect_ai">
                   <li
@@ -481,14 +479,12 @@ export default function Header() {
               <span>Settings</span>
             </Link>
           </li>
-          {userData?.role == "student" ||
-            userData?.role == "admin" ||
-            (userData?.role == "supervisor" && (
-              <li onClick={() => setCertificate(true)}>
-                <FiAward size={21} style={{ verticalAlign: "middle" }} />
-                <span>Certificates </span>
-              </li>
-            ))}
+          {userData?.role == "student" && (
+            <li onClick={() => setCertificate(true)}>
+              <FiAward size={21} style={{ verticalAlign: "middle" }} />
+              <span>Certificates </span>
+            </li>
+          )}
           {userData?.role == "admin" ||
             (userData?.role == "supervisor" && (
               <li>

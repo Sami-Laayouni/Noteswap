@@ -249,6 +249,7 @@ export default function Note() {
                         style={{
                           display: "inline-block",
                           verticalAlign: "middle",
+                          borderRadius: "50%",
                         }}
                       ></Image>
                       <p

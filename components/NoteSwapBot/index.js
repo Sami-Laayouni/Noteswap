@@ -51,11 +51,17 @@ export default function NoteSwapBot() {
         }),
       });
       const json = await res.json();
-      messages.push({
+      const messagei = [
+        {
+          role: "system",
+          content: `You are an AI. You answer questions on these notes ${extractTextFromHTML(
+            json.note[0].notes
+          )}`,
+        },
+      ];
+      messagei.push({
         role: "user",
-        content: `This user is asking this question ${message} on these notes: ${extractTextFromHTML(
-          json.note[0].notes
-        )}. Answer there question with the notes provided.`,
+        content: `This student is asking this question ${message} on the notes.`,
       });
       const response = await fetch("/api/ai/handbook/llm/conversation", {
         method: "POST",
@@ -63,7 +69,7 @@ export default function NoteSwapBot() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          messages: messages,
+          messages: messagei,
         }),
       });
 
