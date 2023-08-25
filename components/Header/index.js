@@ -7,10 +7,14 @@ import { isAuthenticated } from "../../utils/auth";
 import { useEffect } from "react";
 import ProfilePicture from "../ProfilePicture";
 import { useRouter } from "next/router";
-import { MdOutlineArrowDropDown } from "react-icons/md";
+import {
+  MdOutlineArrowDropDown,
+  MdOutlineAdminPanelSettings,
+} from "react-icons/md";
 import { FiSettings, FiLogOut, FiAward } from "react-icons/fi";
 import { LuGlasses } from "react-icons/lu";
 import { CgProfile } from "react-icons/cg";
+
 import AuthService from "../../services/AuthService";
 import ModalContext from "../../context/ModalContext";
 import { useTranslation } from "next-i18next";
@@ -144,13 +148,16 @@ export default function Header() {
               >
                 Notes
               </Link>
-              <Link
-                title="Visit Tutor"
-                className={style.header_nav_a}
-                href="/tutor"
-              >
-                Tutor
-              </Link>
+              {userData?.role != "teacher" && (
+                <Link
+                  title="Visit Tutor"
+                  className={style.header_nav_a}
+                  href="/tutor"
+                >
+                  Tutor
+                </Link>
+              )}
+
               <Link
                 title="Visit events"
                 className={style.header_nav_a}
@@ -359,19 +366,22 @@ export default function Header() {
                   <div className={style.borderLine} />
                 </li>
               </Link>
-              <Link href="/tutor">
-                <li
-                  onClick={() => {
-                    document.getElementById("hamburger_menu").style.display =
-                      "none";
-                    document.getElementById("hamburger_overlay").style.display =
-                      "none";
-                  }}
-                >
-                  Tutor
-                  <div className={style.borderLine} />
-                </li>
-              </Link>
+              {userData.role != "teacher" && (
+                <Link href="/tutor">
+                  <li
+                    onClick={() => {
+                      document.getElementById("hamburger_menu").style.display =
+                        "none";
+                      document.getElementById(
+                        "hamburger_overlay"
+                      ).style.display = "none";
+                    }}
+                  >
+                    Tutor
+                    <div className={style.borderLine} />
+                  </li>
+                </Link>
+              )}
               <Link href="/event">
                 <li
                   onClick={() => {
@@ -398,20 +408,22 @@ export default function Header() {
                   <div className={style.borderLine} />
                 </li>
               </Link>
-              {userData?.role == "student" && (
-                <li
-                  onClick={() => {
-                    setCertificate(true);
-                    document.getElementById("hamburger_menu").style.display =
-                      "none";
-                    document.getElementById("hamburger_overlay").style.display =
-                      "none";
-                  }}
-                >
-                  Certificates
-                  <div className={style.borderLine} />
-                </li>
-              )}
+              {userData?.role == "student" ||
+                (userData?.role == "admin" && (
+                  <li
+                    onClick={() => {
+                      setCertificate(true);
+                      document.getElementById("hamburger_menu").style.display =
+                        "none";
+                      document.getElementById(
+                        "hamburger_overlay"
+                      ).style.display = "none";
+                    }}
+                  >
+                    Certificates
+                    <div className={style.borderLine} />
+                  </li>
+                ))}
               {userData?.role != "student" && (
                 <Link href="/detect_ai">
                   <li
@@ -469,12 +481,26 @@ export default function Header() {
               <span>Settings</span>
             </Link>
           </li>
-          {userData?.role == "student" && (
-            <li onClick={() => setCertificate(true)}>
-              <FiAward size={21} style={{ verticalAlign: "middle" }} />
-              <span>Certificates </span>
-            </li>
-          )}
+          {userData?.role == "student" ||
+            userData?.role == "admin" ||
+            (userData?.role == "supervisor" && (
+              <li onClick={() => setCertificate(true)}>
+                <FiAward size={21} style={{ verticalAlign: "middle" }} />
+                <span>Certificates </span>
+              </li>
+            ))}
+          {userData?.role == "admin" ||
+            (userData?.role == "supervisor" && (
+              <li>
+                <Link href="/admin">
+                  <MdOutlineAdminPanelSettings
+                    size={21}
+                    style={{ verticalAlign: "middle" }}
+                  />
+                  <span>Admin Page</span>
+                </Link>
+              </li>
+            ))}
           {userData?.role != "student" && (
             <li>
               <Link href="/detect_ai">

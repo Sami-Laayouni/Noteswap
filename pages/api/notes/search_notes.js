@@ -17,7 +17,7 @@ export default async function handler(req, res) {
   let options = {};
 
   const body = req.body;
-  const { title, desc, date, classes, type } = body;
+  const { title, desc, date, classes, type, id } = body;
   res.setHeader("Cache-Control", "public, max-age=120");
   await connectDB();
   if (title) {
@@ -96,8 +96,28 @@ export default async function handler(req, res) {
 
   if (type == "latest") {
     query.push({ $sort: { createdAt: -1 } }, { $limit: 15 });
-  } else {
+  } else if (type == "popular") {
     query.push({ $sort: { hot: -1, createdAt: -1 } }, { $limit: 15 });
+  } else {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_URL}api/ai/filtering/collaborative`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: id,
+        }),
+      }
+    );
+    const final = {
+      notes: await response.json(),
+    };
+    if (response.ok) {
+      res.status(200).send(final);
+      return;
+    }
   }
 
   try {

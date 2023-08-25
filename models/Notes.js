@@ -27,6 +27,10 @@ const noteSchema = new mongoose.Schema({
     type: Number,
     required: false,
   },
+  scores: {
+    type: Array,
+    required: false,
+  },
   aiRating: {
     type: Number,
     required: true,

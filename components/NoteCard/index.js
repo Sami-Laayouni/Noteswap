@@ -5,6 +5,9 @@ import { useRouter } from "next/router";
 import { useRef, useState, useContext } from "react";
 import Image from "next/image";
 import { BiRightArrow, BiLeftArrow } from "react-icons/bi";
+import { FiMoreHorizontal } from "react-icons/fi";
+import { FaShare } from "react-icons/fa";
+import { BsFillTrashFill } from "react-icons/bs";
 import ModalContext from "../../context/ModalContext";
 
 /**
@@ -41,8 +44,16 @@ export default function NoteCard(data) {
   const handleMouseLeave = () => {
     setShowArrows(false);
   };
+  function increaseKeyValue(obj, key) {
+    if (obj.hasOwnProperty(key)) {
+      obj[key] += 1;
+    } else {
+      obj[key] = 1;
+    }
+  }
   return (
     <div
+      id={`card${data?.data?._id}`}
       className={style.card}
       style={{
         height: data?.data?.type == "default" ? "200px" : "450px",
@@ -52,11 +63,29 @@ export default function NoteCard(data) {
         if (
           event.target.id != "containerRef" &&
           event.target.id != "right" &&
+          event.target.id != `dropdown${data?.data?._id}` &&
+          event.target.id != `dropdownItem${data?.data?._id}` &&
+          event.target.id != `dropdownItem2${data?.data?._id}` &&
           event.target.id != "right1" &&
           event.target.id != "left" &&
+          event.target.id != `more${data?.data?._id}` &&
+          event.target.id != `more2${data?.data?._id}` &&
           event.target.id != "left1" &&
           event.target.tagName !== "IMG"
         ) {
+          if (!JSON.parse(localStorage.getItem("click"))) {
+            localStorage.setItem("click", JSON.stringify({}));
+          }
+          if (!JSON.parse(localStorage.getItem("click2"))) {
+            localStorage.setItem("click2", JSON.stringify({}));
+          }
+          const obj = JSON.parse(localStorage.getItem("click"));
+          increaseKeyValue(obj, data.data.userInfo[0]._id);
+          localStorage.setItem("click", JSON.stringify(obj));
+          const obj2 = JSON.parse(localStorage.getItem("click2"));
+          increaseKeyValue(obj2, data.data.category);
+          localStorage.setItem("click2", JSON.stringify(obj2));
+
           router.push(`/note/${data?.data?._id}`);
         }
       }}
@@ -79,6 +108,81 @@ export default function NoteCard(data) {
         {data?.data[0]?.userInfo?.last_name}
       </h2>
       <h1>{data?.data?.title}</h1>
+      <button id={`more${data?.data?._id}`} className={style.more}>
+        <FiMoreHorizontal
+          size={25}
+          color="black"
+          id={`more2${data?.data?._id}`}
+          onClick={() => {
+            console.log(
+              document.getElementById(`dropdown${data?.data?._id}`).style
+                .display == "none"
+            );
+            if (
+              document.getElementById(`dropdown${data?.data?._id}`).style
+                .display == "none" ||
+              !document.getElementById(`dropdown${data?.data?._id}`).style
+                .display
+            ) {
+              document.getElementById(
+                `dropdown${data?.data?._id}`
+              ).style.display = "block";
+            } else {
+              document.getElementById(
+                `dropdown${data?.data?._id}`
+              ).style.display = "none";
+            }
+          }}
+        />
+      </button>
+
+      <div id={`dropdown${data?.data?._id}`} className={style.dropdown}>
+        <ol>
+          <li
+            id={`dropdownItem${data?.data?._id}`}
+            onClick={async () => {
+              if (navigator.share) {
+                await navigator.share({
+                  title: data?.data?.title,
+                  text: "Check out these notes on Noteswap",
+                  url: `${process.env.NEXT_PUBLIC_URL}note/${data?.data?._id}`,
+                });
+              }
+            }}
+          >
+            <FaShare style={{ marginRight: "10px" }} />
+            Share notes
+          </li>
+          {localStorage?.getItem("userInfo") &&
+            JSON.parse(localStorage?.getItem("userInfo"))._id ==
+              data?.data?.userInfo[0]?._id && (
+              <li
+                onClick={async () => {
+                  const response = await fetch("/api/notes/delete_note", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      id: data?.data?._id,
+                    }),
+                  });
+                  if (response.ok) {
+                    document.getElementById(
+                      `card${data?.data?._id}`
+                    ).style.display = "none";
+                  } else {
+                    console.log(await response.text());
+                  }
+                }}
+                id={`dropdownItem2${data?.data?._id}`}
+              >
+                <BsFillTrashFill style={{ marginRight: "10px" }} />
+                Delete notes
+              </li>
+            )}
+        </ol>
+      </div>
 
       <div
         style={{

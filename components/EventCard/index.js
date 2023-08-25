@@ -88,7 +88,7 @@ export default function EventCard({ data }) {
       <section style={{ position: "relative" }}>
         <span
           onClick={async () => {
-            await fetch("/api/events/signup_event", {
+            const response = await fetch("/api/events/signup_event", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -98,7 +98,11 @@ export default function EventCard({ data }) {
                 userId: JSON.parse(localStorage.getItem("userInfo"))._id,
               }),
             });
-            router.push(data?.link_to_event);
+            if (response.ok) {
+              router.push(data?.link_to_event);
+            } else {
+              console.log(await response.text);
+            }
           }}
         >
           <button

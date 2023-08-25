@@ -55,7 +55,6 @@ export default function SignupEmail({ url, name, event }) {
             Visit{" "}
           </button>
         </a>
-        <p>Sami Laayouni and Ali Zaid</p>
         <p>The Noteswap team</p>
       </main>
       <footer

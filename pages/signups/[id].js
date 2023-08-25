@@ -120,6 +120,14 @@ export default function SignUps() {
   return (
     <>
       <h1 className={style.header}>Volunteers who signed up for your event</h1>
+      <p
+        className={style.refresh}
+        onClick={() => {
+          window.location.reload();
+        }}
+      >
+        Refresh the page to see changes
+      </p>
       <ul className={style.list}>
         {volunteersData.map((volunteer, index) => (
           <li key={index}>

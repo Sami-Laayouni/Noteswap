@@ -9,7 +9,6 @@ import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
 import Image from "next/image";
 import Footer from "../components/Footer";
-import initFacebookSDK from "../utils/facebook";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
@@ -50,10 +49,6 @@ const Login = () => {
   const AuthServices = new AuthService(setLoggedIn);
   const { t } = useTranslation("common");
 
-  useEffect(() => {
-    // Load the Facebook SDK
-    initFacebookSDK();
-  }, []);
   /**
    * Handle Toggle Password
    *
@@ -64,6 +59,17 @@ const Login = () => {
   const handleTogglePassword = () => {
     setShowPassword((prevState) => !prevState);
   };
+  useEffect(() => {
+    if (localStorage) {
+      if (
+        localStorage.getItem("errorLogin") &&
+        localStorage.getItem("errorLogin") != "undefined"
+      ) {
+        setError(localStorage.getItem("errorLogin"));
+        localStorage.removeItem("errorLogin");
+      }
+    }
+  }, [error]);
   /**
    * Handle login
    *
@@ -92,50 +98,15 @@ const Login = () => {
         const data = await AuthServices.get_google_continue_url("login"); // Get login with Google link
         // Redirect to the page
         window.location.href = data.url;
-      } else if (type === "facebook") {
-        // Login with Facebook (Boomer)
-        FB.login(
-          function (response) {
-            if (response.authResponse) {
-              // User is logged in and authorized
-              // Make any necessary API calls or handle the logged-in state
-            } else {
-              // User canceled the login process or didn't authorize
-              setError("Login failed:", response.status);
-            }
-          },
-          { scope: "email" } // Specify the permissions you require
-        );
-      } else if (type === "metamask") {
-        // Login with Metamask
-        if (window.ethereum) {
-          // Request Metamask popup
-          await window.ethereum.enable();
-          const accounts = await window.ethereum.request({
-            method: "eth_requestAccounts",
-          });
+      } else if (type === "microsoft") {
+        window.location.href = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize
+        ?client_id=${process.env.NEXT_PUBLIC_MICROSOFT_APP_ID}
+        &response_type=code
+        &redirect_uri=${process.env.NEXT_PUBLIC_URL}api/auth/login_with_microsoft_callback
+        &response_mode=query
+        &scope=user.read+openid+profile+email
 
-          const address = accounts[0];
-          if (address) {
-            const response = await AuthServices.login_with_metamask(address);
-            if (response.token) {
-              // Store the token in local storage
-              localStorage.setItem("userInfo", JSON.stringify(response.user));
-              localStorage.setItem("token", response.token);
-              // Redirect to the dashboard page after successful login
-              router.push("/dashboard");
-            } else {
-              // An error has occured
-              setError(response.error);
-            }
-          } else {
-            // The user did not select an addess
-            setError("No address selected.");
-          }
-        } else {
-          // User doesn't have Metamask on their browser
-          setError("Metamask not downloaded on your browser.");
-        }
+        `;
       } else {
         // User trys to login with an unsupported method
         setError(`Login method not supported. Found login method ${type}`);
@@ -172,7 +143,7 @@ const Login = () => {
                 id="emailLogin"
                 type="email"
                 autoComplete="email"
-                placeholder="Enter your email"
+                placeholder="Enter your school email"
                 value={email}
                 aria-required="true"
                 aria-invalid="true"
@@ -192,6 +163,7 @@ const Login = () => {
                   value={password}
                   aria-required="true"
                   aria-invalid="true"
+                  minLength={8}
                   className={style.inputBlank}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -228,29 +200,15 @@ const Login = () => {
               <button
                 type="button"
                 className={style.thirdpartyloginBtn}
-                onClick={() => handleLogin("metamask")}
+                onClick={() => handleLogin("microsoft")}
               >
                 <Image
-                  src="/assets/icons/Metamask_Icon.svg"
-                  alt="Continue with Metamask"
+                  src="/assets/icons/Microsoft_Icon.svg"
+                  alt="Continue with Microsoft"
                   width={24}
                   height={24}
                 />
-                {t("continue_with")} Metamask
-              </button>
-              <button
-                type="button"
-                className={style.thirdpartyloginBtn}
-                style={{ cursor: "not-allowed" }}
-                onClick={() => setError("Method not supported yet")}
-              >
-                <Image
-                  src="/assets/icons/Facebook_Icon.svg"
-                  alt="Continue with Facebook"
-                  width={24}
-                  height={24}
-                />
-                {t("continue_with")} Facebook (Boomer)
+                {t("continue_with")} Microsoft
               </button>
 
               <div className={style.accountContainer}>

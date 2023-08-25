@@ -20,7 +20,7 @@ const LoadingPage = () => {
           <LoadingCircle />
           <h1 style={{ marginLeft: "10px" }}>Noteswap</h1>
         </div>
-        <p style={{ paddingLeft: "40px" }}>
+        <p className={style.padding}>
           {t("loading_message") != "loading_message"
             ? t("loading_message")
             : "Loading...Just kidding just wasting your time"}

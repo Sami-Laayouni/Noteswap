@@ -15,15 +15,27 @@ export default function BookASession() {
   const [open, setOpen] = bookSession;
   const [info] = bookSessionInfo;
   const [email, setEmail] = useState("");
+  const [senderEmail, setSenderEmail] = useState("");
   const [error, setError] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [current, setCurrent] = useState(0);
+  const [type, setType] = useState(null);
 
   useEffect(() => {
+    console.log(info);
     if (info) {
+      console.log(info);
       if (info?.data?.userInfo[0].email) {
         setEmail(info?.data?.userInfo[0].email);
+      }
+    }
+  }, [info]);
+
+  useEffect(() => {
+    if (localStorage) {
+      if (localStorage.getItem("userInfo")) {
+        setSenderEmail(JSON.parse(localStorage.getItem("userInfo")).email);
       }
     }
   }, []);
@@ -55,15 +67,16 @@ export default function BookASession() {
                   "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                  email: info?.data?.userInfo[0].email,
+                  email: email,
                   emailId: info?.data?.userInfo[0]._id,
-                  senderEmail: email,
+                  senderEmail: senderEmail,
                   senderEmailId: JSON.parse(localStorage.getItem("userInfo"))
                     ._id,
                   message: document.getElementById("messageToSend").value,
                   date: document.getElementById("date").value,
                   time: `${startTime} to ${endTime}`,
                   subject: info?.data?.subject,
+                  type: type,
                   receiverName: `${info?.data?.userInfo[0].first_name} ${info?.data?.userInfo[0].last_name}`,
                   name: `${
                     JSON.parse(localStorage.getItem("userInfo")).first_name
@@ -79,31 +92,61 @@ export default function BookASession() {
           }}
         >
           <br></br>
-          <label className={style.label}>Email address</label>
-          <input
-            className={style.input}
-            placeholder="Enter email address"
-            value={email}
-            onChange={(event) => {
-              setEmail(event.target.value);
+          <label className={style.label}>Type of session</label>
+
+          <ul
+            style={{
+              display: "grid",
+              gridTemplateColumns: "50% 50%",
+              listStyle: "none",
+              fontFamily: "var(--manrope-font)",
+              gap: "10px",
+              padding: "0px",
             }}
-            required
-            autoFocus
-          ></input>
-          <br></br>
-          <br></br>
-          <label className={style.label}>Message</label>
+          >
+            <li
+              style={{
+                textAlign: "center",
+                background: "var(--accent-color)",
+                color: "white",
+                paddingTop: "20px",
+                paddingBottom: "20px",
+                borderRadius: "7px",
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                setType("online");
+              }}
+            >
+              Online session
+            </li>
+            <li
+              style={{
+                textAlign: "center",
+                background: "var(--accent-color)",
+                color: "white",
+                paddingTop: "20px",
+                paddingBottom: "20px",
+                borderRadius: "7px",
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                setType("face");
+              }}
+            >
+              Face-to-face session
+            </li>
+          </ul>
+          <label className={style.label}>Comments</label>
 
           <textarea
             id="messageToSend"
             className={style.textarea}
-            placeholder="Message to send"
+            placeholder="Comments to send"
             required
           ></textarea>
           <br></br>
-          <br></br>
 
-          <br></br>
           <span>Select date: </span>
           <input
             type="date"
@@ -168,6 +211,7 @@ export default function BookASession() {
                 setEndTime("");
                 setStartTime("");
                 setOpen(false);
+                setType(null);
               }}
             >
               Close

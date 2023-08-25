@@ -104,6 +104,7 @@ export default function Note() {
       date: date || null,
       classes: classes || null,
       type: type || null,
+      id: JSON.parse(localStorage.getItem("userInfo"))._id || null,
     };
     const response = await fetch(`/api/notes/search_notes`, {
       method: "POST",
@@ -144,7 +145,7 @@ export default function Note() {
         }
       };
     }
-    document.getElementById("uploadNotes").innerText = "Picture of notes";
+    document.getElementById("uploadNotes").innerText = "Image of notes";
   };
 
   return (
@@ -242,9 +243,8 @@ export default function Note() {
         </section>
         <section className={style.notes}>
           <ul>
-            <li onClick={() => addRoutePath("type", "popular")}>
-              {t("popular")}
-            </li>
+            <li onClick={() => addRoutePath("type", "foryou")}>For you</li>
+            <li onClick={() => addRoutePath("type", "popular")}>Quality</li>
             <li onClick={() => addRoutePath("type", "latest")}>
               {t("latest")}
             </li>
@@ -252,6 +252,7 @@ export default function Note() {
           <p className={style.results}>
             {notes?.length} result{notes?.length == 1 ? "" : "s"} found
           </p>
+
           <section className={style.note}>
             {!loading ? (
               notes?.length ? (
@@ -288,7 +289,7 @@ export default function Note() {
             size={20}
             style={{ marginRight: "5px", verticalAlign: "middle" }}
           />
-          <span id="uploadNotes">Picture of notes</span>
+          <span id="uploadNotes">Image of notes</span>
         </li>
       </ul>
       <div

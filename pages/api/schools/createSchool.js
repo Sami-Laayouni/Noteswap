@@ -51,6 +51,7 @@ export default async function createSchool(req, res) {
         schoolJoinCode: school_join_code,
         schoolTeacherCode: school_teacher_code,
         schoolEditorialCode: school_editorial_code,
+        upcoming_events_url: "url",
         createdAt: Date.now(),
       });
       const savedSchool = await newSchool.save();

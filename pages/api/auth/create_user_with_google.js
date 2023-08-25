@@ -16,40 +16,46 @@ const jwtSecret = process.env.NEXT_PUBLIC_JWT_SECRET;
 export default async function createUserWithGoogle(req, res) {
   if (req.method === "POST") {
     const { googleId, first, last, profilePicture, email, role } = req.body;
-    try {
-      await connectDB();
+    if (email.endsWith("@asifrane.org") || email.endsWith("@asi.aui.ma")) {
+      try {
+        await connectDB();
 
-      // Check if user with the same google subject id already exists
-      const existingUser = await User.findOne({ google_id: googleId });
-      if (existingUser) {
-        res.status(400).json({
-          error: "User with the same Google account or email already exists",
+        // Check if user with the same google subject id already exists
+        const existingUser = await User.findOne({ google_id: googleId });
+        if (existingUser) {
+          res.status(400).json({
+            error: "User with the same Google account or email already exists",
+          });
+          return;
+        }
+
+        // Create a new user
+        const newUser = new User({
+          first_name: first,
+          last_name: last,
+          google_id: googleId,
+          profile_picture: profilePicture,
+          email: email,
+          role: role,
+          createdAt: Date.now(),
+          points: 0,
+          tutor_hours: 0,
+          notes: [],
         });
-        return;
+        const savedUser = await newUser.save();
+
+        // Generate JWT token
+        const token = jwt.sign({ userId: savedUser._id }, jwtSecret);
+
+        // Return the token
+        res.status(200).json({ token: token, user: savedUser });
+      } catch (error) {
+        res.status(500).json({ error: error.message });
       }
-
-      // Create a new user
-      const newUser = new User({
-        first_name: first,
-        last_name: last,
-        google_id: googleId,
-        profile_picture: profilePicture,
-        email: email,
-        role: role,
-        createdAt: Date.now(),
-        points: 0,
-        tutor_hours: 0,
-        notes: [],
-      });
-      const savedUser = await newUser.save();
-
-      // Generate JWT token
-      const token = jwt.sign({ userId: savedUser._id }, jwtSecret);
-
-      // Return the token
-      res.status(200).json({ token: token, user: savedUser });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+    } else {
+      res
+        .status(405)
+        .json({ error: "Email must end with @asifrane.org or @asi.aui.ma" });
     }
   } else {
     res.status(405).json({ error: "Method not allowed" });

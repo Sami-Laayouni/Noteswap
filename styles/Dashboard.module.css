@@ -61,4 +61,10 @@
   .subTitle {
     text-align: center;
   }
+  .left {
+    display: block;
+  }
+  .right {
+    display: block;
+  }
 }

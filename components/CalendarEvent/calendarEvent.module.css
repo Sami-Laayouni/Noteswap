@@ -13,9 +13,3 @@
 .container h1 {
   font-family: var(--manrope-bold-font);
 }
-@media all and (max-width: 767px) {
-  .container {
-    display: block;
-    margin-top: 20px;
-  }
-}

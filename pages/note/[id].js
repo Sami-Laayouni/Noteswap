@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import LoadingCircle from "../../components/LoadingCircle";
 import Script from "next/script";
+import NoteSwapBot from "../../components/NoteSwapBot";
 
 /**
  * Note page
@@ -17,10 +18,62 @@ import Script from "next/script";
  * @param {*} note
  * @return {*}
  */
+
 export default function Note() {
   const [note, setNote] = useState(null);
   const [ran, setRan] = useState(false);
+
   const router = useRouter();
+
+  function calculatePercentageByKey(obj, key) {
+    if (obj.hasOwnProperty(key)) {
+      const total = Object.values(obj).reduce((acc, val) => acc + val, 0);
+      const value = obj[key];
+
+      if (total > 0) {
+        return (value / total) * 100;
+      } else {
+        return 0; // To handle the case where total is 0
+      }
+    } else {
+      return 0; // Key doesn't exist
+    }
+  }
+
+  useEffect(() => {
+    const exitingFunction = async () => {
+      const thetaScore = calculatePercentageByKey(
+        JSON.parse(localStorage.getItem("click2")),
+        localStorage.getItem("click2item")
+      );
+
+      const deltaScore = calculatePercentageByKey(
+        JSON.parse(localStorage.getItem("click")),
+        localStorage.getItem("clickitem")
+      );
+      const score = Math.round((thetaScore + deltaScore) / 2) / 100;
+      if (localStorage.getItem("userInfo")) {
+        const response = await fetch("/api/notes/send_score", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            score: score,
+            noteId: router.query.id,
+            user: JSON.parse(localStorage.getItem("userInfo"))._id,
+          }),
+        });
+      }
+    };
+
+    router.events.on("routeChangeStart", exitingFunction);
+
+    return () => {
+      router.events.off("routeChangeStart", exitingFunction);
+    };
+  }, []);
+
   function formatDate(dateString) {
     try {
       const date = new Date(dateString);
@@ -45,6 +98,7 @@ export default function Note() {
       return dateString;
     }
   }
+
   useEffect(() => {
     async function getData(id) {
       const response = await fetch("/api/notes/get_single_note", {
@@ -59,10 +113,9 @@ export default function Note() {
       if (response.ok) {
         const data = await response.json();
         setRan(true);
-        console.log(data);
+        localStorage.setItem("click2item", data.note[0].category);
+        localStorage.setItem("clickitem", data.profile._id);
         setNote(data);
-      } else {
-        console.log(await response.text());
       }
     }
     const id = router.query.id;
@@ -77,6 +130,7 @@ export default function Note() {
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9167942144001417"
         crossOrigin="anonymous"
       />
+      <NoteSwapBot />
       <BiArrowBack
         onClick={() => {
           window.history.back();
@@ -123,7 +177,105 @@ export default function Note() {
               })}
             </section>
           )}
-          <section></section>
+          <section>
+            <h4 className={style.comments}>Comments</h4>
+            <div className={style.line}></div>
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                document.getElementById("send").innerText = "Sending...";
+                const response = await fetch("/api/notes/add_comment", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    id: router.query.id,
+                    message: document.getElementById("comment").value,
+                    userData: JSON.parse(localStorage.getItem("userInfo")),
+                  }),
+                });
+                if (response.ok) {
+                  document.getElementById("comment").value = "";
+                  document.getElementById("send").innerText = "Sent";
+                } else {
+                  document.getElementById("send").innerText =
+                    "An error has occured";
+                }
+              }}
+            >
+              <textarea
+                placeholder="Enter comment"
+                className={style.textarea}
+                required
+                id="comment"
+              ></textarea>
+              <button id="send" className={style.button}>
+                Send
+              </button>
+            </form>
+
+            <section
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                flexDirection: "column",
+                height: "100%",
+              }}
+            >
+              {!note?.note[0]?.comments ||
+                (note?.note[0]?.comments.length == 0 && (
+                  <i>No comments for these notes</i>
+                ))}
+            </section>
+            {note?.note[0]?.comments.length > 0 && (
+              <section style={{ marginTop: "30px" }}>
+                <p>
+                  {note?.note[0]?.comments.length} Comment
+                  {note?.note[0]?.comments.length == 1 ? "" : "s"}
+                </p>
+
+                {note?.note[0]?.comments.map(function (value) {
+                  return (
+                    <div key={value._id}>
+                      <div className={style.blackLine}></div>
+                      <Image
+                        src={value.userData.profile_picture}
+                        alt="User Profile"
+                        width={35}
+                        height={35}
+                        style={{
+                          display: "inline-block",
+                          verticalAlign: "middle",
+                        }}
+                      ></Image>
+                      <p
+                        style={{
+                          marginLeft: "10px",
+                          fontFamily: "var(--manrope-font)",
+                          display: "inline",
+                        }}
+                      >
+                        {value.userData.first_name} {value.userData.last_name}{" "}
+                      </p>
+
+                      <p
+                        style={{
+                          display: "block",
+                          fontFamily: "var(--manrope-font)",
+                          lineHeight: "200%",
+                        }}
+                      >
+                        {value.message}
+                      </p>
+                    </div>
+                  );
+                })}
+              </section>
+            )}
+          </section>
         </section>
       )}
       {!note && (

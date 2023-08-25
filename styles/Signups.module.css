@@ -31,3 +31,12 @@
   top: 25%;
   right: 30px;
 }
+.refresh {
+  padding-left: 20px;
+  color: var(--accent-color);
+  font-family: var(--manrope-font);
+}
+.refresh:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}

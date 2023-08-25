@@ -1,6 +1,7 @@
 import style from "./NotesModal.module.css";
 import Modal from "../Modal";
 import { useContext } from "react";
+import { useRouter } from "next/router";
 import ModalContext from "../../context/ModalContext";
 import { useState, useEffect, useRef } from "react";
 import { MdOutlineArrowDropDown } from "react-icons/md";
@@ -50,6 +51,7 @@ export default function NotesModal() {
   const { notesModal } = useContext(ModalContext);
   const [open, setOpen] = notesModal;
   const [current, setCurrent] = useState(0);
+  const router = useRouter();
 
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
@@ -99,7 +101,10 @@ export default function NotesModal() {
   const [elapsedTime, setElapsedTime] = useState(0);
   const [timer, setTimer] = useState(null);
   const reactQuill = useRef(null);
-
+  const handlePaste = (e) => {
+    // Prevent the default paste behavior
+    e.preventDefault();
+  };
   // Start the timer to start counting the time
   const startTimer = () => {
     if (timer) {
@@ -112,14 +117,20 @@ export default function NotesModal() {
       }, 1000)
     );
   };
-
+  useEffect(() => {
+    setTimeout(() => {
+      const handlePaste = (e) => {
+        // Prevent the default paste behavior
+        e.preventDefault();
+      };
+      const contentEditableDiv = document.getElementById("reactQuill");
+      if (contentEditableDiv) {
+        contentEditableDiv.addEventListener("paste", handlePaste);
+      }
+    }, 1000);
+  }, [title, reactQuill, open, router]);
   // Stop the timer after 15 minutes of typing (daily limit)
   useEffect(() => {
-    const contentEditableDiv = document.getElementById("reactQuill");
-
-    if (contentEditableDiv) {
-      contentEditableDiv.addEventListener("paste", handlePaste);
-    }
     if (elapsedTime >= 900 || current != 0) {
       if (elapsedTime >= 900) {
         setError(
@@ -185,6 +196,25 @@ export default function NotesModal() {
     }
   }, [current]);
 
+  useEffect(() => {
+    const savedNotes = localStorage.getItem("autosave_notes");
+    if (savedNotes && savedNotes.trim() != "undefined") {
+      setContent(savedNotes);
+    }
+    const savedTitle = localStorage.getItem("autosave_title");
+    if (savedTitle && savedTitle.trim() != "undefined") {
+      setTitle(savedTitle);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("autosave_notes", content);
+  }, [content]);
+
+  useEffect(() => {
+    localStorage.setItem("autosave_title", title);
+  }, [title]);
+
   if (!open) {
     return null;
   }
@@ -211,10 +241,6 @@ export default function NotesModal() {
   // Handle change in the title
   const handleChangeTitle = (value) => {
     setTitle(value.target.value);
-  };
-
-  const handlePaste = (event) => {
-    event.preventDefault();
   };
 
   const handleChatRequest = async (content) => {
@@ -276,6 +302,7 @@ export default function NotesModal() {
           <input
             value={title}
             onChange={handleChangeTitle}
+            onPaste={handlePaste}
             className={style.input}
             placeholder="Enter title"
             autoFocus
@@ -289,6 +316,7 @@ export default function NotesModal() {
             value={content}
             onChange={handleChange}
             onFocus={startTimer}
+            onPaste={handlePaste}
             onBlur={handleBlur}
             theme="snow"
             placeholder="Start something wonderful..."
@@ -682,6 +710,8 @@ export default function NotesModal() {
                 });
                 setPoints(Math.round(minutes * 20));
                 setCurrent(4);
+                localStorage.removeItem("autosave_notes");
+                localStorage.removeItem("autosave_title");
               }
             } catch (error) {
               setMessages(error.message);
@@ -695,6 +725,9 @@ export default function NotesModal() {
             setContent();
             setTitle();
             setSchoolClass();
+            localStorage.removeItem("autosave_notes");
+            localStorage.removeItem("autosave_title");
+
             localStorage.setItem(
               "dailyNoteTimer",
               JSON.stringify({
@@ -791,6 +824,9 @@ export default function NotesModal() {
                   });
                   document.getElementById("nextButton").style.display = "block";
                   setPoints(Math.round(minutes * 20));
+                  localStorage.removeItem("autosave_notes");
+                  localStorage.removeItem("autosave_title");
+
                   setCurrent(4);
                 });
               } catch (error) {

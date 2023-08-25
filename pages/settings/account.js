@@ -70,10 +70,10 @@ const Setting = () => {
     }
   };
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "25% 75%" }}>
+    <div className={style.grid}>
       <SettingSidebar />
       <DeleteAccount />
-      <div>
+      <div className={style.paddingLeft}>
         <h2 className={style.title}>Account</h2>
         <div style={{ marginTop: "60px", position: "relative" }}>
           <form
@@ -155,7 +155,7 @@ const Setting = () => {
         <div className={style.line}></div>
 
         <h2 className={style.title}>Delete your Account</h2>
-        <p style={{ paddingRight: "200px" }}>
+        <p className={style.padding}>
           By deleting your Noteswap account, you agree to delete all publicly
           posted information on your account, including notes. This process can
           not be undone.

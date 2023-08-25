@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -38,7 +38,6 @@ const Signup = () => {
   const [last, setLast] = useState("");
   const [method, setMethod] = useState("email");
   const [selectedRole, setSelectedRole] = useState();
-  const [address, setAddress] = useState("");
 
   const { isLoggedIn } = useContext(AuthContext);
   const { errorSignup } = useContext(AuthContext);
@@ -57,6 +56,18 @@ const Signup = () => {
   const handleTogglePassword = () => {
     setShowPassword((prevState) => !prevState);
   };
+
+  useEffect(() => {
+    if (localStorage) {
+      if (
+        localStorage.getItem("errorSignup") &&
+        localStorage.getItem("errorSignup") != "undefined"
+      ) {
+        setError(localStorage.getItem("errorSignup"));
+        localStorage.removeItem("errorSignup");
+      }
+    }
+  }, [error]);
   /**
    * Handles the signup action when the user clicks the signup button.
    *
@@ -94,32 +105,13 @@ const Signup = () => {
         localStorage.setItem("role", selectedRole);
         // Redirect user to google url
         window.location.href = data.url;
-      } else if (type === "metamask") {
-        // Sign up with Metamask
-        if (address) {
-          const response = await AuthServices.create_user_with_metamask(
-            address,
-            first,
-            last,
-            selectedRole
-          );
-          if (response.token) {
-            // Store the token in local storage
-            localStorage.setItem("userInfo", JSON.stringify(response.user));
-            localStorage.setItem("token", response.token);
-            // Redirect to the dashboard page after successful login
-            router.push("/dashboard");
-          } else {
-            // An error has occured
-            setError(response.error);
-            document.getElementById("createAccount").innerText =
-              "Create account.";
-            document.getElementById("createAccount").disabled = false;
-          }
-        }
-      } else {
-        // An error has occured
-        setError(`Sign up method not supported. Found sign up method ${type}`);
+      } else if (type === "microsoft") {
+        window.location.href = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize
+        ?client_id=${process.env.NEXT_PUBLIC_MICROSOFT_APP_ID}
+        &response_type=code
+        &redirect_uri=${process.env.NEXT_PUBLIC_URL}api/auth/continue_with_microsoft_callback
+        &response_mode=query
+        &scope=user.Read+openid+profile+email+offline_access`;
       }
     } catch (error) {
       // An error has occured
@@ -164,22 +156,28 @@ const Signup = () => {
               className={style.form}
               onSubmit={(e) => {
                 e.preventDefault();
-                if (state == 0) {
-                  setState(1);
-                  setError("");
+                if (
+                  email.endsWith("@asifrane.org") ||
+                  email.endsWith("@asi.aui.ma")
+                ) {
+                  if (state == 0) {
+                    setState(1);
+                    setError("");
+                  } else {
+                    document.getElementById("createAccount").innerText =
+                      "Creating...";
+                    document.getElementById("createAccount").disabled = true;
+                    setError("");
+                    handleSignup(method);
+                  }
                 } else {
-                  document.getElementById("createAccount").innerText =
-                    "Creating...";
-                  document.getElementById("createAccount").disabled = true;
-                  setError("");
-                  handleSignup(method);
+                  setError("Email must end with @asifrane.org or @asi.aui.ma");
                 }
               }}
             >
               {!selectedRole && (
                 <>
                   <p className={style.labelCenter}>{t("i_am_joining_as")}</p>
-
                   <ul className={style.roles}>
                     <li id="student" onClick={() => setSelectedRole("student")}>
                       {t("student")}
@@ -204,12 +202,28 @@ const Signup = () => {
                     <input
                       id="emailSignup"
                       type="email"
-                      placeholder="Enter your email"
+                      placeholder="Enter your school email"
                       value={email}
                       aria-required="true"
                       aria-invalid="true"
                       className={style.input}
-                      onChange={(e) => setEmail(e.target.value)}
+                      onChange={(e) => {
+                        if (
+                          !e.target.value.endsWith("@asifrane.org") &&
+                          !e.target.value.endsWith("@asi.aui.ma") &&
+                          e.target.value.length > 15 &&
+                          e.target.value.includes("@") &&
+                          e.target.value.includes(".")
+                        ) {
+                          setEmail(e.target.value);
+                          setError(
+                            "Email must end with @asifrane.org or @asi.aui.ma"
+                          );
+                        } else {
+                          setEmail(e.target.value);
+                          setError("");
+                        }
+                      }}
                       required
                       autoFocus
                     />
@@ -227,6 +241,7 @@ const Signup = () => {
                         aria-required="true"
                         aria-invalid="true"
                         className={style.inputBlank}
+                        minLength={8} // Minimum length requirement of 8 characters
                         onChange={(e) => setPassword(e.target.value)}
                         required
                       />
@@ -260,39 +275,17 @@ const Signup = () => {
                     <button
                       type="button"
                       className={style.thirdpartyloginBtn}
-                      onClick={async () => {
-                        setMethod("metamask");
-                        if (window.ethereum) {
-                          const accounts = await window.ethereum.request({
-                            method: "eth_requestAccounts",
-                          });
-
-                          const selectedAccount = accounts[0];
-                          setAddress(selectedAccount);
-                        }
+                      onClick={() => {
+                        handleSignup("microsoft");
                       }}
                     >
                       <Image
-                        src="/assets/icons/Metamask_Icon.svg"
-                        alt="Continue with Metamask"
+                        src="/assets/icons/Microsoft_Icon.svg"
+                        alt="Continue with Microsoft"
                         width={24}
                         height={24}
                       />
-                      {t("continue_with")} Metamask
-                    </button>
-                    <button
-                      type="button"
-                      style={{ cursor: "not-allowed" }}
-                      onClick={() => setError("Method not supported yet")}
-                      className={style.thirdpartyloginBtn}
-                    >
-                      <Image
-                        src="/assets/icons/Facebook_Icon.svg"
-                        alt="Continue with Facebook"
-                        width={24}
-                        height={24}
-                      />
-                      {t("continue_with")} Facebook (Boomer)
+                      {t("continue_with")} Microsoft
                     </button>
                   </>
                 ) : (

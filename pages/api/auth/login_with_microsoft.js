@@ -4,36 +4,37 @@ import User from "../../../models/User";
 const jwtSecret = process.env.NEXT_PUBLIC_JWT_SECRET;
 
 /**
- * Handle user login with metamask
+ * Handle user login with google
  *
  * @export
  * @async
- * @route POST /api/auth/login_with_metamask
+ * @route POST /api/auth/login_with_microsoft
  * @param {object} req - The request object.
  * @param {object} res - The response object.
  */
-export default async function loginUserWithMetamask(req, res) {
+export default async function loginUserWithMicrosoft(req, res) {
   if (req.method === "POST") {
-    const { address } = req.body;
+    const { uid } = req.body;
 
     try {
       // Connect to MongoDB or use an existing connection
       await connectDB();
 
       /**
-       * Find the user by metamask address.
+       * Find the user microsoft id.
        * @type {import('mongoose').Document}
        */
-      const user = await User.findOne({ metamask_address: address });
+      const user = await User.findOne({ google_id: uid });
       if (!user) {
-        res
-          .status(401)
-          .json({ error: "Account with that Metmask address does not exist" });
+        res.status(401).json({
+          error: "Account with that Microsoft account does not exist",
+        });
       }
 
-      const token = jwt.sign({ userId: user._id }, jwtSecret);
+      const token = jwt.sign({ google_id: user._id }, jwtSecret);
       res.status(200).json({ token: token, user: user });
     } catch (error) {
+      console.log(error);
       res.status(500).json({ error: "User authentication error" });
     }
   } else {

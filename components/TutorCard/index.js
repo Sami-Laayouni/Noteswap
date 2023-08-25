@@ -80,6 +80,7 @@ export default function TutorCard({ data }) {
             style={{
               fontFamily: "var(--manrope-font)",
               paddingTop: "30px",
+              textAlign: "center",
             }}
           >
             No ratings yet

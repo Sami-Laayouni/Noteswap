@@ -2,6 +2,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import style from "../../styles/Legal.module.css";
 import Link from "next/link";
 import dynamic from "next/dynamic";
+import NoteSwapBot from "../../components/NoteSwapBot";
 const Footer = dynamic(() => import("../../components/Footer"));
 
 /**
@@ -30,6 +31,7 @@ export async function getStaticProps({ locale }) {
 export default function TermsOfService() {
   return (
     <>
+      <NoteSwapBot />
       {/* Hero */}
       <section className={style.heroSection}>
         <div className={style.heroText}>

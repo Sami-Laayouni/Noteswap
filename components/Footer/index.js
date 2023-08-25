@@ -2,6 +2,8 @@ import style from "./Footer.module.css";
 import Link from "next/link";
 import Image from "next/image";
 import { useTranslation } from "next-i18next";
+import { useEffect } from "react";
+import { useState } from "react";
 
 /**
  * Footer
@@ -19,24 +21,41 @@ import { useTranslation } from "next-i18next";
  */
 export default function Footer() {
   const { t } = useTranslation("common");
+  const [loggedIn, setLogggedIn] = useState(false);
+  useEffect(() => {
+    if (localStorage) {
+      if (localStorage.getItem("token")) {
+        setLogggedIn(true);
+      } else {
+        setLogggedIn(false);
+      }
+    }
+  }, []);
   return (
     <footer className={style.footer}>
       <section className={style.footer_top}>
         <h1>
-          {t("ready_get_started") == "ready_get_started"
-            ? "Ready to get started?"
-            : t("ready_get_started")}
+          {!loggedIn
+            ? t("ready_get_started") == "ready_get_started"
+              ? "Ready to get started?"
+              : t("ready_get_started")
+            : "Noteswap"}
         </h1>
         <h2>
           {t("send_support_email") == "send_support_email"
             ? "If you have a general inquiry and would like to speak to our expert team, you can contact us via email at: support@noteswap.org"
             : t("send_support_email")}
         </h2>
-        <Link title="Signup to Noteswap" href="/signup">
+        <Link
+          title="Signup to Noteswap"
+          href={`${!loggedIn ? "/signup" : "/dashboard"}`}
+        >
           <button>
-            {t("get_started") == "get_started"
-              ? "Get started"
-              : t("get_started")}
+            {!loggedIn
+              ? t("get_started") == "get_started"
+                ? "Get started"
+                : t("get_started")
+              : "Go to dashboard"}
           </button>
         </Link>
       </section>

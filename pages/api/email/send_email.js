@@ -25,6 +25,7 @@ export default async function handler(req, res) {
     name,
     emailId,
     senderEmailId,
+    type,
   } = req.body;
 
   const queryParams = {
@@ -61,6 +62,9 @@ export default async function handler(req, res) {
         Student’s Name: ${name}
         Student’s Email: ${senderEmail}
         Preferred Tutoring Schedule: ${date} from ${time}
+        Preferred type of meeting: ${
+          type == "online" ? "Online" : "Face-to-Face"
+        }
 
     Additionally, a personalized message from ${name} has been sent to you: ${message}
 
@@ -77,7 +81,6 @@ export default async function handler(req, res) {
 
     Best regards, 
 
-    Sami Laayouni and Ali Zaid
     The Noteswap team
     `,
 
@@ -89,6 +92,7 @@ export default async function handler(req, res) {
           senderEmail={senderEmail}
           date={date}
           time={time}
+          type={type}
           message={message}
           url={`${process.env.NEXT_PUBLIC_URL}confirm/${Object.keys(queryParams)
             .map(

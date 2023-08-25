@@ -5,7 +5,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 99999999;
+  z-index: 9999999;
 }
 .container {
   display: flex;
@@ -23,4 +23,12 @@
   display: flex;
   align-items: center;
   margin-bottom: 10px;
+}
+.padding {
+  padding-left: 40px;
+}
+@media all and (max-width: 808px) {
+  .padding {
+    padding-left: 0px;
+  }
 }

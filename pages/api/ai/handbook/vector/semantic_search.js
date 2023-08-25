@@ -1,6 +1,5 @@
 import { getPinecone } from "../../../../../utils/pinecone";
 import { getOpenAIInstance } from "../../../../../utils/openAI";
-import { PineconeClient } from "@pinecone-database/pinecone";
 
 export default async function handler(req, res) {
   const openai = await getOpenAIInstance();
@@ -21,7 +20,6 @@ export default async function handler(req, res) {
   try {
     // Generate the embedding for the input text
     const inputEmbedding = await getEmbedding(text);
-    console.log(inputEmbedding);
 
     // Search for the nearest embedding in Pinecone
     const pineconeResponse = await pinecone.query({
@@ -29,6 +27,10 @@ export default async function handler(req, res) {
         vector: inputEmbedding, // Embedding generated from OpenAI
         topK: 1,
         namespace: "noteswap-asi",
+        filter: {
+          category: "handbook",
+        },
+        includeMetadata: true,
       },
     });
 

@@ -58,3 +58,22 @@
 .back:hover {
   text-decoration: underline;
 }
+.detail {
+  text-align: left;
+  margin-top: auto;
+  margin-bottom: auto;
+  padding: 30px;
+}
+.detail h1 {
+  font-family: var(--manrope-bold-font);
+}
+.detail h2 {
+  font-family: var(--manrope-font);
+  font-size: 1rem;
+}
+.detail h2 span {
+  color: var(--accent-color);
+}
+.detail h2 b {
+  font-family: var(--manrope-bold-font);
+}

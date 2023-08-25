@@ -169,6 +169,12 @@
   }
   .hero_left {
     text-align: center;
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+  .hero_left h3 {
+    padding-left: 30px;
+    padding-right: 30px;
   }
   .hero_right {
     display: none;
@@ -197,7 +203,13 @@
     text-align: center;
   }
   .user h2 {
-    top: 55%;
+    top: 45%;
+    width: 100vw;
+    font-size: 4rem;
+    text-align: center;
+  }
+  .user h3 {
+    width: 100vw;
     text-align: center;
   }
   /* ========== FAQ ========== */
@@ -205,6 +217,10 @@
     padding-top: 30px;
     padding-bottom: 30px;
     padding-left: 30px;
+    padding-right: 30px;
+  }
+  .faq_section ul li h3 {
+    font-size: 1rem;
     padding-right: 30px;
   }
 }

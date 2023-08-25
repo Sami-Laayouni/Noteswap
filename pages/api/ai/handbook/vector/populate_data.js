@@ -1,30 +1,30 @@
 import { getPinecone } from "../../../../../utils/pinecone";
 import { getOpenAIInstance } from "../../../../../utils/openAI";
-async function splitTextAndGenerateSections(text) {
-  const paragraphs = text.split("\n").filter((word) => word.trim() !== "");
-  const sectionsList = [];
+function removeNonASCII(inputString) {
+  return inputString.replace(/[^\x00-\x7F]/g, "");
+}
+function generateRandomCode(length) {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let randomCode = "";
 
-  for (const paragraph of paragraphs) {
-    let remainingText = paragraph.trim();
-
-    while (remainingText.length > 0) {
-      const section = remainingText.substring(0, 512);
-      const dotIndex = section.lastIndexOf(".");
-      if (dotIndex !== -1) {
-        sectionsList.push(section.substring(0, dotIndex + 1));
-        remainingText = remainingText.substring(dotIndex + 1).trim();
-      } else {
-        sectionsList.push(section);
-        remainingText = remainingText.substring(512).trim();
-      }
-    }
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    randomCode += characters.charAt(randomIndex);
   }
 
-  return sectionsList;
+  return randomCode;
+}
+async function splitTextAndGenerateSections(text) {
+  const paragraphs = removeNonASCII(text)
+    .split("\n\n\n")
+    .filter((word) => word.trim() !== "")
+    .filter((paragraph) => paragraph.length >= 30);
+  return paragraphs;
 }
 
 export default async function PopulateData(req, res) {
-  const { text } = req.body;
+  const { text, category } = req.body;
 
   const pinecone = await getPinecone();
   const openai = await getOpenAIInstance();
@@ -60,8 +60,13 @@ export default async function PopulateData(req, res) {
 
   const vectors = words.map((paragraph, i) => {
     return {
-      id: paragraph,
+      id: generateRandomCode(20),
       values: embeddings[i],
+
+      metadata: {
+        category: category,
+        paragraph: paragraph,
+      },
     };
   });
   try {
@@ -82,6 +87,7 @@ export default async function PopulateData(req, res) {
     }
     res.status(200).send("Worked");
   } catch (error) {
+    console.log(error);
     res.status(500).send(error);
   }
 }

@@ -156,16 +156,6 @@ export default function BecomeTutor() {
         )}
         {current == 1 && (
           <>
-            <label className={style.labelForInput}>Email address</label>
-
-            <input
-              className={style.input}
-              placeholder="Email address to contact you"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            ></input>
             <label className={style.labelForInput}>I want to teach: </label>
             <div
               className={style.dropdown}

@@ -58,29 +58,30 @@ class AuthService {
       throw error;
     }
   }
-  /* ========== Login with Metamask ========== */
-  async login_with_metamask(address) {
-    if (!address) {
-      console.error("No address given to login with Metamask!");
+  /* ========== Login with Microsoft ========== */
+  async login_with_microsoft(id) {
+    if (!id) {
+      console.error("No subject id given to login with Microsoft!");
       return;
     }
     try {
-      const response = await fetch(`${this.API_URL}/login_with_metamask`, {
+      const response = await fetch(`${this.API_URL}/login_with_microsoft`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ address }),
+        body: JSON.stringify({ uid: id }),
       });
 
       const data = await response.json();
       this.setLoggedIn(true);
       return data;
     } catch (error) {
-      console.error("Login with Metamask failed", error);
+      console.error("Login with Microsoft failed", error);
       throw error;
     }
   }
+
   /* ========== Sign up with Google ========== */
   async create_user_with_google(
     first,
@@ -119,21 +120,35 @@ class AuthService {
     }
   }
 
-  /* ========== Sign up with Metamask address ========== */
-  async create_user_with_metamask(address, first, last, role) {
-    if (!address) {
-      console.error("No address given to signup with Metamask!");
+  /* ========== Sign up with Microsoft ========== */
+  async create_user_with_microsoft(
+    first,
+    last,
+    email,
+    profilePicture,
+    id,
+    role
+  ) {
+    if (!email) {
+      console.error("No email given to signup with Microsoft!");
       return;
     }
     try {
       const response = await fetch(
-        `${this.API_URL}/create_user_with_metamask`,
+        `${this.API_URL}/create_user_with_microsoft`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ address, first, last, role }),
+          body: JSON.stringify({
+            id,
+            first,
+            last,
+            email,
+            profilePicture,
+            role,
+          }),
         }
       );
 

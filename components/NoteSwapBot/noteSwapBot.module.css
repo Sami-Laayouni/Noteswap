@@ -19,7 +19,7 @@
 }
 /*========= Chat box ==========*/
 .chatbox {
-  position: absolute;
+  position: fixed;
   bottom: 95px;
   right: 35px;
   width: 353px;

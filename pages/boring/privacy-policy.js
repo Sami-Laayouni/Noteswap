@@ -3,6 +3,7 @@ import style from "../../styles/Legal.module.css";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 const Footer = dynamic(() => import("../../components/Footer"));
+import NoteSwapBot from "../../components/NoteSwapBot";
 
 /**
  * Get static props
@@ -30,6 +31,8 @@ export async function getStaticProps({ locale }) {
 export default function PrivacyPolicy() {
   return (
     <>
+      <NoteSwapBot />
+
       {/* Hero */}
       <section className={style.heroSection}>
         <div className={style.heroText}>

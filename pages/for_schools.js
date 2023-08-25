@@ -142,16 +142,22 @@ const ForSchools = () => {
                 const data = getFormValues();
                 const text = await handleSubmit();
                 const existingObject = JSON.parse(data);
-                console.log(text);
-                await fetch("/api/ai/handbook/vector/populate_data", {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({
-                    text: text,
-                  }),
-                });
+                const response2 = await fetch(
+                  "/api/ai/handbook/vector/populate_data",
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      text: text,
+                      category: "handbook",
+                    }),
+                  }
+                );
+                if (response2.ok) {
+                  setUploadError(response2.error);
+                }
 
                 try {
                   const response = await school.create_school(

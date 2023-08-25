@@ -5,6 +5,13 @@ import { CiMinimize1 } from "react-icons/ci";
 import { VscSend } from "react-icons/vsc";
 import { useState } from "react";
 import { BsFillChatSquareQuoteFill } from "react-icons/bs";
+import { useRouter } from "next/dist/client/router";
+const messages = [
+  {
+    role: "system",
+    content: `You are a easy to understand, clear, kind AI trained on a school's handbook. Your responses are based on the data provided in the handbook.  If they ask what you can do don't use the data and just answer how you can help them .If you can answer a question using the information from the handbook, you'll provide a relevant  response. If the question doesn't require data, you'll respond accordingly. If you're unable to infer an answer from the data, you'll say, "Sorry, I don't have that information."`,
+  },
+];
 
 /**
  * Noteswap Bot
@@ -14,14 +21,17 @@ import { BsFillChatSquareQuoteFill } from "react-icons/bs";
  * @return {*}
  */
 export default function NoteSwapBot() {
-  const messages = [
-    {
-      role: "system",
-      content: `You are a professional, kind AI trained on a school's handbook. Answer questions with the data given to you. If you cannot infer the answer from the data provided say Sorry I don't know that. If the question doesn't require data just respond to it.`,
-    },
-  ];
   const [started, setStarted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  function extractTextFromHTML(htmlString) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlString, "text/html");
+
+    return doc.body.textContent;
+  }
+
   async function addMessage(message) {
     document.getElementById("input").value = "";
 
@@ -29,49 +39,105 @@ export default function NoteSwapBot() {
     setLoading(true);
     document.getElementById("boxContainer").style.display = "block";
     document.getElementById("box").innerHTML += `<li>You: ${message}</li>`;
-
-    const data = await fetch("/api/ai/handbook/vector/semantic_search", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        text: message,
-      }),
-    });
-    const dataResponse = await data.json();
-    const match = dataResponse.matches[0].id;
-
-    messages.push({
-      role: "user",
-      content: `Using this data: ${match}. Answer this question: ${message}`,
-    });
-
-    const response = await fetch("/api/ai/handbook/llm/conversation", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        messages: messages,
-      }),
-    });
-
-    if (response.status == 200) {
-      const aiResponse = await response.text();
-      messages.push({
-        role: "assistant",
-        content: aiResponse,
+    if (router.pathname.includes("note")) {
+      const noteId = router.query.id;
+      const res = await fetch("/api/notes/get_single_note", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: noteId,
+        }),
       });
-      document.getElementById(
-        "box"
-      ).innerHTML += `<li style="color: #40b385">Noteswap Bot: ${aiResponse}</li>`;
+      const json = await res.json();
+      messages.push({
+        role: "user",
+        content: `This user is asking this question ${message} on these notes: ${extractTextFromHTML(
+          json.note[0].notes
+        )}. Answer there question with the notes provided.`,
+      });
+      const response = await fetch("/api/ai/handbook/llm/conversation", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          messages: messages,
+        }),
+      });
+
+      if (response.status == 200) {
+        const aiResponse = await response.text();
+        messages.push({
+          role: "assistant",
+          content: aiResponse,
+        });
+        document.getElementById(
+          "box"
+        ).innerHTML += `<li style="color: #40b385">Noteswap Bot: ${aiResponse}</li>`;
+      } else {
+        document.getElementById(
+          "box"
+        ).innerHTML += `<li style="color: red">An error has occured</li>`;
+      }
+      setLoading(false);
     } else {
-      document.getElementById(
-        "box"
-      ).innerHTML += `<li style="color: red">An error has occured</li>`;
+      const link = router.pathname.includes("boring") ? "_privacy" : "";
+      const data = await fetch(
+        `/api/ai/handbook/vector/semantic_search${link}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            text: message,
+          }),
+        }
+      );
+      const dataResponse = await data.json();
+      const match = dataResponse.matches[0].metadata.paragraph;
+      if (dataResponse.matches[0].score >= 0.76) {
+        messages.push({
+          role: "user",
+          content: `Using this data from the ${
+            router.pathname.includes("boring") ? "privacy policy" : "handbook"
+          }: ${match}. Answer in an clear and understable manner or provide relevant information about this prompt (ONLY IF YOU BELIEVE IN NEEDS DATA IF THEY ARE ASKING YOU A QUESTION THAT DOESN'T REQUIRE DATA DON'T USE THE DATA): ${message}`,
+        });
+      } else {
+        messages.push({
+          role: "user",
+          content: `${message}`,
+        });
+      }
+
+      const response = await fetch("/api/ai/handbook/llm/conversation", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          messages: messages,
+        }),
+      });
+
+      if (response.status == 200) {
+        const aiResponse = await response.text();
+        messages.push({
+          role: "assistant",
+          content: aiResponse,
+        });
+        document.getElementById(
+          "box"
+        ).innerHTML += `<li style="color: #40b385">Noteswap Bot: ${aiResponse}</li>`;
+      } else {
+        document.getElementById(
+          "box"
+        ).innerHTML += `<li style="color: red">An error has occured</li>`;
+      }
+      setLoading(false);
     }
-    setLoading(false);
   }
   return (
     <>
@@ -167,7 +233,13 @@ export default function NoteSwapBot() {
         >
           <input
             id="input"
-            placeholder="Ex: What is the school dress code?"
+            placeholder={`${
+              router.pathname.includes("boring")
+                ? "Ex: What data do you collect?"
+                : router.pathname.includes("note")
+                ? "Ex: What are these notes about?"
+                : "Ex: What is the school dress code?"
+            }`}
             maxLength={300}
             minLength={2}
             disabled={loading}

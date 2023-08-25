@@ -4,8 +4,8 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);
-  const [errorLogin, setErrorLogin] = useState();
-  const [errorSignup, setErrorSignup] = useState();
+  const [errorLogin, setErrorLogin] = useState("");
+  const [errorSignup, setErrorSignup] = useState("");
 
   return (
     <AuthContext.Provider

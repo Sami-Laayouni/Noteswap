@@ -14,7 +14,6 @@ import ReactDOMServer from "react-dom/server";
  */
 export default async function handler(req, res) {
   const { url, name, email, event } = req.body;
-
   try {
     // Create a transporter object using your email service's SMTP settings
     const transporter = nodemailer.createTransport({
@@ -40,7 +39,6 @@ export default async function handler(req, res) {
 
     ${url}
 
-    Sami Laayouni and Ali Zaid
     The Noteswap team
     `,
 
@@ -120,6 +118,7 @@ export default async function handler(req, res) {
     const info = await transporter.sendMail(mailOptions);
     res.status(200).send(info);
   } catch (error) {
+    console.log(error);
     res.status(500).send(error);
   }
 }

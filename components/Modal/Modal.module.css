@@ -40,3 +40,11 @@
   background-color: var(--default-light-grey-color);
   margin-top: 40px;
 }
+@media all and (max-width: 808px) {
+  .title {
+    overflow: hidden;
+    width: 50vw;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}

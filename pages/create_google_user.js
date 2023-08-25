@@ -47,12 +47,16 @@ function CreateGoogleUserPage() {
             setRan(true);
           } else {
             // An error has occured
+            localStorage.setItem("errorSignup", response.error);
+
             setError(response.error);
             // Redirect to the signup page
             router.push("/signup");
           }
         } catch (error) {
           // An error has occured
+          localStorage.setItem("errorSignup", error.message);
+
           setError(error.message);
           // Redirect to the signup page
           router.push("/signup");

@@ -7,6 +7,7 @@ export default function TutoringEmail({
   date,
   time,
   message,
+  type,
   url,
 }) {
   function formatDate(inputDate) {
@@ -83,6 +84,8 @@ export default function TutoringEmail({
           Preferred Tutoring Schedule:{" "}
           <span style={{ color: "#40b385" }}>{formatDate(date)}</span> from{" "}
           <span style={{ color: "#40b385" }}>{time}</span>
+          Preferred type of meeting:
+          {type == "online" ? "Online" : "Face-to-Face"}
         </p>
         <p>
           Additionally, a personalized message from <b>{name}</b> has been sent
@@ -114,7 +117,6 @@ export default function TutoringEmail({
         </p>
         <p style={{ display: "block" }}>Best regards, </p>
 
-        <p style={{ display: "block" }}>Sami Laayouni and Ali Zaid</p>
         <p style={{ display: "block" }}>The Noteswap team</p>
       </main>
       <footer

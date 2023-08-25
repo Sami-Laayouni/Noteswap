@@ -1,3 +1,7 @@
+.grid {
+  display: grid;
+  grid-template-columns: 25% 75%;
+}
 .title {
   font-family: var(--manrope-font);
 }
@@ -69,4 +73,27 @@
   outline: none;
   border-radius: 4px;
   border: 1px solid var(--accent-color);
+}
+.padding {
+  padding-right: 200px;
+}
+.paddingLeft {
+  padding-left: 50px;
+}
+@media all and (max-width: 808px) {
+  .title {
+    text-align: left;
+  }
+  .padding {
+    padding-right: 50px;
+  }
+
+  .profile {
+    display: block;
+    position: initial;
+    margin-top: 20px;
+  }
+  .grid {
+    grid-template-columns: 100%;
+  }
 }

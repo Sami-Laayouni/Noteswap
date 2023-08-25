@@ -3,6 +3,7 @@ import Modal from "../Modal";
 import { useContext, useState, useRef } from "react";
 import ModalContext from "../../context/ModalContext";
 import html2canvas from "html2canvas";
+import Link from "next/link";
 
 /**
  * Create event
@@ -22,14 +23,15 @@ export default function CreateEvent() {
   const [endDate, setEndDate] = useState("");
   const [link, setLink] = useState("");
   const [message, setMessage] = useState("");
-  const [email, setEmail] = useState("");
   const canvasRef = useRef(null);
+  const sectionRef = useRef(null);
   const [drawing, setDrawing] = useState(false);
   const [prevPosition, setPrevPosition] = useState({ x: 0, y: 0 });
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
+  let cert;
+  const [category, setCategory] = useState("");
   const today = new Date().toISOString().split("T")[0];
-  const sectionRef = useRef(null);
   function generateCode(length) {
     const charset = "abcdef0123456789";
     let password = "";
@@ -42,6 +44,7 @@ export default function CreateEvent() {
     return password;
   }
   let code;
+  const [codes, setCodes] = useState(0);
 
   const startDrawing = (e) => {
     const canvas = canvasRef.current;
@@ -86,6 +89,25 @@ export default function CreateEvent() {
     // Convert canvas to image and set as href for download
     const url = canvas.toDataURL("image/png");
     setUrl(url);
+  };
+  const saveImage = async () => {
+    console.log(sectionRef.current);
+    const element = sectionRef.current;
+    const canvas = await html2canvas(element);
+    const image = canvas.toDataURL("image/png");
+    console.log(element, canvas, image);
+    const url = await fetch("/api/gcs/upload_base64", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        base64: image,
+      }),
+    });
+    const data = await url.json();
+    cert = data.url;
+    console.log(data.url);
   };
   function formatDate(inputDate) {
     const months = [
@@ -152,77 +174,72 @@ export default function CreateEvent() {
               setCurrent(2);
             } else if (current == 2) {
               setCurrent(3);
-            } else if (current == 3 || current == 4) {
-              setCurrent(4);
-
+            } else if (current == 3) {
               if (!name) {
                 saveSignature();
               }
+              setCurrent(4);
+            } else if (current == 4) {
+              await saveImage();
 
-              html2canvas(sectionRef.current)
-                .then(async (canvas) => {
-                  const image = canvas.toDataURL("image/png");
-                  const url = await fetch("/api/gcs/upload_base64", {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                      base64: image,
-                    }),
-                  });
-                  if (url.ok) {
-                    const cUrl = await url.json();
-                    code = generateCode(24);
-                    const response = await fetch("/api/events/create_event", {
-                      method: "POST",
-                      headers: {
-                        "Content-Type": "application/json",
-                      },
-                      body: JSON.stringify({
-                        id: code,
-                        title: title,
-                        desc: desc,
-                        community_service_offered: communityService,
-                        teacher_id: JSON.parse(localStorage.getItem("userInfo"))
-                          ._id,
-                        date_of_events: `${startDate} to ${endDate}`,
-                        certificate_link: cUrl.url,
-                        contact_email: email,
-                        link_to_event: link,
-                        createdAt: Date.now(),
-                      }),
-                    });
-                    if (response.ok) {
-                      const Ed = email;
-                      const Tit = title;
+              code = generateCode(24);
+              setCodes(code);
+              console.log(cert);
+              const response = await fetch("/api/events/create_event", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  id: code,
+                  title: title,
+                  desc: desc,
+                  category: category,
+                  community_service_offered: communityService,
+                  teacher_id: JSON.parse(localStorage.getItem("userInfo"))._id,
+                  date_of_events: `${startDate} to ${endDate}`,
+                  certificate_link: cert,
+                  contact_email: JSON.parse(localStorage.getItem("userInfo"))
+                    .email,
+                  link_to_event: link,
+                  createdAt: Date.now(),
+                }),
+              });
+              if (response.ok) {
+                const Tit = title;
 
-                      await fetch("/api/email/send_event_email", {
-                        method: "POST",
-                        headers: {
-                          "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({
-                          name: `${
-                            JSON.parse(localStorage.getItem("userInfo"))
-                              .first_name
-                          } ${
-                            JSON.parse(localStorage.getItem("userInfo"))
-                              .last_name
-                          }`,
-                          email: Ed,
-                          event: Tit,
-                          url: `${process.env.NEXT_PUBLIC_URL}signups/${code}`,
-                        }),
-                      });
-                      setOpen(false);
-                    }
-                  }
-                })
-
-                .catch((error) => {
-                  console.log(error);
+                await fetch("/api/email/send_event_email", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    name: `${
+                      JSON.parse(localStorage.getItem("userInfo")).first_name
+                    } ${
+                      JSON.parse(localStorage.getItem("userInfo")).last_name
+                    }`,
+                    email: JSON.parse(localStorage.getItem("userInfo")).email,
+                    event: Tit,
+                    url: `${process.env.NEXT_PUBLIC_URL}signups/${code}`,
+                  }),
                 });
+              } else {
+                console.log(await response.text());
+              }
+              setCurrent(5);
+            } else if (current == 5) {
+              setCategory("");
+              setCurrent(1);
+              setTitle("");
+              setDesc("");
+              setStartDate("");
+              setEndDate("");
+              setMessage("");
+              setName("");
+              setLink("");
+              setCommunityService(0);
+              setOpen(false);
             }
           }}
         >
@@ -281,6 +298,7 @@ export default function CreateEvent() {
                 style={{ marginLeft: "10px" }}
                 className={style.date}
                 type="date"
+                min={today}
                 value={endDate}
                 onChange={(e) => {
                   setEndDate(e.target.value);
@@ -294,17 +312,50 @@ export default function CreateEvent() {
           )}
           {current == 2 && (
             <>
-              <label className={style.labelForInput}>Contact Email</label>
-              <input
-                placeholder="Enter email"
+              <label className={style.labelForInput}>
+                Select a category for your event
+              </label>
+              <select
                 className={style.input}
-                value={email}
-                type="email"
+                value={category}
+                style={{ fontFamily: "var(--manrope-font)" }}
                 onChange={(e) => {
-                  setEmail(e.target.value);
+                  setCategory(e.target.value);
                 }}
                 required
-              />
+              >
+                <option value="">Select a category</option>
+                <option value="Event Planning and Preparation">
+                  Event Planning and Preparation
+                </option>
+                <option value="Environmental Conservation">
+                  Environmental Conservation
+                </option>
+                <option value="Health and Wellness">Health and Wellness</option>
+                <option value="Homelessness and Hunger Relief">
+                  Homelessness and Hunger Relief
+                </option>
+                <option value="Animal Welfare">Animal Welfare</option>
+                <option value="Arts and Creativity">Arts and Creativity</option>
+                <option value="Community Building">Community Building</option>
+                <option value="Disaster Relief and Preparedness">
+                  Disaster Relief and Preparedness
+                </option>
+                <option value="Digital Inclusion">Digital Inclusion</option>
+                <option value="Gender Equality">Gender Equality</option>
+                <option value="Sports and Recreation">
+                  Sports and Recreation
+                </option>
+                <option value="Disability Support">Disability Support</option>
+                <option value="International Outreach">
+                  International Outreach
+                </option>
+                <option value="Technology and Innovation">
+                  Technology and Innovation
+                </option>
+                <option value="Other">Other</option>
+              </select>
+
               <label className={style.labelForInput}>
                 Link to signup to event (ex: Google Form)
               </label>
@@ -428,6 +479,7 @@ export default function CreateEvent() {
               />
               <div>
                 <button
+                  type="button"
                   style={{
                     background: "var(--accent-color)",
                     border: "none",
@@ -447,88 +499,162 @@ export default function CreateEvent() {
               </div>
             </>
           )}
-          <div>
-            {current == 4 && (
-              <>
-                <section ref={sectionRef}>
-                  <img
-                    style={{
-                      width: "960px",
-                      height: "559.58px",
-                    }}
-                    src="/assets/images/certificate/template.png"
-                    alt="Certificate"
-                  ></img>
-
-                  <p
-                    style={{
-                      position: "absolute",
-                      top: "84%", // Adjust this value to position the <p> tag below the line
-                      left: "500px",
-                      width: "500px", // Adjust this value to control the width of the <p> tag
-                      padding: "10px",
-                      transform: "translate(-50%, -50%)",
-                      textAlign: "center",
-                      lineHeight: "1.5",
-                      whiteSpace: "pre-line",
-                      wordBreak: "break-word",
-                      fontFamily: "var(--manrope-font)",
-                    }}
-                  >
-                    For, {message.charAt(0).toLowerCase() + message.slice(1)}{" "}
-                    between {formatDate(startDate)} and {formatDate(endDate)}{" "}
-                    earning {communityService} community service hour
-                    {communityService != 1 ? "s" : ""}.
-                  </p>
-
-                  {!name && (
+          {current == 4 && (
+            <>
+              <div
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  display: "grid",
+                  gridTemplateColumns: "50% 50%",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    width: "100%",
+                    height: "60vh",
+                  }}
+                >
+                  <section ref={sectionRef}>
                     <img
                       style={{
-                        position: "absolute",
-                        top: "100%", // Adjust this value to position the <p> tag below the line
-                        left: "500px",
-                        width: "500px", // Adjust this value to control the width of the <p> tag
-                        padding: "10px",
-                        transform: "translate(-50%, -50%)",
-                        textAlign: "center",
-                        lineHeight: "1.5",
-                        whiteSpace: "pre-line",
-                        wordBreak: "break-word",
-                        fontFamily: "var(--signature-font)",
+                        width: "500px",
+                        height: "360px",
                       }}
-                      alt="Certificate image"
-                      src={url}
+                      src="/assets/images/certificate/template.png"
+                      alt="Certificate"
                     ></img>
-                  )}
-                  {name && (
-                    <h2
+
+                    <p
                       style={{
                         position: "absolute",
-                        top: "100%", // Adjust this value to position the <p> tag below the line
-                        left: "500px",
-                        width: "500px", // Adjust this value to control the width of the <p> tag
+                        top: "330px", // Adjust this value to position the <p> tag below the line
+                        left: "300px",
+                        width: "290px", // Adjust this value to control the width of the <p> tag
                         padding: "10px",
                         transform: "translate(-50%, -50%)",
                         textAlign: "center",
-                        lineHeight: "1.5",
+                        lineHeight: "1.2",
                         whiteSpace: "pre-line",
+                        fontSize: "0.7rem",
                         wordBreak: "break-word",
-                        fontFamily: "var(--signature-font)",
+                        fontFamily: "var(--manrope-font)",
                       }}
                     >
-                      {name}
-                    </h2>
-                  )}
-                </section>
-                <button className={style.button} type="submit">
-                  Finish
-                </button>
-              </>
-            )}
-          </div>
+                      For, {message.charAt(0).toLowerCase() + message.slice(1)}{" "}
+                      between {formatDate(startDate)} and {formatDate(endDate)}{" "}
+                      earning {communityService} community service hour
+                      {communityService != 1 ? "s" : ""}.
+                    </p>
+
+                    {!name && (
+                      <img
+                        style={{
+                          position: "absolute",
+                          top: "100%", // Adjust this value to position the <p> tag below the line
+                          left: "500px",
+                          width: "500px", // Adjust this value to control the width of the <p> tag
+                          padding: "10px",
+                          transform: "translate(-50%, -50%)",
+                          textAlign: "center",
+                          lineHeight: "1.5",
+                          whiteSpace: "pre-line",
+                          wordBreak: "break-word",
+                          fontFamily: "var(--signature-font)",
+                        }}
+                        alt="Certificate image"
+                        src={url}
+                      ></img>
+                    )}
+                    {name && (
+                      <h2
+                        style={{
+                          position: "absolute",
+                          top: "100%", // Adjust this value to position the <p> tag below the line
+                          left: "500px",
+                          width: "500px", // Adjust this value to control the width of the <p> tag
+                          padding: "10px",
+                          transform: "translate(-50%, -50%)",
+                          textAlign: "center",
+                          lineHeight: "1.5",
+                          whiteSpace: "pre-line",
+                          wordBreak: "break-word",
+                          fontFamily: "var(--signature-font)",
+                        }}
+                      >
+                        {name}
+                      </h2>
+                    )}
+                  </section>
+                </div>
+                <div className={style.detail}>
+                  <h1>Certificate Details</h1>
+                  <i>
+                    {" "}
+                    Notice: certificates can be checked by educational
+                    institutes. Forged or modified ones will be detected.
+                  </i>
+                  <h2>
+                    <b>Offered by:</b> <span>You</span>
+                  </h2>
+                  <h2>
+                    <b>NoteSwap Id:</b> Example Id{" "}
+                  </h2>
+                </div>
+              </div>
+
+              <button className={style.button} type="submit">
+                Next
+              </button>
+            </>
+          )}
+          {current == 5 && (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                flexDirection: "column",
+                height: "60vh",
+              }}
+            >
+              <h1
+                style={{
+                  fontFamily: "var(--manrope-font)",
+                  textAlign: "center",
+                  fontSize: "1.8rem",
+                  color: "var(--accent-color)",
+                }}
+              >
+                Your event has been successfully created!
+              </h1>
+              <p
+                style={{
+                  fontFamily: "var(--manrope-font)",
+                  textAlign: "center",
+                  fontSize: "1rem",
+                }}
+              >
+                Anybody that has signed up for your event can be found at this
+                url:{" "}
+                <Link
+                  href={`${process.env.NEXT_PUBLIC_URL}signups/${codes}`}
+                  target="_blank"
+                >
+                  {process.env.NEXT_PUBLIC_URL}signups/{codes}
+                </Link>
+              </p>
+              <button className={style.button} type="submit">
+                Finish
+              </button>
+            </div>
+          )}
         </form>
 
-        {current != 1 && current != 4 && (
+        {current != 1 && current != 4 && current != 5 && (
           <p
             onClick={() => {
               if (current == 2) {

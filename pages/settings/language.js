@@ -34,7 +34,7 @@ export default function Language() {
   };
   return (
     <>
-      <div style={{ display: "grid", gridTemplateColumns: "25% 75%" }}>
+      <div className={style.grid}>
         <SettingSidebar />
         <div>
           <h2 className={style.title}>Language</h2>
