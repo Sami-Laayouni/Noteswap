@@ -2,8 +2,8 @@ import Image from "next/image";
 import style from "../../styles/Connect.module.css";
 import { useEffect, useState, useContext } from "react";
 import { useRouter } from "next/router";
-import SocketContext from "../../context/SocketContext";
 import Link from "next/link";
+import { useSocket } from "../../context/SocketContext";
 
 /**
  * Connect page
@@ -14,8 +14,7 @@ import Link from "next/link";
  */
 export default function Connect() {
   const router = useRouter();
-  const { socketIs } = useContext(SocketContext);
-  const [socket] = socketIs;
+  const socket = useSocket();
   const [allSpeech, setAllSpeech] = useState("Speech: ");
   const [numberTimes, setNumberTimes] = useState(0);
   const [elapsedTime, setElapsedTime] = useState(0);
@@ -30,20 +29,24 @@ export default function Connect() {
   const [recognition, setRecognition] = useState(null);
   const [rated, setRated] = useState(false);
   let speech = "Speech: ";
+  console.log(socket);
+  useEffect(() => {
+    if (socket) {
+      socket.on("connect", () => {
+        socket.on("join", () => {
+          if (data?.isTutor) {
+            startTimer();
+            speechToText();
+            setStarted(true);
+          }
+        });
 
-  if (socket) {
-    socket.on("join", () => {
-      if (data?.isTutor) {
-        startTimer();
-        speechToText();
-        setStarted(true);
-      }
-    });
-
-    socket.on("end", () => {
-      setEnded(true);
-    });
-  }
+        socket.on("end", () => {
+          setEnded(true);
+        });
+      });
+    }
+  }, [socket]);
   function formatTime(totalSeconds) {
     const totalMinutes = Math.floor(totalSeconds / 60);
 

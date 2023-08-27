@@ -162,7 +162,7 @@ class AuthService {
       return data;
     } catch (error) {
       console.error("Create user failed", error);
-      throw error;
+      return error;
     }
   }
 

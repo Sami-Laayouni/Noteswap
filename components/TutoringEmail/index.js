@@ -83,6 +83,7 @@ export default function TutoringEmail({
           <span style={{ color: "#40b385" }}>{senderEmail}</span> <br></br>
           Preferred Tutoring Schedule:{" "}
           <span style={{ color: "#40b385" }}>{formatDate(date)}</span> from{" "}
+          <br></br>
           <span style={{ color: "#40b385" }}>{time}</span>
           Preferred type of meeting:
           {type == "online" ? "Online" : "Face-to-Face"}

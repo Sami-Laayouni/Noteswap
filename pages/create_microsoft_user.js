@@ -47,7 +47,6 @@ function CreateMicrosoftUserPage() {
             setRan(true);
           } else {
             // An error has occured
-
             localStorage.setItem("errorSignup", response.error);
             setTimeout(() => {
               router.push("/signup");

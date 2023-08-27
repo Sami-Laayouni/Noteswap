@@ -1,9 +1,8 @@
 import { useRouter } from "next/router";
 import { requireAuthentication } from "../../middleware/authenticate";
 import { useEffect, useState, useContext } from "react";
-import SocketContext from "../../context/SocketContext";
 import style from "../../styles/Connect.module.css";
-import io from "socket.io-client";
+import { useSocket } from "../../context/SocketContext";
 
 /**
  * Connect
@@ -13,10 +12,9 @@ import io from "socket.io-client";
  */
 const Connect = () => {
   const router = useRouter();
-  const { socketIs } = useContext(SocketContext);
+  const socket = useSocket();
   const [data, setData] = useState();
   const [tutorData, setTutorData] = useState();
-  const [socket, setSocket] = socketIs;
 
   function parseQueryString(queryString) {
     const keyValuePairs = queryString.split("&");
@@ -29,6 +27,33 @@ const Connect = () => {
 
     return result;
   }
+  const socketInitializer = async (id) => {
+    try {
+      socket.emit("joinGroup", id);
+      socket.on("connect_error", (err) => {
+        console.log(`connect_error due to ${err}`);
+      });
+      socket.on("start", () => {
+        const data = { ...tutorData, started: true };
+        setTutorData(data);
+      });
+
+      // Handle other socket events and functionalities here if needed.
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (router.query.id && socket) {
+      const { query } = router;
+      const { tutoringSessionId } = parseQueryString(query.id);
+      socket.on("connect", () => {
+        socket.emit("joinGroup", tutoringSessionId);
+        socketInitializer(tutoringSessionId);
+      });
+    }
+  }, [socket]);
   useEffect(() => {
     async function fetchTutorData(id) {
       const response = await fetch("/api/tutor/get_tutoring_session", {
@@ -44,45 +69,20 @@ const Connect = () => {
         setTutorData(await response.json());
       }
     }
-    const socketInitializer = async (id) => {
-      try {
-        await fetch("/api/socket/handler").finally(() => {
-          const socket = io("", {
-            path: "/api/socket.io",
-            transports: ["websocket", "polling"],
-          });
-          socket.emit("joinGroup", id);
-          socket.on("connect_error", (err) => {
-            console.log(`connect_error due to ${err}`);
-          });
-          socket.on("connect", () => {
-            socket.on("start", () => {
-              const data = { ...tutorData, started: true };
-              setTutorData(data);
-            });
-          });
-
-          setSocket(socket);
-        });
-
-        // Handle other socket events and functionalities here if needed.
-      } catch (error) {
-        console.log(error);
-      }
-    };
 
     const { query } = router;
+
     if (query.id) {
       const { tutoringSessionId, isTheTutor, joinCode } = parseQueryString(
         query.id
       );
+
       fetchTutorData(tutoringSessionId);
       setData({
         tutoringSessionId: tutoringSessionId,
         isTheTutor: isTheTutor,
         joinCode: joinCode,
       });
-      socketInitializer(tutoringSessionId);
     }
   }, [router]);
 
@@ -90,7 +90,6 @@ const Connect = () => {
     try {
       await navigator.mediaDevices.getUserMedia({ audio: true });
       // Use the stream or do any other necessary operations
-
       await socket.emit("started", data?.tutoringSessionId);
       await fetch("/api/tutor/start_session", {
         method: "POST",
