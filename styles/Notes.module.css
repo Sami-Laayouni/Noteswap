@@ -49,6 +49,9 @@
 .select li:first-child {
   border-bottom: 1px solid var(--default-black-color);
 }
+.selected {
+  background-color: red;
+}
 /* ======== Search =========*/
 .searchContainer {
   padding-top: 10px;

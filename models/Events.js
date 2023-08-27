@@ -33,6 +33,10 @@ const eventSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  max: {
+    type: Number,
+    require: false,
+  },
   link_to_event: {
     type: String,
     required: true,

@@ -1,4 +1,6 @@
 import Notes from "../../../../models/Notes";
+import User from "../../../../models/User";
+
 import { connectDB } from "../../../../utils/db";
 /**
  * Search notes
@@ -34,36 +36,77 @@ function findFavorite(userData) {
     author: favoriteAuthors[index],
   }));
 }
+
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "public, max-age=120");
 
   try {
-    const { userId } = req.body; // User ID from the request body
-
-    // Retrieve all notes from the MongoDB collection
-    const notes = await Notes.aggregate([
-      {
-        $lookup: {
-          from: "users",
-          localField: "publisherId",
-          foreignField: "_id",
-          as: "userInfo",
+    const query = [];
+    let options = {};
+    await connectDB();
+    const { userId, title, desc, date, classes } = req.body;
+    if (title) {
+      options = {
+        $match: {
+          title: { $regex: title, $options: "i" },
         },
-      },
-    ]).exec();
+      };
+      query.push(options);
+    }
+    if (desc) {
+      options = {
+        $match: {
+          notes: { $regex: desc, $options: "i" },
+        },
+      };
+      query.push(options);
+    }
+    if (date) {
+      const regex = new RegExp(date, "i");
 
+      options = {
+        $match: {
+          date: { $regex: regex },
+        },
+      };
+      query.push(options);
+    }
+
+    options = {
+      $lookup: {
+        from: User.collection.name,
+        localField: "publisherId",
+        foreignField: "_id",
+        as: "userInfo",
+      },
+    };
+
+    if (classes) {
+      options = {
+        $match: {
+          category: classes,
+        },
+      };
+      query.push(options);
+    }
+    query.push({
+      $lookup: {
+        from: "users",
+        localField: "publisherId",
+        foreignField: "_id",
+        as: "userInfo",
+      },
+    });
+    // Retrieve all notes from the MongoDB collection
+    const notes = await Notes.aggregate(query);
+    console.log(notes);
     // Initialize the scores matrix
     const scores = [];
+    const favorites = [];
 
-    await connectDB();
-
-    // Iterate through each note
     notes.forEach((note) => {
-      // Iterate through ratings within the note
       note?.scores?.forEach((score) => {
-        // Add user and note to their respective sets
-        const noteScoreUser = score.user;
-        if (noteScoreUser == userId) {
+        if (score.user === userId) {
           scores.push({
             user: note.userInfo[0]._id,
             score: score.score,
@@ -73,85 +116,60 @@ export default async function handler(req, res) {
       });
     });
 
-    const favorites = findFavorite(scores);
-    const first_results = await Notes.aggregate([
-      {
-        $match: {
-          publisherId: favorites[0].author,
-          category: favorites[0].category,
-        },
-      },
-      {
-        $lookup: {
-          from: "users",
-          localField: "publisherId",
-          foreignField: "_id",
-          as: "userInfo",
-        },
-      },
-      { $sort: { aiRating: -1, createdAt: -1 } },
-      { $limit: 15 },
-    ]);
+    if (scores.length > 0) {
+      favorites.push(...findFavorite(scores));
+    } else {
+      res.status(405).send("error");
+    }
+    const includedNoteIds = new Set();
 
-    const second_results = await Notes.aggregate([
-      {
-        $match: {
-          publisherId: { $ne: favorites[0].author },
-          category: favorites[0].category,
-        },
-      },
-      {
-        $lookup: {
-          from: "users",
-          localField: "publisherId",
-          foreignField: "_id",
-          as: "userInfo",
-        },
-      },
-      { $sort: { aiRating: -1, createdAt: -1 } },
-      { $limit: 5 },
-    ]);
-    const knownAuthor = second_results[0].publisherId;
-    const third_results = await Notes.aggregate([
-      {
-        $match: {
-          publisherId: favorites[0].author,
-          category: { $ne: favorites[0].category },
-        },
-      },
-      {
-        $lookup: {
-          from: "users",
-          localField: "publisherId",
-          foreignField: "_id",
-          as: "userInfo",
-        },
-      },
-      { $sort: { aiRating: -1, createdAt: -1 } },
-      { $limit: 5 },
-    ]);
-    const fouth_results = await Notes.aggregate([
-      {
-        $match: {
-          publisherId: knownAuthor,
-        },
-      },
-      {
-        $lookup: {
-          from: "users",
-          localField: "publisherId",
-          foreignField: "_id",
-          as: "userInfo",
-        },
-      },
-      { $sort: { aiRating: -1, createdAt: -1 } },
-      { $limit: 10 },
-    ]);
+    const first_results = notes.filter(
+      (note) =>
+        JSON.stringify(note.publisherId) ===
+          JSON.stringify(favorites[0]?.author) &&
+        note.category === favorites[0]?.category
+    );
+    first_results.forEach((note) => includedNoteIds.add(note._id)); // Add IDs to the set
 
-    res
-      .status(200)
-      .send([first_results, second_results, third_results, fouth_results]);
+    const second_results = notes
+      .filter(
+        (note) =>
+          JSON.stringify(note.publisherId) !==
+            JSON.stringify(favorites[0]?.author) &&
+          note.category === favorites[0]?.category &&
+          !includedNoteIds.has(note._id) // Filter out already included notes
+      )
+      .slice(0, 5);
+    second_results.forEach((note) => includedNoteIds.add(note._id)); // Add IDs to the set
+    const knownAuthor = second_results[0]?.publisherId;
+
+    const third_results = notes
+      .filter(
+        (note) =>
+          JSON.stringify(note.publisherId) ===
+            JSON.stringify(favorites[0]?.author) &&
+          note.category !== favorites[0]?.category &&
+          !includedNoteIds.has(note._id) // Filter out already included notes
+      )
+      .slice(0, 5);
+    third_results.forEach((note) => includedNoteIds.add(note._id)); // Add IDs to the set
+
+    const fourth_results = notes
+      .filter(
+        (note) =>
+          JSON.stringify(note.publisherId) === JSON.stringify(knownAuthor) &&
+          !includedNoteIds.has(note._id) // Filter out already included notes
+      )
+      .slice(0, 10);
+    if (first_results || second_results || third_results || fourth_results) {
+      res
+        .status(200)
+        .send([first_results, second_results, third_results, fourth_results]);
+    } else {
+      res.status(405).send("error");
+    }
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: error });
   }
 }

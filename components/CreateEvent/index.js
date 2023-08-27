@@ -23,6 +23,8 @@ export default function CreateEvent() {
   const [endDate, setEndDate] = useState("");
   const [link, setLink] = useState("");
   const [message, setMessage] = useState("");
+  const [clicked, setClicked] = useState(false);
+  const [max, setMax] = useState(50);
   const canvasRef = useRef(null);
   const sectionRef = useRef(null);
   const [drawing, setDrawing] = useState(false);
@@ -180,6 +182,7 @@ export default function CreateEvent() {
               }
               setCurrent(4);
             } else if (current == 4) {
+              setClicked(true);
               await saveImage();
 
               code = generateCode(24);
@@ -202,6 +205,7 @@ export default function CreateEvent() {
                   contact_email: JSON.parse(localStorage.getItem("userInfo"))
                     .email,
                   link_to_event: link,
+                  max: max,
                   createdAt: Date.now(),
                 }),
               });
@@ -238,6 +242,7 @@ export default function CreateEvent() {
               setMessage("");
               setName("");
               setLink("");
+              setMax(50);
               setCommunityService(0);
               setOpen(false);
             }
@@ -258,7 +263,7 @@ export default function CreateEvent() {
               <label className={style.labelForInput}>Description</label>
               <textarea
                 className={style.input}
-                style={{ height: "110px", paddingTop: "10px", resize: "none" }}
+                style={{ height: "70px", paddingTop: "10px", resize: "none" }}
                 placeholder="Enter description"
                 value={desc}
                 onChange={(e) => {
@@ -277,6 +282,20 @@ export default function CreateEvent() {
                 value={communityService}
                 onChange={(e) => {
                   setCommunityService(e.target.value);
+                }}
+                required
+              />
+              <label className={style.labelForInput}>
+                Maximum number of volunteers that can sign up. (Max: 10,000)
+              </label>
+              <input
+                className={style.input}
+                min={0}
+                max={10000}
+                type="number"
+                value={max}
+                onChange={(e) => {
+                  setMax(e.target.value);
                 }}
                 required
               />
@@ -442,6 +461,7 @@ export default function CreateEvent() {
                 placeholder="Enter full name"
                 className={style.input}
                 id="signature"
+                maxLength={20}
                 value={name}
                 onChange={(e) => {
                   setName(e.target.value);
@@ -531,8 +551,8 @@ export default function CreateEvent() {
                     <p
                       style={{
                         position: "absolute",
-                        top: "330px", // Adjust this value to position the <p> tag below the line
-                        left: "300px",
+                        top: "52.53940455341506vh", // Adjust this value to position the <p> tag below the line
+                        left: "21.09375vw",
                         width: "290px", // Adjust this value to control the width of the <p> tag
                         padding: "10px",
                         transform: "translate(-50%, -50%)",
@@ -554,8 +574,8 @@ export default function CreateEvent() {
                       <img
                         style={{
                           position: "absolute",
-                          top: "100%", // Adjust this value to position the <p> tag below the line
-                          left: "500px",
+                          top: "62vh", // Adjust this value to position the <p> tag below the line
+                          left: "21.09375vw",
                           width: "500px", // Adjust this value to control the width of the <p> tag
                           padding: "10px",
                           transform: "translate(-50%, -50%)",
@@ -573,8 +593,8 @@ export default function CreateEvent() {
                       <h2
                         style={{
                           position: "absolute",
-                          top: "100%", // Adjust this value to position the <p> tag below the line
-                          left: "500px",
+                          top: "62vh", // Adjust this value to position the <p> tag below the line
+                          left: "21.09375vw",
                           width: "500px", // Adjust this value to control the width of the <p> tag
                           padding: "10px",
                           transform: "translate(-50%, -50%)",
@@ -606,7 +626,7 @@ export default function CreateEvent() {
                 </div>
               </div>
 
-              <button className={style.button} type="submit">
+              <button disabled={clicked} className={style.button} type="submit">
                 Next
               </button>
             </>

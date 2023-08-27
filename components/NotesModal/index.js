@@ -72,10 +72,13 @@ export default function NotesModal() {
   const socialClasses = [
     "World History I",
     "World History II",
+    "U.S History",
+    "Comparative Gov.",
     "AP World History",
   ];
   const englishClasses = [
-    "Introduction",
+    "English I",
+    "English II",
     "American Literature",
     "British Literature",
     "AP English",
@@ -88,12 +91,20 @@ export default function NotesModal() {
     "AP Chemistry",
     "AP Physics",
   ];
+
+  const frenchClasses = ["French FL", "French I", "French II", "French III"];
+  const arabicClasses = ["Arabic FL", "Arabic I", "Arabic II", "Arabic III"];
+
   const electives = [
-    "Art",
-    "PE",
-    "IT",
-    "AP Arts",
-    "AP IT",
+    "Women's Lit",
+    "Model U.N",
+    "Digital Marketing",
+    "Visual Art",
+    "PE & Health",
+    "Computer Science",
+    "Spanish I",
+    "AP ART",
+    "AP Computer Science",
     "Advanced PE",
     "Other",
   ];
@@ -512,6 +523,19 @@ export default function NotesModal() {
                 >
                   French
                 </li>
+                {frenchClasses?.map((value) => (
+                  <li
+                    key={value}
+                    onClick={() => {
+                      setSchoolClass(value);
+                      document.getElementById("dropdownMenu").style.display =
+                        "none";
+                      setCurrent(2);
+                    }}
+                  >
+                    {value}
+                  </li>
+                ))}
                 <li
                   key="Arabic"
                   className={style.boldText}
@@ -524,6 +548,19 @@ export default function NotesModal() {
                 >
                   Arabic
                 </li>
+                {arabicClasses?.map((value) => (
+                  <li
+                    key={value}
+                    onClick={() => {
+                      setSchoolClass(value);
+                      document.getElementById("dropdownMenu").style.display =
+                        "none";
+                      setCurrent(2);
+                    }}
+                  >
+                    {value}
+                  </li>
+                ))}
                 <li
                   key="Electives"
                   className={style.boldText}

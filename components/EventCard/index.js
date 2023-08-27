@@ -2,6 +2,7 @@ import style from "./eventCard.module.css";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useState, useEffect } from "react";
 /**
  * Format date
  * @date 8/13/2023 - 5:10:50 PM
@@ -56,6 +57,16 @@ function formatDate(inputDate) {
  */
 export default function EventCard({ data }) {
   const router = useRouter();
+  const [teacher, setTeacher] = useState(false);
+  const [id, setId] = useState(null);
+  useEffect(() => {
+    if (localStorage) {
+      setTeacher(
+        JSON.parse(localStorage.getItem("userInfo")).role == "teacher"
+      );
+      setId(JSON.parse(localStorage.getItem("userInfo"))._id);
+    }
+  }, [router]);
   return (
     <div className={style.container}>
       <div
@@ -83,40 +94,93 @@ export default function EventCard({ data }) {
           From {formatDate(data?.date_of_events.split("to")[0])} to{" "}
           {formatDate(data?.date_of_events.split("to")[1])}
         </h3>
+        <h4>{data?.category}</h4>
+
         <p>{data?.desc}</p>
       </section>
       <section style={{ position: "relative" }}>
-        <span
-          onClick={async () => {
-            const response = await fetch("/api/events/signup_event", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                id: data?._id,
-                userId: JSON.parse(localStorage.getItem("userInfo"))._id,
-              }),
-            });
-            if (response.ok) {
-              router.push(data?.link_to_event);
-            } else {
-              console.log(await response.text);
-            }
-          }}
-        >
-          <button
+        {data?.volunteers?.length == data?.max && (
+          <p
             style={{
-              marginTop: "10px",
-              bottom: "65px",
-              background: "var(--accent-color)",
-              color: "white",
+              color: "var(--accent-color)",
+              textAlign: "center",
             }}
-            className={style.button}
           >
-            Sign Up
-          </button>
-        </span>
+            Event is full
+          </p>
+        )}
+        {!teacher && (
+          <span
+            onClick={async () => {
+              if (data?.volunteers?.includes(id)) {
+                const response = await fetch("/api/events/unsignup_event", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    id: data?._id,
+                    userId: JSON.parse(localStorage.getItem("userInfo"))._id,
+                  }),
+                });
+                if (response.ok) {
+                  document.getElementById(`${data._id}button`).innerText =
+                    "Sign Up";
+                }
+              } else {
+                const response = await fetch("/api/events/signup_event", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    id: data?._id,
+                    userId: JSON.parse(localStorage.getItem("userInfo"))._id,
+                  }),
+                });
+                document.getElementById(`${data._id}button`).innerText =
+                  "Unsignup";
+                if (response.ok) {
+                  router.push(data?.link_to_event);
+                }
+              }
+            }}
+          >
+            <button
+              style={{
+                marginTop: "10px",
+                bottom: "65px",
+                background: "var(--accent-color)",
+                color: "white",
+              }}
+              className={style.button}
+              id={`${data?._id}button`}
+              disabled={
+                !data?.volunteers?.includes(id) &&
+                data?.volunteers?.length == data?.max
+              }
+            >
+              {data?.volunteers?.includes(id) ? "Unsignup" : "Sign Up"}
+            </button>
+          </span>
+        )}
+        {id == data?.teacher_id && (
+          <Link href={`/signups/${data._id}`}>
+            {" "}
+            <button
+              style={{
+                marginTop: "10px",
+                bottom: "65px",
+                background: "var(--accent-color)",
+                color: "white",
+              }}
+              className={style.button}
+            >
+              View Volunteers
+            </button>
+          </Link>
+        )}
+
         <button
           className={style.button}
           style={{ marginTop: "10px", bottom: "10px" }}

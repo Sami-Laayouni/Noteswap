@@ -25,11 +25,15 @@ class AuthService {
         },
         body: JSON.stringify({ email, password }),
       });
-      const data = await response.json();
-      if (data.token) {
-        this.setLoggedIn(true);
+      if (response.ok) {
+        const data = await response.json();
+        if (data.token) {
+          this.setLoggedIn(true);
+        }
+        return data;
+      } else {
+        return "Incorrect username or password";
       }
-      return data;
     } catch (error) {
       console.error("Login failed", error);
       throw error;
@@ -72,10 +76,11 @@ class AuthService {
         },
         body: JSON.stringify({ uid: id }),
       });
-
-      const data = await response.json();
-      this.setLoggedIn(true);
-      return data;
+      if (response.ok) {
+        const data = await response.json();
+        this.setLoggedIn(true);
+        return data;
+      }
     } catch (error) {
       console.error("Login with Microsoft failed", error);
       throw error;

@@ -26,6 +26,7 @@ export default async function becomeTutor(req, res) {
       link_to_event,
       contact_email,
       category,
+      max,
       id,
     } = req.body;
     try {
@@ -42,6 +43,7 @@ export default async function becomeTutor(req, res) {
         link_to_event: link_to_event,
         createdAt: Date.now(),
         category: category,
+        max: max,
         expiration_date: new Date(date_of_events.split("to")[1]),
       });
       const savedEvent = await newEvent.save();

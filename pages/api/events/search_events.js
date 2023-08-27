@@ -39,6 +39,9 @@ export default async function handler(req, res) {
       teacher_id: 1,
       contact_email: 1,
       link_to_event: 1,
+      max: 1,
+      category: 1,
+      volunteers: 1,
     },
   });
 

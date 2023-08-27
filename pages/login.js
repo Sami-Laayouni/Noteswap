@@ -90,8 +90,7 @@ const Login = () => {
           // Redirect to the dashboard page after successful login
           router.push("/dashboard");
         } else {
-          // An error has occured
-          setError(response.error);
+          setError(response);
         }
       } else if (type === "google") {
         // Login with Google

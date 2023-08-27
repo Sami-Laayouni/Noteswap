@@ -114,10 +114,6 @@ export default function NoteCard(data) {
           color="black"
           id={`more2${data?.data?._id}`}
           onClick={() => {
-            console.log(
-              document.getElementById(`dropdown${data?.data?._id}`).style
-                .display == "none"
-            );
             if (
               document.getElementById(`dropdown${data?.data?._id}`).style
                 .display == "none" ||
@@ -171,8 +167,6 @@ export default function NoteCard(data) {
                     document.getElementById(
                       `card${data?.data?._id}`
                     ).style.display = "none";
-                  } else {
-                    console.log(await response.text());
                   }
                 }}
                 id={`dropdownItem2${data?.data?._id}`}

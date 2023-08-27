@@ -82,7 +82,9 @@ export default function Note() {
     const isLoggedIn = isAuthenticated();
     setLoggedIn(isLoggedIn);
     if (localStorage) {
-      setRole(JSON.parse(localStorage?.getItem("userInfo")).role);
+      if (localStorage.getItem("userInfo")) {
+        setRole(JSON.parse(localStorage?.getItem("userInfo")).role);
+      }
     }
   }, [setLoggedIn]);
 
@@ -108,7 +110,7 @@ export default function Note() {
       date: date || null,
       classes: classes || null,
       type: type || null,
-      id: JSON.parse(localStorage.getItem("userInfo"))._id || null,
+      id: JSON.parse(localStorage?.getItem("userInfo"))?._id || null,
     };
     const response = await fetch(`/api/notes/search_notes`, {
       method: "POST",
@@ -119,7 +121,6 @@ export default function Note() {
     });
     const data = await response.json();
     setLoading(false);
-    console.log(data);
     setNotes(data.notes);
   }
 
@@ -200,9 +201,12 @@ export default function Note() {
               <option>Social Study</option>
               <option>World History I</option>
               <option>World History II</option>
+              <option>U.S History</option>
+              <option>Comparative Gov.</option>
               <option>AP World History</option>
               <option>ELA</option>
-              <option>Introduction</option>
+              <option>English I</option>
+              <option>English II</option>
               <option>American Literature</option>
               <option>British Literature</option>
               <option>AP English</option>
@@ -212,12 +216,26 @@ export default function Note() {
               <option>Geometry</option>
               <option>Pre-calculas</option>
               <option>AP calculas</option>
+              <option>French</option>
+              <option>French FL</option>
+              <option>French I</option>
+              <option>French II</option>
+              <option>French III</option>
+              <option>Arabic</option>
+              <option>Arabic FL</option>
+              <option>Arabic I</option>
+              <option>Arabic II</option>
+              <option>Arabic III</option>
               <option>Electives</option>
-              <option>Art</option>
-              <option>PE</option>
-              <option>IT</option>
+              <option>Women&apos;s Lit</option>
+              <option>Model U.N</option>
+              <option>Digital Marketing</option>
+              <option>Visual Art</option>
+              <option>PE & Health</option>
+              <option>Computer Science</option>
+              <option>Spanish I</option>
               <option>AP ART</option>
-              <option>AP IT</option>
+              <option>AP Computer Science</option>
               <option>Advanced PE</option>
               <option>Other</option>
             </select>
@@ -248,9 +266,51 @@ export default function Note() {
         </section>
         <section className={style.notes}>
           <ul>
-            <li onClick={() => addRoutePath("type", "foryou")}>For you</li>
-            <li onClick={() => addRoutePath("type", "popular")}>Quality</li>
-            <li onClick={() => addRoutePath("type", "latest")}>
+            {loggedIn && (
+              <li
+                style={{
+                  background:
+                    router?.query?.type == "foryou" || !router?.query?.type
+                      ? "white"
+                      : "var(--accent-color)",
+                  color:
+                    router?.query?.type == "foryou" || !router?.query?.type
+                      ? "var(--accent-color)"
+                      : "white",
+                }}
+                onClick={() => addRoutePath("type", "foryou")}
+              >
+                For you
+              </li>
+            )}
+            <li
+              style={{
+                background:
+                  router?.query?.type == "popular"
+                    ? "white"
+                    : "var(--accent-color)",
+                color:
+                  router?.query?.type == "popular"
+                    ? "var(--accent-color)"
+                    : "white",
+              }}
+              onClick={() => addRoutePath("type", "popular")}
+            >
+              Quality
+            </li>
+            <li
+              style={{
+                background:
+                  router?.query?.type == "latest"
+                    ? "white"
+                    : "var(--accent-color)",
+                color:
+                  router?.query?.type == "latest"
+                    ? "var(--accent-color)"
+                    : "white",
+              }}
+              onClick={() => addRoutePath("type", "latest")}
+            >
               {t("latest")}
             </li>
           </ul>

@@ -108,27 +108,33 @@ export default async function handler(req, res) {
         },
         body: JSON.stringify({
           userId: id,
+          title: title,
+          desc: desc,
+          date: date,
+          classes: classes,
         }),
       }
     );
-    const array = [];
-    const data = await response.json();
-    array.push(data[0]);
-    data[1].map(function (value) {
-      array[0].push(value);
-    });
-    data[2].map(function (value) {
-      array[0].push(value);
-    });
-    data[3].map(function (value) {
-      array[0].push(value);
-    });
-    const final = {
-      notes: array[0],
-    };
     if (response.ok) {
+      const array = [];
+      const data = await response.json();
+      array.push(data[0]);
+      data[1].map(function (value) {
+        array[0].push(value);
+      });
+      data[2].map(function (value) {
+        array[0].push(value);
+      });
+      data[3].map(function (value) {
+        array[0].push(value);
+      });
+      const final = {
+        notes: array[0],
+      };
       res.status(200).send(final);
       return;
+    } else {
+      query.push({ $sort: { hot: -1, createdAt: -1 } }, { $limit: 15 });
     }
   }
 
