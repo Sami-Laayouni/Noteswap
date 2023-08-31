@@ -159,6 +159,7 @@ class AuthService {
 
       const data = await response.json();
       this.setLoggedIn(true);
+
       return data;
     } catch (error) {
       console.error("Create user failed", error);

@@ -106,6 +106,7 @@ const Signup = () => {
         // Redirect user to google url
         window.location.href = data.url;
       } else if (type === "microsoft") {
+        localStorage.setItem("role", selectedRole);
         window.location.href = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize
         ?client_id=${process.env.NEXT_PUBLIC_MICROSOFT_APP_ID}
         &response_type=code

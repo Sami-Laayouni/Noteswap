@@ -107,8 +107,8 @@ export default function BookASession() {
             <li
               style={{
                 textAlign: "center",
-                background: "var(--accent-color)",
-                color: "white",
+                background: type == "online" ? "white" : "var(--accent-color)",
+                color: type == "online" ? "var(--accent-color)" : "white",
                 paddingTop: "20px",
                 paddingBottom: "20px",
                 borderRadius: "7px",
@@ -123,8 +123,8 @@ export default function BookASession() {
             <li
               style={{
                 textAlign: "center",
-                background: "var(--accent-color)",
-                color: "white",
+                background: type == "face" ? "white" : "var(--accent-color)",
+                color: type == "face" ? "var(--accent-color)" : "white",
                 paddingTop: "20px",
                 paddingBottom: "20px",
                 borderRadius: "7px",

@@ -16,7 +16,7 @@ function CreateMicrosoftUserPage() {
   const [loggedIn, setLoggedIn] = isLoggedIn;
   const AuthServices = new AuthService(setLoggedIn);
   const { errorSignup } = useContext(AuthContext);
-  const [ran, setRan] = useState(false);
+  let ran = false;
   const [error, setError] = errorSignup;
 
   useEffect(() => {
@@ -38,13 +38,14 @@ function CreateMicrosoftUserPage() {
             data.uid,
             role
           );
-          if (response.ok) {
+
+          if (response.token) {
             // Store the token in local storage
             localStorage.setItem("userInfo", JSON.stringify(response.user));
             localStorage.setItem("token", response.token);
             // Redirect to the dashboard page after successful login
             router.push("/dashboard");
-            setRan(true);
+            ran = true;
           } else {
             // An error has occured
             localStorage.setItem("errorSignup", response.error);
@@ -75,6 +76,7 @@ function CreateMicrosoftUserPage() {
 
       try {
         if (!ran) {
+          ran = true;
           createUser(parsedProfileData);
           setRan(true);
         }
