@@ -1,10 +1,9 @@
 import style from "./Header.module.css";
 import Link from "next/link";
 import Image from "next/image";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import AuthContext from "../../context/AuthContext";
 import { isAuthenticated } from "../../utils/auth";
-import { useEffect } from "react";
 import ProfilePicture from "../ProfilePicture";
 import { useRouter } from "next/router";
 import {
@@ -54,7 +53,7 @@ export default function Header() {
     if (localStorage.getItem("token")) {
       setUserData(JSON.parse(localStorage.getItem("userInfo")));
     }
-  }, [router]);
+  }, [router, loggedIn]);
 
   useEffect(() => {
     /* 

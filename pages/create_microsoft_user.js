@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import AuthService from "../services/AuthService";
 import { useContext } from "react";
@@ -41,6 +41,7 @@ function CreateMicrosoftUserPage() {
 
           if (response.token) {
             // Store the token in local storage
+            setLoggedIn(true);
             localStorage.setItem("userInfo", JSON.stringify(response.user));
             localStorage.setItem("token", response.token);
             // Redirect to the dashboard page after successful login
@@ -75,7 +76,7 @@ function CreateMicrosoftUserPage() {
       const parsedProfileData = JSON.parse(decodedProfileDataString);
 
       try {
-        if (!ran) {
+        if (!ran && localStorage.getItem("role")) {
           ran = true;
           createUser(parsedProfileData);
           setRan(true);
