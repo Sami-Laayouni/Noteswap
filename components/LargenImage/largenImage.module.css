@@ -3,6 +3,7 @@
   height: 40px;
   outline: none;
   border-radius: 50%;
+  background-color: var(--accent-color);
   outline: none;
   border: none;
   display: flex;

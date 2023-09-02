@@ -39,7 +39,7 @@ export default function LargenImage() {
         backgroundColor: "rgba(0, 0, 0, 0.7)",
         width: "100%",
         height: "100%",
-        position: "absolute",
+        position: "fixed",
         top: 0,
         left: 0,
         zIndex: 99,
@@ -103,14 +103,14 @@ export default function LargenImage() {
           className={style.button}
           onClick={() => handleZoom(10)}
         >
-          <FaPlus id="plus1" />
+          <FaPlus color="white" id="plus1" />
         </button>
         <button
           id="minus"
           className={style.button}
           onClick={() => handleZoom(-10)}
         >
-          <FaMinus id="minus1" />
+          <FaMinus color="white" id="minus1" />
         </button>
       </div>
     </section>

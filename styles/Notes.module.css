@@ -50,7 +50,7 @@
   border-bottom: 1px solid var(--default-black-color);
 }
 .selected {
-  background-color: red;
+  background-color: var(--accent-color);
 }
 /* ======== Search =========*/
 .searchContainer {
@@ -181,7 +181,7 @@
 .note::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
-.notes ul li {
+.notes > ul li {
   display: inline-block;
   background-color: var(--accent-color);
   color: var(--default-white-color);

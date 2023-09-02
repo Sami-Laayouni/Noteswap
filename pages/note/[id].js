@@ -5,7 +5,8 @@ import Link from "next/link";
 import { BiArrowBack } from "react-icons/bi";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import ModalContext from "../../context/ModalContext";
 import LoadingCircle from "../../components/LoadingCircle";
 import Script from "next/script";
 import NoteSwapBot from "../../components/NoteSwapBot";
@@ -22,7 +23,9 @@ import NoteSwapBot from "../../components/NoteSwapBot";
 export default function Note() {
   const [note, setNote] = useState(null);
   const [ran, setRan] = useState(false);
-
+  const { imageModal, imageUrl } = useContext(ModalContext);
+  const [open, setOpen] = imageModal;
+  const [url, setUrl] = imageUrl;
   const router = useRouter();
 
   function calculatePercentageByKey(obj, key) {
@@ -130,7 +133,7 @@ export default function Note() {
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9167942144001417"
         crossOrigin="anonymous"
       />
-      <NoteSwapBot />
+      {!note?.note[0].images.length > 0 && <NoteSwapBot />}
       <BiArrowBack
         onClick={() => {
           window.history.back();
@@ -161,12 +164,22 @@ export default function Note() {
             style={{ lineHeight: "200%" }}
             dangerouslySetInnerHTML={{ __html: note?.note[0]?.notes }}
           ></section>
-          {note?.note?.images && (
-            <section>
+
+          {note?.note[0]?.images.length > 0 && (
+            <section className={style.imageScroll}>
               {note?.note[0]?.images.map(function (value) {
                 return (
                   <Image
-                    style={{ borderRadius: "8px", display: "block" }}
+                    style={{
+                      borderRadius: "8px",
+                      marginRight: "20px",
+                      display: "inline-block",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      setUrl(value);
+                      setOpen(true);
+                    }}
                     src={value}
                     key={value}
                     alt="Notes"

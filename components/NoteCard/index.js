@@ -182,7 +182,8 @@ export default function NoteCard(data) {
         style={{
           wordBreak: "normal",
           overflow: "hidden",
-          height: "95px",
+          height: "auto",
+          maxHeight: "95px",
         }}
         dangerouslySetInnerHTML={{ __html: data?.data?.notes }}
       ></div>

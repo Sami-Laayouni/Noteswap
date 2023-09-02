@@ -46,6 +46,15 @@
   margin-bottom: 10px;
   background-color: black;
 }
+.imageScroll {
+  width: 100%;
+  margin-top: 20px;
+  height: 100%;
+
+  white-space: nowrap;
+  overflow-x: scroll;
+  scrollbar-width: none;
+}
 .line {
   width: 100%;
   height: 2px;

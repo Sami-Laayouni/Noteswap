@@ -43,7 +43,7 @@
   position: absolute;
   border-radius: 50%;
   left: 100px;
-  bottom: 195px;
+  bottom: 34.15061295971979vh;
   opacity: 1;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   display: inline-block;
@@ -137,7 +137,7 @@
   }
   .userInfo img {
     left: 50%;
-    top: 28%;
+    top: 22%;
     transform: translate(-50%);
   }
   .notes {
