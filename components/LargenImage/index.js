@@ -97,6 +97,7 @@ export default function LargenImage() {
           marginRight: "10px",
           marginTop: "10px",
         }}
+        id="plus1"
       >
         <button
           id="plus"

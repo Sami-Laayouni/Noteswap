@@ -10,6 +10,10 @@ import ModalContext from "../../context/ModalContext";
 import LoadingCircle from "../../components/LoadingCircle";
 import Script from "next/script";
 import NoteSwapBot from "../../components/NoteSwapBot";
+import { FaShare } from "react-icons/fa";
+import { BiPencil } from "react-icons/bi";
+import dynamic from "next/dynamic";
+const CiteModal = dynamic(() => import("../../components/CiteModal"));
 
 /**
  * Note page
@@ -23,9 +27,14 @@ import NoteSwapBot from "../../components/NoteSwapBot";
 export default function Note() {
   const [note, setNote] = useState(null);
   const [ran, setRan] = useState(false);
-  const { imageModal, imageUrl } = useContext(ModalContext);
+  const { imageModal, imageUrl, shareOpen, shareURL, citeOpen, citeInfo } =
+    useContext(ModalContext);
   const [open, setOpen] = imageModal;
   const [url, setUrl] = imageUrl;
+  const [openS, setOpenS] = shareOpen;
+  const [urlS, setUrlS] = shareURL;
+  const [openC, setOpenC] = citeOpen;
+  const [dataC, setDataC] = citeInfo;
   const router = useRouter();
 
   function calculatePercentageByKey(obj, key) {
@@ -133,6 +142,7 @@ export default function Note() {
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9167942144001417"
         crossOrigin="anonymous"
       />
+      <CiteModal />
       {!note?.note[0].images.length > 0 && <NoteSwapBot />}
       <BiArrowBack
         onClick={() => {
@@ -160,6 +170,40 @@ export default function Note() {
               Updated: {formatDate(note?.note[0]?.date)}
             </span>
           </h3>
+
+          <ul className={style.items}>
+            <li
+              onClick={() => {
+                setOpenS(true);
+                setUrlS(window.location.href);
+              }}
+            >
+              <FaShare
+                style={{ marginRight: "5px", verticalAlign: "middle" }}
+              />{" "}
+              Share
+            </li>
+            <li
+              onClick={() => {
+                setOpenC(true);
+                setDataC({
+                  firstName: note?.profile?.first_name,
+                  lastName: note?.profile?.last_name,
+                  date: formatDate(note?.note[0]?.date),
+                  title: note?.note[0]?.title,
+                  url: window.location.href,
+                  platform: "Noteswap",
+                });
+              }}
+            >
+              {" "}
+              <BiPencil
+                style={{ marginRight: "5px", verticalAlign: "middle" }}
+              />{" "}
+              Cite
+            </li>
+          </ul>
+
           <section
             style={{ lineHeight: "200%" }}
             dangerouslySetInnerHTML={{ __html: note?.note[0]?.notes }}
@@ -217,8 +261,23 @@ export default function Note() {
                 }
               }}
             >
+              {localStorage && localStorage.getItem("userInfo") && (
+                <>
+                  {JSON.parse(localStorage.getItem("userInfo"))._id !=
+                    note?.profile?._id && (
+                    <>
+                      <br></br>
+                      <i>
+                        When leaving a comment please make sure to give{" "}
+                        {note?.profile?.first_name} constructive feedback
+                      </i>
+                    </>
+                  )}
+                </>
+              )}
+
               <textarea
-                placeholder="Enter comment"
+                placeholder="Enter a comment"
                 className={style.textarea}
                 required
                 id="comment"

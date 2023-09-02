@@ -1,0 +1,24 @@
+.list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.list li {
+  margin-bottom: 20px;
+}
+
+.list li h1 {
+  font-size: 1.1rem;
+  font-family: var(--manrope-font);
+  color: var(--accent-color);
+}
+
+.list li h2 {
+  font-size: 0.9rem;
+  font-family: var(--manrope-font);
+  transition: 0.5s ease-in-out all;
+}
+.list li h2:hover {
+  cursor: pointer;
+  padding-left: 20px;
+}

@@ -19,12 +19,15 @@ import ModalContext from "../../context/ModalContext";
  * @return {*}
  */
 export default function NoteCard(data) {
-  const { imageModal, imageUrl } = useContext(ModalContext);
+  const { imageModal, imageUrl, shareOpen, shareURL } =
+    useContext(ModalContext);
   const router = useRouter();
   const containerRef = useRef(null);
   const [showArrows, setShowArrows] = useState(false);
   const [open, setOpen] = imageModal;
   const [url, setUrl] = imageUrl;
+  const [openS, setOpenS] = shareOpen;
+  const [urlS, setUrlS] = shareURL;
 
   const scrollLeft = () => {
     if (containerRef.current) {
@@ -135,15 +138,11 @@ export default function NoteCard(data) {
       <div id={`dropdown${data?.data?._id}`} className={style.dropdown}>
         <ol>
           <li
+            key={`dropdownItem${data?.data?._id}`}
             id={`dropdownItem${data?.data?._id}`}
-            onClick={async () => {
-              if (navigator.share) {
-                await navigator.share({
-                  title: data?.data?.title,
-                  text: "Check out these notes on Noteswap",
-                  url: `${process.env.NEXT_PUBLIC_URL}note/${data?.data?._id}`,
-                });
-              }
+            onClick={() => {
+              setOpenS(true);
+              setUrlS(`${process.env.NEXT_PUBLIC_URL}note/${data?.data?._id}`);
             }}
           >
             <FaShare style={{ marginRight: "10px" }} />
@@ -169,6 +168,7 @@ export default function NoteCard(data) {
                     ).style.display = "none";
                   }
                 }}
+                key={`dropdownItem2${data?.data?._id}`}
                 id={`dropdownItem2${data?.data?._id}`}
               >
                 <BsFillTrashFill style={{ marginRight: "10px" }} />

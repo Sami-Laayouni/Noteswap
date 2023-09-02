@@ -6,16 +6,20 @@ export const ModalProvider = ({ children }) => {
   const [certificate, setCertificate] = useState(false);
   const [notes, setNotes] = useState(false);
   const [images, setImages] = useState(false);
-  const [imagesUrl, setImagesUrl] = useState();
+  const [imagesUrl, setImagesUrl] = useState("");
   const [error, setError] = useState("");
   const [image, setImage] = useState(false);
-  const [imageUrl, setImageUrl] = useState();
+  const [imageUrl, setImageUrl] = useState("");
   const [tutor, setTutor] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [bookSession, setBookSession] = useState(false);
   const [bookSessionInfo, setBookSessionInfo] = useState();
   const [eventStatus, setEventStatus] = useState(false);
   const [eventdata, setEventData] = useState("");
+  const [shareOpen, setShareOpen] = useState(false);
+  const [shareURL, setShareURL] = useState("");
+  const [citeOpen, setCiteOpen] = useState(false);
+  const [citeInfo, setCiteInfo] = useState("");
   return (
     <ModalContext.Provider
       value={{
@@ -32,6 +36,10 @@ export const ModalProvider = ({ children }) => {
         bookSessionInfo: [bookSessionInfo, setBookSessionInfo],
         eventStatus: [eventStatus, setEventStatus],
         eventdata: [eventdata, setEventData],
+        shareOpen: [shareOpen, setShareOpen],
+        shareURL: [shareURL, setShareURL],
+        citeOpen: [citeOpen, setCiteOpen],
+        citeInfo: [citeInfo, setCiteInfo],
       }}
     >
       {children}

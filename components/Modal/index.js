@@ -9,7 +9,7 @@ import { AiOutlineClose } from "react-icons/ai";
  * @param {*} { children, isOpen, onClose, title }
  * @return {*}
  */
-export default function Modal({ children, isOpen, onClose, title }) {
+export default function Modal({ children, isOpen, onClose, title, small }) {
   if (!isOpen) return null;
   return (
     <div
@@ -21,7 +21,11 @@ export default function Modal({ children, isOpen, onClose, title }) {
         }
       }}
     >
-      <div className={style.modal} onClick={(e) => e.stopPropagation()}>
+      <div
+        className={style.modal}
+        style={{ height: `${small ? "auto" : "520px"}` }}
+        onClick={(e) => e.stopPropagation()}
+      >
         <AiOutlineClose size={20} className={style.close} onClick={onClose} />
         {title && <div className={style.line}></div>}
         <h1 className={style.title}>{title}</h1>
