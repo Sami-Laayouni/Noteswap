@@ -159,7 +159,8 @@ const Signup = () => {
                 e.preventDefault();
                 if (
                   email.endsWith("@asifrane.org") ||
-                  email.endsWith("@asi.aui.ma")
+                  email.endsWith("@asi.aui.ma") ||
+                  email.endsWith("@aui.ma")
                 ) {
                   if (state == 0) {
                     setState(1);
@@ -172,7 +173,9 @@ const Signup = () => {
                     handleSignup(method);
                   }
                 } else {
-                  setError("Email must end with @asifrane.org or @asi.aui.ma");
+                  setError(
+                    "Email must end with @asifrane.org, @asi.aui.ma or @aui.ma"
+                  );
                 }
               }}
             >

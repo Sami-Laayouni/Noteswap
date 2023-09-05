@@ -32,8 +32,8 @@ export default function ImageNotesModal() {
     "Algebra I",
     "Algebra II",
     "Geometry",
-    "Pre-calculas",
-    "AP calculas",
+    "Pre-calculus",
+    "AP calculus",
   ];
   const socialClasses = [
     "World History I",
@@ -53,6 +53,7 @@ export default function ImageNotesModal() {
     "Biology",
     "Chemistry",
     "Physics",
+    "Environmental Science",
     "AP Biology",
     "AP Chemistry",
     "AP Physics",

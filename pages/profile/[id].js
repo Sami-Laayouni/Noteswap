@@ -45,7 +45,7 @@ export default function Profile() {
       });
       setNotes(await secondRequestOptions.json());
     }
-    if (localStorage) {
+    if (localStorage && localStorage.getItem("userInfo")) {
       setUsersId(JSON.parse(localStorage.getItem("userInfo"))._id);
     }
     const { id } = router.query;
@@ -81,7 +81,7 @@ export default function Profile() {
           <h1 style={{ display: "inline-block" }}>
             {data?.first_name} {data?.last_name}
           </h1>
-          {data?._id == usersId && (
+          {usersId && data?._id == usersId && (
             <Link href="/settings/account">
               <MdModeEditOutline
                 size={21}

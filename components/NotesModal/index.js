@@ -66,8 +66,8 @@ export default function NotesModal() {
     "Algebra I",
     "Algebra II",
     "Geometry",
-    "Pre-calculas",
-    "AP calculas",
+    "Pre-calculus",
+    "AP calculus",
   ];
   const socialClasses = [
     "World History I",
@@ -87,6 +87,7 @@ export default function NotesModal() {
     "Biology",
     "Chemistry",
     "Physics",
+    "Environmental Science",
     "AP Biology",
     "AP Chemistry",
     "AP Physics",
@@ -124,8 +125,14 @@ export default function NotesModal() {
 
     setTimer(
       setInterval(() => {
-        localStorage.setItem("autosave_time", JSON.stringify(elapsedTime + 1));
         setElapsedTime((elapsedTime) => elapsedTime + 1);
+        localStorage.setItem(
+          "dailyNoteTimer",
+          JSON.stringify({
+            date: new Date().toUTCString().slice(5, 16),
+            time: elapsedTime + 1,
+          })
+        );
       }, 1000)
     );
   };
@@ -143,10 +150,10 @@ export default function NotesModal() {
   }, [title, reactQuill, open, router]);
   // Stop the timer after 15 minutes of typing (daily limit)
   useEffect(() => {
-    if (elapsedTime >= 900 || current != 0) {
-      if (elapsedTime >= 900) {
+    if (elapsedTime >= 600 || current != 0) {
+      if (elapsedTime >= 600) {
         setError(
-          "The maximum limit for daily community service hours has been reached for notes."
+          "You've reached today's limit for community service through note typing."
         );
       }
 
@@ -185,9 +192,10 @@ export default function NotesModal() {
           "dailyNoteTimer",
           JSON.stringify({
             date: new Date().toUTCString().slice(5, 16),
-            time: elapsedTime,
+            time: 0,
           })
         );
+        setElapsedTime(0);
       }
     }
 
@@ -216,10 +224,6 @@ export default function NotesModal() {
     const savedTitle = localStorage.getItem("autosave_title");
     if (savedTitle && savedTitle.trim() != "undefined") {
       setTitle(savedTitle);
-    }
-    const savedTime = localStorage.getItem("autosave_time");
-    if (savedTime && savedTime.trim() != "undefined") {
-      setElapsedTime(parseInt(savedTime));
     }
   }, []);
 
@@ -304,8 +308,6 @@ export default function NotesModal() {
       done = doneReading;
       const chunkValue = decoder.decode(value);
       setFeedback((prev) => prev + chunkValue);
-      const Element = document.getElementById("feedbackText");
-      Element.scrollTop = Element.scrollHeight;
     }
   };
 
@@ -740,6 +742,13 @@ export default function NotesModal() {
                 }),
               });
               if (response.ok) {
+                // In case somebody gets more than 10 minutes set it to 10 minutes
+                let points = null;
+                if (Math.round(minutes * 20) <= 600) {
+                  points = Math.round(minutes * 20);
+                } else {
+                  points = 540;
+                }
                 await fetch("/api/profile/add_community_minutes", {
                   method: "POST",
                   headers: {
@@ -747,10 +756,14 @@ export default function NotesModal() {
                   },
                   body: JSON.stringify({
                     id: JSON.parse(localStorage.getItem("userInfo"))._id,
-                    points: Math.round(minutes * 20),
+                    points: points,
                   }),
                 });
-                setPoints(Math.round(minutes * 20));
+                if (Math.round(minutes * 20) <= 600) {
+                  setPoints(Math.round(minutes * 20));
+                } else {
+                  setPoints(540);
+                }
                 setCurrent(4);
                 localStorage.removeItem("autosave_notes");
                 localStorage.removeItem("autosave_title");

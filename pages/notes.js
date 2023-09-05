@@ -195,6 +195,7 @@ export default function Note() {
               <option>Biology</option>
               <option>Chemistry</option>
               <option>Physics</option>
+              <option>Environmental Science</option>
               <option>AP Biology</option>
               <option>AP Chemistry</option>
               <option>AP Physics</option>
@@ -214,8 +215,8 @@ export default function Note() {
               <option>Algebra I</option>
               <option>Algebra II</option>
               <option>Geometry</option>
-              <option>Pre-calculas</option>
-              <option>AP calculas</option>
+              <option>Pre-calculus</option>
+              <option>AP calculus</option>
               <option>French</option>
               <option>French FL</option>
               <option>French I</option>

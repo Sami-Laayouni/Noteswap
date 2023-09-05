@@ -147,7 +147,11 @@ export default function NoteSwapBot() {
   }
   return (
     <>
-      <chat id="chatBox" style={{ display: "none" }} className={style.chatbox}>
+      <section
+        id="chatBox"
+        style={{ display: "none" }}
+        className={style.chatbox}
+      >
         <section className={style.header}>
           NoteSwap Bot {loading && "(Thinking...)"}
           <AiOutlineExpandAlt
@@ -258,7 +262,7 @@ export default function NoteSwapBot() {
             <VscSend color="grey" size={23} />
           </button>
         </form>
-      </chat>
+      </section>
       <section
         className={style.container}
         onClick={() => {

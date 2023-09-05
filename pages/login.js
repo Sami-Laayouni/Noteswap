@@ -65,7 +65,15 @@ const Login = () => {
         localStorage.getItem("errorLogin") &&
         localStorage.getItem("errorLogin") != "undefined"
       ) {
-        setError(localStorage.getItem("errorLogin"));
+        if (
+          localStorage.getItem("errorLogin").trim() ==
+          "Cannot read properties of undefined (reading 'token')"
+        ) {
+          setError("This account does not exist.");
+        } else {
+          setError(localStorage.getItem("errorLogin"));
+        }
+
         localStorage.removeItem("errorLogin");
       }
     }
@@ -112,7 +120,14 @@ const Login = () => {
       }
     } catch (error) {
       // An error has occured
-      setError(error.message);
+      if (
+        error.message.trim() ==
+        "Cannot read properties of undefined (reading 'token')"
+      ) {
+        setError("This account does not exist.");
+      } else {
+        setError(error.message);
+      }
     }
   };
 

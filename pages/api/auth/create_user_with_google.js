@@ -16,7 +16,11 @@ const jwtSecret = process.env.NEXT_PUBLIC_JWT_SECRET;
 export default async function createUserWithGoogle(req, res) {
   if (req.method === "POST") {
     const { googleId, first, last, profilePicture, email, role } = req.body;
-    if (email.endsWith("@asifrane.org") || email.endsWith("@asi.aui.ma")) {
+    if (
+      email.endsWith("@asifrane.org") ||
+      email.endsWith("@asi.aui.ma") ||
+      email.endsWith("@aui.ma")
+    ) {
       try {
         await connectDB();
 
@@ -53,9 +57,9 @@ export default async function createUserWithGoogle(req, res) {
         res.status(500).json({ error: error.message });
       }
     } else {
-      res
-        .status(405)
-        .json({ error: "Email must end with @asifrane.org or @asi.aui.ma" });
+      res.status(405).json({
+        error: "Email must end with @asifrane.org, @asi.aui.ma or @aui.ma",
+      });
     }
   } else {
     res.status(405).json({ error: "Method not allowed" });

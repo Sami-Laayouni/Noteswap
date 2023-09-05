@@ -38,7 +38,7 @@ function CreateMicrosoftUserPage() {
             data.uid,
             role
           );
-
+          console.log(response);
           if (response.token) {
             // Store the token in local storage
             setLoggedIn(true);
@@ -57,7 +57,6 @@ function CreateMicrosoftUserPage() {
           }
         } catch (error) {
           // An error has occured
-
           localStorage.setItem("errorSignup", error.message);
 
           // Redirect to the signup page

@@ -233,11 +233,11 @@ export default function Header() {
                 Notes
               </Link>
               <Link className={style.header_nav_a} href="/login">
-                {t("login")}
+                {t("login") == "login" ? "Login" : t("login")}
               </Link>
               <div style={{ display: "inline-block" }}>
                 <Link className={style.header_nav_button} href="/signup">
-                  {t("signup")}
+                  {t("signup") == "signup" ? "Signup" : t("signup")}
                 </Link>
               </div>
             </>
