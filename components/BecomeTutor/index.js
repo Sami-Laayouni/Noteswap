@@ -15,8 +15,8 @@ export default function BecomeTutor() {
   const { tutor } = useContext(ModalContext);
   const [open, setOpen] = tutor;
   const [schoolClass, setSchoolClass] = useState();
-  const [startTime, setStartTime] = useState("10:00");
-  const [endTime, setEndTime] = useState("12:00");
+  const [startTime, setStartTime] = useState("15:30");
+  const [endTime, setEndTime] = useState("16:30");
   const [error, setError] = useState("");
   const [description, setDescription] = useState("");
   const [current, setCurrent] = useState(1);
@@ -27,7 +27,6 @@ export default function BecomeTutor() {
     Wednesday: false,
     Thursday: false,
     Friday: false,
-    Saturday: false,
   });
   const handleCheckboxChange = (event) => {
     const { name, checked } = event.target;
@@ -45,16 +44,19 @@ export default function BecomeTutor() {
     "Algebra I",
     "Algebra II",
     "Geometry",
-    "Pre-calculas",
-    "AP calculas",
+    "Pre-calculus",
+    "AP calculus",
   ];
   const socialClasses = [
     "World History I",
     "World History II",
+    "U.S History",
+    "Comparative Gov.",
     "AP World History",
   ];
   const englishClasses = [
-    "Introduction",
+    "English I",
+    "English II",
     "American Literature",
     "British Literature",
     "AP English",
@@ -63,16 +65,21 @@ export default function BecomeTutor() {
     "Biology",
     "Chemistry",
     "Physics",
+    "Environmental Science",
     "AP Biology",
     "AP Chemistry",
     "AP Physics",
   ];
   const electives = [
-    "Art",
-    "PE",
-    "IT",
-    "AP Arts",
-    "AP IT",
+    "Women's Lit",
+    "Model U.N",
+    "Digital Marketing",
+    "Visual Art",
+    "PE & Health",
+    "Computer Science",
+    "Spanish I",
+    "AP ART",
+    "AP Computer Science",
     "Advanced PE",
     "Other",
   ];
@@ -123,8 +130,6 @@ export default function BecomeTutor() {
                 Wednesday: false,
                 Thursday: false,
                 Friday: false,
-                Saturday: false,
-                Sunday: false,
               });
               setError();
               setStartTime("10:00");
@@ -390,17 +395,6 @@ export default function BecomeTutor() {
                   <span>Friday</span>
                 </label>
               </li>
-              <li>
-                <label>
-                  <input
-                    type="checkbox"
-                    name="Saturday"
-                    checked={checkboxes.Saturday}
-                    onChange={handleCheckboxChange}
-                  />
-                  <span>Saturday</span>
-                </label>
-              </li>
             </ul>
             <section className={style.container}>
               <label className={style.labelForInput}>At this time</label>
@@ -411,6 +405,8 @@ export default function BecomeTutor() {
                 value={startTime}
                 onChange={handleStartTimeChange}
                 className={style.time}
+                min="15:30"
+                max="16:30"
               />
               <span style={{ marginLeft: "10px", marginRight: "10px" }}>-</span>
               <input
@@ -420,8 +416,23 @@ export default function BecomeTutor() {
                 value={endTime}
                 onChange={handleEndTimeChange}
                 className={style.time}
+                min="15:30"
+                max="16:30"
               />
             </section>
+            <p
+              style={{
+                color: "var(--accent-color)",
+                fontFamily: "var(--manrope-font)",
+              }}
+            >
+              Please be aware that becoming a tutor is permanent. Therefore,
+              please carefully choose the dates and times when you are available
+              for tutoring. Additionally, it&apos;s important to note that all
+              tutoring sessions are required to take place in person at ASI
+              (3:30PM - 4:30PM) to be considered valid. Your agreement to this
+              information is appreciated.
+            </p>
           </>
         )}
         <p className={style.error}>{error}</p>

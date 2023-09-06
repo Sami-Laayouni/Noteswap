@@ -30,6 +30,7 @@ export async function getStaticProps({ locale }) {
 export default function DetectAI() {
   const [likely, setLikely] = useState();
   const [texts, setTexts] = useState();
+  const [percent, setPercent] = useState();
   return (
     <>
       <Head>
@@ -68,6 +69,9 @@ export default function DetectAI() {
                   const data = result;
                   setTexts(document.getElementById("detectText").value);
                   setLikely(data.data[0].Label);
+                  setPercent(
+                    Math.floor(data.data[0][data.data[0].Label] * 100)
+                  );
                   document.getElementById("right").style.display = "block";
                   document.getElementById("detectButton").innerText = "Detect";
                 }
@@ -92,7 +96,11 @@ export default function DetectAI() {
           <div className={style.text}>{texts}</div>
           <div className={style.likely}>
             The following text is likely{" "}
-            {likely == "Human" ? "human" : "AI generated"}
+            {likely == "Human" ? "human" : "AI generated"}{" "}
+            {percent
+              ? `(${percent}
+            ${percent ? "%" : ""} confident) `
+              : ""}
           </div>
           <p style={{ fontFamily: "var(--manrope-font)", marginLeft: "5px" }}>
             Looking for more accurate results?{" "}

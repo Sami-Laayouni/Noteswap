@@ -22,6 +22,7 @@ export default async function createUser(req, res) {
       aiRating,
       type,
       images,
+      date,
     } = req.body;
     try {
       await connectDB();
@@ -41,9 +42,11 @@ export default async function createUser(req, res) {
         downvotes: downvotes,
         aiRating: aiRating,
         comments: [],
-        date: `${currentDate.getFullYear()}-${addLeadingZero(
-          currentDate.getMonth() + 1
-        )}-${addLeadingZero(currentDate.getDate())}`,
+        date: date
+          ? date
+          : `${currentDate.getFullYear()}-${addLeadingZero(
+              currentDate.getMonth() + 1
+            )}-${addLeadingZero(currentDate.getDate())}`,
         type: type,
         images: images,
         createdNow: Date.now(),

@@ -11,6 +11,8 @@ import Image from "next/image";
 import Footer from "../components/Footer";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import dynamic from "next/dynamic";
+const Warning = dynamic(() => import("../components/Warning"));
 
 export async function getStaticProps({ locale }) {
   return {
@@ -131,6 +133,7 @@ const Signup = () => {
         <Head>
           <title>Signup | Noteswap</title> {/* Title of the page */}
         </Head>
+        <Warning />
         <div className={style.container}>
           <section className={style.left}>
             <h1>{t("sign_up_to_noteswap")}</h1>
@@ -215,13 +218,14 @@ const Signup = () => {
                         if (
                           !e.target.value.endsWith("@asifrane.org") &&
                           !e.target.value.endsWith("@asi.aui.ma") &&
+                          !e.target.value.endsWith("@aui.ma") &&
                           e.target.value.length > 15 &&
                           e.target.value.includes("@") &&
                           e.target.value.includes(".")
                         ) {
                           setEmail(e.target.value);
                           setError(
-                            "Email must end with @asifrane.org or @asi.aui.ma"
+                            "Email must end with @asifrane.org, @asi.aui.ma or @aui.ma"
                           );
                         } else {
                           setEmail(e.target.value);

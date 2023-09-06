@@ -1,6 +1,8 @@
 .list {
   list-style: none;
   padding-left: 0;
+  max-height: 70vh;
+  overflow-y: scroll;
 }
 
 .list li {

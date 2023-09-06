@@ -1,0 +1,23 @@
+.input {
+  width: 65vw;
+  outline: none;
+  border: none;
+  line-height: 25px;
+  font-size: 25px;
+  margin-top: 30px;
+  padding-bottom: 5px;
+  font-family: var(--manrope-font);
+  border-bottom: 2px solid var(--accent-color);
+}
+.next {
+  outline: none;
+  padding: 15px 35px;
+  border: none;
+  background-color: var(--accent-color);
+  color: var(--default-white-color);
+  border-radius: 5px;
+  bottom: 20px;
+  right: 20px;
+  position: absolute;
+  cursor: pointer;
+}

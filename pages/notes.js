@@ -16,6 +16,7 @@ import dynamic from "next/dynamic";
 
 const Notes = dynamic(() => import("../components/NotesModal"));
 const ImageNotesModal = dynamic(() => import("../components/ImageNotesModal"));
+const EditNotesModal = dynamic(() => import("../components/EditNotesModal"));
 
 /**
  * Get static props
@@ -161,6 +162,7 @@ export default function Note() {
       </Head>
       <Notes />
       <ImageNotesModal />
+      <EditNotesModal />
       <main className={style.grids}>
         <section className={style.searchContainer} id="searchBar">
           <form

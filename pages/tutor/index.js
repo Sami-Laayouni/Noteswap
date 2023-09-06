@@ -436,17 +436,6 @@ export default function Tutor() {
               >
                 Friday
               </li>
-              <li
-                key="Weekend"
-                className={style.boldText}
-                onClick={() => {
-                  setTime("Weekend");
-                  document.getElementById("dropdownMenu2").style.display =
-                    "none";
-                }}
-              >
-                The weekend? Are you crazy?
-              </li>
             </ul>
           </div>
         </section>
@@ -508,7 +497,7 @@ export default function Tutor() {
           </div>
         )}
       </section>
-      {dataFromLocalStorage && dataFromLocalStorage.is_tutor && (
+      {dataFromLocalStorage && dataFromLocalStorage.is_tutor && false && (
         <button
           className={style.becomeButton}
           onClick={async () => {

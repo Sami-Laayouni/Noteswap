@@ -8,6 +8,7 @@ import { BiRightArrow, BiLeftArrow } from "react-icons/bi";
 import { FiMoreHorizontal } from "react-icons/fi";
 import { FaShare } from "react-icons/fa";
 import { BsFillTrashFill } from "react-icons/bs";
+import { MdModeEditOutline } from "react-icons/md";
 import ModalContext from "../../context/ModalContext";
 
 /**
@@ -19,8 +20,16 @@ import ModalContext from "../../context/ModalContext";
  * @return {*}
  */
 export default function NoteCard(data) {
-  const { imageModal, imageUrl, shareOpen, shareURL } =
-    useContext(ModalContext);
+  const {
+    imageModal,
+    imageUrl,
+    shareOpen,
+    shareURL,
+    edit,
+    editValue,
+    editTitle,
+    editId,
+  } = useContext(ModalContext);
   const router = useRouter();
   const containerRef = useRef(null);
   const [showArrows, setShowArrows] = useState(false);
@@ -28,6 +37,10 @@ export default function NoteCard(data) {
   const [url, setUrl] = imageUrl;
   const [openS, setOpenS] = shareOpen;
   const [urlS, setUrlS] = shareURL;
+  const [openE, setOpenE] = edit;
+  const [valueE, setValueE] = editValue;
+  const [titleE, setTitleE] = editTitle;
+  const [idE, setIdE] = editId;
 
   const scrollLeft = () => {
     if (containerRef.current) {
@@ -152,6 +165,23 @@ export default function NoteCard(data) {
             JSON.parse(localStorage?.getItem("userInfo"))._id ==
               data?.data?.userInfo[0]?._id && (
               <li
+                key={`dropdownItem2${data?.data?._id}`}
+                id={`dropdownItem2${data?.data?._id}`}
+                onClick={() => {
+                  setOpenE(true);
+                  setValueE(data?.data?.notes);
+                  setTitleE(data?.data?.title);
+                  setIdE(data?.data?._id);
+                }}
+              >
+                <MdModeEditOutline style={{ marginRight: "10px" }} />
+                Edit notes
+              </li>
+            )}
+          {localStorage?.getItem("userInfo") &&
+            JSON.parse(localStorage?.getItem("userInfo"))._id ==
+              data?.data?.userInfo[0]?._id && (
+              <li
                 onClick={async () => {
                   const response = await fetch("/api/notes/delete_note", {
                     method: "POST",
@@ -168,8 +198,8 @@ export default function NoteCard(data) {
                     ).style.display = "none";
                   }
                 }}
-                key={`dropdownItem2${data?.data?._id}`}
-                id={`dropdownItem2${data?.data?._id}`}
+                key={`dropdownItem3${data?.data?._id}`}
+                id={`dropdownItem3${data?.data?._id}`}
               >
                 <BsFillTrashFill style={{ marginRight: "10px" }} />
                 Delete notes

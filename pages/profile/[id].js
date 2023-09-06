@@ -7,10 +7,16 @@ import {
   MdOutlineSpeakerNotesOff,
 } from "react-icons/md";
 import { BsBookmark } from "react-icons/bs";
+import { PiStudent } from "react-icons/pi";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import NoteCard from "../../components/NoteCard";
+import dynamic from "next/dynamic";
+const ImageNotesModal = dynamic(() =>
+  import("../../components/ImageNotesModal")
+);
+const EditNotesModal = dynamic(() => import("../../components/EditNotesModal"));
 
 /**
  * Profile
@@ -55,6 +61,8 @@ export default function Profile() {
   }, [router.query.id]);
   return (
     <main className={style.background}>
+      <ImageNotesModal />
+      <EditNotesModal />
       <div className={style.image_container}>
         <img
           className={style.background_image}
@@ -141,7 +149,23 @@ export default function Profile() {
                   lineHeight: "0px",
                 }}
               >
-                {data?.role}
+                {data?.role}{" "}
+              </p>
+            </div>
+            <div style={{ display: "block", height: "fit-content" }}>
+              <PiStudent size={20} style={{ verticalAlign: "middle" }} />
+              <p
+                style={{
+                  display: "inline-block",
+                  marginLeft: "5px",
+                  fontFamily: "var(--manrope-font)",
+                  marginTop: "35px",
+                  lineHeight: "0px",
+                }}
+              >
+                {data?.is_tutor
+                  ? `${data?.first_name} is tutoring on Noteswap`
+                  : `${data?.first_name} is not tutoring on Noteswap`}
               </p>
             </div>
           </section>

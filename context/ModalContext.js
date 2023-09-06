@@ -20,6 +20,11 @@ export const ModalProvider = ({ children }) => {
   const [shareURL, setShareURL] = useState("");
   const [citeOpen, setCiteOpen] = useState(false);
   const [citeInfo, setCiteInfo] = useState("");
+  const [warning, setWarning] = useState(true); //Signup popup
+  const [edit, setEdit] = useState(false);
+  const [editValue, setEditValue] = useState("");
+  const [editTitle, setEditTitle] = useState("");
+  const [editId, setEditId] = useState("");
   return (
     <ModalContext.Provider
       value={{
@@ -40,6 +45,11 @@ export const ModalProvider = ({ children }) => {
         shareURL: [shareURL, setShareURL],
         citeOpen: [citeOpen, setCiteOpen],
         citeInfo: [citeInfo, setCiteInfo],
+        warning: [warning, setWarning],
+        edit: [edit, setEdit],
+        editValue: [editValue, setEditValue],
+        editTitle: [editTitle, setEditTitle],
+        editId: [editId, setEditId],
       }}
     >
       {children}

@@ -204,7 +204,7 @@ export default function CreateEvent() {
                   certificate_link: cert,
                   contact_email: JSON.parse(localStorage.getItem("userInfo"))
                     .email,
-                  link_to_event: link,
+                  link_to_event: link ? link : "",
                   max: max,
                   createdAt: Date.now(),
                 }),
@@ -379,14 +379,13 @@ export default function CreateEvent() {
                 Link to signup to event (ex: Google Form)
               </label>
               <input
-                placeholder="Enter link"
+                placeholder="Enter link (optional)"
                 className={style.input}
                 value={link}
                 type="url"
                 onChange={(e) => {
                   setLink(e.target.value);
                 }}
-                required
               />
               <label className={style.labelForInput}>
                 Award Message of Certificate (keep it short)

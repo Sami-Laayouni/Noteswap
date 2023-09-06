@@ -22,6 +22,8 @@ export default function ImageNotesModal() {
   const [current, setCurrent] = useState(1);
   const [schoolClass, setSchoolClass] = useState();
   const [points, setPoints] = useState();
+  const currentDate = new Date().toISOString().split("T")[0];
+  const [date, setDate] = useState(currentDate);
 
   useEffect(() => {
     setImageArray(url ? [url] : []);
@@ -393,6 +395,17 @@ export default function ImageNotesModal() {
               ))}
             </ul>
           </div>
+          <input
+            style={{ outline: "none" }}
+            className={style.dropdown}
+            type="date"
+            value={date}
+            max={currentDate}
+            onChange={(e) => {
+              setDate(e.target.value);
+            }}
+            required
+          ></input>
         </>
       )}
       {current == 3 && (
@@ -481,6 +494,7 @@ export default function ImageNotesModal() {
                   aiRating: 60,
                   type: "images",
                   images: imageArray,
+                  date: date,
                 }),
               });
               if (response.ok) {

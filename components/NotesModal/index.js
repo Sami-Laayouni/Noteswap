@@ -113,6 +113,9 @@ export default function NotesModal() {
   const [elapsedTime, setElapsedTime] = useState(0);
   const [timer, setTimer] = useState(null);
   const reactQuill = useRef(null);
+  const currentDate = new Date().toISOString().split("T")[0];
+  const [date, setDate] = useState(currentDate);
+
   const handlePaste = (e) => {
     // Prevent the default paste behavior
     e.preventDefault();
@@ -148,7 +151,7 @@ export default function NotesModal() {
       }
     }, 1000);
   }, [title, reactQuill, open, router]);
-  // Stop the timer after 15 minutes of typing (daily limit)
+  // Stop the timer after 10 minutes of typing (daily limit)
   useEffect(() => {
     if (elapsedTime >= 600 || current != 0) {
       if (elapsedTime >= 600) {
@@ -182,7 +185,7 @@ export default function NotesModal() {
     window.katex = katex;
 
     const editor = document.querySelector(".ql-editor");
-
+    setElapsedTime(0);
     if (localStorage.getItem("dailyNoteTimer")) {
       const dailyTimer = JSON.parse(localStorage.getItem("dailyNoteTimer"));
       if (new Date().toUTCString().slice(5, 16) == dailyTimer.date) {
@@ -372,6 +375,20 @@ export default function NotesModal() {
         </>
       ) : current == 1 ? (
         <>
+          <h1 className={style.select}>
+            Select which day the notes were taken (default today):
+          </h1>
+          <input
+            style={{ outline: "none" }}
+            className={style.dropdown}
+            type="date"
+            value={date}
+            max={currentDate}
+            onChange={(e) => {
+              setDate(e.target.value);
+            }}
+            required
+          ></input>
           {/* Select class */}
           <div className={style.selectContainer}>
             <h1 className={style.select}>
@@ -670,7 +687,9 @@ export default function NotesModal() {
         </p>
       )}
 
-      <p className={style.error}>{error}</p>
+      <p className={style.error}>
+        {error} {elapsedTime}
+      </p>
       <button
         id="nextButton"
         className={style.next}
@@ -739,15 +758,16 @@ export default function NotesModal() {
                   aiRating: parseInt(result) ? parseInt(result) : 70,
                   type: "default",
                   images: [],
+                  date: date,
                 }),
               });
               if (response.ok) {
                 // In case somebody gets more than 10 minutes set it to 10 minutes
                 let points = null;
-                if (Math.round(minutes * 20) <= 600) {
+                if (Math.round(minutes * 20) <= 200) {
                   points = Math.round(minutes * 20);
                 } else {
-                  points = 540;
+                  points = 150;
                 }
                 await fetch("/api/profile/add_community_minutes", {
                   method: "POST",
@@ -759,10 +779,10 @@ export default function NotesModal() {
                     points: points,
                   }),
                 });
-                if (Math.round(minutes * 20) <= 600) {
+                if (Math.round(minutes * 20) <= 200) {
                   setPoints(Math.round(minutes * 20));
                 } else {
-                  setPoints(540);
+                  setPoints(150);
                 }
                 setCurrent(4);
                 localStorage.removeItem("autosave_notes");
