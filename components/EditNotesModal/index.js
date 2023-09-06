@@ -4,7 +4,7 @@ import ModalContext from "../../context/ModalContext";
 import katex from "katex";
 import "katex/dist/katex.min.css";
 import dynamic from "next/dynamic";
-import style from "./EditNotesModal.module.css";
+import style from "./editNotesModal.module.css";
 
 /**
  * React Quil
