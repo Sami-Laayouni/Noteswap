@@ -27,13 +27,13 @@ export default async function becomeTutor(req, res) {
         desc: desc,
         reviews: [],
         since: Date.now(),
-        paused: false,
+        paused: true,
       });
       const savedTutor = await newTutor.save();
       await User.findOneAndUpdate(
         { _id: user_id },
         {
-          $set: { is_tutor: true },
+          $set: { is_tutor: false },
         },
         {
           returnNewDocument: true,

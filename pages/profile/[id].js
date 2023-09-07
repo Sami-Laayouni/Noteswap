@@ -87,7 +87,8 @@ export default function Profile() {
         />
         <div>
           <h1 style={{ display: "inline-block" }}>
-            {data?.first_name} {data?.last_name}
+            {data?.first_name ? data?.first_name : "Loading"}{" "}
+            {data?.last_name ? data?.last_name : ""}
           </h1>
           {usersId && data?._id == usersId && (
             <Link href="/settings/account">
@@ -132,9 +133,7 @@ export default function Profile() {
                   lineHeight: "0px",
                 }}
               >
-                {data?.email
-                  ? data?.email
-                  : `${data?.metamask_address.slice(0, 25)}...`}
+                {data?.email ? data?.email : "Loading..."}
               </p>
             </div>
             <div style={{ display: "block", height: "fit-content" }}>
@@ -149,7 +148,7 @@ export default function Profile() {
                   lineHeight: "0px",
                 }}
               >
-                {data?.role}{" "}
+                {data?.role ? data?.role : "Loading..."}{" "}
               </p>
             </div>
             <div style={{ display: "block", height: "fit-content" }}>
@@ -164,8 +163,12 @@ export default function Profile() {
                 }}
               >
                 {data?.is_tutor
-                  ? `${data?.first_name} is tutoring on Noteswap`
-                  : `${data?.first_name} is not tutoring on Noteswap`}
+                  ? `${
+                      data?.first_name ? data?.first_name : "Loading name"
+                    } is tutoring on Noteswap`
+                  : `${
+                      data?.first_name ? data?.first_name : "Loading name"
+                    } is not tutoring on Noteswap`}
               </p>
             </div>
           </section>

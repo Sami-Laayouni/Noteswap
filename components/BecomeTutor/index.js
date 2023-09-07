@@ -15,7 +15,7 @@ export default function BecomeTutor() {
   const { tutor } = useContext(ModalContext);
   const [open, setOpen] = tutor;
   const [schoolClass, setSchoolClass] = useState();
-  const [startTime, setStartTime] = useState("15:30");
+  const [startTime, setStartTime] = useState("15:40");
   const [endTime, setEndTime] = useState("16:30");
   const [error, setError] = useState("");
   const [description, setDescription] = useState("");
@@ -105,7 +105,7 @@ export default function BecomeTutor() {
         onSubmit={async (e) => {
           e.preventDefault();
           if (current == 2) {
-            document.getElementById("finish").innerText = "Saving...";
+            document.getElementById("finish").innerText = "Sending...";
             const response = await fetch("/api/tutor/become_a_tutor", {
               method: "POST",
               headers: {
@@ -124,21 +124,26 @@ export default function BecomeTutor() {
               }),
             });
             if (response.ok) {
-              setCheckboxes({
-                Monday: false,
-                Tuesday: false,
-                Wednesday: false,
-                Thursday: false,
-                Friday: false,
-              });
-              setError();
-              setStartTime("10:00");
-              setEndTime("12:00");
-              setSchoolClass();
-              setOpen(false);
+              document.getElementById("finish").innerText = "Sent";
+
+              setCurrent(3);
             } else {
               setError(await response.text());
             }
+          } else if (current == 3) {
+            setCheckboxes({
+              Monday: false,
+              Tuesday: false,
+              Wednesday: false,
+              Thursday: false,
+              Friday: false,
+            });
+            setError();
+            setStartTime("15:40");
+            setEndTime("16:30");
+            setSchoolClass();
+            setOpen(false);
+            setCurrent(1);
           } else {
             setCurrent(2);
           }
@@ -158,6 +163,38 @@ export default function BecomeTutor() {
               required
             ></textarea>
           </>
+        )}
+        {current == 3 && (
+          <div
+            style={{
+              height: "75vh",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+            }}
+          >
+            <h1
+              style={{
+                fontFamily: "var(--bold-manrope-font)",
+                textAlign: "center",
+                color: "var(--accent-color)",
+                fontSize: "2.2rem",
+              }}
+            >
+              Thank you for expressing your interest in becoming a tutor.
+            </h1>
+            <h2
+              style={{
+                fontFamily: "var(--manrope-font)",
+                textAlign: "center",
+                fontSize: "1.3rem",
+              }}
+            >
+              Your request to become a tutor will be reviewed, and we will
+              notify you if you have been accepted as a tutor. Thank you.
+            </h2>
+          </div>
         )}
         {current == 1 && (
           <>
@@ -344,17 +381,6 @@ export default function BecomeTutor() {
                 <label>
                   <input
                     type="checkbox"
-                    name="Monday"
-                    checked={checkboxes.Monday}
-                    onChange={handleCheckboxChange}
-                  />
-                  <span>Monday</span>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input
-                    type="checkbox"
                     name="Tuesday"
                     checked={checkboxes.Tuesday}
                     onChange={handleCheckboxChange}
@@ -384,17 +410,6 @@ export default function BecomeTutor() {
                   <span>Thursday</span>
                 </label>
               </li>
-              <li>
-                <label>
-                  <input
-                    type="checkbox"
-                    name="Friday"
-                    checked={checkboxes.Friday}
-                    onChange={handleCheckboxChange}
-                  />
-                  <span>Friday</span>
-                </label>
-              </li>
             </ul>
             <section className={style.container}>
               <label className={style.labelForInput}>At this time</label>
@@ -405,7 +420,7 @@ export default function BecomeTutor() {
                 value={startTime}
                 onChange={handleStartTimeChange}
                 className={style.time}
-                min="15:30"
+                min="15:40"
                 max="16:30"
               />
               <span style={{ marginLeft: "10px", marginRight: "10px" }}>-</span>
@@ -416,7 +431,7 @@ export default function BecomeTutor() {
                 value={endTime}
                 onChange={handleEndTimeChange}
                 className={style.time}
-                min="15:30"
+                min="15:40"
                 max="16:30"
               />
             </section>
@@ -430,7 +445,7 @@ export default function BecomeTutor() {
               please carefully choose the dates and times when you are available
               for tutoring. Additionally, it&apos;s important to note that all
               tutoring sessions are required to take place in person at ASI
-              (3:30PM - 4:30PM) to be considered valid. Your agreement to this
+              (3:40PM - 4:30PM) to be considered valid. Your agreement to this
               information is appreciated.
             </p>
           </>

@@ -129,13 +129,6 @@ export default function NotesModal() {
     setTimer(
       setInterval(() => {
         setElapsedTime((elapsedTime) => elapsedTime + 1);
-        localStorage.setItem(
-          "dailyNoteTimer",
-          JSON.stringify({
-            date: new Date().toUTCString().slice(5, 16),
-            time: elapsedTime + 1,
-          })
-        );
       }, 1000)
     );
   };
@@ -158,6 +151,8 @@ export default function NotesModal() {
         setError(
           "You've reached today's limit for community service through note typing."
         );
+      } else {
+        setError("");
       }
 
       clearInterval(timer);
@@ -180,7 +175,21 @@ export default function NotesModal() {
       };
     }
   }, [reactQuill.current]);
-
+  useEffect(() => {
+    if (localStorage.getItem("dailyNoteTimer")) {
+      const dailyTimer = JSON.parse(localStorage.getItem("dailyNoteTimer"));
+      if (new Date().toUTCString().slice(5, 16) != dailyTimer.date) {
+        localStorage.setItem(
+          "dailyNoteTimer",
+          JSON.stringify({
+            date: new Date().toUTCString().slice(5, 16),
+            time: 0,
+          })
+        );
+        setElapsedTime(0);
+      }
+    }
+  }, [elapsedTime, open, reactQuill.current]);
   useEffect(() => {
     window.katex = katex;
 
@@ -198,7 +207,6 @@ export default function NotesModal() {
             time: 0,
           })
         );
-        setElapsedTime(0);
       }
     }
 
@@ -687,9 +695,7 @@ export default function NotesModal() {
         </p>
       )}
 
-      <p className={style.error}>
-        {error} {elapsedTime}
-      </p>
+      <p className={style.error}>{error}</p>
       <button
         id="nextButton"
         className={style.next}
@@ -738,6 +744,13 @@ export default function NotesModal() {
             } else {
               pastTime = 0;
             }
+            localStorage.setItem(
+              "dailyNoteTimer",
+              JSON.stringify({
+                date: new Date().toUTCString().slice(5, 16),
+                time: pastTime + elapsedTime,
+              })
+            );
 
             const minutes = ((elapsedTime - pastTime) * (result / 100)) / 60;
 
