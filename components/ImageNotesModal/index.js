@@ -523,12 +523,12 @@ export default function ImageNotesModal() {
                   localStorage.getItem("dailyImageTimer")
                 ).time;
 
-                if (currentTime < 100) {
-                  let imagesUploaded = imageArray.length * 20;
+                if (currentTime < 200) {
+                  let imagesUploaded = imageArray.length * 40;
                   let amount;
-                  if (currentTime + imagesUploaded >= 100) {
-                    amount == 100;
-                    imagesUploaded = 100 - imagesUploaded;
+                  if (currentTime + imagesUploaded >= 200) {
+                    amount == 200;
+                    imagesUploaded = 200 - imagesUploaded;
                   } else {
                     amount = currentTime + imagesUploaded;
                   }

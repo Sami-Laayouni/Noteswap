@@ -381,6 +381,17 @@ export default function BecomeTutor() {
                 <label>
                   <input
                     type="checkbox"
+                    name="Monday"
+                    checked={checkboxes.Monday}
+                    onChange={handleCheckboxChange}
+                  />
+                  <span>Monday</span>
+                </label>
+              </li>
+              <li>
+                <label>
+                  <input
+                    type="checkbox"
                     name="Tuesday"
                     checked={checkboxes.Tuesday}
                     onChange={handleCheckboxChange}
@@ -408,6 +419,17 @@ export default function BecomeTutor() {
                     onChange={handleCheckboxChange}
                   />
                   <span>Thursday</span>
+                </label>
+              </li>
+              <li>
+                <label>
+                  <input
+                    type="checkbox"
+                    name="Friday"
+                    checked={checkboxes.Friday}
+                    onChange={handleCheckboxChange}
+                  />
+                  <span>Friday</span>
                 </label>
               </li>
             </ul>

@@ -91,6 +91,16 @@ export default async function handler(req, res) {
     },
   });
 
+  const mail = `When you are ready for the tutoring session please click the button below and follow the steps to 
+  connect and start your tutoring session. 
+
+  ${process.env.NEXT_PUBLIC_URL}connect/${Object.keys(queryParams1)
+    .map(
+      (key) =>
+        `${encodeURIComponent(key)}=${encodeURIComponent(queryParams1[key])}`
+    )
+    .join("&")}`;
+
   const firstMail = {
     from: "The Noteswap Bot <samilaayouni14@gmail.com>", // sender address
     to: email, // list of receivers
@@ -98,16 +108,9 @@ export default async function handler(req, res) {
     text: `Dear ${emailUser[0].first_name} ${emailUser[0].last_name},
     
     This is to confirm that your recent tutoring session has been confirmed for ${date} from ${time}, with
-    ${senderEmailUser[0].first_name} ${senderEmailUser[0].last_name}
-    . When you are ready for the tutoring session please click the button below and follow the steps to 
-    connect and start your tutoring session. 
+    ${senderEmailUser[0].first_name} ${senderEmailUser[0].last_name}.
 
-    ${process.env.NEXT_PUBLIC_URL}connect/${Object.keys(queryParams1)
-      .map(
-        (key) =>
-          `${encodeURIComponent(key)}=${encodeURIComponent(queryParams1[key])}`
-      )
-      .join("&")}
+    In accordance with your school's policies, tutoring sessions must take place at the ASI Building after school to be deemed valid.
     
     Best regards, 
 
@@ -132,25 +135,25 @@ export default async function handler(req, res) {
     ),
   };
 
+  const mail2 = `When you are ready for the tutoring session please click the button below and follow the steps to 
+  connect and join your tutoring session. 
+
+  ${process.env.NEXT_PUBLIC_URL}connect/${Object.keys(queryParams2)
+    .map(
+      (key) =>
+        `${encodeURIComponent(key)}=${encodeURIComponent(queryParams2[key])}`
+    )
+    .join("&")}`;
   const secondMail = {
     from: "The Noteswap Bot <samilaayouni14@gmail.com>", // sender address
     to: senderEmail, // list of receivers
     subject: "Noteswap Tutoring", // Subject line
-    text: `Dear ${senderEmailUser[0].first_name} ${
-      senderEmailUser[0].last_name
-    },
+    text: `Dear ${senderEmailUser[0].first_name} ${senderEmailUser[0].last_name},
     
     This is to confirm that your recent tutoring session has been confirmed for ${date} from ${time}, with
-    ${emailUser[0].first_name} ${emailUser[0].last_name}
-    . When you are ready for the tutoring session please click the button below and follow the steps to 
-    connect and join your tutoring session. 
+    ${emailUser[0].first_name} ${emailUser[0].last_name}.
 
-    ${process.env.NEXT_PUBLIC_URL}connect/${Object.keys(queryParams2)
-      .map(
-        (key) =>
-          `${encodeURIComponent(key)}=${encodeURIComponent(queryParams2[key])}`
-      )
-      .join("&")}
+    In accordance with your school's policies, tutoring sessions must take place at the ASI Building after school to be deemed valid.
     
     Best regards, 
     

@@ -40,10 +40,10 @@ export default async function handler(req, res) {
 
       // Compress the image using sharp
       const compressedImageBuffer = await sharp(imageFile[0].filepath)
-        .resize({ width: 370 })
-        .jpeg({ quality: 95, progressive: true, force: false })
-        .png({ quality: 95, progressive: true, force: false })
-        .webp({ quality: 95, progressive: true, force: false })
+        .resize({ width: 460 })
+        .jpeg({ quality: 96, progressive: true, force: false })
+        .png({ quality: 96, progressive: true, force: false })
+        .webp({ quality: 96, progressive: true, force: false })
 
         .toBuffer();
 

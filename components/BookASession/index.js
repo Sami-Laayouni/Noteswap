@@ -20,12 +20,10 @@ export default function BookASession() {
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [current, setCurrent] = useState(0);
-  const [type, setType] = useState(null);
+  //const [type, setType] = useState(null);
 
   useEffect(() => {
-    console.log(info);
     if (info) {
-      console.log(info);
       if (info?.data?.userInfo[0].email) {
         setEmail(info?.data?.userInfo[0].email);
       }
@@ -76,7 +74,6 @@ export default function BookASession() {
                   date: document.getElementById("date").value,
                   time: `${startTime} to ${endTime}`,
                   subject: info?.data?.subject,
-                  type: type,
                   receiverName: `${info?.data?.userInfo[0].first_name} ${info?.data?.userInfo[0].last_name}`,
                   name: `${
                     JSON.parse(localStorage.getItem("userInfo")).first_name
@@ -93,7 +90,7 @@ export default function BookASession() {
         >
           <br></br>
           <label className={style.label}>Type of session</label>
-
+          {/*
           <ul
             style={{
               display: "grid",
@@ -120,6 +117,7 @@ export default function BookASession() {
             >
               Online session
             </li>
+            
             <li
               style={{
                 textAlign: "center",
@@ -136,7 +134,7 @@ export default function BookASession() {
             >
               Face-to-face session
             </li>
-          </ul>
+            </ul>*/}
           <label className={style.label}>Comments</label>
 
           <textarea
