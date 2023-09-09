@@ -27,9 +27,9 @@ export default function TutoringValidated() {
         }}
       >
         Note: Noteswap supports in person and online tutoring sessions with AI
-        validation. However, in accordance with your school's policies, tutoring
-        sessions must take place at the ASI Building after school to be deemed
-        valid.
+        validation. However, in accordance with your school&apos;s policies,
+        tutoring sessions must take place at the ASI Building after school to be
+        deemed valid.
       </p>
       <Link href="/dashboard">
         <button

@@ -202,7 +202,7 @@ const Supervisor = () => {
 
       <ul className={style.list}>
         <h3 className={style.subText}>
-          When selecting who is fit to be a tutor, please review Noteswap's
+          When selecting who is fit to be a tutor, please review Noteswap&apos;s
           Tutoring Guideline
         </h3>
         {!studentsAwaiting && (
