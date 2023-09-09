@@ -64,6 +64,11 @@ export default async function handler(req, res) {
     started: false,
     ended: false,
     id: emailId,
+    type: "In Person",
+    date: date,
+    time: time,
+    tutor: emailId,
+    learner: senderEmailId,
   });
 
   await newTutorSession.save();
@@ -82,7 +87,7 @@ export default async function handler(req, res) {
 
   // Create a transporter object using your email service's SMTP settings
   const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
+    host: "smtp.zoho.com",
     port: 465, // Replace with your SMTP port (usually 587 for non-secure, 465 for secure)
     secure: true,
     auth: {
@@ -102,7 +107,7 @@ export default async function handler(req, res) {
     .join("&")}`;
 
   const firstMail = {
-    from: "The Noteswap Bot <samilaayouni14@gmail.com>", // sender address
+    from: "The Noteswap Bot <support@noteswap.org>", // sender address
     to: email, // list of receivers
     subject: "Noteswap Tutoring", // Subject line
     text: `Dear ${emailUser[0].first_name} ${emailUser[0].last_name},
@@ -110,11 +115,10 @@ export default async function handler(req, res) {
     This is to confirm that your recent tutoring session has been confirmed for ${date} from ${time}, with
     ${senderEmailUser[0].first_name} ${senderEmailUser[0].last_name}.
 
-    In accordance with your school's policies, tutoring sessions must take place at the ASI Building after school to be deemed valid.
+    Noteswap supports in person and online tutoring sessions with AI validation. However, in accordance with your school's policies, tutoring sessions must take place at the ASI Building after school to be deemed valid.
     
     Best regards, 
 
-    Sami Laayouni and Ali Zaid
     The Noteswap team`,
     html: ReactDOMServer.renderToString(
       <ReserveEmail
@@ -145,7 +149,7 @@ export default async function handler(req, res) {
     )
     .join("&")}`;
   const secondMail = {
-    from: "The Noteswap Bot <samilaayouni14@gmail.com>", // sender address
+    from: "The Noteswap Bot <support@noteswap.org>", // sender address
     to: senderEmail, // list of receivers
     subject: "Noteswap Tutoring", // Subject line
     text: `Dear ${senderEmailUser[0].first_name} ${senderEmailUser[0].last_name},
@@ -153,11 +157,10 @@ export default async function handler(req, res) {
     This is to confirm that your recent tutoring session has been confirmed for ${date} from ${time}, with
     ${emailUser[0].first_name} ${emailUser[0].last_name}.
 
-    In accordance with your school's policies, tutoring sessions must take place at the ASI Building after school to be deemed valid.
+    Noteswap supports in person and online tutoring sessions with AI validation. However, in accordance with your school's policies, tutoring sessions must take place at the ASI Building after school to be deemed valid.
     
     Best regards, 
     
-    Sami Laayouni and Ali Zaid
     The Noteswap team`,
     html: ReactDOMServer.renderToString(
       <ReserveEmail

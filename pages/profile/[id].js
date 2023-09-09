@@ -113,7 +113,7 @@ export default function Profile() {
             · Tutor minutes:{" "}
             <span>
               {data?.tutor_hours ? Math.floor(data?.tutor_hours / 60) : "0"}{" "}
-              minute{Math.floor(data?.points / 20) == 1 ? "" : "s"}
+              minute{Math.floor(data?.tutor_hours / 60) == 1 ? "" : "s"}
             </span>
           </h2>
         </div>

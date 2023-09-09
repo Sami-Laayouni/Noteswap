@@ -1,4 +1,3 @@
-import Link from "next/link";
 export default function ReserveEmail({
   emailUser,
   senderEmailUser,
@@ -47,12 +46,13 @@ export default function ReserveEmail({
           {isTutor
             ? `${senderEmailUser.first_name} ${senderEmailUser.last_name}`
             : ` ${emailUser.first_name} ${emailUser.last_name}`}
-          . When you are ready for the tutoring session please click the button
-          below and follow the steps to connect and {isTutor ? "start" : "join"}{" "}
-          your tutoring session.{" "}
+          . Noteswap supports in person and online tutoring sessions with AI
+          validation. However, in accordance with your school's policies,
+          tutoring sessions must take place at the ASI Building after school to
+          be deemed valid.
         </p>
 
-        <Link href={url}>
+        {/*<Link href={url}>
           <button
             style={{
               backgroundColor: "#40b385",
@@ -65,11 +65,10 @@ export default function ReserveEmail({
           >
             {isTutor ? "Start" : "Join"}
           </button>
-        </Link>
+          </Link>*/}
 
         <p style={{ display: "block" }}>Best regards, </p>
 
-        <p style={{ display: "block" }}>Sami Laayouni and Ali Zaid</p>
         <p style={{ display: "block" }}>The Noteswap team</p>
       </main>
       <footer

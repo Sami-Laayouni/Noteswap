@@ -1,0 +1,54 @@
+.list {
+  list-style: none;
+  padding-left: 0px;
+}
+.header {
+  font-family: var(--manrope-bold-font);
+  padding-left: 20px;
+  color: var(--accent-color);
+  font-size: 35px;
+}
+.line {
+  width: 100%;
+  height: 5px;
+  background-color: black;
+}
+.list li {
+  margin-left: 20px;
+  margin-right: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-top: 1px solid var(--accent-color);
+}
+.list li h1 {
+  font-size: 18px;
+  font-family: var(--manrope-font);
+}
+.list li p {
+  font-family: var(--manrope-font);
+  width: 54.6875vw;
+}
+.list li span {
+  color: var(--accent-color);
+}
+.subText {
+  padding-left: 20px;
+  font-size: 13px;
+  font-family: var(--manrope-font);
+}
+.waiting {
+  text-align: center;
+  font-family: var(--manrope-font);
+  font-style: italic;
+}
+.button {
+  outline: none;
+  border: none;
+  background-color: var(--accent-color);
+  font-family: var(--manrope-font);
+  color: var(--default-white-color);
+  padding: var(--button-default-padding);
+  margin-right: 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}

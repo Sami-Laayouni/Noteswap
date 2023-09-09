@@ -17,8 +17,8 @@ export default function BookASession() {
   const [email, setEmail] = useState("");
   const [senderEmail, setSenderEmail] = useState("");
   const [error, setError] = useState("");
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
+  const [startTime, setStartTime] = useState("15:40");
+  const [endTime, setEndTime] = useState("16:30");
   const [current, setCurrent] = useState(0);
   //const [type, setType] = useState(null);
 
@@ -82,6 +82,9 @@ export default function BookASession() {
               });
               if (response.ok) {
                 setCurrent(1);
+              } else {
+                document.getElementById("book").innerText =
+                  "An error has occured";
               }
             } else {
               setError("Cannot book a session with yourself.");
@@ -89,8 +92,9 @@ export default function BookASession() {
           }}
         >
           <br></br>
-          <label className={style.label}>Type of session</label>
           {/*
+          <label className={style.label}>Type of session</label>
+          
           <ul
             style={{
               display: "grid",
@@ -151,6 +155,8 @@ export default function BookASession() {
             id="date"
             className={style.time}
             style={{ marginLeft: "10px" }}
+            min="15:40"
+            max="16:30"
           ></input>
           <br></br>
           <span>Select time: </span>
@@ -160,6 +166,8 @@ export default function BookASession() {
               id="startTime"
               name="startTime"
               value={startTime}
+              min="15:40"
+              max="16:30"
               onChange={(e) => {
                 setStartTime(e.target.value);
               }}
@@ -209,7 +217,7 @@ export default function BookASession() {
                 setEndTime("");
                 setStartTime("");
                 setOpen(false);
-                setType(null);
+                //setType(null);
               }}
             >
               Close

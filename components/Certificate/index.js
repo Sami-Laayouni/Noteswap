@@ -158,7 +158,8 @@ export default function CertificateDownload({ main, userData, url }) {
               >
                 Has successfully completed{" "}
                 <span id="points" style={{ color: "var(--accent-color)" }}>
-                  {Math.round(userData?.points / 20)}
+                  {Math.round(userData?.points / 20) +
+                    Math.round(userData?.tutor_hours / 60)}
                 </span>{" "}
                 minute{Math.round(userData?.points / 20) == 1 ? "" : "s"} of
                 community service on Noteswap including{" "}
@@ -192,7 +193,11 @@ export default function CertificateDownload({ main, userData, url }) {
             <h2>
               <b>Message:</b> {userData?.first_name} {userData?.last_name} has
               successfully completed{" "}
-              <span>{Math.round(userData?.points / 20)}</span> minute
+              <span>
+                {Math.round(userData?.points / 20) +
+                  Math.round(userData?.tutor_hours / 60)}
+              </span>{" "}
+              minute
               {Math.round(userData?.points / 20) == 1 ? "" : "s"} of community
               service on Noteswap including{" "}
               <span>{Math.round(userData?.tutor_hours / 60)}</span> minute

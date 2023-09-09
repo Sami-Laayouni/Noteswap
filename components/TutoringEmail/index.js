@@ -7,7 +7,6 @@ export default function TutoringEmail({
   date,
   time,
   message,
-  type,
   url,
 }) {
   function formatDate(inputDate) {
@@ -85,8 +84,6 @@ export default function TutoringEmail({
           <span style={{ color: "#40b385" }}>{formatDate(date)}</span> from{" "}
           <br></br>
           <span style={{ color: "#40b385" }}>{time}</span>
-          Preferred type of meeting:
-          {type == "online" ? "Online" : "Face-to-Face"}
         </p>
         <p>
           Additionally, a personalized message from <b>{name}</b> has been sent

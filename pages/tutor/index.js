@@ -40,16 +40,19 @@ export default function Tutor() {
     "Algebra I",
     "Algebra II",
     "Geometry",
-    "Pre-calculas",
-    "AP calculas",
+    "Pre-calculus",
+    "AP calculus",
   ];
   const socialClasses = [
     "World History I",
     "World History II",
+    "U.S History",
+    "Comparative Gov.",
     "AP World History",
   ];
   const englishClasses = [
-    "Introduction",
+    "English I",
+    "English II",
     "American Literature",
     "British Literature",
     "AP English",
@@ -58,25 +61,32 @@ export default function Tutor() {
     "Biology",
     "Chemistry",
     "Physics",
+    "Environmental Science",
     "AP Biology",
     "AP Chemistry",
     "AP Physics",
   ];
   const electives = [
-    "Art",
-    "PE",
-    "IT",
-    "AP Arts",
-    "AP IT",
+    "Women's Lit",
+    "Model U.N",
+    "Digital Marketing",
+    "Visual Art",
+    "PE & Health",
+    "Computer Science",
+    "Spanish I",
+    "AP ART",
+    "AP Computer Science",
     "Advanced PE",
     "Other",
   ];
+  const frenchClasses = ["French FL", "French I", "French II", "French III"];
+  const arabicClasses = ["Arabic FL", "Arabic I", "Arabic II", "Arabic III"];
   const [schoolClass, setSchoolClass] = useState();
   const [time, setTime] = useState();
   const [tutors, setTutor] = useState();
   const [loading, setLoading] = useState(true);
-  const [startTime, setStartTime] = useState("10:00");
-  const [endTime, setEndTime] = useState("12:00");
+  const [startTime, setStartTime] = useState("15:40");
+  const [endTime, setEndTime] = useState("16:30");
   const [pause, setPaused] = useState("");
   const [dataFromLocalStorage, setDataFromLocalStorage] = useState(null);
 
@@ -307,6 +317,18 @@ export default function Tutor() {
               >
                 French
               </li>
+              {frenchClasses?.map((value) => (
+                <li
+                  key={value}
+                  onClick={() => {
+                    setSchoolClass(value);
+                    document.getElementById("dropdownMenu").style.display =
+                      "none";
+                  }}
+                >
+                  {value}
+                </li>
+              ))}
               <li
                 key="Arabic"
                 className={style.boldText}
@@ -318,6 +340,18 @@ export default function Tutor() {
               >
                 Arabic
               </li>
+              {arabicClasses?.map((value) => (
+                <li
+                  key={value}
+                  onClick={() => {
+                    setSchoolClass(value);
+                    document.getElementById("dropdownMenu").style.display =
+                      "none";
+                  }}
+                >
+                  {value}
+                </li>
+              ))}
               <li
                 key="Electives"
                 className={style.boldText}
@@ -447,6 +481,8 @@ export default function Tutor() {
             type="time"
             id="startTime"
             name="startTime"
+            min="15:40"
+            max="16:30"
             value={startTime}
             onChange={handleStartTimeChange}
             className={style.time}
@@ -456,6 +492,8 @@ export default function Tutor() {
             type="time"
             id="endTime"
             name="endTime"
+            min="15:40"
+            max="16:30"
             value={endTime}
             onChange={handleEndTimeChange}
             className={style.time}
@@ -497,24 +535,34 @@ export default function Tutor() {
           </div>
         )}
       </section>
-      {dataFromLocalStorage && dataFromLocalStorage.is_tutor && false && (
+      {dataFromLocalStorage && dataFromLocalStorage.is_tutor && (
         <button
+          id="dropout"
           className={style.becomeButton}
           onClick={async () => {
-            const response = await fetch("/api/tutor/pause_tutoring", {
+            document.getElementById("dropout").innerText = "Sending...";
+            const response = await fetch("/api/tutor/request_dropout", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
-                id: JSON.parse(localStorage.getItem("userInfo"))._id,
-                value: !pause,
+                tutor_name: process.env.NEXT_PUBLIC_SUPERVISOR_NAME,
+                tutor_email: process.env.NEXT_PUBLIC_SUPERVISOR_EMAIL,
+                name: `${
+                  JSON.parse(localStorage.getItem("userInfo")).first_name
+                } ${JSON.parse(localStorage.getItem("userInfo")).last_name}`,
               }),
             });
-            setPaused(!pause);
+            if (response.ok) {
+              document.getElementById("dropout").innerText = "Success";
+            } else {
+              document.getElementById("dropout").innerText =
+                "An error has occured";
+            }
           }}
         >
-          {pause ? "Unpause" : "Pause"} tutoring
+          Request to dropout
         </button>
       )}
       {dataFromLocalStorage && !dataFromLocalStorage.is_tutor && (

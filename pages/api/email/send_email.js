@@ -38,7 +38,7 @@ export default async function handler(req, res) {
   try {
     // Create a transporter object using your email service's SMTP settings
     const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
+      host: "smtp.zoho.com",
       port: 465, // Replace with your SMTP port (usually 587 for non-secure, 465 for secure)
       secure: true,
       auth: {
@@ -49,7 +49,7 @@ export default async function handler(req, res) {
 
     // Define the email options
     const mailOptions = {
-      from: "The Noteswap Bot <samilaayouni14@gmail.com>", // sender address
+      from: "The Noteswap Bot <support@noteswap.org>", // sender address
       to: email, // list of receivers
       subject: "Noteswap Tutoring", // Subject line
       text: `
@@ -89,7 +89,6 @@ export default async function handler(req, res) {
           senderEmail={senderEmail}
           date={date}
           time={time}
-          type={type}
           message={message}
           url={`${process.env.NEXT_PUBLIC_URL}confirm/${Object.keys(queryParams)
             .map(
@@ -107,6 +106,7 @@ export default async function handler(req, res) {
     const info = await transporter.sendMail(mailOptions);
     res.status(200).send(info);
   } catch (error) {
+    console.log(error);
     res.status(500).send(error);
   }
 }

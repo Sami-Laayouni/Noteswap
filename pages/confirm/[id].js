@@ -49,9 +49,12 @@ const Confirm = () => {
       });
       if (response.ok) {
         const data = await response.json();
+        router.push("/tutoringValidated");
+
+        /*
         router.push(
           `/connect/tutoringSessionId=${data.tutoringSessionId}&isTheTutor=true&joinCode=${data.joinCode}`
-        );
+        );*/
       }
     }
     const { id } = router.query;

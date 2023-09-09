@@ -3,7 +3,7 @@ import React from "react";
 import ReactDOMServer from "react-dom/server";
 
 /**
- * Send event email
+ * Send supervisor email
  * @date 8/13/2023 - 4:35:52 PM
  *
  * @export
@@ -13,7 +13,7 @@ import ReactDOMServer from "react-dom/server";
  * @return {*}
  */
 export default async function handler(req, res) {
-  const { url, name, email, event } = req.body;
+  const { tutor_email, tutor_name, name } = req.body;
   try {
     // Create a transporter object using your email service's SMTP settings
     const transporter = nodemailer.createTransport({
@@ -29,15 +29,15 @@ export default async function handler(req, res) {
     // Define the email options
     const mailOptions = {
       from: "The Noteswap Bot <support@noteswap.org>", // sender address
-      to: email, // list of receivers
-      subject: "Noteswap Event", // Subject line
+      to: tutor_email, // list of receivers
+      subject: "Noteswap Tutoring", // Subject line
       text: `
     
-    Hello ${name}, 
-      
-    Thank you for your interest in Noteswap for Events. In order to award the certificates to volunteers for the ${event}, please check out this page.
+    Hello ${tutor_name}, 
 
-    ${url}
+    ${name} would like to stop being a tutor and dropout. Please visit this link to drop them out (${process.env.NEXT_PUBLIC_URL}supervisor).
+      
+    Best regards,
 
     The Noteswap team
     `,
@@ -58,7 +58,7 @@ export default async function handler(req, res) {
               marginBottom: "20px",
             }}
           >
-            <h1>NoteSwap Events</h1>
+            <h1>NoteSwap Tutoring</h1>
           </section>
           <main
             style={{
@@ -69,26 +69,12 @@ export default async function handler(req, res) {
               paddingRight: "50px",
             }}
           >
-            <b>Hello {name},</b>
+            <b>Hello {tutor_name}, </b>
             <p>
-              Thank you for your interest in Noteswap for Events. In order to
-              award the certificates to volunteers for the {event}, please check
-              out this page.
+              {name} would like to stop being a tutor and dropout. Please visit
+              this link to drop them out ({process.env.NEXT_PUBLIC_URL}
+              supervisor).
             </p>{" "}
-            <a href={url}>
-              <button
-                style={{
-                  backgroundColor: "#40b385",
-                  color: "white",
-                  border: "none",
-                  padding: "12px 32px",
-                  borderRadius: "2px",
-                  cursor: "pointer",
-                }}
-              >
-                Visit{" "}
-              </button>
-            </a>
             <p>Best regards,</p>
             <p>The Noteswap team</p>
           </main>

@@ -83,6 +83,8 @@ export default function BecomeTutor() {
     "Advanced PE",
     "Other",
   ];
+  const frenchClasses = ["French FL", "French I", "French II", "French III"];
+  const arabicClasses = ["Arabic FL", "Arabic I", "Arabic II", "Arabic III"];
   const handleStartTimeChange = (event) => {
     setStartTime(event.target.value);
   };
@@ -106,6 +108,21 @@ export default function BecomeTutor() {
           e.preventDefault();
           if (current == 2) {
             document.getElementById("finish").innerText = "Sending...";
+            await fetch("/api/email/send_supervisor", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                tutor_email: process.env.NEXT_PUBLIC_SUPERVISOR_EMAIL,
+                tutor_name: process.env.NEXT_PUBLIC_SUPERVISOR_NAME,
+                name: `${
+                  JSON.parse(localStorage.getItem("userInfo")).first_name
+                } ${JSON.parse(localStorage.getItem("userInfo")).last_name}`,
+                subject: schoolClass,
+                email: email,
+              }),
+            });
             const response = await fetch("/api/tutor/become_a_tutor", {
               method: "POST",
               headers: {
@@ -192,7 +209,9 @@ export default function BecomeTutor() {
               }}
             >
               Your request to become a tutor will be reviewed, and we will
-              notify you if you have been accepted as a tutor. Thank you.
+              notify you if you have been accepted as a tutor. Ensure to check
+              your Junk email if you believe the response is taking too long.
+              Thank you.
             </h2>
           </div>
         )}
@@ -335,6 +354,18 @@ export default function BecomeTutor() {
                   >
                     French
                   </li>
+                  {frenchClasses?.map((value) => (
+                    <li
+                      key={value}
+                      onClick={() => {
+                        setSchoolClass(value);
+                        document.getElementById("dropdownMenu").style.display =
+                          "none";
+                      }}
+                    >
+                      {value}
+                    </li>
+                  ))}
                   <li
                     key="Arabic"
                     className={style.boldText}
@@ -346,6 +377,18 @@ export default function BecomeTutor() {
                   >
                     Arabic
                   </li>
+                  {arabicClasses?.map((value) => (
+                    <li
+                      key={value}
+                      onClick={() => {
+                        setSchoolClass(value);
+                        document.getElementById("dropdownMenu").style.display =
+                          "none";
+                      }}
+                    >
+                      {value}
+                    </li>
+                  ))}
                   <li
                     key="Electives"
                     className={style.boldText}
