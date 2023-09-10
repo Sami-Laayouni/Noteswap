@@ -533,7 +533,7 @@ export default function ImageNotesModal() {
                     } else {
                       imagesUploaded -= currentTime;
                       if (imagesUploaded > 200) {
-                        imagesUploaded = 200;
+                        imagesUploaded = 200 - currentTime;
                       }
                     }
                   } else {
