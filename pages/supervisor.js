@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import style from "../styles/Supervisor.module.css";
 import LoadingCircle from "../components/LoadingCircle";
 import { requireAuthentication } from "../middleware/authenticate";
+import { useRouter } from "next/router";
 
 const Supervisor = () => {
   const [studentsAwaiting, setStudentsAwaiting] = useState(null);
   const [currentSessions, setCurrentSesions] = useState(null);
   const [currentStudents, setCurrentStudents] = useState(null);
+  const router = useRouter();
   useEffect(() => {
     async function getTutoringSessions() {
       const currentSessions = await fetch("/api/tutor/get_tutoring_sessions", {
@@ -55,6 +57,17 @@ const Supervisor = () => {
     getCurrentTutors();
     getTutoringSessions();
   }, []);
+  useEffect(() => {
+    if (localStorage) {
+      const data = JSON.parse(localStorage.getItem("userInfo"));
+      if (
+        !data.email.toLowerCase() != "sami.laayouni@asi.aui.ma" ||
+        !data.email.toLowerCase() != "al.zaid@asi.aui.ma"
+      ) {
+        router.push("/dashboard");
+      }
+    }
+  }, [router]);
   function calculateTimeDifference(startTime, endTime) {
     const [startHour, startMinute] = startTime.split(":").map(Number);
     const [endHour, endMinute] = endTime.split(":").map(Number);
