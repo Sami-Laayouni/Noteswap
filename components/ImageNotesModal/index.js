@@ -519,7 +519,7 @@ export default function ImageNotesModal() {
                     })
                   );
                 }
-                const currentTime = JSON.parse(
+                let currentTime = JSON.parse(
                   localStorage.getItem("dailyImageTimer")
                 ).time;
 
@@ -527,8 +527,15 @@ export default function ImageNotesModal() {
                   let imagesUploaded = imageArray.length * 40;
                   let amount;
                   if (currentTime + imagesUploaded >= 200) {
-                    amount == 200;
-                    imagesUploaded = 200 - imagesUploaded;
+                    if (currentTime > 200) {
+                      currentTime = 0;
+                      imagesUploaded = 0;
+                    } else {
+                      imagesUploaded -= currentTime;
+                      if (imagesUploaded > 200) {
+                        imagesUploaded = 200;
+                      }
+                    }
                   } else {
                     amount = currentTime + imagesUploaded;
                   }
@@ -539,6 +546,7 @@ export default function ImageNotesModal() {
                       time: currentTime + imagesUploaded,
                     })
                   );
+                  console.log(imageArray);
 
                   await fetch("/api/profile/add_community_minutes", {
                     method: "POST",

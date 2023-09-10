@@ -33,19 +33,16 @@ export default async function handler(req, res) {
       }
 
       const imageFile = files.image;
+      console.log(imageFile);
 
       if (!imageFile) {
         return res.status(400).json({ error: "No image file provided." });
       }
 
       // Compress the image using sharp
-      const compressedImageBuffer = await sharp(imageFile[0].filepath)
-        .resize({ width: 460 })
-        .jpeg({ quality: 96, progressive: true, force: false })
-        .png({ quality: 96, progressive: true, force: false })
-        .webp({ quality: 96, progressive: true, force: false })
-
-        .toBuffer();
+      const compressedImageBuffer = await sharp(
+        imageFile[0].filepath
+      ).toBuffer();
 
       // Continue with the rest of the code as before
       const storage = new Storage({
@@ -59,7 +56,7 @@ export default async function handler(req, res) {
       const bucket = storage.bucket(process.env.GOOGLE_BUCKET_NAME);
 
       // Generate a unique filename for the uploaded image
-      const filename = `${Date.now()}-${imageFile[0].originalFilename}`;
+      const filename = `${Date.now()}`;
       const gcsFilePath = `${filename}`;
 
       // Create a write stream to upload the file to Google Cloud Storage
@@ -82,6 +79,7 @@ export default async function handler(req, res) {
       res.status(200).json({ url: publicUrl });
     });
   } catch (error) {
+    console.log(error);
     res.status(500).send(`Upload image failed with error: ${error}`);
   }
 }
