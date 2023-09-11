@@ -63,6 +63,8 @@ export default function LargenImage() {
       <img
         style={{
           minHeight: "500px",
+          maxHeight: "90vh",
+          maxWidth: "800px",
           borderRadius: "8px",
           cursor: "grab",
           transform: `scale(${zoomLevel / 100})`,

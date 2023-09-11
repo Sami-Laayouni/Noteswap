@@ -735,7 +735,10 @@ export default function NotesModal() {
                 notes: content,
               }),
             });
-            const result = await response.json();
+            let result = await response.json();
+            if (!result) {
+              result = 70;
+            }
             let pastTime;
             if (localStorage.getItem("dailyNoteTimer")) {
               pastTime = JSON.parse(

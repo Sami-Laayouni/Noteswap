@@ -76,6 +76,9 @@ export default async function rateText(req, res) {
     if (!finalGrade) {
       finalGrade = 0.8;
     }
+    if ((finalGrade = 0 || !finalGrade)) {
+      finalGrade = 0.7;
+    }
 
     res.status(200).send(finalGrade);
   } catch (error) {

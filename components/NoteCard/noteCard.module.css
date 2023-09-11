@@ -31,6 +31,7 @@
   display: inline-block;
   margin-right: 20px;
   cursor: pointer;
+  object-fit: cover;
 }
 .imageScroll {
   width: 100%;
