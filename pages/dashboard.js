@@ -77,7 +77,10 @@ const Dashboard = () => {
       );
       if (response.ok) {
         const data = await response.json();
-        setCalendar(data.items);
+        const sortedEvents = data.items.sort((a, b) => {
+          return new Date(a.start.date) - new Date(b.start.date);
+        });
+        setCalendar(sortedEvents);
       }
     }
     if (data) {
