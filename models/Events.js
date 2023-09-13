@@ -39,7 +39,7 @@ const eventSchema = new mongoose.Schema({
   },
   link_to_event: {
     type: String,
-    required: true,
+    required: false,
   },
   createdAt: {
     type: String,

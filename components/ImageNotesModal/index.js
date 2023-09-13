@@ -522,47 +522,91 @@ export default function ImageNotesModal() {
                 let currentTime = JSON.parse(
                   localStorage.getItem("dailyImageTimer")
                 ).time;
-
-                if (currentTime < 200) {
-                  let imagesUploaded = imageArray.length * 40;
-                  let amount;
-                  if (currentTime + imagesUploaded >= 200) {
-                    if (currentTime > 200) {
-                      currentTime = 0;
-                      imagesUploaded = 0;
-                    } else {
-                      imagesUploaded -= currentTime;
-                      if (imagesUploaded > 200) {
-                        imagesUploaded = 200 - currentTime;
-                      }
-                    }
-                  } else {
-                    amount = currentTime + imagesUploaded;
-                  }
+                if (!currentTime) {
+                  currentTime = 0;
                   localStorage.setItem(
                     "dailyImageTimer",
                     JSON.stringify({
                       date: new Date().toUTCString().slice(5, 16),
-                      time: currentTime + imagesUploaded,
+                      time: 0,
                     })
                   );
-                  console.log(imageArray);
+                }
 
-                  await fetch("/api/profile/add_community_minutes", {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                      id: JSON.parse(localStorage.getItem("userInfo"))._id,
-                      points: imagesUploaded,
-                    }),
-                  });
-                  setPoints(imagesUploaded);
+                const pointstoAdd = imageArray.length * 40;
+
+                const totalPoints = parseInt(currentTime) + pointstoAdd;
+                if (currentTime >= 200) {
                   setCurrent(4);
+                  setPoints(0);
                 } else {
-                  setPoints("Enough");
-                  setCurrent(4);
+                  if (totalPoints <= 200) {
+                    localStorage.setItem(
+                      "dailyImageTimer",
+                      JSON.stringify({
+                        date: new Date().toUTCString().slice(5, 16),
+                        time: totalPoints,
+                      })
+                    );
+                    await fetch("/api/profile/add_community_minutes", {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({
+                        id: JSON.parse(localStorage.getItem("userInfo"))._id,
+                        points: Math.abs(totalPoints),
+                      }),
+                    });
+                    setPoints(Math.abs(totalPoints));
+                    setCurrent(4);
+                  } else {
+                    if (pointstoAdd < 200) {
+                      const pointsToAddWithoutExceedingLimit =
+                        200 - pointstoAdd;
+                      localStorage.setItem(
+                        "dailyImageTimer",
+                        JSON.stringify({
+                          date: new Date().toUTCString().slice(5, 16),
+                          time: totalPoints,
+                        })
+                      );
+                      await fetch("/api/profile/add_community_minutes", {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                          id: JSON.parse(localStorage.getItem("userInfo"))._id,
+                          points: Math.abs(pointsToAddWithoutExceedingLimit),
+                        }),
+                      });
+                      setPoints(Math.abs(pointsToAddWithoutExceedingLimit));
+                      setCurrent(4);
+                    } else {
+                      const pointsToAddWithoutExceedingLimit =
+                        200 - currentTime;
+                      localStorage.setItem(
+                        "dailyImageTimer",
+                        JSON.stringify({
+                          date: new Date().toUTCString().slice(5, 16),
+                          time: totalPoints,
+                        })
+                      );
+                      await fetch("/api/profile/add_community_minutes", {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                          id: JSON.parse(localStorage.getItem("userInfo"))._id,
+                          points: Math.abs(pointsToAddWithoutExceedingLimit),
+                        }),
+                      });
+                      setPoints(Math.abs(pointsToAddWithoutExceedingLimit));
+                      setCurrent(4);
+                    }
+                  }
                 }
               } else {
                 setCurrent(4);

@@ -74,6 +74,7 @@ function NoteSwap({ Component, pageProps }) {
           rel="apple-touch-icon"
           href="/assets/icons/icons/circle.png"
         ></link>
+
         <script
           dangerouslySetInnerHTML={{
             __html: `

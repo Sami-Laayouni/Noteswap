@@ -8,7 +8,7 @@ import EventCard from "../components/EventCard";
 import Head from "next/head";
 import dynamic from "next/dynamic";
 const CreateEvent = dynamic(() => import("../components/CreateEvent"));
-
+import OneSignal from "react-onesignal";
 /**
  * Get Static props
  * @date 8/13/2023 - 4:53:53 PM
@@ -87,8 +87,61 @@ export default function Event() {
     getUserData(title);
   }, [title]);
 
+  useEffect(() => {
+    const initializeOneSignal = async () => {
+      await OneSignal.init({
+        appId: "3b28d10b-3b88-426f-8025-507667803b2a",
+        safari_web_id:
+          "web.onesignal.auto.65a2ca34-f112-4f9d-a5c6-253c0b61cb9f",
+        notifyButton: {
+          enable: false,
+        },
+        promptOptions: {
+          slidedown: {
+            prompts: [
+              {
+                type: "push", // current types are "push" & "category"
+                autoPrompt: true,
+                text: {
+                  /* limited to 90 characters */
+                  actionMessage:
+                    "We would like to show you notifications for the latest community service opportunities and updates.",
+                  /* acceptButton limited to 15 characters */
+                  acceptButton: "Allow",
+                  /* cancelButton limited to 15 characters */
+                  cancelButton: "Cancel",
+                },
+                delay: {
+                  pageViews: 1,
+                  timeDelay: 20,
+                },
+              },
+            ],
+          },
+        },
+        allowLocalhostAsSecureOrigin: true,
+      });
+    };
+
+    const askForNotificationPermission = async () => {
+      try {
+        await OneSignal.Slidedown.promptPush();
+      } catch (error) {
+        console.error("Error requesting notification permission:", error);
+      }
+    };
+    initializeOneSignal();
+    document
+      .getElementById("container")
+      .addEventListener("click", askForNotificationPermission);
+
+    return () => {
+      window.OneSignal = undefined;
+    };
+  }, []);
+
   return (
-    <>
+    <div id="container">
       <Head>
         <title>Noteswap | Events</title>
       </Head>
@@ -158,6 +211,6 @@ export default function Event() {
           Create a new event
         </section>
       )}
-    </>
+    </div>
   );
 }

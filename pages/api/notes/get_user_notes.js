@@ -19,7 +19,11 @@ export default async function handler(req, res) {
   await connectDB();
 
   try {
-    const response = await Notes.find({ publisherId: id });
+    const response = await Notes.find({ publisherId: id })
+      .sort({
+        createdAt: -1, // Sort by createdAt field in descending order
+      })
+      .limit(25); // Limit the result to 25 notes
     const user = await User.find({ _id: id });
 
     if (response) {
