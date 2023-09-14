@@ -9,6 +9,7 @@ import Head from "next/head";
 import dynamic from "next/dynamic";
 const CreateEvent = dynamic(() => import("../components/CreateEvent"));
 import OneSignal from "react-onesignal";
+import { requireAuthentication } from "../middleware/authenticate";
 /**
  * Get Static props
  * @date 8/13/2023 - 4:53:53 PM
@@ -32,7 +33,7 @@ export async function getStaticProps({ locale }) {
  * @export
  * @return {*}
  */
-export default function Event() {
+const Event = () => {
   const router = useRouter();
   const { eventStatus } = useContext(ModalContext);
   const [open, setOpen] = eventStatus;
@@ -213,4 +214,5 @@ export default function Event() {
       )}
     </div>
   );
-}
+};
+export default requireAuthentication(Event);
