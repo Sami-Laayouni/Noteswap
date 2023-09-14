@@ -61,8 +61,8 @@ const Supervisor = () => {
     if (localStorage) {
       const data = JSON.parse(localStorage.getItem("userInfo"));
       if (
-        !data.email.toLowerCase() != "sami.laayouni@asi.aui.ma" ||
-        !data.email.toLowerCase() != "al.zaid@asi.aui.ma"
+        data.email.toLowerCase() != "sami.laayouni@asi.aui.ma" &&
+        data.email.toLowerCase() != "al.zaid@asi.aui.ma"
       ) {
         router.push("/dashboard");
       }
