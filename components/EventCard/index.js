@@ -82,7 +82,7 @@ export default function EventCard({ data }) {
             alt="User ¨Picture"
             width={200}
             height={200}
-            style={{ borderRadius: "50%" }}
+            style={{ borderRadius: "50%", objectFit: "cover" }}
           ></Image>
         </Link>
       </div>

@@ -31,6 +31,16 @@
   top: 25%;
   right: 30px;
 }
+.input {
+  position: absolute;
+  top: 25%;
+  right: 405px;
+  border: 1px solid black;
+  outline: none;
+  width: 195px;
+  padding-left: 10px;
+  height: 39px;
+}
 .refresh {
   padding-left: 20px;
   color: var(--accent-color);

@@ -13,6 +13,7 @@
   height: 200px;
   border-radius: 50%;
   cursor: pointer;
+  object-fit: cover;
 }
 .name {
   font-family: var(--manrope-font);

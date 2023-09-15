@@ -40,8 +40,8 @@ const Certificate = () => {
       <p
         style={{
           fontFamily: "var(--manrope-font)",
-          position: "relative",
-          bottom: "55px",
+          position: "absolute",
+          bottom: "10px",
           left: "50%",
         }}
       >

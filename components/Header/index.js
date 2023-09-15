@@ -139,22 +139,26 @@ export default function Header() {
         <nav className={style.header_nav}>
           {loggedIn ? (
             <>
-              {/* User is logged in */}
-              <Link
-                title="Visit notes"
-                className={style.header_nav_a}
-                href="/notes"
-              >
-                Notes
-              </Link>
-              {userData?.role != "teacher" && (
-                <Link
-                  title="Visit Tutor"
-                  className={style.header_nav_a}
-                  href="/tutor"
-                >
-                  Tutor
-                </Link>
+              {userData?.role != "volunteer" && (
+                <>
+                  {/* User is logged in */}
+                  <Link
+                    title="Visit notes"
+                    className={style.header_nav_a}
+                    href="/notes"
+                  >
+                    Notes
+                  </Link>
+                  {userData?.role != "teacher" && (
+                    <Link
+                      title="Visit Tutor"
+                      className={style.header_nav_a}
+                      href="/tutor"
+                    >
+                      Tutor
+                    </Link>
+                  )}
+                </>
               )}
 
               <Link
@@ -352,35 +356,43 @@ export default function Header() {
             </>
           ) : (
             <>
-              <Link href="/notes">
-                <li
-                  onClick={() => {
-                    document.getElementById("hamburger_menu").style.display =
-                      "none";
-                    document.getElementById("hamburger_overlay").style.display =
-                      "none";
-                  }}
-                >
-                  Notes
-                  <div className={style.borderLine} />
-                </li>
-              </Link>
-              {userData?.role != "teacher" && (
-                <Link href="/tutor">
-                  <li
-                    onClick={() => {
-                      document.getElementById("hamburger_menu").style.display =
-                        "none";
-                      document.getElementById(
-                        "hamburger_overlay"
-                      ).style.display = "none";
-                    }}
-                  >
-                    Tutor
-                    <div className={style.borderLine} />
-                  </li>
-                </Link>
+              {userData?.role != "volunteer" && (
+                <>
+                  <Link href="/notes">
+                    <li
+                      onClick={() => {
+                        document.getElementById(
+                          "hamburger_menu"
+                        ).style.display = "none";
+                        document.getElementById(
+                          "hamburger_overlay"
+                        ).style.display = "none";
+                      }}
+                    >
+                      Notes
+                      <div className={style.borderLine} />
+                    </li>
+                  </Link>
+                  {userData?.role != "teacher" && (
+                    <Link href="/tutor">
+                      <li
+                        onClick={() => {
+                          document.getElementById(
+                            "hamburger_menu"
+                          ).style.display = "none";
+                          document.getElementById(
+                            "hamburger_overlay"
+                          ).style.display = "none";
+                        }}
+                      >
+                        Tutor
+                        <div className={style.borderLine} />
+                      </li>
+                    </Link>
+                  )}
+                </>
               )}
+
               <Link href="/event">
                 <li
                   onClick={() => {
@@ -407,21 +419,23 @@ export default function Header() {
                   <div className={style.borderLine} />
                 </li>
               </Link>
-              {userData?.role == "student" && (
-                <li
-                  onClick={() => {
-                    setCertificate(true);
-                    document.getElementById("hamburger_menu").style.display =
-                      "none";
-                    document.getElementById("hamburger_overlay").style.display =
-                      "none";
-                  }}
-                >
-                  Certificates
-                  <div className={style.borderLine} />
-                </li>
-              )}
-              {userData?.role != "student" && (
+              {userData?.role == "student" ||
+                (userData?.role == "volunteer" && (
+                  <li
+                    onClick={() => {
+                      setCertificate(true);
+                      document.getElementById("hamburger_menu").style.display =
+                        "none";
+                      document.getElementById(
+                        "hamburger_overlay"
+                      ).style.display = "none";
+                    }}
+                  >
+                    Certificates
+                    <div className={style.borderLine} />
+                  </li>
+                ))}
+              {userData?.role == "teacher" && (
                 <Link href="/detect_ai">
                   <li
                     onClick={() => {
@@ -478,7 +492,7 @@ export default function Header() {
               <span>Settings</span>
             </Link>
           </li>
-          {userData?.role == "student" && (
+          {userData?.role != "teacher" && (
             <li onClick={() => setCertificate(true)}>
               <FiAward size={21} style={{ verticalAlign: "middle" }} />
               <span>Certificates </span>
@@ -496,7 +510,7 @@ export default function Header() {
                 </Link>
               </li>
             ))}
-          {userData?.role != "student" && (
+          {userData?.role == "teacher" && (
             <li>
               <Link href="/detect_ai">
                 <LuGlasses size={21} style={{ verticalAlign: "middle" }} />

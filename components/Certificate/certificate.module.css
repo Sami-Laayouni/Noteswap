@@ -32,6 +32,12 @@
 .detail h2 b {
   font-family: var(--manrope-bold-font);
 }
+@media all and (max-height: 900px) {
+  .container {
+    height: 48vh;
+  }
+}
+
 @media all and (max-width: 767px) {
   .container {
     grid-template-columns: 100%;

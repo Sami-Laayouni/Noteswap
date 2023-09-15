@@ -192,6 +192,12 @@ const Signup = () => {
                     <li id="teacher" onClick={() => setSelectedRole("teacher")}>
                       {t("teacher")}
                     </li>
+                    <li
+                      id="volunteer"
+                      onClick={() => setSelectedRole("volunteer")}
+                    >
+                      Volunteer
+                    </li>
                   </ul>
                   <p className={style.error}>{error}</p>
                 </>

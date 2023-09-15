@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import LoadingCircle from "../../components/LoadingCircle";
 
 /**
  * Get static paths
@@ -45,6 +46,7 @@ export async function getStaticProps({ locale }) {
 export default function SignUps() {
   const [data, setData] = useState([]);
   const [volunteersData, setVolunteersData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
@@ -90,6 +92,7 @@ export default function SignUps() {
           const resolvedVolunteersData = await Promise.all(
             volunteerDataPromises
           );
+          setLoading(false);
           setVolunteersData(resolvedVolunteersData);
         }
       }
@@ -128,6 +131,13 @@ export default function SignUps() {
       >
         Refresh the page to see changes
       </p>
+      {loading && (
+        <div
+          style={{ width: "100%", display: "flex", justifyContent: "center" }}
+        >
+          <LoadingCircle />
+        </div>
+      )}
       <ul className={style.list}>
         {volunteersData.map((volunteer, index) => (
           <li key={index}>
@@ -142,6 +152,7 @@ export default function SignUps() {
                   marginBottom: "auto",
                   display: "inline-block",
                   verticalAlign: "middle",
+                  borderRadius: "50%",
                 }}
               />
             </Link>
@@ -149,14 +160,65 @@ export default function SignUps() {
             <p
               style={{
                 display: "inline",
-                paddingLeft: "20px",
+                paddingLeft: "10px",
               }}
             >
               Name:{" "}
-              <span style={{ color: "var(--accent-color)" }}>
+              <span
+                style={{ color: "var(--accent-color)", marginRight: "20px" }}
+              >
                 {volunteer.first_name} {volunteer.last_name}
+              </span>{" "}
+              Email:{" "}
+              <span style={{ color: "var(--accent-color)" }}>
+                {volunteer.email}
               </span>
             </p>
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                const response = await fetch(
+                  "/api/profile/add_community_minutes",
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      id: volunteer._id,
+                      points:
+                        document.getElementById(`input_${volunteer._id}`)
+                          .value * 20,
+                    }),
+                  }
+                );
+                if (response.ok) {
+                  document.getElementById(
+                    `award_custom__${volunteer._id}`
+                  ).innerText = "Success";
+                  document.getElementById(`input_${volunteer._id}`).value = "";
+                }
+              }}
+            >
+              <input
+                className={style.input}
+                type="number"
+                min={1}
+                max={3600}
+                id={`input_${volunteer._id}`}
+                placeholder="Enter a custom amount (mins)"
+                required
+              />
+              <button
+                className={style.button}
+                style={{ right: "195px" }}
+                type="submit"
+                id={`award_custom__${volunteer._id}`}
+              >
+                Award custom amount
+              </button>
+            </form>
+
             <button
               onClick={() => giveCertificate(volunteer._id)}
               className={style.button}
