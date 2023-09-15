@@ -95,9 +95,9 @@ export default async function handler(req, res) {
   });
 
   if (type == "latest") {
-    query.push({ $sort: { createdAt: -1 } }, { $limit: 15 });
+    query.push({ $sort: { createdAt: -1 } }, { $limit: 20 });
   } else if (type == "popular") {
-    query.push({ $sort: { hot: -1, createdAt: -1 } }, { $limit: 15 });
+    query.push({ $sort: { hot: -1, createdAt: -1 } }, { $limit: 20 });
   } else {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_URL}api/ai/filtering/collaborative`,

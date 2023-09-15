@@ -38,6 +38,42 @@ export default function BookASession() {
     }
   }, []);
 
+  const validate = (dateString) => {
+    const daysOfWeek = [
+      "sunday",
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+    ];
+    const day = daysOfWeek[new Date(dateString).getDay()];
+
+    const daysAvailable = info?.data?.days_available
+      .split(",")
+      .map((day) => day.trim().toLowerCase());
+    if (!daysAvailable.includes(day)) {
+      setError(
+        `${
+          info?.data?.userInfo[0].first_name
+        } is only available on ${info?.data?.days_available
+          .split(",")
+          .map(function (value, index) {
+            return `${
+              index == info?.data?.days_available.split(",").length - 1 &&
+              info?.data?.days_available.split(",").length != 1
+                ? " and "
+                : ""
+            } ${value}s`;
+          })}`
+      );
+      return false;
+    }
+    setError("");
+    return true;
+  };
+
   if (!open) {
     return null;
   }
@@ -45,7 +81,9 @@ export default function BookASession() {
   return (
     <Modal
       isOpen={open}
-      onClose={() => setOpen(false)}
+      onClose={() => {
+        setOpen(false), setError("");
+      }}
       title={`Book a tutoring session with ${info?.data?.userInfo[0].first_name} ${info?.data?.userInfo[0].last_name}`}
     >
       {current == 0 && (
@@ -154,9 +192,15 @@ export default function BookASession() {
             type="date"
             id="date"
             className={style.time}
+            onChange={(e) => {
+              if (!validate(e.target.value)) {
+                e.target.value = "";
+              }
+            }}
             style={{ marginLeft: "10px" }}
             min="15:40"
             max="16:30"
+            required
           ></input>
           <br></br>
           <span>Select time: </span>
@@ -172,6 +216,7 @@ export default function BookASession() {
                 setStartTime(e.target.value);
               }}
               className={style.time}
+              required
             />
             <span style={{ marginLeft: "10px", marginRight: "10px" }}>-</span>
             <input
@@ -183,6 +228,7 @@ export default function BookASession() {
                 setEndTime(e.target.value);
               }}
               className={style.time}
+              required
             />
           </div>
           <p className={style.error}>{error}</p>

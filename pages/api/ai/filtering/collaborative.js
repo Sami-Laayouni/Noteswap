@@ -99,7 +99,6 @@ export default async function handler(req, res) {
     });
     // Retrieve all notes from the MongoDB collection
     const notes = await Notes.aggregate(query);
-    console.log(notes);
     // Initialize the scores matrix
     const scores = [];
     const favorites = [];
@@ -151,7 +150,7 @@ export default async function handler(req, res) {
           note.category !== favorites[0]?.category &&
           !includedNoteIds.has(note._id) // Filter out already included notes
       )
-      .slice(0, 5);
+      .slice(0, 10);
     third_results.forEach((note) => includedNoteIds.add(note._id)); // Add IDs to the set
 
     const fourth_results = notes
@@ -160,7 +159,7 @@ export default async function handler(req, res) {
           JSON.stringify(note.publisherId) === JSON.stringify(knownAuthor) &&
           !includedNoteIds.has(note._id) // Filter out already included notes
       )
-      .slice(0, 10);
+      .slice(0, 15);
     if (first_results || second_results || third_results || fourth_results) {
       res
         .status(200)

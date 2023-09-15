@@ -104,13 +104,21 @@ export default function Profile() {
           )}
 
           <h2>
-            {data?.bio ? data?.bio : "No bios available"} · Community service
-            minutes:{" "}
+            {data?.bio ? data?.bio : "No bios available"} · Total community
+            service:{" "}
             <span>
-              {data?.points ? Math.floor(data?.points / 20) : "0"} minute
-              {Math.floor(data?.points / 20) == 1 ? "" : "s"}
+              {data?.points || data?.tutor_hours
+                ? Math.floor(data?.points / 20) +
+                  Math.floor(data?.tutor_hours / 60)
+                : "0"}{" "}
+              minute
+              {Math.floor(data?.points / 20) +
+                Math.floor(data?.tutor_hours / 60) ==
+              1
+                ? ""
+                : "s"}
             </span>{" "}
-            · Tutor minutes:{" "}
+            · Community service earned by tutoring:{" "}
             <span>
               {data?.tutor_hours ? Math.floor(data?.tutor_hours / 60) : "0"}{" "}
               minute{Math.floor(data?.tutor_hours / 60) == 1 ? "" : "s"}
