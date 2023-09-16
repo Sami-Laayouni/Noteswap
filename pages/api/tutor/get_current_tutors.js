@@ -27,7 +27,7 @@ export default async function handler(req, res) {
   });
 
   try {
-    const result = await Tutor.aggregate(query);
+    const result = await Tutor.aggregate(query).limit(15);
     if (result) {
       const final = {
         tutors: result,
