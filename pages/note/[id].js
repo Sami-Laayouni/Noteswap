@@ -13,6 +13,7 @@ import NoteSwapBot from "../../components/NoteSwapBot";
 import { FaShare } from "react-icons/fa";
 import { BiPencil } from "react-icons/bi";
 import dynamic from "next/dynamic";
+import Head from "next/head";
 const CiteModal = dynamic(() => import("../../components/CiteModal"));
 
 /**
@@ -137,6 +138,17 @@ export default function Note() {
   });
   return (
     <>
+      <Head>
+        <title>
+          {note?.note[0]?.title
+            ? `${note?.note[0]?.title} | Noteswap`
+            : "Noteswap"}
+        </title>
+        <link
+          rel="canonical"
+          href={`${process.env.NEXT_PUBLIC_URL}note/${note?.note[0]?._id}`}
+        />
+      </Head>
       <Script
         async
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9167942144001417"
