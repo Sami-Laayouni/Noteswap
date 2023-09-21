@@ -146,8 +146,8 @@ export default function NotesModal() {
   }, [title, reactQuill, open, router]);
   // Stop the timer after 10 minutes of typing (daily limit)
   useEffect(() => {
-    if (elapsedTime >= 900 || current != 0) {
-      if (elapsedTime >= 900) {
+    if (elapsedTime >= 1200 || current != 0) {
+      if (elapsedTime >= 1200) {
         setError(
           "You've reached today's limit for community service through note typing."
         );
@@ -778,12 +778,12 @@ export default function NotesModal() {
                 }),
               });
               if (response.ok) {
-                // In case somebody gets more than 10 minutes set it to 10 minutes
+                // In case somebody gets more than 20 minutes set it to 20 minutes
                 let points = null;
-                if (Math.round(minutes * 20) <= 300) {
+                if (Math.round(minutes * 20) <= 400) {
                   points = Math.round(minutes * 20);
                 } else {
-                  points = 250;
+                  points = 350;
                 }
                 await fetch("/api/profile/add_community_minutes", {
                   method: "POST",
@@ -795,10 +795,10 @@ export default function NotesModal() {
                     points: points,
                   }),
                 });
-                if (Math.round(minutes * 20) <= 300) {
+                if (Math.round(minutes * 20) <= 400) {
                   setPoints(Math.round(minutes * 20));
                 } else {
-                  setPoints(250);
+                  setPoints(350);
                 }
                 setCurrent(4);
                 localStorage.removeItem("autosave_notes");

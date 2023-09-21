@@ -533,14 +533,14 @@ export default function ImageNotesModal() {
                   );
                 }
 
-                const pointstoAdd = imageArray.length * 40;
+                const pointstoAdd = imageArray.length * 100;
 
                 const totalPoints = parseInt(currentTime) + pointstoAdd;
-                if (currentTime >= 200) {
+                if (currentTime >= 300) {
                   setCurrent(4);
                   setPoints(0);
                 } else {
-                  if (totalPoints <= 200) {
+                  if (totalPoints <= 300) {
                     localStorage.setItem(
                       "dailyImageTimer",
                       JSON.stringify({
@@ -561,9 +561,9 @@ export default function ImageNotesModal() {
                     setPoints(Math.abs(totalPoints));
                     setCurrent(4);
                   } else {
-                    if (pointstoAdd < 200) {
+                    if (pointstoAdd < 300) {
                       const pointsToAddWithoutExceedingLimit =
-                        200 - pointstoAdd;
+                        300 - pointstoAdd;
                       localStorage.setItem(
                         "dailyImageTimer",
                         JSON.stringify({
@@ -585,7 +585,7 @@ export default function ImageNotesModal() {
                       setCurrent(4);
                     } else {
                       const pointsToAddWithoutExceedingLimit =
-                        200 - currentTime;
+                        300 - currentTime;
                       localStorage.setItem(
                         "dailyImageTimer",
                         JSON.stringify({
