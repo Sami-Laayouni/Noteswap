@@ -74,7 +74,10 @@ function NoteSwap({ Component, pageProps }) {
           rel="apple-touch-icon"
           href="/assets/icons/icons/circle.png"
         ></link>
-
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-QXR2R5FDM0"
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -87,10 +90,6 @@ function NoteSwap({ Component, pageProps }) {
           }}
         />
       </Head>
-      <Script
-        async
-        src="https://www.googletagmanager.com/gtag/js?id=G-QXR2R5FDM0"
-      />
     </>
   );
   // Return the JSX element
