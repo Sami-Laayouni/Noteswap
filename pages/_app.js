@@ -1,11 +1,17 @@
+/* The main app directory for NEXTJS*/
+
+
+// Import styles
 import "../styles/globals.css";
 import "../styles/fonts.css";
 import "../styles/quill.css";
 
+// Import Head
 import Head from "next/head";
+// Import the default layout 
 import DefaultLayout from "../layouts/DefaultLayout";
+// Import translations
 import { appWithTranslation } from "next-i18next";
-import Script from "next/script";
 
 /**
  * Custom App component for Next.js.
@@ -104,3 +110,4 @@ function NoteSwap({ Component, pageProps }) {
 }
 // Export the Noteswap app
 export default appWithTranslation(NoteSwap);
+//End of the app directory

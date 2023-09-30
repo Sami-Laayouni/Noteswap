@@ -1,5 +1,10 @@
+/* Middleware used to ensure that the user is actually logged, else redirect them to login  */
+
+// Import from React
 import { useEffect, useState } from "react";
+// Import the router from NEXTJS
 import { useRouter } from "next/router";
+// Import dynamic loading from NEXTJS
 import dynamic from "next/dynamic";
 const LoadingPage = dynamic(() => import("../components/LoadingPage"));
 import { verify } from "jsonwebtoken";
@@ -13,6 +18,7 @@ export const requireAuthentication = (WrappedComponent) => {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(true);
 
+    // Function to verify if the token is valid
     const verifyToken = (token) => {
       try {
         const decoded = verify(token, process.env.NEXT_PUBLIC_JWT_SECRET);
@@ -59,3 +65,4 @@ export const requireAuthentication = (WrappedComponent) => {
   return WithAuthentication;
   // Return the wrapper component with authentication enforcement
 };
+// End of the authenticate middleware

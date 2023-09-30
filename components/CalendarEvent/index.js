@@ -1,5 +1,11 @@
+/* Compoenent used in the dashboard page in order to display the 
+school's events. */
+
+// Import the style
 import style from "./calendarEvent.module.css";
+// Import from NEXTJS
 import Link from "next/link";
+// Used for simplification in handling dates
 import { format, parseISO, addDays, isSameDay } from "date-fns";
 /**
  * Calendar Event
@@ -10,9 +16,10 @@ import { format, parseISO, addDays, isSameDay } from "date-fns";
  * @return {*}
  */
 export default function CalendarEvent({ data }) {
-  const startDate = parseISO(data.start.date);
-  const endDate = parseISO(data.end.date);
-  const nextDayDate = addDays(startDate, 1);
+  const startDate = parseISO(data.start.date); // Start date of the event
+  const endDate = parseISO(data.end.date); // End date of the event
+  const nextDayDate = addDays(startDate, 1); // The day after the event
+  // Return the JSX (a link that opens the event in their Google calendar)
   return (
     <Link href={data.htmlLink} target="_blank">
       <li key={data.id} className={style.container}>
@@ -40,3 +47,4 @@ export default function CalendarEvent({ data }) {
     </Link>
   );
 }
+// End of the component

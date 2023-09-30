@@ -1,3 +1,4 @@
+/* Sidebar that is used to route between admin pages */
 import style from "./adminSidebar.module.css";
 import Link from "next/link";
 
@@ -9,6 +10,7 @@ import Link from "next/link";
  * @return {*}
  */
 export default function AdminSidebar() {
+  //Return the JSX
   return (
     <nav>
       <ul className={style.nav}>

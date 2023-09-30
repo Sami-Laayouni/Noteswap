@@ -1,4 +1,4 @@
-// models/User.js
+/* User Model */
 
 import mongoose, { Schema } from "mongoose";
 

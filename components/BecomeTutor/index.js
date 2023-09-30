@@ -1,7 +1,15 @@
+/* Modal used by students in order to apply to be a tutor. Allows students to select 
+the subject they want to teach the days they are available and sends an acceptance email to 
+the supervisors selected by the school. */
+
+//Import the default Modal component
 import Modal from "../Modal";
+//Style
 import style from "./becomeTutor.module.css";
+//React
 import { useContext, useEffect, useState } from "react";
 import ModalContext from "../../context/ModalContext";
+//React icons
 import { MdOutlineArrowDropDown } from "react-icons/md";
 
 /**
@@ -13,26 +21,30 @@ import { MdOutlineArrowDropDown } from "react-icons/md";
  */
 export default function BecomeTutor() {
   const { tutor } = useContext(ModalContext);
-  const [open, setOpen] = tutor;
-  const [schoolClass, setSchoolClass] = useState();
-  const [startTime, setStartTime] = useState("15:40");
-  const [endTime, setEndTime] = useState("16:30");
-  const [error, setError] = useState("");
-  const [description, setDescription] = useState("");
-  const [current, setCurrent] = useState(1);
-  const [email, setEmail] = useState("");
+  const [open, setOpen] = tutor; // Stores the state of the becomeATutor Modal
+  const [schoolClass, setSchoolClass] = useState(); // Used to store the subject that student wants to teach
+  const [startTime, setStartTime] = useState("15:40"); // Used to store the start time at which the student is available
+  const [endTime, setEndTime] = useState("16:30"); // Used to store the end time at which the student is available
+  const [error, setError] = useState(""); // Used to store error messages (as is pretty obvious by the name)
+  const [description, setDescription] = useState(""); // Used to store the student's description of themselves
+  const [current, setCurrent] = useState(1); // Used to store the current page of the becomeATutor Modal
+  const [email, setEmail] = useState(""); // Used to store the email address of the user (default: their school email)
   const [checkboxes, setCheckboxes] = useState({
     Monday: false,
     Tuesday: false,
     Wednesday: false,
     Thursday: false,
     Friday: false,
-  });
+  }); // Used to store the days the student is available to tutor
+
+  // Function used to change the availability of a certain day
   const handleCheckboxChange = (event) => {
     const { name, checked } = event.target;
     setCheckboxes((prevCheckboxes) => ({ ...prevCheckboxes, [name]: checked }));
   };
+  // UseEffect to set the student's email to the one stored in the localstorage 
   useEffect(() => {
+    //Ensure the user is logged in
     if (localStorage.getItem("userInfo")) {
       if (JSON.parse(localStorage.getItem("userInfo")).email) {
         setEmail(JSON.parse(localStorage.getItem("userInfo")).email);
@@ -40,6 +52,7 @@ export default function BecomeTutor() {
     }
   }, []);
 
+  // The classes that fall under MATH in the school (currently: hard coded)
   const mathClasses = [
     "Algebra I",
     "Algebra II",
@@ -47,6 +60,7 @@ export default function BecomeTutor() {
     "Pre-calculus",
     "AP calculus",
   ];
+  // The classes that fall under SOCIAL STUDY in the school (currently: hard coded)
   const socialClasses = [
     "World History I",
     "World History II",
@@ -54,6 +68,7 @@ export default function BecomeTutor() {
     "Comparative Gov.",
     "AP World History",
   ];
+  // The classes that fall under ELA in the school (currently: hard coded)
   const englishClasses = [
     "English I",
     "English II",
@@ -61,6 +76,7 @@ export default function BecomeTutor() {
     "British Literature",
     "AP English",
   ];
+  // The classes that fall under SCIENCE in the school (currently: hard coded)
   const scienceClasses = [
     "Biology",
     "Chemistry",
@@ -70,6 +86,7 @@ export default function BecomeTutor() {
     "AP Chemistry",
     "AP Physics",
   ];
+  //The classes that fall under ELECTIVE in the school (currently: hard coded)
   const electives = [
     "Women's Lit",
     "Model U.N",
@@ -83,91 +100,109 @@ export default function BecomeTutor() {
     "Advanced PE",
     "Other",
   ];
+  // The classes that fall under FRENCH in the school (currently: hard coded)
   const frenchClasses = ["French FL", "French I", "French II", "French III"];
+  // The classes that fall under ARABIC in the school (currently: hard coded)
   const arabicClasses = ["Arabic FL", "Arabic I", "Arabic II", "Arabic III"];
+
+  // Change the startTime variable
   const handleStartTimeChange = (event) => {
     setStartTime(event.target.value);
   };
 
+  // Change the endTime variable
   const handleEndTimeChange = (event) => {
     setEndTime(event.target.value);
   };
 
+  // Optimization return nothing is the Modal is closed
   if (!open) {
     return null;
   }
 
+  // Return the JSX
   return (
     <Modal
       isOpen={open}
       onClose={() => setOpen(false)}
       title="Become a tutor on Noteswap"
     >
+      {/* Form (on submit send the email to the supervisors) */}
       <form
         onSubmit={async (e) => {
+          //Prevent reload of the page
           e.preventDefault();
           if (current == 2) {
+            // Feedback to the user telling them that the email is being sent
             document.getElementById("finish").innerText = "Sending...";
+            // Send the email to the supervisors
             await fetch("/api/email/send_supervisor", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
-                tutor_email: process.env.NEXT_PUBLIC_SUPERVISOR_EMAIL,
-                tutor_name: process.env.NEXT_PUBLIC_SUPERVISOR_NAME,
+                tutor_email: process.env.NEXT_PUBLIC_SUPERVISOR_EMAIL, // The supervisors email 
+                tutor_name: process.env.NEXT_PUBLIC_SUPERVISOR_NAME || "Supervisors", // The supervisors name default Supervisor
                 name: `${
                   JSON.parse(localStorage.getItem("userInfo")).first_name
-                } ${JSON.parse(localStorage.getItem("userInfo")).last_name}`,
-                subject: schoolClass,
-                email: email,
+                } ${JSON.parse(localStorage.getItem("userInfo")).last_name}`, // Name of the student that wants to become a tutor
+                subject: schoolClass, // Subject that the student wants to teach
+                email: email, // Email of the student that wants to become a tutor
               }),
             });
+            // Add student's name to the list of students that want to become tutors
             const response = await fetch("/api/tutor/become_a_tutor", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
-                user_id: JSON.parse(localStorage.getItem("userInfo"))._id,
-                email: email,
-                desc: description,
-                subject: schoolClass,
+                user_id: JSON.parse(localStorage.getItem("userInfo"))._id, // UID of the student
+                email: email, // Email of the student
+                desc: description, // Description that the student gave
+                subject: schoolClass, // Subject that the student wants to teach
                 days_available: Object.entries(checkboxes)
                   .filter(([day, value]) => value === true)
                   .map(([day, value]) => day)
-                  .join(", "),
-                time_available: `${startTime}-${endTime}`,
+                  .join(", "), // String of days that student is available (ex: Monday, Friday)
+                time_available: `${startTime}-${endTime}`, //The time the student is available
               }),
             });
+            // Check if the response was succesful.
             if (response.ok) {
+              // Notify the user that the email was sent
               document.getElementById("finish").innerText = "Sent";
-
+              // Switch to the next page
               setCurrent(3);
             } else {
+              // An error has occured, display that to the users
               setError(await response.text());
             }
           } else if (current == 3) {
+            // When the student closes the Modal we reset all the values
             setCheckboxes({
               Monday: false,
               Tuesday: false,
               Wednesday: false,
               Thursday: false,
               Friday: false,
-            });
-            setError();
-            setStartTime("15:40");
-            setEndTime("16:30");
-            setSchoolClass();
-            setOpen(false);
-            setCurrent(1);
+            }); // Reset the days the student are available to none
+            setError(); // Reset error message to none
+            setStartTime("15:40"); // Set start time to the min amount allowed by the school
+            setEndTime("16:30"); // Set end time to the max amount allowed by the school
+            setSchoolClass(); // Set subject to none
+            setCurrent(1); // Set page back to the first one
+            setOpen(false); // Close the modal
           } else {
+            // Switch to the second page
             setCurrent(2);
           }
         }}
       >
         {current == 2 && (
           <>
+            {/* Second page where the students give us their description */}
             <label className={style.labelForInput}>
               Description (Tell us a little bit about yourself){" "}
             </label>
@@ -177,7 +212,9 @@ export default function BecomeTutor() {
               onChange={(e) => {
                 setDescription(e.target.value);
               }}
-              required
+              required // Required
+              autoFocus // Auto Focus
+              autoSave // Auto Save
             ></textarea>
           </>
         )}
@@ -191,6 +228,7 @@ export default function BecomeTutor() {
               flexDirection: "column",
             }}
           >
+            {/* Third page where we thank them for their intrest in becoming a tutor */}
             <h1
               style={{
                 fontFamily: "var(--bold-manrope-font)",
@@ -215,8 +253,10 @@ export default function BecomeTutor() {
             </h2>
           </div>
         )}
+
         {current == 1 && (
           <>
+             {/* First page where the student gives us basic information about themselves */}
             <label className={style.labelForInput}>I want to teach: </label>
             <div
               className={style.dropdown}
@@ -273,6 +313,7 @@ export default function BecomeTutor() {
                       {value}
                     </li>
                   ))}
+                  {/* ELA classes*/}
                   <li
                     key="ELA"
                     className={style.boldText}
@@ -296,7 +337,7 @@ export default function BecomeTutor() {
                       {value}
                     </li>
                   ))}
-
+                  {/* Social Study classes*/}
                   <li
                     key="Social Study"
                     className={style.boldText}
@@ -320,6 +361,7 @@ export default function BecomeTutor() {
                       {value}
                     </li>
                   ))}
+                  {/* Math classes*/}
                   <li
                     key="Math"
                     className={style.boldText}
@@ -343,6 +385,7 @@ export default function BecomeTutor() {
                       {value}
                     </li>
                   ))}
+                  {/* French classes*/}
                   <li
                     key="French"
                     className={style.boldText}
@@ -366,6 +409,7 @@ export default function BecomeTutor() {
                       {value}
                     </li>
                   ))}
+                  {/* Arabic classes*/}
                   <li
                     key="Arabic"
                     className={style.boldText}
@@ -389,6 +433,7 @@ export default function BecomeTutor() {
                       {value}
                     </li>
                   ))}
+                  {/* Elective classes*/}
                   <li
                     key="Electives"
                     className={style.boldText}
@@ -476,6 +521,7 @@ export default function BecomeTutor() {
                 </label>
               </li>
             </ul>
+            {/* Select the time the student is available*/}
             <section className={style.container}>
               <label className={style.labelForInput}>At this time</label>
               <input
@@ -500,6 +546,7 @@ export default function BecomeTutor() {
                 max="16:30"
               />
             </section>
+            {/* Quick message (set by the school) */}
             <p
               style={{
                 color: "var(--accent-color)",
@@ -515,6 +562,8 @@ export default function BecomeTutor() {
             </p>
           </>
         )}
+
+        {/* Back button */}
         <p className={style.error}>{error}</p>
         {current == 2 ? (
           <p
@@ -535,3 +584,4 @@ export default function BecomeTutor() {
     </Modal>
   );
 }
+// End of the component

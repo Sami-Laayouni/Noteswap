@@ -1,3 +1,6 @@
+/* The Internal Server Error (error 500) page displayed whenever a problem occurs in the backend. 
+TODO: Check if this actually works*/
+
 import Head from "next/head";
 import style from "../styles/404.module.css";
 import Link from "next/link";
@@ -20,13 +23,13 @@ export async function getStaticProps({ locale }) {
   };
 }
 /**
- * Page not found page
+ * Internal Server Error page
  * @date 7/3/2023 - 12:50:32 PM
  *
  * @export
- * @return {JSX.Element} the rendered 404 page
+ * @return {JSX.Element} the rendered 500 page
  */
-export default function PageNotFound() {
+export default function InternalError() {
   // Return the JSX
   return (
     <>

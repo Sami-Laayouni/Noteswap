@@ -1,3 +1,5 @@
+/* Redirect URL for the create microsoft user method */
+
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import AuthService from "../services/AuthService";

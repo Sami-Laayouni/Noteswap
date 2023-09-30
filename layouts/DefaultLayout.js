@@ -1,6 +1,13 @@
+/* The default layout used in the page */
+
+
+// Import the Auth Provider
 import { AuthProvider } from "../context/AuthContext";
+// Import the Modal Provider
 import { ModalProvider } from "../context/ModalContext";
+// Import the Socket Provider
 import { SocketProvider } from "../context/SocketContext";
+// Import dynamic loading from NEXTJS
 import dynamic from "next/dynamic";
 const Certificate = dynamic(() => import("../components/CertificateModal"), {
   ssr: false,
@@ -37,3 +44,4 @@ const DefaultLayout = ({ children }) => {
 };
 
 export default DefaultLayout;
+// End of the default layout

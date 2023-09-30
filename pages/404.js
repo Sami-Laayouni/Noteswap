@@ -1,3 +1,6 @@
+/* The Page Not Found (error 404) page displayed whenever the user visits 
+a page that does not exist*/
+
 import Head from "next/head";
 import style from "../styles/404.module.css";
 import Link from "next/link";
@@ -58,3 +61,4 @@ export default function PageNotFound() {
     </>
   );
 }
+// End of the 404 Page

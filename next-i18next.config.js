@@ -1,10 +1,12 @@
+/* i18 configuartion (used for allowing different languages on Noteswap) */
+
 /** @type {import('next-i18next').UserConfig} */
 module.exports = {
   i18n: {
-    defaultLocale: "en",
-    locales: ["en", "fr", "es", "de", "it", "pt", "hi", "zh", "ru", "kr"],
+    defaultLocale: "en", // Default language
+    locales: ["en", "fr", "es", "de", "it", "pt", "hi", "zh", "ru", "kr"], // Supported languages
   },
   fallbackLng: {
-    default: ["en"],
+    default: ["en"], // Fallback language in case their is an error
   },
 };

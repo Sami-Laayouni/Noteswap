@@ -1,4 +1,4 @@
-// models/School.js
+/* School Model */
 
 import mongoose from "mongoose";
 

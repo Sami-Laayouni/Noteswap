@@ -1,13 +1,22 @@
+/* This page allows admins to add extra information to train the 
+school handbook AI on */
+
+// Import the style
 import style from "../styles/AI.module.css";
 export default function AddVector() {
+  // Return the JSX
   return (
     <div className={style.grid}>
       <form
         className={style.left}
         onSubmit={async (e) => {
+          // Prevent the page from reloading
           e.preventDefault();
-          if (document.getElementById("category").value == "handbook") {
+          // Check if we are adding information to the handbook
+          if (document.getElementById("category").value == "handbook") { // We are
+            // Notify the user that we are saving the changes
             document.getElementById("button").innerText = "Saving...";
+            // Add information to the vector database
             const response = await fetch(
               "/api/ai/handbook/vector/populate_data",
               {
@@ -21,14 +30,18 @@ export default function AddVector() {
                 }),
               }
             );
+            // The response was succesful
             if (response.ok) {
               document.getElementById("button").innerText = "Saved";
             } else {
+              // An error has occured
               document.getElementById("button").innerText =
                 await response.text();
             }
-          } else {
+          } else { // We are not 
+            // Notify the user that we are saving the changes
             document.getElementById("button").innerText = "Saving...";
+            // Add information to the vector database
             const response = await fetch(
               "/api/ai/handbook/vector/populate_data",
               {
@@ -42,9 +55,11 @@ export default function AddVector() {
                 }),
               }
             );
+            // The response was ok
             if (response.ok) {
               document.getElementById("button").innerText = "Saved";
             } else {
+              // An error has occured
               document.getElementById("button").innerText =
                 await response.text();
             }

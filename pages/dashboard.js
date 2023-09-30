@@ -1,3 +1,4 @@
+/* The main dashboard page */
 import { requireAuthentication } from "../middleware/authenticate";
 import Head from "next/head";
 import style from "../styles/Dashboard.module.css";

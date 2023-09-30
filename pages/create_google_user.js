@@ -1,8 +1,12 @@
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+/* Redirect URL for the create google user method */
+
+// Import from React
+import { useEffect, useState, useContext } from "react";
 import AuthService from "../services/AuthService";
-import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
+// Import from NEXTJS
+import { useRouter } from "next/router";
+
 
 /**
  * Create Google User Page
@@ -11,12 +15,12 @@ import AuthContext from "../context/AuthContext";
  * @return {JSX.Element} The rendered page
  */
 function CreateGoogleUserPage() {
-  const router = useRouter();
-  const { isLoggedIn } = useContext(AuthContext);
-  const [loggedIn, setLoggedIn] = isLoggedIn;
+  const router = useRouter(); // Intialize NEXTJS Router
+  const { isLoggedIn } = useContext(AuthContext); 
+  const [loggedIn, setLoggedIn] = isLoggedIn; // Stores whether or not the user is logged in
   const AuthServices = new AuthService(setLoggedIn);
-  const { errorSignup } = useContext(AuthContext);
-  const [ran, setRan] = useState(false);
+  const { errorSignup } = useContext(AuthContext); // Used to store error messages
+  const [ran, setRan] = useState(false); // Not important just ignore
   const [error, setError] = errorSignup;
 
   useEffect(() => {

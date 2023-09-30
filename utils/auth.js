@@ -1,3 +1,6 @@
+/* Util used to return a true/false depending if the user is logged in or not*/
+
+
 import jwt from "jsonwebtoken";
 
 export const isAuthenticated = () => {

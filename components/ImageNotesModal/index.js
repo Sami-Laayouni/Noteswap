@@ -114,6 +114,23 @@ export default function ImageNotesModal() {
       "Upload another picture";
   };
 
+  function calculateTotalTime(elapsedTime, pastTime, limit) {
+    // Calculate totalTime as the sum of pastTime and elapsedTime
+    let totalTime = pastTime + elapsedTime;
+    
+    // Check if totalTime exceeds the limit
+    if (totalTime > limit) {
+        // If it does, set elapsedTime to the difference between limit and pastTime
+        elapsedTime = limit - pastTime;
+        // Set totalTime to limit
+        totalTime = limit;
+    }
+    
+    // Return the updated elapsedTime and totalTime
+    return { elapsedTime, totalTime };
+  }
+
+
   return (
     <Modal
       isOpen={open}
@@ -522,8 +539,9 @@ export default function ImageNotesModal() {
                 let currentTime = JSON.parse(
                   localStorage.getItem("dailyImageTimer")
                 ).time;
+                
                 if (!currentTime) {
-                  currentTime = 0;
+                  currentTime = "0";
                   localStorage.setItem(
                     "dailyImageTimer",
                     JSON.stringify({
@@ -534,18 +552,17 @@ export default function ImageNotesModal() {
                 }
 
                 const pointstoAdd = imageArray.length * 100;
+                const time = calculateTotalTime(pointstoAdd, currentTime, 300)
 
-                const totalPoints = parseInt(currentTime) + pointstoAdd;
                 if (currentTime >= 300) {
                   setCurrent(4);
                   setPoints(0);
                 } else {
-                  if (totalPoints <= 300) {
                     localStorage.setItem(
                       "dailyImageTimer",
                       JSON.stringify({
                         date: new Date().toUTCString().slice(5, 16),
-                        time: totalPoints,
+                        time: time.totalTime,
                       })
                     );
                     await fetch("/api/profile/add_community_minutes", {
@@ -555,58 +572,11 @@ export default function ImageNotesModal() {
                       },
                       body: JSON.stringify({
                         id: JSON.parse(localStorage.getItem("userInfo"))._id,
-                        points: Math.abs(totalPoints),
+                        points: Math.abs(time.elapsedTime),
                       }),
                     });
-                    setPoints(Math.abs(totalPoints));
+                    setPoints(Math.abs(time.elapsedTime));
                     setCurrent(4);
-                  } else {
-                    if (pointstoAdd < 300) {
-                      const pointsToAddWithoutExceedingLimit =
-                        300 - pointstoAdd;
-                      localStorage.setItem(
-                        "dailyImageTimer",
-                        JSON.stringify({
-                          date: new Date().toUTCString().slice(5, 16),
-                          time: totalPoints,
-                        })
-                      );
-                      await fetch("/api/profile/add_community_minutes", {
-                        method: "POST",
-                        headers: {
-                          "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({
-                          id: JSON.parse(localStorage.getItem("userInfo"))._id,
-                          points: Math.abs(pointsToAddWithoutExceedingLimit),
-                        }),
-                      });
-                      setPoints(Math.abs(pointsToAddWithoutExceedingLimit));
-                      setCurrent(4);
-                    } else {
-                      const pointsToAddWithoutExceedingLimit =
-                        300 - currentTime;
-                      localStorage.setItem(
-                        "dailyImageTimer",
-                        JSON.stringify({
-                          date: new Date().toUTCString().slice(5, 16),
-                          time: totalPoints,
-                        })
-                      );
-                      await fetch("/api/profile/add_community_minutes", {
-                        method: "POST",
-                        headers: {
-                          "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({
-                          id: JSON.parse(localStorage.getItem("userInfo"))._id,
-                          points: Math.abs(pointsToAddWithoutExceedingLimit),
-                        }),
-                      });
-                      setPoints(Math.abs(pointsToAddWithoutExceedingLimit));
-                      setCurrent(4);
-                    }
-                  }
                 }
               } else {
                 setCurrent(4);

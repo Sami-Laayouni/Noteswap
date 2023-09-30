@@ -9,15 +9,18 @@ class AuthService {
 
   /* ========== Login with email and password ========== */
   async login(email, password) {
+    // No email address was given 
     if (!email) {
       console.error("No email given to log in user!");
       return;
     }
+    // No password was given
     if (!password) {
       console.error("No password given to log in user!");
       return;
     }
     try {
+      // Login 
       const response = await fetch(`${this.API_URL}/login`, {
         method: "POST",
         headers: {
@@ -25,13 +28,16 @@ class AuthService {
         },
         body: JSON.stringify({ email, password }),
       });
+      // Check if the response was ok
       if (response.ok) {
         const data = await response.json();
         if (data.token) {
+          // Log in the user
           this.setLoggedIn(true);
         }
         return data;
       } else {
+        // Incorrect username or password
         return "Incorrect username or password";
       }
     } catch (error) {
@@ -46,6 +52,7 @@ class AuthService {
       return;
     }
     try {
+      // Login with Google
       const response = await fetch(`${this.API_URL}/login_with_google`, {
         method: "POST",
         headers: {
@@ -55,7 +62,9 @@ class AuthService {
       });
 
       const data = await response.json();
-      this.setLoggedIn(true);
+      if(data){
+        this.setLoggedIn(true);
+      }
       return data;
     } catch (error) {
       console.error("Login with Google failed", error);
@@ -69,6 +78,7 @@ class AuthService {
       return;
     }
     try {
+      // Login with microsoft
       const response = await fetch(`${this.API_URL}/login_with_microsoft`, {
         method: "POST",
         headers: {

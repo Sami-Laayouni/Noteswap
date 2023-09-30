@@ -1,4 +1,4 @@
-// models/Notes.js
+/* Notes Model */
 
 import mongoose from "mongoose";
 

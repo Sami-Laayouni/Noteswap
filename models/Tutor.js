@@ -1,4 +1,4 @@
-// models/Tutor.js
+/* Tutor Model */
 
 import mongoose, { Schema } from "mongoose";
 

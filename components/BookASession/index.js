@@ -1,8 +1,14 @@
+/* Modal to book a session with a tutor. Sends a confirmation email to the tutor so that they 
+can either confirm or deny the tutoring session with the user. When confirmed it will show up for the
+supervisors on the /supervisor page. */
+
+// Import the style
 import style from "./bookASession.module.css";
+// Import components
 import Modal from "../Modal";
-import { useContext } from "react";
+// Import from React
+import { useContext, useState, useEffect } from "react";
 import ModalContext from "../../context/ModalContext";
-import { useState, useEffect } from "react";
 /**
  * Book a session
  * @date 8/13/2023 - 5:07:05 PM
@@ -11,34 +17,39 @@ import { useState, useEffect } from "react";
  * @return {*}
  */
 export default function BookASession() {
-  const { bookSession, bookSessionInfo } = useContext(ModalContext);
-  const [open, setOpen] = bookSession;
-  const [info] = bookSessionInfo;
-  const [email, setEmail] = useState("");
-  const [senderEmail, setSenderEmail] = useState("");
-  const [error, setError] = useState("");
-  const [startTime, setStartTime] = useState("15:40");
-  const [endTime, setEndTime] = useState("16:30");
-  const [current, setCurrent] = useState(0);
+  const { bookSession, bookSessionInfo } = useContext(ModalContext); 
+  const [open, setOpen] = bookSession; // Stores the display state of the BookASession Modal (open/closed)
+  const [info] = bookSessionInfo; // Stores the information of the tutor the user wants to book a session with
+  const [email, setEmail] = useState(""); // Stores the email address of the tutor (stored in the info)
+  const [senderEmail, setSenderEmail] = useState(""); // Stores the email address of the user (default their school email)
+  const [error, setError] = useState(""); // Stores the error messages
+  const [startTime, setStartTime] = useState("15:40"); // Stores the start time of the tutoring session
+  const [endTime, setEndTime] = useState("16:30"); // Stores the end time of the tutoring session
+  const [current, setCurrent] = useState(0); // Stores the current page
   //const [type, setType] = useState(null);
 
+
   useEffect(() => {
+    // Checks that the info exists
     if (info) {
       if (info?.data?.userInfo[0].email) {
-        setEmail(info?.data?.userInfo[0].email);
+        setEmail(info?.data?.userInfo[0].email); // Set email to tutor's email
       }
     }
   }, [info]);
 
   useEffect(() => {
+    // Check if the page is loaded
     if (localStorage) {
       if (localStorage.getItem("userInfo")) {
-        setSenderEmail(JSON.parse(localStorage.getItem("userInfo")).email);
+        setSenderEmail(JSON.parse(localStorage.getItem("userInfo")).email); // Set the senderEmail to the user's email
       }
     }
   }, []);
 
+  // Function to validate if the tutor is available at a certain date
   const validate = (dateString) => {
+    // Days of the week (unless you are alien)
     const daysOfWeek = [
       "sunday",
       "monday",
@@ -54,6 +65,7 @@ export default function BookASession() {
       .split(",")
       .map((day) => day.trim().toLowerCase());
     if (!daysAvailable.includes(day)) {
+      // Tutor is not available that day
       setError(
         `${
           info?.data?.userInfo[0].first_name
@@ -74,10 +86,12 @@ export default function BookASession() {
     return true;
   };
 
+  // Optimization return nothing is the Modal is closed
   if (!open) {
     return null;
   }
 
+  // Return the JSX
   return (
     <Modal
       isOpen={open}
@@ -90,13 +104,15 @@ export default function BookASession() {
         <form
           className={style.container}
           onSubmit={async (e) => {
+            // Ensure the page doesn't reload
             e.preventDefault();
-
             if (
               info?.data?.userInfo[0]._id !=
               JSON.parse(localStorage.getItem("userInfo"))._id
             ) {
+              // Tell the user that we are booking the session
               document.getElementById("book").innerText = "Booking...";
+              // Send the confirmation email to the tutor
               const response = await fetch("api/email/send_email", {
                 method: "POST",
                 headers: {
@@ -130,6 +146,7 @@ export default function BookASession() {
           }}
         >
           <br></br>
+          {/* Because our school only supports in person tutoring sessions this is hidden. However for other schools we uncomment this */}
           {/*
           <label className={style.label}>Type of session</label>
           
@@ -258,11 +275,12 @@ export default function BookASession() {
             <button
               className={style.button}
               onClick={() => {
+                // Set variables back to their default values
                 setCurrent(0);
                 setEmail("");
                 setEndTime("");
                 setStartTime("");
-                setOpen(false);
+                setOpen(false); // Close the Modal
                 //setType(null);
               }}
             >
@@ -274,3 +292,4 @@ export default function BookASession() {
     </Modal>
   );
 }
+// End of the component
