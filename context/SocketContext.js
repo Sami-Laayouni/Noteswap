@@ -33,7 +33,6 @@ export const SocketProvider = ({ children }) => {
 
   const server = "https://noteswap.onrender.com"; // Sever that hosts the socket (beacause VERCEL doesn't)
 
-
   useEffect(() => {
     if (router.pathname.includes("connect")) {
       const { query } = router;

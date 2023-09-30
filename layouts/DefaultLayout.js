@@ -1,6 +1,5 @@
 /* The default layout used in the page */
 
-
 // Import the Auth Provider
 import { AuthProvider } from "../context/AuthContext";
 // Import the Modal Provider

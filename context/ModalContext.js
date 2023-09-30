@@ -1,7 +1,6 @@
 /* This file conatins the app wide component used to store if 
 a certain Modal is opened or closed. */
 
-
 // Import from React
 import { createContext, useState } from "react";
 
@@ -18,15 +17,15 @@ export const ModalProvider = ({ children }) => {
   const [image, setImage] = useState(false); // Stores whether the expanded image modal is closed or opened
   const [imageUrl, setImageUrl] = useState(""); // Stores the Image URL for expanded images
   const [tutor, setTutor] = useState(false); // Stores whether the become a tutor modal is closed or opened
-  const [deleteModal, setDeleteModal] = useState(false); // Stores whether the delete account modal is closed or opened 
+  const [deleteModal, setDeleteModal] = useState(false); // Stores whether the delete account modal is closed or opened
   const [bookSession, setBookSession] = useState(false); // Stores whether the book a tutor modal is closed or opened
   const [bookSessionInfo, setBookSessionInfo] = useState(); // Stores the information of the tutor when booking a session
-  const [eventStatus, setEventStatus] = useState(false); 
-  const [eventdata, setEventData] = useState(""); 
+  const [eventStatus, setEventStatus] = useState(false);
+  const [eventdata, setEventData] = useState("");
   const [shareOpen, setShareOpen] = useState(false); // Stores whether the share modal is closed or opened
   const [shareURL, setShareURL] = useState(""); // Stores the url of the page that wants to be shared
   const [citeOpen, setCiteOpen] = useState(false); // Stores whether the cite Modal is closed or opened
-  const [citeInfo, setCiteInfo] = useState("");  // Stores teh information that is used to create citations
+  const [citeInfo, setCiteInfo] = useState(""); // Stores teh information that is used to create citations
   const [warning, setWarning] = useState(true); // Signup popup
   const [edit, setEdit] = useState(false); // Stores whether the edit Note Modal is closed or opened
   const [editValue, setEditValue] = useState(""); // Stores the HTML of the notes that are being edited

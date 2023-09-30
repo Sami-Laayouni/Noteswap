@@ -17,7 +17,7 @@ import ModalContext from "../../context/ModalContext";
  * @return {*}
  */
 export default function BookASession() {
-  const { bookSession, bookSessionInfo } = useContext(ModalContext); 
+  const { bookSession, bookSessionInfo } = useContext(ModalContext);
   const [open, setOpen] = bookSession; // Stores the display state of the BookASession Modal (open/closed)
   const [info] = bookSessionInfo; // Stores the information of the tutor the user wants to book a session with
   const [email, setEmail] = useState(""); // Stores the email address of the tutor (stored in the info)
@@ -27,7 +27,6 @@ export default function BookASession() {
   const [endTime, setEndTime] = useState("16:30"); // Stores the end time of the tutoring session
   const [current, setCurrent] = useState(0); // Stores the current page
   //const [type, setType] = useState(null);
-
 
   useEffect(() => {
     // Checks that the info exists

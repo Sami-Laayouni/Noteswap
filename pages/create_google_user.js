@@ -7,7 +7,6 @@ import AuthContext from "../context/AuthContext";
 // Import from NEXTJS
 import { useRouter } from "next/router";
 
-
 /**
  * Create Google User Page
  * @date 6/23/2023 - 9:32:54 PM
@@ -16,7 +15,7 @@ import { useRouter } from "next/router";
  */
 function CreateGoogleUserPage() {
   const router = useRouter(); // Intialize NEXTJS Router
-  const { isLoggedIn } = useContext(AuthContext); 
+  const { isLoggedIn } = useContext(AuthContext);
   const [loggedIn, setLoggedIn] = isLoggedIn; // Stores whether or not the user is logged in
   const AuthServices = new AuthService(setLoggedIn);
   const { errorSignup } = useContext(AuthContext); // Used to store error messages

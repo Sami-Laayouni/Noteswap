@@ -42,7 +42,7 @@ export default function BecomeTutor() {
     const { name, checked } = event.target;
     setCheckboxes((prevCheckboxes) => ({ ...prevCheckboxes, [name]: checked }));
   };
-  // UseEffect to set the student's email to the one stored in the localstorage 
+  // UseEffect to set the student's email to the one stored in the localstorage
   useEffect(() => {
     //Ensure the user is logged in
     if (localStorage.getItem("userInfo")) {
@@ -142,8 +142,9 @@ export default function BecomeTutor() {
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
-                tutor_email: process.env.NEXT_PUBLIC_SUPERVISOR_EMAIL, // The supervisors email 
-                tutor_name: process.env.NEXT_PUBLIC_SUPERVISOR_NAME || "Supervisors", // The supervisors name default Supervisor
+                tutor_email: process.env.NEXT_PUBLIC_SUPERVISOR_EMAIL, // The supervisors email
+                tutor_name:
+                  process.env.NEXT_PUBLIC_SUPERVISOR_NAME || "Supervisors", // The supervisors name default Supervisor
                 name: `${
                   JSON.parse(localStorage.getItem("userInfo")).first_name
                 } ${JSON.parse(localStorage.getItem("userInfo")).last_name}`, // Name of the student that wants to become a tutor
@@ -256,7 +257,7 @@ export default function BecomeTutor() {
 
         {current == 1 && (
           <>
-             {/* First page where the student gives us basic information about themselves */}
+            {/* First page where the student gives us basic information about themselves */}
             <label className={style.labelForInput}>I want to teach: </label>
             <div
               className={style.dropdown}

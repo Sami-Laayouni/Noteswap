@@ -13,7 +13,8 @@ export default function AddVector() {
           // Prevent the page from reloading
           e.preventDefault();
           // Check if we are adding information to the handbook
-          if (document.getElementById("category").value == "handbook") { // We are
+          if (document.getElementById("category").value == "handbook") {
+            // We are
             // Notify the user that we are saving the changes
             document.getElementById("button").innerText = "Saving...";
             // Add information to the vector database
@@ -38,7 +39,8 @@ export default function AddVector() {
               document.getElementById("button").innerText =
                 await response.text();
             }
-          } else { // We are not 
+          } else {
+            // We are not
             // Notify the user that we are saving the changes
             document.getElementById("button").innerText = "Saving...";
             // Add information to the vector database

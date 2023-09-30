@@ -317,18 +317,18 @@ export default function NotesModal() {
   function calculateTotalTime(elapsedTime, pastTime, limit) {
     // Calculate totalTime as the sum of pastTime and elapsedTime
     let totalTime = pastTime + elapsedTime;
-    
+
     // Check if totalTime exceeds the limit
     if (totalTime > limit) {
-        // If it does, set elapsedTime to the difference between limit and pastTime
-        elapsedTime = limit - pastTime;
-        // Set totalTime to limit
-        totalTime = limit;
+      // If it does, set elapsedTime to the difference between limit and pastTime
+      elapsedTime = limit - pastTime;
+      // Set totalTime to limit
+      totalTime = limit;
     }
-    
+
     // Return the updated elapsedTime and totalTime
     return { elapsedTime, totalTime };
-}
+  }
 
   // Return the JSX
   return (
@@ -703,7 +703,10 @@ export default function NotesModal() {
         </p>
       )}
 
-      <p className={style.error}>{error}{elapsedTime}</p>
+      <p className={style.error}>
+        {error}
+        {elapsedTime}
+      </p>
       <button
         id="nextButton"
         className={style.next}
@@ -772,10 +775,10 @@ export default function NotesModal() {
                 })
               );
             }
-            
+
             // Calculate the amount of time they get added to their account by taking a percantage of the elapsedTime
-            const minutesThatCount = elapsedTime * (result / 100)
-         
+            const minutesThatCount = elapsedTime * (result / 100);
+
             let pastTime;
             if (localStorage.getItem("dailyNoteTimer")) {
               pastTime = JSON.parse(
@@ -785,7 +788,7 @@ export default function NotesModal() {
               pastTime = 0;
             }
 
-            const time = calculateTotalTime(minutesThatCount, pastTime, 1200)
+            const time = calculateTotalTime(minutesThatCount, pastTime, 1200);
 
             localStorage.setItem(
               "dailyNoteTimer",
@@ -818,7 +821,6 @@ export default function NotesModal() {
                 }),
               });
               if (response.ok) {
-              
                 // In case somebody gets more than 20 minutes set it to 20 minutes
                 let points = null;
                 if (Math.round(minutes * 20) <= 400) {

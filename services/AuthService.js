@@ -9,7 +9,7 @@ class AuthService {
 
   /* ========== Login with email and password ========== */
   async login(email, password) {
-    // No email address was given 
+    // No email address was given
     if (!email) {
       console.error("No email given to log in user!");
       return;
@@ -20,7 +20,7 @@ class AuthService {
       return;
     }
     try {
-      // Login 
+      // Login
       const response = await fetch(`${this.API_URL}/login`, {
         method: "POST",
         headers: {
@@ -62,7 +62,7 @@ class AuthService {
       });
 
       const data = await response.json();
-      if(data){
+      if (data) {
         this.setLoggedIn(true);
       }
       return data;
