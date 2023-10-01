@@ -120,6 +120,28 @@ export default function SignUps() {
     }
   }
 
+  async function notify(email, name, event_name, desc, date) {
+    const response = await fetch("/api/events/notify", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email,
+        name: name,
+        event_name: event_name,
+        desc: desc,
+        date: date,
+      }),
+    });
+    if (response.ok) {
+      document.getElementById(`notify_them_${email}`).innerText = "Success";
+    }else{
+      document.getElementById(`notify_them_${email}`).innerText = "An error has ocurred";
+
+    }
+  }
+
   return (
     <>
       <h1 className={style.header}>Volunteers who signed up for your event</h1>
@@ -170,11 +192,22 @@ export default function SignUps() {
                 {volunteer.first_name} {volunteer.last_name}
               </span>{" "}
               Email:{" "}
-              <span style={{ color: "var(--accent-color)" }}>
+              <span
+                style={{ color: "var(--accent-color)", marginRight: "20px" }}
+              >
                 {volunteer.email}
               </span>
+              {"  "}
+              Total Community Service Earned:{" "}
+              <span style={{ color: "var(--accent-color)" }}>
+                {Math.round(volunteer.points / 20) +
+                  Math.round(volunteer.tutor_hours / 60)}{" "}
+                minutes
+              </span>
             </p>
+            <br></br>
             <form
+              style={{ display: "inline-block" }}
               onSubmit={async (e) => {
                 e.preventDefault();
                 const response = await fetch(
@@ -206,7 +239,7 @@ export default function SignUps() {
                 min={1}
                 max={3600}
                 id={`input_${volunteer._id}`}
-                placeholder="Enter a custom amount (mins)"
+                placeholder="Enter a custom amount (in mins)"
                 required
               />
               <button
@@ -215,7 +248,7 @@ export default function SignUps() {
                 type="submit"
                 id={`award_custom__${volunteer._id}`}
               >
-                Award custom amount
+                Award custom amount (will not receive certificate)
               </button>
             </form>
 
@@ -226,7 +259,22 @@ export default function SignUps() {
             >
               {volunteer?.certificates?.includes(data.certificate_link)
                 ? "Already received"
-                : "Give Certificate"}
+                : `Give Certificate (Full ${data.community_service_offered} hours)`}
+            </button>
+            <button
+              onClick={() =>
+                notify(
+                  volunteer.email,
+                  volunteer.first_name,
+                  data.title,
+                  data.desc,
+                  data.date_of_events
+                )
+              }
+              className={style.button}
+              id={`notify_them_${volunteer.email}`}
+            >
+              Notify them that they have been accepted for the event
             </button>
           </li>
         ))}

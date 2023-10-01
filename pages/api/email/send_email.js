@@ -1,7 +1,6 @@
 import nodemailer from "nodemailer";
 import React from "react";
 import ReactDOMServer from "react-dom/server";
-import TutoringEmail from "../../../components/TutoringEmail";
 
 /**
  * Send an email
@@ -82,23 +81,106 @@ export default async function handler(req, res) {
     `,
 
       html: ReactDOMServer.renderToString(
-        <TutoringEmail
-          subject={subject}
-          name={name}
-          receive={receiverName}
-          senderEmail={senderEmail}
-          date={date}
-          time={time}
-          message={message}
-          url={`${process.env.NEXT_PUBLIC_URL}confirm/${Object.keys(queryParams)
-            .map(
-              (key) =>
-                `${encodeURIComponent(key)}=${encodeURIComponent(
-                  queryParams[key]
-                )}`
-            )
-            .join("&")}`}
-        />
+        <section>
+          <section
+            style={{
+              width: "100%",
+              height: "8vh",
+              backgroundColor: "#40b385",
+              textAlign: "left",
+              color: "white",
+              fontFamily: "Manrope",
+              paddingLeft: "20px",
+              display: "flex",
+              alignItems: "center",
+              marginBottom: "20px",
+            }}
+          >
+            <h1>NoteSwap Tutoring</h1>
+          </section>
+          <main
+            style={{
+              whiteSpace: "pre-line",
+              wordBreak: "break-all",
+              fontFamily: "Manrope",
+              lineHeight: "200%",
+              paddingRight: "50px",
+            }}
+          >
+            <b>Hello {receiverName},</b>
+            <p>
+              Thank you for your interest in becoming a tutor on Noteswap. We
+              have received a request from a student who is looking to be
+              tutored on {subject} by you.
+            </p>{" "}
+            <p>
+              Student’s Name: {name}
+              Student’s Email: {senderEmail}
+              Preferred Tutoring Schedule: {date} from {time}
+            </p>
+            <p>
+              {" "}
+              Additionally, a personalized message from {name} has been sent to
+              you: {message}
+            </p>
+            <p>
+              {" "}
+              If you are interested in tutoring this student, please click the
+              link below to be redirected to Noteswap and accept the request:
+            </p>
+            <a
+              href={`${process.env.NEXT_PUBLIC_URL}confirm/${Object.keys(
+                queryParams
+              )
+                .map(
+                  (key) =>
+                    `${encodeURIComponent(key)}=${encodeURIComponent(
+                      queryParams[key]
+                    )}`
+                )
+                .join("&")}`}
+            >
+              <button
+                style={{
+                  backgroundColor: "#40b385",
+                  color: "white",
+                  border: "none",
+                  padding: "12px 32px",
+                  borderRadius: "2px",
+                  cursor: "pointer",
+                }}
+              >
+                Accept{" "}
+              </button>
+            </a>
+            <p>
+              {" "}
+              In case you need to further contact {name} please reach out to the
+              email address provided above. We thank you again for considering
+              the opportunity to make a positive impact on a student’s academic
+              journey.
+            </p>
+            <p>Best regards,</p>
+            <p>The Noteswap team</p>
+          </main>
+          <footer
+            style={{
+              width: "100%",
+              height: "8vh",
+              backgroundColor: "#40b385",
+              textAlign: "center",
+              color: "white",
+              border: "none",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontFamily: "Manrope",
+              marginTop: "20px",
+            }}
+          >
+            © {new Date().getFullYear()} All Rights Reserved
+          </footer>
+        </section>
       ), // html body
     };
 

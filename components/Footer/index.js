@@ -19,7 +19,7 @@ import { useState } from "react";
  * @author Sami Laayouni
  * @license MIT
  */
-export default function Footer() {
+export default function Footer({type}) {
   const { t } = useTranslation("common");
   const [loggedIn, setLogggedIn] = useState(false);
   useEffect(() => {
@@ -48,7 +48,7 @@ export default function Footer() {
         </h2>
         <Link
           title="Signup to Noteswap"
-          href={`${!loggedIn ? "/signup" : "/dashboard"}`}
+          href={`${!loggedIn ? type == "b" ? "/business/signup" : "/signup" : "/dashboard"}`}
         >
           <button>
             {!loggedIn

@@ -27,19 +27,20 @@
   cursor: pointer;
   background-color: var(--accent-color);
   color: white;
-  position: absolute;
-  top: 25%;
-  right: 30px;
+  display: inline-block;
+  margin-left: 20px;
+  
 }
 .input {
-  position: absolute;
-  top: 25%;
-  right: 405px;
+ 
   border: 1px solid black;
   outline: none;
-  width: 195px;
+  width: 225px;
   padding-left: 10px;
   height: 39px;
+  display: inline-block;
+  margin-left: 5px;
+  margin-top: 15px;
 }
 .refresh {
   padding-left: 20px;

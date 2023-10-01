@@ -124,7 +124,7 @@ export default function Header() {
       <header className={style.header_main_container}>
         {/* Noteswap logo (redirects to /dashboard) */}
         <div className={style.header_logo}>
-          <Link href={loggedIn ? "/dashboard" : "/"}>
+          <Link href={loggedIn ? "/dashboard" : router.pathname.includes("business") ? "/business" : "/"}>
             <Image
               src="/assets/icons/Logo_light.svg"
               alt="Noteswap Logo light"
@@ -133,6 +133,9 @@ export default function Header() {
               priority
             ></Image>
           </Link>
+          {router.pathname.includes("business") && (
+            <h1 className={style.business}>Business</h1>
+          )}
         </div>
 
         {/* Header nav bar (for tablets and desktops)*/}
@@ -229,19 +232,21 @@ export default function Header() {
           ) : (
             <>
               {/* User is not logged in */}
-              <Link
-                title="Visit notes"
-                className={style.header_nav_a}
-                href="/notes"
-              >
-                Notes
-              </Link>
+              {!router.pathname.includes("business") && (
+                <Link
+                  title="Visit notes"
+                  className={style.header_nav_a}
+                  href="/notes"
+                >
+                  Notes
+                </Link>
+              )}
               <Link className={style.header_nav_a} href="/login">
                 {t("login") == "login" ? "Login" : t("login")}
               </Link>
               <div style={{ display: "inline-block" }}>
-                <Link className={style.header_nav_button} href="/signup">
-                  {t("signup") == "signup" ? "Signup" : t("signup")}
+                <Link className={style.header_nav_button} href={router.pathname.includes("business") ? "/business/signup" : "/signup"}>
+                  {router.pathname.includes("business") ? "Get started" : t("signup") == "signup" ? "Signup" : t("signup")}
                 </Link>
               </div>
             </>
@@ -314,19 +319,22 @@ export default function Header() {
           {/* User is not logged in*/}
           {!loggedIn ? (
             <>
-              <Link href="/notes">
-                <li
-                  onClick={() => {
-                    document.getElementById("hamburger_menu").style.display =
-                      "none";
-                    document.getElementById("hamburger_overlay").style.display =
-                      "none";
-                  }}
-                >
-                  Notes
-                  <div className={style.borderLine} />
-                </li>
-              </Link>
+              {router.pathname.includes("business") && (
+                <Link href="/notes">
+                  <li
+                    onClick={() => {
+                      document.getElementById("hamburger_menu").style.display =
+                        "none";
+                      document.getElementById(
+                        "hamburger_overlay"
+                      ).style.display = "none";
+                    }}
+                  >
+                    Notes
+                    <div className={style.borderLine} />
+                  </li>
+                </Link>
+              )}
               <Link href="/login">
                 <li
                   onClick={() => {
@@ -340,7 +348,7 @@ export default function Header() {
                   <div className={style.borderLine} />
                 </li>
               </Link>
-              <Link href="/signup">
+              <Link href={router.pathname.includes("business") ? "/business/signup" : "/signup"}>
                 <li
                   onClick={() => {
                     document.getElementById("hamburger_menu").style.display =
@@ -349,7 +357,7 @@ export default function Header() {
                       "none";
                   }}
                 >
-                  {t("signup")}
+                  {router.pathname.includes("business") ? "Create your business account" : t("signup")}
                   <div className={style.borderLine} />
                 </li>
               </Link>

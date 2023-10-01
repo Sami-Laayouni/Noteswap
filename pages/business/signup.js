@@ -2,17 +2,15 @@ import { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import AuthService from "../services/AuthService";
-import style from "../styles/Auth.module.css";
+import AuthService from "../../services/AuthService";
+import style from "../../styles/Auth.module.css";
 import Head from "next/head";
 import { useContext } from "react";
-import AuthContext from "../context/AuthContext";
+import AuthContext from "../../context/AuthContext";
 import Image from "next/image";
-import Footer from "../components/Footer";
+import Footer from "../../components/Footer";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import dynamic from "next/dynamic";
-const Warning = dynamic(() => import("../components/Warning"));
 
 export async function getStaticProps({ locale }) {
   return {
@@ -36,7 +34,8 @@ const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const [state, setState] = useState(0);
-  const [first, setFirst] = useState("");
+  const [name, setName] = useState("");
+  const [first, setFirst] = useState("")
   const [last, setLast] = useState("");
   const [method, setMethod] = useState("email");
   const [selectedRole, setSelectedRole] = useState();
@@ -133,15 +132,13 @@ const Signup = () => {
         <Head>
           <title>Signup | Noteswap</title> {/* Title of the page */}
         </Head>
-        <Warning />
         <div className={style.container}>
           <section className={style.left}>
-            <h1>{t("sign_up_to_noteswap")}</h1>
+            <h1>Enhance Your Business with NoteSwap</h1>
 
-            <p>{t("slogan")}</p>
 
             <p style={{ paddingRight: "20px" }}>
-              By signing up to Noteswap, you agree to our{" "}
+              By creating a business account on Noteswap, you agree to our{" "}
               <Link href="/boring/terms-of-service">
                 <span style={{ textDecoration: "underline" }}>
                   Terms of Service
@@ -160,11 +157,7 @@ const Signup = () => {
               className={style.form}
               onSubmit={(e) => {
                 e.preventDefault();
-                if (
-                  email.endsWith("@asifrane.org") ||
-                  email.endsWith("@asi.aui.ma") ||
-                  email.endsWith("@aui.ma")
-                ) {
+               
                   if (state == 0) {
                     setState(1);
                     setError("");
@@ -175,29 +168,20 @@ const Signup = () => {
                     setError("");
                     handleSignup(method);
                   }
-                } else {
-                  setError(
-                    "Email must end with @asifrane.org, @asi.aui.ma or @aui.ma"
-                  );
-                }
+                
               }}
             >
               {!selectedRole && (
                 <>
-                  <p className={style.labelCenter}>{t("i_am_joining_as")}</p>
-                  <ul className={style.roles}>
-                    <li id="student" onClick={() => setSelectedRole("student")}>
-                      {t("student")}
+                  <p className={style.labelCenter}>{t("i_am_joining_as")}(n)</p>
+                  <ul className={style.roles} style={{gridTemplateColumns:"50% 50%"}}>
+                    <li id="association"  onClick={() => setSelectedRole("association")}>
+                      Association
                     </li>
-                    <li id="teacher" onClick={() => setSelectedRole("teacher")}>
-                      {t("teacher")}
+                    <li id="school"  onClick={() =>setError("School creation currently not supported")}>
+                      School
                     </li>
-                    <li
-                      id="volunteer"
-                      onClick={() => setSelectedRole("volunteer")}
-                    >
-                      Volunteer
-                    </li>
+                   
                   </ul>
                   <p className={style.error}>{error}</p>
                 </>
@@ -215,23 +199,20 @@ const Signup = () => {
                     <input
                       id="emailSignup"
                       type="email"
-                      placeholder="Enter your school email"
+                      placeholder="Enter your business email"
                       value={email}
                       aria-required="true"
                       aria-invalid="true"
                       className={style.input}
                       onChange={(e) => {
                         if (
-                          !e.target.value.endsWith("@asifrane.org") &&
-                          !e.target.value.endsWith("@asi.aui.ma") &&
-                          !e.target.value.endsWith("@aui.ma") &&
-                          e.target.value.length > 15 &&
-                          e.target.value.includes("@") &&
-                          e.target.value.includes(".")
+                          e.target.value.length > 10 &&
+                          !e.target.value.includes("@") ||
+                          !e.target.value.includes(".")
                         ) {
                           setEmail(e.target.value);
                           setError(
-                            "Email must end with @asifrane.org, @asi.aui.ma or @aui.ma"
+                            "Email must be valid"
                           );
                         } else {
                           setEmail(e.target.value);
@@ -304,11 +285,29 @@ const Signup = () => {
                   </>
                 ) : (
                   <>
-                    <label className={style.labelForInput} htmlFor="nameSignup">
-                      {t("first_name")}
+                    <label className={style.labelForInput} htmlFor="associationName">
+                      Association Name
                     </label>
                     <input
                       id="nameSignup"
+                      type="text"
+                      placeholder="Enter your association name"
+                      value={name}
+                      aria-required="true"
+                      aria-invalid="true"
+                      className={style.input}
+                      onChange={(e) => setName(e.target.value)}
+                      required
+                      autoFocus
+                    />
+                    <label
+                      className={style.labelForInput}
+                      htmlFor="name2Signup"
+                    >
+                      {t("first_name")}
+                    </label>
+                    <input
+                      id="name2Signup"
                       type="text"
                       placeholder="Enter your first name"
                       value={first}
@@ -319,6 +318,8 @@ const Signup = () => {
                       required
                       autoFocus
                     />
+                    <p className={style.error}>{error}</p>
+                    
                     <label
                       className={style.labelForInput}
                       htmlFor="namelSignup"
@@ -353,16 +354,7 @@ const Signup = () => {
                   {t("already_have_account")}
                 </Link>
               </div>
-              {!selectedRole && (
-                <div className={style.accountContainer} style={{marginTop:"40vh", marginLeft:"1vw"}}>
-                <Link
-                  style={{ cursor: "pointer", color:"var(--accent-color)", textDecoration:"underline" }}
-                  href="/business"
-                >
-                  I am joining as a school or association 
-                </Link>
-                </div>
-              )}
+             
               {selectedRole && (
                 <p
                   style={{ cursor: "pointer" }}
@@ -385,7 +377,7 @@ const Signup = () => {
         </div>
       </div>
       <div className={style.footer}>
-        <Footer />
+        <Footer type="b" />
       </div>
     </>
   );
