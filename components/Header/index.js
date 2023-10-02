@@ -124,7 +124,15 @@ export default function Header() {
       <header className={style.header_main_container}>
         {/* Noteswap logo (redirects to /dashboard) */}
         <div className={style.header_logo}>
-          <Link href={loggedIn ? "/dashboard" : router.pathname.includes("business") ? "/business" : "/"}>
+          <Link
+            href={
+              loggedIn
+                ? "/dashboard"
+                : router.pathname.includes("business")
+                ? "/business"
+                : "/"
+            }
+          >
             <Image
               src="/assets/icons/Logo_light.svg"
               alt="Noteswap Logo light"
@@ -245,8 +253,19 @@ export default function Header() {
                 {t("login") == "login" ? "Login" : t("login")}
               </Link>
               <div style={{ display: "inline-block" }}>
-                <Link className={style.header_nav_button} href={router.pathname.includes("business") ? "/business/signup" : "/signup"}>
-                  {router.pathname.includes("business") ? "Get started" : t("signup") == "signup" ? "Signup" : t("signup")}
+                <Link
+                  className={style.header_nav_button}
+                  href={
+                    router.pathname.includes("business")
+                      ? "/business/signup"
+                      : "/signup"
+                  }
+                >
+                  {router.pathname.includes("business")
+                    ? "Get started"
+                    : t("signup") == "signup"
+                    ? "Signup"
+                    : t("signup")}
                 </Link>
               </div>
             </>
@@ -348,7 +367,13 @@ export default function Header() {
                   <div className={style.borderLine} />
                 </li>
               </Link>
-              <Link href={router.pathname.includes("business") ? "/business/signup" : "/signup"}>
+              <Link
+                href={
+                  router.pathname.includes("business")
+                    ? "/business/signup"
+                    : "/signup"
+                }
+              >
                 <li
                   onClick={() => {
                     document.getElementById("hamburger_menu").style.display =
@@ -357,7 +382,9 @@ export default function Header() {
                       "none";
                   }}
                 >
-                  {router.pathname.includes("business") ? "Create your business account" : t("signup")}
+                  {router.pathname.includes("business")
+                    ? "Create your business account"
+                    : t("signup")}
                   <div className={style.borderLine} />
                 </li>
               </Link>

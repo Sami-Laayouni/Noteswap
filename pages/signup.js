@@ -354,19 +354,25 @@ const Signup = () => {
                 </Link>
               </div>
               {!selectedRole && (
-                <div className={style.accountContainer} style={{marginTop:"40vh", marginLeft:"1vw"}}>
-                <Link
-                  style={{ cursor: "pointer", color:"var(--accent-color)", textDecoration:"underline" }}
-                  href="/business"
+                <div
+                  className={style.accountContainer}
+                  style={{ marginTop: "40vh", marginLeft: "1vw" }}
                 >
-                  I am joining as a school or association 
-                </Link>
+                  <Link
+                    style={{
+                      cursor: "pointer",
+                      color: "var(--accent-color)",
+                      textDecoration: "underline",
+                    }}
+                    href="/business"
+                  >
+                    I am joining as a school or association
+                  </Link>
                 </div>
               )}
               {selectedRole && (
                 <p
                   style={{ cursor: "pointer" }}
-                  
                   onClick={() => {
                     if (state != 0) {
                       setState(0);

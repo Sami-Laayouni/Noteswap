@@ -35,7 +35,7 @@ const Signup = () => {
 
   const [state, setState] = useState(0);
   const [name, setName] = useState("");
-  const [first, setFirst] = useState("")
+  const [first, setFirst] = useState("");
   const [last, setLast] = useState("");
   const [method, setMethod] = useState("email");
   const [selectedRole, setSelectedRole] = useState();
@@ -136,7 +136,6 @@ const Signup = () => {
           <section className={style.left}>
             <h1>Enhance Your Business with NoteSwap</h1>
 
-
             <p style={{ paddingRight: "20px" }}>
               By creating a business account on Noteswap, you agree to our{" "}
               <Link href="/boring/terms-of-service">
@@ -157,31 +156,40 @@ const Signup = () => {
               className={style.form}
               onSubmit={(e) => {
                 e.preventDefault();
-               
-                  if (state == 0) {
-                    setState(1);
-                    setError("");
-                  } else {
-                    document.getElementById("createAccount").innerText =
-                      "Creating...";
-                    document.getElementById("createAccount").disabled = true;
-                    setError("");
-                    handleSignup(method);
-                  }
-                
+
+                if (state == 0) {
+                  setState(1);
+                  setError("");
+                } else {
+                  document.getElementById("createAccount").innerText =
+                    "Creating...";
+                  document.getElementById("createAccount").disabled = true;
+                  setError("");
+                  handleSignup(method);
+                }
               }}
             >
               {!selectedRole && (
                 <>
                   <p className={style.labelCenter}>{t("i_am_joining_as")}(n)</p>
-                  <ul className={style.roles} style={{gridTemplateColumns:"50% 50%"}}>
-                    <li id="association"  onClick={() => setSelectedRole("association")}>
+                  <ul
+                    className={style.roles}
+                    style={{ gridTemplateColumns: "50% 50%" }}
+                  >
+                    <li
+                      id="association"
+                      onClick={() => setSelectedRole("association")}
+                    >
                       Association
                     </li>
-                    <li id="school"  onClick={() =>setError("School creation currently not supported")}>
+                    <li
+                      id="school"
+                      onClick={() =>
+                        setError("School creation currently not supported")
+                      }
+                    >
                       School
                     </li>
-                   
                   </ul>
                   <p className={style.error}>{error}</p>
                 </>
@@ -206,14 +214,12 @@ const Signup = () => {
                       className={style.input}
                       onChange={(e) => {
                         if (
-                          e.target.value.length > 10 &&
-                          !e.target.value.includes("@") ||
+                          (e.target.value.length > 10 &&
+                            !e.target.value.includes("@")) ||
                           !e.target.value.includes(".")
                         ) {
                           setEmail(e.target.value);
-                          setError(
-                            "Email must be valid"
-                          );
+                          setError("Email must be valid");
                         } else {
                           setEmail(e.target.value);
                           setError("");
@@ -285,7 +291,10 @@ const Signup = () => {
                   </>
                 ) : (
                   <>
-                    <label className={style.labelForInput} htmlFor="associationName">
+                    <label
+                      className={style.labelForInput}
+                      htmlFor="associationName"
+                    >
                       Association Name
                     </label>
                     <input
@@ -319,7 +328,7 @@ const Signup = () => {
                       autoFocus
                     />
                     <p className={style.error}>{error}</p>
-                    
+
                     <label
                       className={style.labelForInput}
                       htmlFor="namelSignup"
@@ -354,11 +363,10 @@ const Signup = () => {
                   {t("already_have_account")}
                 </Link>
               </div>
-             
+
               {selectedRole && (
                 <p
                   style={{ cursor: "pointer" }}
-                  
                   onClick={() => {
                     if (state != 0) {
                       setState(0);

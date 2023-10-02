@@ -150,7 +150,7 @@ export default function Business() {
             <h3>More</h3>
             <p>
               Noteswap is continuously evolving providing new and creative
-              methods to enhance student's learning.
+              methods to enhance student&apos;s learning.
             </p>
           </li>
         </ul>

@@ -136,9 +136,9 @@ export default function SignUps() {
     });
     if (response.ok) {
       document.getElementById(`notify_them_${email}`).innerText = "Success";
-    }else{
-      document.getElementById(`notify_them_${email}`).innerText = "An error has ocurred";
-
+    } else {
+      document.getElementById(`notify_them_${email}`).innerText =
+        "An error has ocurred";
     }
   }
 
