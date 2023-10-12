@@ -13,10 +13,12 @@ import {
 import { FiSettings, FiLogOut, FiAward } from "react-icons/fi";
 import { LuGlasses } from "react-icons/lu";
 import { CgProfile } from "react-icons/cg";
+import {IoMdTime} from "react-icons/io"
 
 import AuthService from "../../services/AuthService";
 import ModalContext from "../../context/ModalContext";
 import { useTranslation } from "next-i18next";
+import { getDailyStreak, updateDailyStreak } from "../../utils/streak";
 
 /**
  * Header component
@@ -37,6 +39,21 @@ export default function Header() {
   const router = useRouter();
   const AuthServices = new AuthService(setLoggedIn);
   const { t } = useTranslation("common");
+
+  const [streak, setStreak] = useState(0);
+
+  useEffect(() => {
+    const accessedToday = updateDailyStreak();
+
+    if (accessedToday) {
+      // User accessed the app consecutively
+      const streakCount = getDailyStreak() ? streak + 1 : 1;
+      setStreak(streakCount);
+    } else {
+      // User missed a day, reset streak
+      setStreak(1);
+    }
+  }, []);
 
   /*
      This function checks if the current user is logged in
@@ -240,15 +257,7 @@ export default function Header() {
           ) : (
             <>
               {/* User is not logged in */}
-              {!router.pathname.includes("business") && (
-                <Link
-                  title="Visit notes"
-                  className={style.header_nav_a}
-                  href="/notes"
-                >
-                  Notes
-                </Link>
-              )}
+              
               <Link className={style.header_nav_a} href="/login">
                 {t("login") == "login" ? "Login" : t("login")}
               </Link>
@@ -338,22 +347,7 @@ export default function Header() {
           {/* User is not logged in*/}
           {!loggedIn ? (
             <>
-              {router.pathname.includes("business") && (
-                <Link href="/notes">
-                  <li
-                    onClick={() => {
-                      document.getElementById("hamburger_menu").style.display =
-                        "none";
-                      document.getElementById(
-                        "hamburger_overlay"
-                      ).style.display = "none";
-                    }}
-                  >
-                    Notes
-                    <div className={style.borderLine} />
-                  </li>
-                </Link>
-              )}
+              
               <Link href="/login">
                 <li
                   onClick={() => {
@@ -505,15 +499,14 @@ export default function Header() {
           )}
         </ul>
       </section>
-      {/* Dropdown menu (School code + email/metamask address) */}
+      {/* Dropdown menu (email) */}
       <section id="dropdown" className={style.dropdown}>
         <ul>
           <p className={style.lightext}>
-            {userData?.email ? userData?.email : userData?.metamask_address}
+            {userData?.email ? userData?.email : "Could not be found"}
           </p>
-          <p>
-            {userData?.schoolCode ? `School code: ${userData?.schoolCode}` : ""}
-          </p>
+          <p className={style.lightext}>Your Daily Streak: <span style={{color:"var(--accent-color)"}}>{streak} day{streak == 1 ? "" : "s"} </span></p>
+          
           <div className={style.line}></div>
           <li>
             <Link href={`/profile/${userData?._id}`}>
@@ -531,6 +524,14 @@ export default function Header() {
             <li onClick={() => setCertificate(true)}>
               <FiAward size={21} style={{ verticalAlign: "middle" }} />
               <span>Certificates </span>
+            </li>
+          )}
+           {userData?.role != "teacher" && (
+            <li>
+            <Link href="/productivity">
+              <IoMdTime size={21} style={{ verticalAlign: "middle" }} />
+              <span>My Productivity</span>
+            </Link>
             </li>
           )}
           {userData?.role == "admin" ||

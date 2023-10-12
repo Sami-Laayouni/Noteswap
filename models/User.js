@@ -60,9 +60,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  metamask_address: {
-    type: String,
-    reuired: false,
+  admin: {
+    type: Boolean,
+    required: false,
   },
   schoolCode: {
     type: String,

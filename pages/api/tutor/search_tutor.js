@@ -74,7 +74,7 @@ export default async function handler(req, res) {
     },
   });
 
-  query.push({ $limit: 15 });
+  query.push({ $limit: 30 });
 
   try {
     const result = await Tutor.aggregate(query);

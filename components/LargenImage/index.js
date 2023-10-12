@@ -1,6 +1,6 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import ModalContext from "../../context/ModalContext";
-import { FaPlus, FaMinus } from "react-icons/fa";
+import { FaPlus, FaMinus, FaSync } from "react-icons/fa";
 import style from "./largenImage.module.css";
 
 /**
@@ -16,7 +16,17 @@ export default function LargenImage() {
   const [url] = imageUrl;
 
   const [zoomLevel, setZoomLevel] = useState(100);
-  const [imagePosition, setImagePosition] = useState({ x: 0, y: 0 });
+  const [rotationAngle, setRotationAngle] = useState(0);
+
+  useEffect(() => {
+    setZoomLevel(100);
+    setRotationAngle(0);
+  }, [url]);
+
+  const handleRotate = () => {
+    const newRotationAngle = (rotationAngle + 90) % 360;
+    setRotationAngle(newRotationAngle);
+  };
 
   const handleZoom = (delta) => {
     const newZoomLevel = zoomLevel + delta;
@@ -25,12 +35,6 @@ export default function LargenImage() {
     }
   };
 
-  const handleImageDrag = (event) => {
-    setImagePosition({
-      x: event.nativeEvent.offsetX,
-      y: event.nativeEvent.offsetY,
-    });
-  };
 
   return (
     <section
@@ -53,7 +57,10 @@ export default function LargenImage() {
           event.target.id != "plus" &&
           event.target.id != "minus" &&
           event.target.id != "plus1" &&
-          event.target.id != "minus1"
+          event.target.id != "minus1" &&
+          event.target.id != "rotate" && 
+          event.target.id != "rotate1" 
+
         ) {
           setOpen(false);
           setZoomLevel(100);
@@ -67,8 +74,8 @@ export default function LargenImage() {
           maxWidth: "800px",
           borderRadius: "8px",
           cursor: "grab",
-          transform: `scale(${zoomLevel / 100})`,
-          transformOrigin: `${imagePosition.x}px ${imagePosition.y}px`,
+          transform: `scale(${zoomLevel / 100}) rotate(${rotationAngle}deg)`,
+          transformOrigin: `center center`,
         }}
         src={url}
         id="image"
@@ -79,14 +86,7 @@ export default function LargenImage() {
           e.preventDefault();
           handleZoom(e.deltaY > 0 ? -10 : 10);
         }}
-        onMouseMove={(e) => {
-          if (e.buttons === 1) {
-            handleImageDrag(e);
-          }
-        }}
-        onMouseUp={() => {
-          setImagePosition({ x: 0, y: 0 });
-        }}
+       
       ></img>
       <div
         style={{
@@ -114,6 +114,9 @@ export default function LargenImage() {
           onClick={() => handleZoom(-10)}
         >
           <FaMinus color="white" id="minus1" />
+        </button>
+        <button id="rotate" className={style.button} onClick={handleRotate}>
+          <FaSync color="white" id="rotate1" />
         </button>
       </div>
     </section>

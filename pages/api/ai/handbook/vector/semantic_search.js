@@ -38,7 +38,7 @@ export default async function handler(req, res) {
 
     res.status(200).send(pineconeResponse);
   } catch (error) {
-    console.log(error);
+    console.log(error.request);
     res.status(500).send(error);
   }
 }

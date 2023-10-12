@@ -44,7 +44,8 @@
     "react-onesignal": "^3.0.1",
     "react-quill": "^2.0.0",
     "sharp": "^0.32.4",
-    "socket.io-client": "^4.7.1"
+    "socket.io-client": "^4.7.1",
+    "react-toastify":  "9.1.3"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.5",

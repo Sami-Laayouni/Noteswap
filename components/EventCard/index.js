@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
+
 /**
  * Format date
  * @date 8/13/2023 - 5:10:50 PM
@@ -124,6 +125,7 @@ export default function EventCard({ data }) {
                   }),
                 });
                 if (response.ok) {
+                  toast.success("Successfully un signed up for event")
                   document.getElementById(`${data._id}button`).innerText =
                     "Sign Up";
                 }
@@ -138,6 +140,8 @@ export default function EventCard({ data }) {
                     userId: JSON.parse(localStorage.getItem("userInfo"))._id,
                   }),
                 });
+                toast.success("Successfully signed up for event")
+
                 document.getElementById(`${data._id}button`).innerText =
                   "Unsignup";
                 if (response.ok) {

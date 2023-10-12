@@ -23,7 +23,7 @@ export default function AdminSidebar() {
           <li>Error Logs</li>
         </Link>
         <Link href="/settings/account">
-          <li>User Management</li>
+          <li>Analytics</li>
         </Link>
         <Link href="/add_vector">
           <li>Add vectors</li>

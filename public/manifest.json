@@ -5,7 +5,7 @@
     "background_color": "#40b385",
     "display": "standalone",
     "scope": "/",
-    "start_url": "/",
+    "start_url": "/dashboard",
     "description": "World’s leading online educational platform for earning community service hours using AI to validate. Discover a new way to earn your community service hours.",
     "icons": [
         {

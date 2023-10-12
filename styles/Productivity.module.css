@@ -1,0 +1,8 @@
+.title{
+    text-align: center;
+    font-family: var(--manrope-bold-font);
+    font-size: 2.2rem;
+}
+.title span{
+    color: var(--accent-color);
+}

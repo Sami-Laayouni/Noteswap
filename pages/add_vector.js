@@ -81,7 +81,7 @@ export default function AddVector() {
             outline: "none",
             marginTop: "20px",
           }}
-          placeholder="Category"
+          placeholder="Category (ex: handbook)"
           required
         ></input>
         <button id="button" className={style.button}>

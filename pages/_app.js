@@ -4,6 +4,8 @@
 import "../styles/globals.css";
 import "../styles/fonts.css";
 import "../styles/quill.css";
+import 'react-toastify/dist/ReactToastify.css'; 
+
 
 // Import Head
 import Head from "next/head";
@@ -12,6 +14,7 @@ import Script from "next/script";
 import DefaultLayout from "../layouts/DefaultLayout";
 // Import translations
 import { appWithTranslation } from "next-i18next";
+import { ToastContainer } from "react-toastify";
 
 /**
  * Custom App component for Next.js.
@@ -105,6 +108,7 @@ function NoteSwap({ Component, pageProps }) {
       {headers} {/* Headers */}
       <DefaultLayout>
         <Component {...pageProps} />
+        <ToastContainer/>
       </DefaultLayout>
     </>
   );

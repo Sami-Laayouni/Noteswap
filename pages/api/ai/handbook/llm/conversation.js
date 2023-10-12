@@ -20,6 +20,7 @@ export default async function handler(req, res) {
       model: "gpt-3.5-turbo",
       messages: messages,
     });
+    console.log(response.data)
     res.status(200).send(response.data.choices[0].message.content);
   } catch (error) {
     res.status(500).send(error);
