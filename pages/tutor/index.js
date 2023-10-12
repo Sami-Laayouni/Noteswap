@@ -10,7 +10,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import dynamic from "next/dynamic";
 const BecomeTutor = dynamic(() => import("../../components/BecomeTutor"));
 const BookASession = dynamic(() => import("../../components/BookASession"));
-import {toast} from "react-toastify"
+import { toast } from "react-toastify";
 /**
  * Get static props
  * @date 8/13/2023 - 5:02:47 PM
@@ -90,7 +90,6 @@ export default function Tutor() {
   const [endTime, setEndTime] = useState("16:30");
   const [pause, setPaused] = useState("");
   const [dataFromLocalStorage, setDataFromLocalStorage] = useState(null);
-
 
   const router = useRouter();
 
@@ -557,10 +556,10 @@ export default function Tutor() {
               }),
             });
             if (response.ok) {
-              toast.success("Successfully sent message!")
+              toast.success("Successfully sent message!");
               document.getElementById("dropout").innerText = "Success";
             } else {
-              toast.error("An error has occurred!")
+              toast.error("An error has occurred!");
               document.getElementById("dropout").innerText =
                 "An error has occured";
             }

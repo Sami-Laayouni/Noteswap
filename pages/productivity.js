@@ -2,7 +2,7 @@
 
 import Head from "next/head";
 import Link from "next/link";
-import style from "../styles/Productivity.module.css"
+import style from "../styles/Productivity.module.css";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 /**
@@ -26,14 +26,16 @@ export async function getStaticProps({ locale }) {
  * @date 7/3/2023 - 12:50:32 PM
  *
  * @export
- * @return {JSX.Element} 
+ * @return {JSX.Element}
  */
 export default function Productivity() {
   // Return the JSX
   return (
     <>
       <section>
-        <h1 className={style.title}><span>Your</span> Productivity</h1>
+        <h1 className={style.title}>
+          <span>Your</span> Productivity
+        </h1>
       </section>
     </>
   );

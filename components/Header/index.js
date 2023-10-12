@@ -13,7 +13,7 @@ import {
 import { FiSettings, FiLogOut, FiAward } from "react-icons/fi";
 import { LuGlasses } from "react-icons/lu";
 import { CgProfile } from "react-icons/cg";
-import {IoMdTime} from "react-icons/io"
+import { IoMdTime } from "react-icons/io";
 
 import AuthService from "../../services/AuthService";
 import ModalContext from "../../context/ModalContext";
@@ -257,7 +257,7 @@ export default function Header() {
           ) : (
             <>
               {/* User is not logged in */}
-              
+
               <Link className={style.header_nav_a} href="/login">
                 {t("login") == "login" ? "Login" : t("login")}
               </Link>
@@ -347,7 +347,6 @@ export default function Header() {
           {/* User is not logged in*/}
           {!loggedIn ? (
             <>
-              
               <Link href="/login">
                 <li
                   onClick={() => {
@@ -505,8 +504,13 @@ export default function Header() {
           <p className={style.lightext}>
             {userData?.email ? userData?.email : "Could not be found"}
           </p>
-          <p className={style.lightext}>Your Daily Streak: <span style={{color:"var(--accent-color)"}}>{streak} day{streak == 1 ? "" : "s"} </span></p>
-          
+          <p className={style.lightext}>
+            Your Daily Streak:{" "}
+            <span style={{ color: "var(--accent-color)" }}>
+              {streak} day{streak == 1 ? "" : "s"}{" "}
+            </span>
+          </p>
+
           <div className={style.line}></div>
           <li>
             <Link href={`/profile/${userData?._id}`}>
@@ -526,12 +530,12 @@ export default function Header() {
               <span>Certificates </span>
             </li>
           )}
-           {userData?.role != "teacher" && (
+          {userData?.role != "teacher" && (
             <li>
-            <Link href="/productivity">
-              <IoMdTime size={21} style={{ verticalAlign: "middle" }} />
-              <span>My Productivity</span>
-            </Link>
+              <Link href="/productivity">
+                <IoMdTime size={21} style={{ verticalAlign: "middle" }} />
+                <span>My Productivity</span>
+              </Link>
             </li>
           )}
           {userData?.role == "admin" ||

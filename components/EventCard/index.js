@@ -125,7 +125,7 @@ export default function EventCard({ data }) {
                   }),
                 });
                 if (response.ok) {
-                  toast.success("Successfully un signed up for event")
+                  toast.success("Successfully un signed up for event");
                   document.getElementById(`${data._id}button`).innerText =
                     "Sign Up";
                 }
@@ -140,7 +140,7 @@ export default function EventCard({ data }) {
                     userId: JSON.parse(localStorage.getItem("userInfo"))._id,
                   }),
                 });
-                toast.success("Successfully signed up for event")
+                toast.success("Successfully signed up for event");
 
                 document.getElementById(`${data._id}button`).innerText =
                   "Unsignup";

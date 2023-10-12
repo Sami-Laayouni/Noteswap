@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 const TimeTracker = () => {
   const [startTime, setStartTime] = useState(null);
@@ -11,10 +11,10 @@ const TimeTracker = () => {
       setEndTime(new Date());
     };
 
-    window.addEventListener('beforeunload', handleUnload);
+    window.addEventListener("beforeunload", handleUnload);
 
     return () => {
-      window.removeEventListener('beforeunload', handleUnload);
+      window.removeEventListener("beforeunload", handleUnload);
     };
   }, []); // Empty dependency array ensures useEffect runs only once, mimicking componentDidMount behavior
 

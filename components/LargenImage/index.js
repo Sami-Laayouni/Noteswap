@@ -35,7 +35,6 @@ export default function LargenImage() {
     }
   };
 
-
   return (
     <section
       style={{
@@ -58,9 +57,8 @@ export default function LargenImage() {
           event.target.id != "minus" &&
           event.target.id != "plus1" &&
           event.target.id != "minus1" &&
-          event.target.id != "rotate" && 
-          event.target.id != "rotate1" 
-
+          event.target.id != "rotate" &&
+          event.target.id != "rotate1"
         ) {
           setOpen(false);
           setZoomLevel(100);
@@ -86,7 +84,6 @@ export default function LargenImage() {
           e.preventDefault();
           handleZoom(e.deltaY > 0 ? -10 : 10);
         }}
-       
       ></img>
       <div
         style={{

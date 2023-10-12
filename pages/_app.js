@@ -4,8 +4,7 @@
 import "../styles/globals.css";
 import "../styles/fonts.css";
 import "../styles/quill.css";
-import 'react-toastify/dist/ReactToastify.css'; 
-
+import "react-toastify/dist/ReactToastify.css";
 
 // Import Head
 import Head from "next/head";
@@ -108,7 +107,7 @@ function NoteSwap({ Component, pageProps }) {
       {headers} {/* Headers */}
       <DefaultLayout>
         <Component {...pageProps} />
-        <ToastContainer/>
+        <ToastContainer />
       </DefaultLayout>
     </>
   );
