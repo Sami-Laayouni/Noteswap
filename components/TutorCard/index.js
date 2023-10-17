@@ -48,6 +48,7 @@ export default function TutorCard({ data }) {
           onClick={() => {
             router.push(`/profile/${data?.userInfo[0]?._id}`);
           }}
+          loading="lazy"
         />
       </div>
 

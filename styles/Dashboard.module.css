@@ -20,10 +20,15 @@
   font-family: var(--manrope-font);
   padding-left: 20px;
   line-height: 10px;
+  display: inline;
+  vertical-align: middle;
 }
 .list {
   height: 100%;
   background-color: whitesmoke;
+}
+.list::-webkit-scrollbar{
+  display: none;
 }
 .left {
   position: absolute;
@@ -53,6 +58,7 @@
   background-color: var(--accent-color);
   display: none;
 }
+
 @media all and (max-width: 767px) {
   .title {
     line-height: 140%;

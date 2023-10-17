@@ -16,13 +16,13 @@ export default function AdminSidebar() {
       <ul className={style.nav}>
         <h1>Admin</h1>
         <div className={style.verticalAlign}></div>
-        <Link href="/settings/account">
+        <Link href="https://noteswap.statuspage.io/">
           <li>Server status</li>
         </Link>
-        <Link href="/settings/account">
+        <Link href="https://vercel.com/sami-laayouni/noteswap/logs?timeline=past30Minutes&page=1&startDate=1697390839594&endDate=1697392639594">
           <li>Error Logs</li>
         </Link>
-        <Link href="/settings/account">
+        <Link href="https://analytics.google.com/analytics/web/?utm_source=marketingplatform.google.com&utm_medium=et&utm_campaign=marketingplatform.google.com%2Fabout%2Fanalytics%2F#/p403158042/reports/intelligenthome">
           <li>Analytics</li>
         </Link>
         <Link href="/add_vector">

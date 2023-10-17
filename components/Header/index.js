@@ -14,6 +14,8 @@ import { FiSettings, FiLogOut, FiAward } from "react-icons/fi";
 import { LuGlasses } from "react-icons/lu";
 import { CgProfile } from "react-icons/cg";
 import { IoMdTime } from "react-icons/io";
+import { RiCopperCoinLine } from "react-icons/ri";
+import { GrScan } from "react-icons/gr";
 
 import AuthService from "../../services/AuthService";
 import ModalContext from "../../context/ModalContext";
@@ -43,15 +45,10 @@ export default function Header() {
   const [streak, setStreak] = useState(0);
 
   useEffect(() => {
-    const accessedToday = updateDailyStreak();
-
-    if (accessedToday) {
-      // User accessed the app consecutively
-      const streakCount = getDailyStreak() ? streak + 1 : 1;
+    if (localStorage) {
+      updateDailyStreak();
+      const streakCount = getDailyStreak();
       setStreak(streakCount);
-    } else {
-      // User missed a day, reset streak
-      setStreak(1);
     }
   }, []);
 
@@ -384,6 +381,19 @@ export default function Header() {
             </>
           ) : (
             <>
+              <Link href={`/profile/${userData?._id}`}>
+                <li
+                  onClick={() => {
+                    document.getElementById("hamburger_menu").style.display =
+                      "none";
+                    document.getElementById("hamburger_overlay").style.display =
+                      "none";
+                  }}
+                >
+                  My Profile
+                  <div className={style.borderLine} />
+                </li>
+              </Link>
               {userData?.role != "volunteer" && (
                 <>
                   <Link href="/notes">
@@ -434,6 +444,22 @@ export default function Header() {
                   <div className={style.borderLine} />
                 </li>
               </Link>
+              {userData?.role == "teacher" && (
+                <Link href="/rewardcs">
+                  <li
+                    onClick={() => {
+                      document.getElementById("hamburger_menu").style.display =
+                        "none";
+                      document.getElementById(
+                        "hamburger_overlay"
+                      ).style.display = "none";
+                    }}
+                  >
+                    Reward Community Service
+                    <div className={style.borderLine} />
+                  </li>
+                </Link>
+              )}
               <Link href="/settings/account">
                 <li
                   onClick={() => {
@@ -463,6 +489,7 @@ export default function Header() {
                     <div className={style.borderLine} />
                   </li>
                 ))}
+
               {userData?.role == "teacher" && (
                 <Link href="/detect_ai">
                   <li
@@ -518,6 +545,44 @@ export default function Header() {
               <span>My Profile</span>
             </Link>
           </li>
+          {userData?.role == "teacher" && (
+            <li>
+              <Link href="/rewardcs">
+                <RiCopperCoinLine
+                  size={21}
+                  style={{ verticalAlign: "middle" }}
+                />
+                <span>Reward CS</span>
+              </Link>
+            </li>
+          )}
+          {userData?.role != "teacher" && (
+            <li>
+              <Link href="/productivity">
+                <IoMdTime size={21} style={{ verticalAlign: "middle" }} />
+                <span>My Productivity</span>
+              </Link>
+            </li>
+          )}
+          {userData?.admin == true && (
+            <li>
+              <Link href="/admin">
+                <MdOutlineAdminPanelSettings
+                  size={21}
+                  style={{ verticalAlign: "middle" }}
+                />
+                <span>Admin Page</span>
+              </Link>
+            </li>
+          )}
+          {userData?.role == "teacher" && (
+            <li>
+              <Link href="/verify">
+                <GrScan size={21} style={{ verticalAlign: "middle" }} />
+                <span>Verify Certificate</span>
+              </Link>
+            </li>
+          )}
           <li>
             <Link href="/settings/account">
               <FiSettings size={21} style={{ verticalAlign: "middle" }} />
@@ -530,26 +595,6 @@ export default function Header() {
               <span>Certificates </span>
             </li>
           )}
-          {userData?.role != "teacher" && (
-            <li>
-              <Link href="/productivity">
-                <IoMdTime size={21} style={{ verticalAlign: "middle" }} />
-                <span>My Productivity</span>
-              </Link>
-            </li>
-          )}
-          {userData?.role == "admin" ||
-            (userData?.role == "supervisor" && (
-              <li>
-                <Link href="/admin">
-                  <MdOutlineAdminPanelSettings
-                    size={21}
-                    style={{ verticalAlign: "middle" }}
-                  />
-                  <span>Admin Page</span>
-                </Link>
-              </li>
-            ))}
           {userData?.role == "teacher" && (
             <li>
               <Link href="/detect_ai">

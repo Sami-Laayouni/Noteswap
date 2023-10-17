@@ -84,6 +84,7 @@ export default function EventCard({ data }) {
             width={200}
             height={200}
             style={{ borderRadius: "50%", objectFit: "cover" }}
+            loading="lazy"
           ></Image>
         </Link>
       </div>

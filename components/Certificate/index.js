@@ -162,12 +162,17 @@ export default function CertificateDownload({ main, userData, url }) {
                     Math.round(userData?.tutor_hours / 60)}
                 </span>{" "}
                 minute{Math.round(userData?.points / 20) == 1 ? "" : "s"} of
-                community service on Noteswap including{" "}
+                community service on Noteswap
+                {Math.round(userData?.tutor_hours / 60) != "0" ? (
+                  `{" "}including{" "}
                 <span id="tutor_hours" style={{ color: "var(--accent-color)" }}>
                   {Math.round(userData?.tutor_hours / 60)}
                 </span>{" "}
                 minute{Math.round(userData?.tutor_hours / 60) == 1 ? "" : "s"}{" "}
-                tutoring other students.
+                tutoring other students.`
+                ) : (
+                  <>.</>
+                )}
               </p>
               <img
                 src="/assets/images/certificate/Noteswap.png"
@@ -181,8 +186,9 @@ export default function CertificateDownload({ main, userData, url }) {
             <h1>Certificate Details</h1>
             <i>
               {" "}
-              Notice: certificates can be checked by educational institutes.
-              Forged or modified ones will be detected.
+              Notice: Certificates offered by Noteswap only cover note typing
+              and tutoring. For community service earned through volunteering
+              for events, please click on other certificates below.
             </i>
             <h2>
               <b>Offered by:</b> <span>NoteSwap</span>
@@ -199,10 +205,15 @@ export default function CertificateDownload({ main, userData, url }) {
               </span>{" "}
               minute
               {Math.round(userData?.points / 20) == 1 ? "" : "s"} of community
-              service on Noteswap including{" "}
+              service on Noteswap
+              {Math.round(userData?.tutor_hours / 60) != "0" ? (
+                `{" "}including{" "}
               <span>{Math.round(userData?.tutor_hours / 60)}</span> minute
               {Math.round(userData?.tutor_hours / 60) == 1 ? "" : "s"} tutoring
-              other students.
+              other students.`
+              ) : (
+                <>.</>
+              )}
             </h2>
             <button
               onClick={() => {

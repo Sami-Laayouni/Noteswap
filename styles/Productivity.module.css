@@ -6,3 +6,25 @@
 .title span{
     color: var(--accent-color);
 }
+.subTitle{
+    text-align: center;
+    font-family: var(--manrope-font);
+    font-size: 1.9rem;
+}
+.subsubTitle{
+    text-align: center;
+    font-family: var(--manrope-font);
+    font-size: 1.3rem;
+}
+.subsubTitle span{
+    color: var(--accent-color);
+}
+.button{
+    padding: var(--button-default-padding);
+    color: white;
+    background-color: var(--accent-color);
+    border-radius: 2px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}

@@ -122,12 +122,14 @@ export default async function handler(req, res) {
     }
     const includedNoteIds = new Set();
 
-    const first_results = notes.filter(
-      (note) =>
-        JSON.stringify(note.publisherId) ===
-          JSON.stringify(favorites[0]?.author) &&
-        note.category === favorites[0]?.category
-    );
+    const first_results = notes
+      .filter(
+        (note) =>
+          JSON.stringify(note.publisherId) ===
+            JSON.stringify(favorites[0]?.author) &&
+          note.category === favorites[0]?.category
+      )
+      .slice(0, 5);
     first_results.forEach((note) => includedNoteIds.add(note._id)); // Add IDs to the set
 
     const second_results = notes
@@ -159,7 +161,7 @@ export default async function handler(req, res) {
           JSON.stringify(note.publisherId) === JSON.stringify(knownAuthor) &&
           !includedNoteIds.has(note._id) // Filter out already included notes
       )
-      .slice(0, 15);
+      .slice(0, 10);
     if (first_results || second_results || third_results || fourth_results) {
       res
         .status(200)

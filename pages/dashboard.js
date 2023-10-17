@@ -109,7 +109,7 @@ const Dashboard = () => {
             : "Good evening"}
           , <span>{userData?.first_name}</span>
         </h1>
-        <h2 className={style.subTitle}>Upcoming school events</h2>
+        <h2 className={style.subTitle}>Upcoming school events </h2>
         {loading && <LoadingCircle />}
         {calendar?.length == 0 && <h3>No upcoming events</h3>}
         <div
@@ -134,7 +134,11 @@ const Dashboard = () => {
               listStyle: "none",
               width: "100%",
               maxWidth: "100%",
-              overflowX: "hidden",
+              overflowX: "auto",
+              WebkitOverflowScrolling: "touch",
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+              overflow: "-moz-scrollbars-none",
               whiteSpace: "nowrap",
               paddingBottom: "20px",
               paddingTop: "20px",

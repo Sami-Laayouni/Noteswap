@@ -138,7 +138,7 @@ const Signup = () => {
           <section className={style.left}>
             <h1>{t("sign_up_to_noteswap")}</h1>
 
-            <p>{t("slogan")}</p>
+            <p>Where opportunities are born!</p>
 
             <p style={{ paddingRight: "20px" }}>
               By signing up to Noteswap, you agree to our{" "}
@@ -177,7 +177,7 @@ const Signup = () => {
                   }
                 } else {
                   setError(
-                    "Email must end with @asifrane.org, @asi.aui.ma or @aui.ma"
+                    "You must use your school email ex: @asifrane.org, @asi.aui.ma, and @aui.ma"
                   );
                 }
               }}
@@ -231,7 +231,7 @@ const Signup = () => {
                         ) {
                           setEmail(e.target.value);
                           setError(
-                            "Email must end with @asifrane.org, @asi.aui.ma or @aui.ma"
+                            "You must use your school email ex: @asifrane.org, @asi.aui.ma, and @aui.ma"
                           );
                         } else {
                           setEmail(e.target.value);
@@ -356,7 +356,7 @@ const Signup = () => {
               {!selectedRole && (
                 <div
                   className={style.accountContainer}
-                  style={{ marginTop: "40vh", marginLeft: "1vw" }}
+                  style={{ marginTop: "36vh", marginLeft: "1vw" }}
                 >
                   <Link
                     style={{

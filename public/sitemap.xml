@@ -232,6 +232,14 @@
     <priority>0.6</priority>
    </url>
    <url>
+    <loc>https://noteswap.org/rewardcs</loc>
+    <priority>0.6</priority>
+   </url>
+   <url>
+    <loc>https://noteswap.org/assets/pdf/whitepaper.pdf</loc>
+    <priority>0.6</priority>
+   </url>
+   <url>
     <loc>https://noteswap.org/settings/account</loc>
     <priority>0.6</priority>
    </url>

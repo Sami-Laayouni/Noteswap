@@ -74,6 +74,11 @@ const Certificate = () => {
             marginLeft: "5px",
           }}
         />
+        <span
+          style={{ color: "var(--accent-color)" }}
+        >{`<= Click here to view other certificates ${
+          1 + userData?.certificates.length == 1 ? "(when you earn them)" : ""
+        } `}</span>
       </p>
     </Modal>
   );

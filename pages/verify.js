@@ -78,9 +78,15 @@ export default function Verify() {
   return (
     <>
       <section className={style.background}>
-        <h1 style={{ fontFamily: "var(--manrope-bold-font)" }}>
+        <h1
+          style={{ fontFamily: "var(--manrope-bold-font)", lineHeight: "20px" }}
+        >
           Verify NoteSwap Certificate
         </h1>
+        <p style={{ fontFamily: "var(--manrope-font)" }}>
+          Drag and drop a student&apos;s certificate to verify that it is valid
+          and not forged or modified.
+        </p>
         {data &&
           (verified ? (
             <div className={style.container}>
