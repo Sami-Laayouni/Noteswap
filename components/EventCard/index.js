@@ -101,7 +101,7 @@ export default function EventCard({ data }) {
         <p>{data?.desc}</p>
       </section>
       <section style={{ position: "relative" }}>
-        {data?.volunteers?.length == data?.max && (
+        {data?.volunteers?.length >= data?.max && (
           <p
             style={{
               color: "var(--accent-color)",
@@ -114,6 +114,7 @@ export default function EventCard({ data }) {
         {!teacher && (
           <span
             onClick={async () => {
+              document.getElementById(`${data?._id}button`).disabled = true;
               if (data?.volunteers?.includes(id)) {
                 const response = await fetch("/api/events/unsignup_event", {
                   method: "POST",
@@ -126,7 +127,6 @@ export default function EventCard({ data }) {
                   }),
                 });
                 if (response.ok) {
-                  toast.success("Successfully un signed up for event");
                   document.getElementById(`${data._id}button`).innerText =
                     "Sign Up";
                 }
@@ -141,7 +141,6 @@ export default function EventCard({ data }) {
                     userId: JSON.parse(localStorage.getItem("userInfo"))._id,
                   }),
                 });
-                toast.success("Successfully signed up for event");
 
                 document.getElementById(`${data._id}button`).innerText =
                   "Unsignup";
@@ -162,7 +161,8 @@ export default function EventCard({ data }) {
               id={`${data?._id}button`}
               disabled={
                 !data?.volunteers?.includes(id) &&
-                data?.volunteers?.length == data?.max
+                data?.volunteers?.length == data?.max &&
+                data?.volunteers?.length > data?.max
               }
             >
               {data?.volunteers?.includes(id) ? "Unsignup" : "Sign Up"}
