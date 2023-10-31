@@ -64,7 +64,8 @@
   line-height: 20px;
   border-radius: var(--third-party-login-card-radius);
   font-size: 16px;
-  border: 1px solid var(--input-border-color);
+  border: 1px solid rgba(234, 240, 238, 255);
+  background-color: rgba(234, 240, 238, 255);
   padding-left: 15px;
   height: 32px;
   width: 50%;
@@ -89,7 +90,7 @@
 }
 .button {
   padding: var(--button-default-padding);
-  border-radius: 5px;
+  border-radius: 30px;
   color: var(--default-white-color);
   border: none;
   background-color: var(--accent-color);
@@ -97,6 +98,9 @@
   bottom: 10px;
   right: 10px;
   cursor: pointer;
+  padding-left: 45px;
+  padding-right: 45px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 .time {
   font-family: var(--manrope-font);

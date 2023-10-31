@@ -77,6 +77,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+  breakdown: {
+    type: Array,
+    required: false,
+  },
   certificates: {
     type: Array,
     required: false,

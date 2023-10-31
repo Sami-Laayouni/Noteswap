@@ -8,7 +8,6 @@ import { useRouter } from "next/router";
 import { useState, useEffect, useContext } from "react";
 import ModalContext from "../../context/ModalContext";
 import LoadingCircle from "../../components/LoadingCircle";
-import Script from "next/script";
 import NoteSwapBot from "../../components/NoteSwapBot";
 import { FaShare } from "react-icons/fa";
 import { BiPencil } from "react-icons/bi";
@@ -149,11 +148,6 @@ export default function Note() {
           href={`${process.env.NEXT_PUBLIC_URL}note/${note?.note[0]?._id}`}
         />
       </Head>
-      <Script
-        async
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9167942144001417"
-        crossOrigin="anonymous"
-      />
       <CiteModal />
       {!note?.note[0].images.length > 0 && <NoteSwapBot />}
       <BiArrowBack

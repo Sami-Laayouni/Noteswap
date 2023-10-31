@@ -7,6 +7,7 @@ import style from "../../styles/Auth.module.css";
 import Head from "next/head";
 import { useContext } from "react";
 import AuthContext from "../../context/AuthContext";
+import ModalContext from "../../context/ModalContext";
 import Image from "next/image";
 import Footer from "../../components/Footer";
 import { useTranslation } from "next-i18next";
@@ -42,8 +43,10 @@ const Signup = () => {
 
   const { isLoggedIn } = useContext(AuthContext);
   const { errorSignup } = useContext(AuthContext);
+  const { business } = useContext(ModalContext);
   const [loggedIn, setLoggedIn] = isLoggedIn;
   const [error, setError] = errorSignup;
+  const [open, setOpen] = business;
   const AuthServices = new AuthService(setLoggedIn);
   const { t } = useTranslation("common");
 
@@ -79,9 +82,11 @@ const Signup = () => {
    * @license MIT
    */
   const handleSignup = async (type) => {
+    setOpen(true);
     try {
       if (type === "email") {
         // Sign up with email and password
+
         const response = await AuthServices.create_user(
           email,
           password,
@@ -92,7 +97,7 @@ const Signup = () => {
         if (response.token) {
           localStorage.setItem("userInfo", JSON.stringify(response.user));
           localStorage.setItem("token", response.token); // Store the token in local storage
-          router.push("/dashboard"); // Redirect to the dashboard page
+          router.push("/shortcuts"); // Redirect to the dashboard page
         } else {
           // An error has occured
           setError(response.error);
@@ -293,24 +298,6 @@ const Signup = () => {
                   <>
                     <label
                       className={style.labelForInput}
-                      htmlFor="associationName"
-                    >
-                      Association Name
-                    </label>
-                    <input
-                      id="nameSignup"
-                      type="text"
-                      placeholder="Enter your association name"
-                      value={name}
-                      aria-required="true"
-                      aria-invalid="true"
-                      className={style.input}
-                      onChange={(e) => setName(e.target.value)}
-                      required
-                      autoFocus
-                    />
-                    <label
-                      className={style.labelForInput}
                       htmlFor="name2Signup"
                     >
                       {t("first_name")}
@@ -347,6 +334,7 @@ const Signup = () => {
                       required
                       autoFocus
                     />
+
                     <p className={style.error}>{error}</p>
                     <button
                       type="submit"

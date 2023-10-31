@@ -1,0 +1,30 @@
+.list {
+  padding-left: 0px;
+  list-style: none;
+}
+.list li {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  background-color: white;
+  border-radius: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 30px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  position: relative;
+}
+.list li div {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+.list li div button {
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  outline: none;
+  border-radius: 3px;
+  padding: var(--button-default-padding);
+  cursor: pointer;
+  margin-right: 15px;
+}

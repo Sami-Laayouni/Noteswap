@@ -31,6 +31,7 @@ export const ModalProvider = ({ children }) => {
   const [editValue, setEditValue] = useState(""); // Stores the HTML of the notes that are being edited
   const [editTitle, setEditTitle] = useState(""); // Stores the edited title of the notes tht are being edited
   const [editId, setEditId] = useState(""); // Stores the id of the notes that are being edited
+  const [business, setBusiness] = useState(false); // Stores the id of the notes that are being edited
 
   // Return the JSX
   return (
@@ -58,6 +59,7 @@ export const ModalProvider = ({ children }) => {
         editValue: [editValue, setEditValue],
         editTitle: [editTitle, setEditTitle],
         editId: [editId, setEditId],
+        business: [business, setBusiness],
       }}
     >
       {children}

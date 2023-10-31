@@ -26,6 +26,8 @@ export default function BookASession() {
   const [startTime, setStartTime] = useState("15:40"); // Stores the start time of the tutoring session
   const [endTime, setEndTime] = useState("16:30"); // Stores the end time of the tutoring session
   const [current, setCurrent] = useState(0); // Stores the current page
+  const today = new Date().toISOString().split("T")[0];
+
   //const [type, setType] = useState(null);
 
   useEffect(() => {
@@ -203,7 +205,9 @@ export default function BookASession() {
           ></textarea>
           <br></br>
 
-          <span>Select date: </span>
+          <span style={{ fontFamily: "var(--manrope-font)" }}>
+            Select date:{" "}
+          </span>
           <input
             type="date"
             id="date"
@@ -214,12 +218,13 @@ export default function BookASession() {
               }
             }}
             style={{ marginLeft: "10px" }}
-            min="15:40"
-            max="16:30"
+            min={today}
             required
           ></input>
           <br></br>
-          <span>Select time: </span>
+          <span style={{ fontFamily: "var(--manrope-font)" }}>
+            Select time:{" "}
+          </span>
           <div style={{ display: "inline-block", marginLeft: "10px" }}>
             <input
               type="time"

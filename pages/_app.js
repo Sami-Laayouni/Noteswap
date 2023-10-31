@@ -8,7 +8,6 @@ import "react-toastify/dist/ReactToastify.css";
 
 // Import Head
 import Head from "next/head";
-import Script from "next/script";
 // Import the default layout
 import DefaultLayout from "../layouts/DefaultLayout";
 // Import translations
@@ -41,7 +40,7 @@ function NoteSwap({ Component, pageProps }) {
         <title>Noteswap</title>
         <meta
           name="description"
-          content="Online educational platform for earning community service hours using AI to validate. Discover a new way to earn your community service hours."
+          content="Online educational platform for earning community service hours using AI to validate. A place where opportunities are born. Discover a new way to earn your community service hours."
         />
         <meta
           name="keywords"
@@ -55,7 +54,7 @@ function NoteSwap({ Component, pageProps }) {
         <meta property="og:title" content="Noteswap" />
         <meta
           property="og:description"
-          content="Online educational platform for earning community service hours using AI to validate. Discover a new way to earn your community service hours."
+          content="Online educational platform for earning community service hours using AI to validate. A place where opportunities are born. Discover a new way to earn your community service hours."
         />
         <meta
           property="og:image"
@@ -65,7 +64,7 @@ function NoteSwap({ Component, pageProps }) {
         <meta name="twitter:title" content="Noteswap" />
         <meta
           name="twitter:description"
-          content="Online educational platform for earning community service hours using AI to validate. Discover a new way to earn your community service hours."
+          content="Online educational platform for earning community service hours using AI to validate. A place where opportunities are born. Discover a new way to earn your community service hours."
         />
         <meta
           name="twitter:image"
@@ -82,23 +81,7 @@ function NoteSwap({ Component, pageProps }) {
           rel="apple-touch-icon"
           href="/assets/icons/icons/circle.png"
         ></link>
-
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-
-                gtag('config', 'G-QXR2R5FDM0');
-              `,
-          }}
-        />
       </Head>
-      <Script
-        async
-        src="https://www.googletagmanager.com/gtag/js?id=G-QXR2R5FDM0"
-      />
     </>
   );
   // Return the JSX element

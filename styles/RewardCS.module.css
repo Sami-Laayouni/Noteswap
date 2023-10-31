@@ -61,10 +61,10 @@
   .container h1 {
     text-align: center;
   }
-  .grid{
+  .grid {
     grid-template-columns: 100%;
   }
-  .grid p{
+  .grid p {
     text-align: center;
   }
 }

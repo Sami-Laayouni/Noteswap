@@ -38,6 +38,7 @@ const RewardCommunityService = () => {
   const [data, setData] = useState({});
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
+  const [task, setTask] = useState("");
   const router = useRouter();
   async function fetchStudents() {
     const data = await fetch("/api/schools/get_cs_for_students", {
@@ -61,9 +62,34 @@ const RewardCommunityService = () => {
     fetchStudents();
   }, []);
 
+  function formatMessagesWithMinutes(points, tutor_hours, messagesArray) {
+    let formattedMessages = "";
+    if (points != 0) {
+      formattedMessages += `${Math.floor(points / 20)} minute${
+        Math.floor(points / 20) == 1 ? "" : "s"
+      } typing and sharing notes\n\t`;
+    }
+    if (tutor_hours != 0) {
+      formattedMessages += `${Math.floor(tutor_hours / 60)} minute${
+        Math.floor(tutor_hours / 60) == 1 ? "" : "s"
+      } tutoring other students\n\t`;
+    }
+    if (messagesArray) {
+      messagesArray.forEach((obj) => {
+        if (obj.message && obj.minutes !== undefined) {
+          formattedMessages += `${obj.minutes} minute${
+            obj.minutes == 1 ? "" : "s"
+          } for ${obj.message}\n\t`;
+        }
+      });
+    }
+    return formattedMessages;
+  }
+
   async function downloadDataAsExcel() {
     const modifiedData = data.map((item) => {
-      const { _id, first_name, last_name, points, tutor_hours } = item;
+      const { _id, first_name, last_name, points, tutor_hours, breakdown } =
+        item;
       const fixed_first_name =
         first_name.charAt(0).toUpperCase() + first_name.slice(1);
       const fixed_last_name =
@@ -76,12 +102,21 @@ const RewardCommunityService = () => {
           : "s"
       }`;
       Math.floor(item?.points / 20) + Math.floor(item?.tutor_hours / 60);
-      return { fixed_first_name, fixed_last_name, totalPoints };
+
+      console.log(breakdown);
+      const full_breakdown = formatMessagesWithMinutes(
+        points,
+        tutor_hours,
+        breakdown
+      );
+
+      return { fixed_first_name, fixed_last_name, totalPoints, full_breakdown };
     });
     const headers = [
       "Student First Name",
       "Student Last Name",
       "Total Community Service Earned",
+      "Breakdown of Community Service Earned",
     ]; // Add titles for columns
 
     const workbook = XLSX.utils.book_new();
@@ -98,16 +133,32 @@ const RewardCommunityService = () => {
 
   async function downloadDataAsCSV() {
     const modifiedData = data.map((item) => {
-      const { _id, first_name, last_name, points, tutor_hours, ...rest } = item; // Extract Student First Name and Last Name
+      const {
+        _id,
+        first_name,
+        last_name,
+        points,
+        tutor_hours,
+        breakdown,
+        ...rest
+      } = item; // Extract Student First Name and Last Name
       const totalPoints =
         Math.floor(item?.points / 20) + Math.floor(item?.tutor_hours / 60);
-      return { first_name, last_name, ...rest, totalPoints }; // Include Student First Name and Last Name in the modified data
+
+      const full_breakdown = formatMessagesWithMinutes(
+        points,
+        tutor_hours,
+        breakdown
+      );
+
+      return { first_name, last_name, ...rest, totalPoints, full_breakdown }; // Include Student First Name and Last Name in the modified data
     });
 
     const headers = [
       "Student First Name",
       "Student Last Name",
       "Total Community Service Earned",
+      "Breakdown of Community Service Earned",
     ]; // Add titles for columns, including Points
     const values = modifiedData.map((item) => [...Object.values(item)]); // Include Student First Name, Last Name, and Points in each row
 
@@ -252,6 +303,36 @@ const RewardCommunityService = () => {
                                 }),
                               }
                             );
+                            const response2 = await fetch(
+                              "/api/profile/add_task",
+                              {
+                                method: "POST",
+                                headers: {
+                                  "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify({
+                                  id: value._id,
+                                  task: {
+                                    message: `${
+                                      document.getElementById(
+                                        `input1_${value._id}`
+                                      ).value
+                                    } (rewarded by ${
+                                      JSON.parse(
+                                        localStorage.getItem("userInfo")
+                                      ).first_name
+                                    } ${
+                                      JSON.parse(
+                                        localStorage.getItem("userInfo")
+                                      ).last_name
+                                    })`,
+                                    minutes: document.getElementById(
+                                      `input_${value._id}`
+                                    ).value,
+                                  },
+                                }),
+                              }
+                            );
                             if (response.ok) {
                               document.getElementById(
                                 `reward_button_${value._id}`
@@ -284,17 +365,45 @@ const RewardCommunityService = () => {
                               border: "1px solid var(--input-border-color)",
                               paddingLeft: "15px",
                               height: "32px",
-                              width: "75%",
+                              width: "28%",
+                              transition: "border-color 0.3s ease-in-out",
+                              verticalAlign: "middle",
+                            }}
+                            id={`input1_${value._id}`}
+                            placeholder={`Enter task name`}
+                            onChange={(e) => {
+                              setTask(e.target.value);
+                            }}
+                            type="text"
+                            value={task}
+                            required
+                          ></input>
+                          <input
+                            style={{
+                              outline: "none",
+                              boxShadow: "none",
+                              fontWeight: "400",
+                              fontFamily: "var(--primary-font)",
+                              lineHeight: "20px",
+                              borderRadius:
+                                "var(--third-party-login-card-radius)",
+                              fontSize: "16px",
+                              border: "1px solid var(--input-border-color)",
+                              paddingLeft: "15px",
+                              height: "32px",
+                              width: "50%",
+                              marginLeft: "10px",
                               transition: "border-color 0.3s ease-in-out",
                               verticalAlign: "middle",
                             }}
                             id={`input_${value._id}`}
-                            placeholder={`Enter amount to reward ${value.first_name} (in mins)`}
+                            placeholder={`Enter amount to reward (in mins)`}
                             type="number"
                             min={1}
                             max={10000}
                             required
                           ></input>
+
                           <button
                             id={`reward_button_${value._id}`}
                             style={{

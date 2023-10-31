@@ -7,6 +7,8 @@ import { useState, useEffect, useRef } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import CalendarEvent from "../components/CalendarEvent";
 import LoadingCircle from "../components/LoadingCircle";
+import dynamic from "next/dynamic";
+const BusinessModal = dynamic(() => import("../components/BusinessModal"));
 
 /**
  * Get static props
@@ -98,6 +100,7 @@ const Dashboard = () => {
       <Head>
         <title>Dashboard | Noteswap</title> {/* Title page */}
       </Head>
+      <BusinessModal />
       <main className={style.background}>
         <h1 className={style.title}>
           {new Date().getHours() >= 0 && new Date().getHours() < 12

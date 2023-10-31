@@ -28,6 +28,8 @@ export default async function becomeTutor(req, res) {
       category,
       max,
       id,
+      location,
+      req,
     } = req.body;
     try {
       await connectDB();
@@ -45,6 +47,8 @@ export default async function becomeTutor(req, res) {
         category: category,
         max: max,
         expiration_date: new Date(date_of_events.split("to")[1]),
+        location: location,
+        req: req,
       });
       const savedEvent = await newEvent.save();
 

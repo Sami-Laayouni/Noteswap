@@ -25,6 +25,7 @@ export default async function handler(req, res) {
       last_name: 1,
       tutor_hours: 1,
       points: 1,
+      breakdown: 1,
     },
   });
 

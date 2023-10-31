@@ -11,21 +11,22 @@ This repository contains the NEXTJS frontend for NoteSwap
 ### Installation
 
 1. Clone the repo
+
    ```sh
-   git clone https://github.com/DeviteamITS/campus-go-mobile 
+   git clone https://github.com/DeviteamITS/campus-go-mobile
    ```
 
 2. Install YARN packages
    ```sh
     yarn install
-    ```
+   ```
 3. Run the app
-    ```sh
-    yarn start
-    ```
+   ```sh
+   yarn start
+   ```
 
-This will start the server on localhost:3000. A couple of features many not be working at first so you might need to add an 
-.env.local with the following dummy data: 
+This will start the server on localhost:3000. A couple of features many not be working at first so you might need to add an
+.env.local with the following dummy data:
 
 ```sh
 NEXT_PUBLIC_GOOGLE_CLIENT_ID=example-google-client-id

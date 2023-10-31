@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import {
   MdOutlineArrowDropDown,
   MdOutlineAdminPanelSettings,
+  MdEdit,
 } from "react-icons/md";
 import { FiSettings, FiLogOut, FiAward } from "react-icons/fi";
 import { LuGlasses } from "react-icons/lu";
@@ -16,6 +17,7 @@ import { CgProfile } from "react-icons/cg";
 import { IoMdTime } from "react-icons/io";
 import { RiCopperCoinLine } from "react-icons/ri";
 import { GrScan } from "react-icons/gr";
+import { SiGoogleanalytics } from "react-icons/si";
 
 import AuthService from "../../services/AuthService";
 import ModalContext from "../../context/ModalContext";
@@ -141,7 +143,9 @@ export default function Header() {
           <Link
             href={
               loggedIn
-                ? "/dashboard"
+                ? userData?.role == "association"
+                  ? "/shortcuts"
+                  : "/dashboard"
                 : router.pathname.includes("business")
                 ? "/business"
                 : "/"
@@ -155,44 +159,47 @@ export default function Header() {
               priority
             ></Image>
           </Link>
-          {router.pathname.includes("business") && (
-            <h1 className={style.business}>Business</h1>
-          )}
+          {router.pathname.includes("business") &&
+            userData?.role == "association" && (
+              <h1 className={style.business}>Business</h1>
+            )}
         </div>
 
         {/* Header nav bar (for tablets and desktops)*/}
         <nav className={style.header_nav}>
           {loggedIn ? (
             <>
-              {userData?.role != "volunteer" && (
-                <>
-                  {/* User is logged in */}
-                  <Link
-                    title="Visit notes"
-                    className={style.header_nav_a}
-                    href="/notes"
-                  >
-                    Notes
-                  </Link>
-                  {userData?.role != "teacher" && (
+              {userData?.role != "volunteer" &&
+                userData?.role != "association" && (
+                  <>
+                    {/* User is logged in */}
                     <Link
-                      title="Visit Tutor"
+                      title="Visit notes"
                       className={style.header_nav_a}
-                      href="/tutor"
+                      href="/notes"
                     >
-                      Tutor
+                      Notes
                     </Link>
-                  )}
-                </>
+                    {userData?.role != "teacher" && (
+                      <Link
+                        title="Visit Tutor"
+                        className={style.header_nav_a}
+                        href="/tutor"
+                      >
+                        Tutor
+                      </Link>
+                    )}
+                  </>
+                )}
+              {userData?.role != "association" && (
+                <Link
+                  title="Visit events"
+                  className={style.header_nav_a}
+                  href="/event"
+                >
+                  Events
+                </Link>
               )}
-
-              <Link
-                title="Visit events"
-                className={style.header_nav_a}
-                href="/event"
-              >
-                Events
-              </Link>
               {/* User info (Profile pic + name)*/}
               {userData && (
                 <>
@@ -444,22 +451,24 @@ export default function Header() {
                   <div className={style.borderLine} />
                 </li>
               </Link>
-              {userData?.role == "teacher" && (
-                <Link href="/rewardcs">
-                  <li
-                    onClick={() => {
-                      document.getElementById("hamburger_menu").style.display =
-                        "none";
-                      document.getElementById(
-                        "hamburger_overlay"
-                      ).style.display = "none";
-                    }}
-                  >
-                    Reward Community Service
-                    <div className={style.borderLine} />
-                  </li>
-                </Link>
-              )}
+              {userData?.role == "teacher" ||
+                (userData?.role == "association" && (
+                  <Link href="/rewardcs">
+                    <li
+                      onClick={() => {
+                        document.getElementById(
+                          "hamburger_menu"
+                        ).style.display = "none";
+                        document.getElementById(
+                          "hamburger_overlay"
+                        ).style.display = "none";
+                      }}
+                    >
+                      Reward Community Service
+                      <div className={style.borderLine} />
+                    </li>
+                  </Link>
+                ))}
               <Link href="/settings/account">
                 <li
                   onClick={() => {
@@ -531,11 +540,19 @@ export default function Header() {
           <p className={style.lightext}>
             {userData?.email ? userData?.email : "Could not be found"}
           </p>
-          <p className={style.lightext}>
-            Your Daily Streak:{" "}
-            <span style={{ color: "var(--accent-color)" }}>
-              {streak} day{streak == 1 ? "" : "s"}{" "}
-            </span>
+          {userData?.role == "student" && (
+            <p className={style.lightext}>
+              Your Daily Streak:{" "}
+              <span style={{ color: "var(--accent-color)" }}>
+                {streak} day{streak == 1 ? "" : "s"}{" "}
+              </span>
+            </p>
+          )}
+          <p
+            className={style.lightext}
+            style={{ color: "var(--accent-color)" }}
+          >
+            Business Account
           </p>
 
           <div className={style.line}></div>
@@ -545,18 +562,19 @@ export default function Header() {
               <span>My Profile</span>
             </Link>
           </li>
-          {userData?.role == "teacher" && (
-            <li>
-              <Link href="/rewardcs">
-                <RiCopperCoinLine
-                  size={21}
-                  style={{ verticalAlign: "middle" }}
-                />
-                <span>Reward CS</span>
-              </Link>
-            </li>
-          )}
-          {userData?.role != "teacher" && (
+          {userData?.role == "teacher" ||
+            (userData?.role == "association" && (
+              <li>
+                <Link href="/rewardcs">
+                  <RiCopperCoinLine
+                    size={21}
+                    style={{ verticalAlign: "middle" }}
+                  />
+                  <span>Reward CS</span>
+                </Link>
+              </li>
+            ))}
+          {userData?.role == "student" && (
             <li>
               <Link href="/productivity">
                 <IoMdTime size={21} style={{ verticalAlign: "middle" }} />
@@ -583,13 +601,32 @@ export default function Header() {
               </Link>
             </li>
           )}
+          {userData?.role == "association" && (
+            <li>
+              <Link href="/business/edit">
+                <MdEdit size={21} style={{ verticalAlign: "middle" }} />
+                <span>Edit Association</span>
+              </Link>
+            </li>
+          )}
+          {userData?.role == "association" && (
+            <li>
+              <Link href="/business/analytics">
+                <SiGoogleanalytics
+                  size={21}
+                  style={{ verticalAlign: "middle" }}
+                />
+                <span>Analytics</span>
+              </Link>
+            </li>
+          )}
           <li>
             <Link href="/settings/account">
               <FiSettings size={21} style={{ verticalAlign: "middle" }} />
               <span>Settings</span>
             </Link>
           </li>
-          {userData?.role != "teacher" && (
+          {userData?.role != "teacher" && userData?.role != "association" && (
             <li onClick={() => setCertificate(true)}>
               <FiAward size={21} style={{ verticalAlign: "middle" }} />
               <span>Certificates </span>

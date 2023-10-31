@@ -52,6 +52,14 @@ const eventSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  location: {
+    type: String,
+    required: true,
+  },
+  req: {
+    type: String,
+    required: true,
+  },
   volunteers: {
     type: Array,
     required: false,

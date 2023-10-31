@@ -202,12 +202,13 @@ const Event = () => {
           </div>
         )}
       </section>
-      {data?.role != "student" && (
+      {data?.role == "teacher" && (
         <section
           onClick={() => {
             setOpen(true);
           }}
           className={style.createNewEvent}
+          style={{ borderRadius: "4px" }}
         >
           Create a new event
         </section>

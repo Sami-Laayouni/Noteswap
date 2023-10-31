@@ -32,6 +32,8 @@ export default function CreateEvent() {
   const [prevPosition, setPrevPosition] = useState({ x: 0, y: 0 });
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
+  const [location, setLocation] = useState("");
+  const [req, setReq] = useState("");
   let cert;
   const [category, setCategory] = useState("");
   const today = new Date().toISOString().split("T")[0];
@@ -94,7 +96,6 @@ export default function CreateEvent() {
     setUrl(url);
   };
   const saveImage = async () => {
-    console.log(sectionRef.current);
     const element = sectionRef.current;
     const canvas = await html2canvas(element);
     const image = canvas.toDataURL("image/png");
@@ -166,7 +167,13 @@ export default function CreateEvent() {
       onClose={() => {
         setOpen(false);
       }}
-      title={`${current == 1 ? "Create a new event" : "Create a certificate"}`}
+      title={`${
+        current == 1
+          ? "Create a new event"
+          : current == 2 || current == 3
+          ? "Basic information"
+          : "Create a certificate"
+      }`}
     >
       <section className={style.container}>
         <form
@@ -178,11 +185,15 @@ export default function CreateEvent() {
             } else if (current == 2) {
               setCurrent(3);
             } else if (current == 3) {
+              setCurrent(4);
+            } else if (current == 4) {
+              setCurrent(5);
+            } else if (current == 5) {
               if (!name) {
                 saveSignature();
               }
-              setCurrent(4);
-            } else if (current == 4) {
+              setCurrent(6);
+            } else if (current == 6) {
               setClicked(true);
               await saveImage();
 
@@ -206,6 +217,8 @@ export default function CreateEvent() {
                     .email,
                   link_to_event: link ? link : "",
                   max: max,
+                  location: location,
+                  req: req,
                   createdAt: Date.now(),
                 }),
               });
@@ -283,8 +296,8 @@ export default function CreateEvent() {
               } else {
                 console.log(await response.text());
               }
-              setCurrent(5);
-            } else if (current == 5) {
+              setCurrent(7);
+            } else if (current == 7) {
               setCategory("");
               setCurrent(1);
               setTitle("");
@@ -294,6 +307,8 @@ export default function CreateEvent() {
               setMessage("");
               setName("");
               setLink("");
+              setReq("");
+              setLocation("");
               setMax(50);
               setCommunityService(0);
               setOpen(false);
@@ -302,27 +317,42 @@ export default function CreateEvent() {
         >
           {current == 1 && (
             <>
-              <label className={style.labelForInput}>Name of event</label>
+              <label className={style.labelForInput}>Name of the event</label>
               <input
                 placeholder="Enter event name"
                 className={style.input}
                 value={title}
+                minLength={3}
+                maxLength={1000}
+                type="text"
                 onChange={(e) => {
                   setTitle(e.target.value);
                 }}
                 required
+                autoFocus
               />
               <label className={style.labelForInput}>Description</label>
               <textarea
                 className={style.input}
-                style={{ height: "70px", paddingTop: "10px", resize: "none" }}
-                placeholder="Enter description"
+                style={{ height: "250px", paddingTop: "10px", resize: "none" }}
+                placeholder="Enter a detailed description that will include anything a volunteer needs to know"
                 value={desc}
+                type="text"
+                minLength={300}
+                maxLength={10000}
                 onChange={(e) => {
                   setDesc(e.target.value);
                 }}
                 required
               />
+
+              <button className={style.button} type="submit">
+                Next
+              </button>
+            </>
+          )}
+          {current == 2 && (
+            <>
               <label className={style.labelForInput}>
                 Number of community service hours offered
               </label>
@@ -338,7 +368,7 @@ export default function CreateEvent() {
                 required
               />
               <label className={style.labelForInput}>
-                Maximum number of volunteers that can sign up. (Max: 10,000)
+                Maximum number of volunteers that can sign up
               </label>
               <input
                 className={style.input}
@@ -351,38 +381,6 @@ export default function CreateEvent() {
                 }}
                 required
               />
-              <label className={style.labelForInput}>Date of the event</label>
-              <span>From: </span>
-              <input
-                style={{ marginLeft: "10px" }}
-                className={style.date}
-                type="date"
-                min={today}
-                value={startDate}
-                onChange={(e) => {
-                  setStartDate(e.target.value);
-                }}
-                required
-              />
-              <span>To: </span>
-              <input
-                style={{ marginLeft: "10px" }}
-                className={style.date}
-                type="date"
-                min={today}
-                value={endDate}
-                onChange={(e) => {
-                  setEndDate(e.target.value);
-                }}
-                required
-              />
-              <button className={style.button} type="submit">
-                Next
-              </button>
-            </>
-          )}
-          {current == 2 && (
-            <>
               <label className={style.labelForInput}>
                 Select a category for your event
               </label>
@@ -426,7 +424,79 @@ export default function CreateEvent() {
                 </option>
                 <option value="Other">Other</option>
               </select>
+              <label className={style.labelForInput}>Date of the event</label>
+              <span>From: </span>
+              <input
+                style={{ marginLeft: "10px" }}
+                className={style.date}
+                type="date"
+                min={today}
+                value={startDate}
+                onChange={(e) => {
+                  setStartDate(e.target.value);
+                }}
+                required
+              />
+              <span>To: </span>
+              <input
+                style={{ marginLeft: "10px" }}
+                className={style.date}
+                type="date"
+                min={today}
+                value={endDate}
+                onChange={(e) => {
+                  setEndDate(e.target.value);
+                }}
+                required
+              />
 
+              <button className={style.button} type="submit">
+                Next
+              </button>
+            </>
+          )}
+          {current == 3 && (
+            <>
+              {" "}
+              <label className={style.labelForInput}>
+                Location of the event (Ex: Location X Building Y Room Z)
+              </label>
+              <input
+                placeholder="Enter the location of the event (be as detailed as possible)"
+                className={style.input}
+                value={location}
+                minLength={3}
+                maxLength={1000}
+                type="text"
+                onChange={(e) => {
+                  setLocation(e.target.value);
+                }}
+                required
+                autoFocus
+              />
+              <label className={style.labelForInput}>
+                Requirements to join event
+              </label>
+              <textarea
+                className={style.input}
+                style={{ height: "250px", paddingTop: "10px", resize: "none" }}
+                placeholder="Enter requirements for a volunteer to sign up"
+                value={req}
+                type="text"
+                minLength={300}
+                maxLength={10000}
+                onChange={(e) => {
+                  setReq(e.target.value);
+                }}
+                required
+              />
+              <button className={style.button} type="submit">
+                Next
+              </button>
+            </>
+          )}
+          {current == 4 && (
+            <>
               <label className={style.labelForInput}>
                 Link to signup to event (ex: Google Form)
               </label>
@@ -505,7 +575,7 @@ export default function CreateEvent() {
               </button>
             </>
           )}
-          {current == 3 && (
+          {current == 5 && (
             <>
               <label className={style.labelForInput}>Type your signature</label>
               <input
@@ -570,7 +640,7 @@ export default function CreateEvent() {
               </div>
             </>
           )}
-          {current == 4 && (
+          {current == 6 && (
             <>
               <div
                 style={{
@@ -682,7 +752,7 @@ export default function CreateEvent() {
               </button>
             </>
           )}
-          {current == 5 && (
+          {current == 7 && (
             <div
               style={{
                 display: "flex",
@@ -725,19 +795,23 @@ export default function CreateEvent() {
           )}
         </form>
 
-        {current != 1 && current != 4 && current != 5 && (
-          <p
+        {current != 1 && current != 5 && current != 6 && (
+          <button
             onClick={() => {
               if (current == 2) {
                 setCurrent(1);
               } else if (current == 3) {
                 setCurrent(2);
+              } else if (current == 4) {
+                setCurrent(3);
+              } else if (current == 5) {
+                settCurrent(4);
               }
             }}
             className={style.back}
           >
             Back
-          </p>
+          </button>
         )}
       </section>
     </Modal>

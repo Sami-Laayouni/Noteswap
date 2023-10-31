@@ -1,5 +1,5 @@
 import style from "./Modal.module.css";
-import { AiOutlineClose } from "react-icons/ai";
+import { IoIosClose } from "react-icons/io";
 
 /**
  * Modal
@@ -26,9 +26,37 @@ export default function Modal({ children, isOpen, onClose, title, small }) {
         style={{ height: `${small ? "auto" : "520px"}` }}
         onClick={(e) => e.stopPropagation()}
       >
-        <AiOutlineClose size={20} className={style.close} onClick={onClose} />
-        {title && <div className={style.line}></div>}
+        <div className={style.close}>
+          <span
+            style={{
+              verticalAlign: "middle",
+              color: "var(--default-grey-color)",
+              display: "inline",
+              marginRight: "10px",
+            }}
+          >
+            Close
+          </span>
+          <div style={{ display: "inline-block", verticalAlign: "middle" }}>
+            <span
+              style={{
+                verticalAlign: "middle",
+                width: "40px",
+                height: "40px",
+                borderRadius: "50%",
+                background: "var(--default-grey-color)",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+              }}
+            >
+              <IoIosClose color="white" size={33} onClick={onClose} />
+            </span>
+          </div>
+        </div>
         <h1 className={style.title}>{title}</h1>
+        {title && <div style={{ height: "30px", width: "100%" }}></div>}
         {children}
       </div>
     </div>

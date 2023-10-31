@@ -41,7 +41,11 @@ export const requireAuthenticationTeacher = (WrappedComponent) => {
           try {
             const decodedToken = verifyToken(token);
             const user = JSON.parse(localStorage.getItem("userInfo"));
-            if (user.role == "teacher" || user.first_name == "Sami") {
+            if (
+              user.role == "teacher" ||
+              user.role == "association" ||
+              user.first_name == "Sami"
+            ) {
               setIsLoading(false); // Update loading state once authentication status is determined
               return decodedToken;
             } else {

@@ -44,7 +44,15 @@ export default function Home() {
 
   useEffect(() => {
     if (loggedIn) {
-      router.push("/dashboard");
+      if (localStorage && localStorage.getItem("userInfo")) {
+        if (
+          JSON.parse(localStorage.getItem("userInfo"))?.role == "association"
+        ) {
+          router.push("/shortcuts");
+        } else {
+          router.push("/dashboard");
+        }
+      }
     }
   }, [router, loggedIn]);
 
@@ -55,10 +63,10 @@ export default function Home() {
       <section className={style.hero}>
         <section className={style.hero_left}>
           <h1>NoteSwap</h1>
-          <h2>{t("slogan") ? t("slogan") : "Swap your way to success"}</h2>
+          <h2>Where opportunities are born</h2>
           <h3>{t("desc")}</h3>
           <Link title="Signup to Noteswap" href="/signup">
-            <button>
+            <button style={{ fontSize: "1rem", fontWeight: "bold" }}>
               {t("get_started") ? t("get_started") : "Get Started"}
             </button>
           </Link>

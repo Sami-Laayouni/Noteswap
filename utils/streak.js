@@ -20,8 +20,8 @@ export const updateDailyStreak = () => {
       const streak = parseInt(localStorage.getItem("streak"));
       localStorage.setItem("streak", streak + 1);
       localStorage.setItem("lastAccessedDate", currentDate.getDate());
-    } else if(lastAccessedDate == currentDate.getDate()){
-      return false
+    } else if (lastAccessedDate == currentDate.getDate()) {
+      return false;
     } else {
       localStorage.setItem("streak", 1);
       localStorage.setItem("lastAccessedDate", currentDate.getDate());

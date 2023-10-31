@@ -1,11 +1,52 @@
-.container {
-  width: 75vw;
+.form {
+  font-family: var(--manrope-font);
+  margin-top: 20px;
 }
-.labelForInput {
-  font-family: var(--primary-font);
+.form label {
+  font-family: var(--manrope-font);
   display: block;
   margin-top: 10px;
   margin-bottom: 10px;
+}
+.form textarea {
+  outline: none;
+  box-shadow: none;
+  font-weight: 400;
+  font-family: var(--primary-font);
+  line-height: 20px;
+  border-radius: var(--third-party-login-card-radius);
+  font-size: 16px;
+  border: 1px solid rgba(234, 240, 238, 255);
+  padding-left: 15px;
+  padding-top: 15px;
+  height: 225px;
+  width: 100%;
+  transition: border-color 0.3s ease-in-out;
+  resize: none;
+  background-color: rgba(234, 240, 238, 255);
+}
+.form textarea:focus {
+  background-color: white;
+  border: 1px solid var(--accent-color);
+}
+.form input {
+  outline: none;
+  box-shadow: none;
+  font-weight: 400;
+  font-family: var(--primary-font);
+  line-height: 20px;
+  border-radius: var(--third-party-login-card-radius);
+  font-size: 16px;
+  border: 1px solid rgba(234, 240, 238, 255);
+  padding-left: 15px;
+  height: 46px;
+  width: 100%;
+  background-color: rgba(234, 240, 238, 255);
+  transition: border-color 0.3s ease-in-out;
+}
+.form input:focus {
+  border-color: var(--accent-color);
+  background-color: white;
 }
 .input {
   outline: none;
@@ -24,19 +65,6 @@
 }
 .input:focus {
   border-color: var(--accent-color);
-}
-.date {
-  font-family: var(--manrope-font);
-  margin-right: 20px;
-  outline: none;
-  padding: 10px;
-  border: 1px solid rgba(234, 240, 238, 255);
-  border-radius: 3px;
-  background-color: rgba(234, 240, 238, 255);
-  margin-top: 5px;
-}
-.date:focus {
-  border: 1px solid var(--accent-color);
   background-color: white;
 }
 .button {
@@ -74,23 +102,4 @@
 }
 .back:hover {
   text-decoration: underline;
-}
-.detail {
-  text-align: left;
-  margin-top: auto;
-  margin-bottom: auto;
-  padding: 30px;
-}
-.detail h1 {
-  font-family: var(--manrope-bold-font);
-}
-.detail h2 {
-  font-family: var(--manrope-font);
-  font-size: 1rem;
-}
-.detail h2 span {
-  color: var(--accent-color);
-}
-.detail h2 b {
-  font-family: var(--manrope-bold-font);
 }
