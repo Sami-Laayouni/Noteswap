@@ -18,12 +18,36 @@ export default function CreateAccount() {
   const [city, setCity] = useState("");
   const [street, setStreet] = useState("");
   const [postal, setPostal] = useState("");
+  const [profile, setProfile] = useState("./assets/fallback/user.webp");
 
   const router = useRouter();
+
+  // Upload image/notes to gcs
+  const uploadImage = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const img = new Image();
+      img.src = URL.createObjectURL(file);
+
+      img.onload = async function () {
+        const formData = new FormData();
+        formData.append("image", file);
+        const response = await fetch("/api/gcs/upload_image", {
+          method: "POST",
+          body: formData,
+        });
+
+        const { url } = await response.json();
+
+        setProfile(url);
+      };
+    }
+  };
   return (
     <Modal
       isOpen={open}
       onClose={() => {
+        setOpen(false)
         router.push("/shortcuts");
       }}
       title="Setup Your NoteSwap Business Account"
@@ -35,9 +59,39 @@ export default function CreateAccount() {
       >
         <form
           className={style.form}
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
-            setCurrent(current + 1);
+            if (current != 4) {
+              setCurrent(current + 1);
+            } else {
+              const response = await fetch(
+                "/api/association/create_association",
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    id: JSON.parse(localStorage.getItem("userInfo"))._id,
+                    name: name,
+                    desc: desc,
+                    contact_email: email,
+                    contact_phone: phone,
+                    website: web,
+                    category: category,
+                    country: country,
+                    city: city,
+                    street: street,
+                    postal_code: postal,
+                    icon: profile,
+                  }),
+                }
+              );
+              if(response.ok){
+                router.push("/shortcuts");
+                setOpen(false)
+              }
+            }
           }}
         >
           {current == 1 && (
@@ -216,7 +270,7 @@ export default function CreateAccount() {
                 required
               />
               <label className={style.labelForInput} htmlFor="streetSignup">
-                Street Address (optional)
+                Street Address (optional, not public)
               </label>
               <input
                 id="streetSignup"
@@ -229,7 +283,7 @@ export default function CreateAccount() {
                 onChange={(e) => setStreet(e.target.value)}
               />
               <label className={style.labelForInput} htmlFor="postalcodeSignup">
-                Postal Code (optional)
+                Postal Code (optional, not public)
               </label>
               <input
                 id="postalcodeSignup"
@@ -241,6 +295,37 @@ export default function CreateAccount() {
                 className={style.input}
                 onChange={(e) => setPostal(e.target.value)}
               />
+            </>
+          )}
+          {current == 4 && (
+            <>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "55vh",
+                }}
+              >
+                <img
+                  alt="Profile"
+                  src={profile}
+                  width={300}
+                  height={300}
+                  style={{ borderRadius: "50%", cursor: "pointer" }}
+                  onClick={() => {
+                    document.getElementById("imageUploadInput").click();
+                  }}
+                ></img>
+              </div>
+              <input
+                type="file"
+                accept="image/jpeg, image/png, image/gif, image/webp"
+                capture="user"
+                id="imageUploadInput"
+                style={{ display: "none" }}
+                onChange={uploadImage}
+              ></input>
             </>
           )}
           {current != 1 && (
@@ -256,7 +341,7 @@ export default function CreateAccount() {
           )}
 
           <button className={style.button} type="submit">
-            Next
+            {current == 4 ? "Finish" : "Next"}
           </button>
         </form>
       </section>

@@ -5,6 +5,8 @@ import style from "./imageNotesModal.module.css";
 import { AiOutlinePlus } from "react-icons/ai";
 import { MdOutlineArrowDropDown } from "react-icons/md";
 import LoadingCircle from "../LoadingCircle";
+import { useTranslation } from "next-i18next";
+
 
 /**
  * Image Notes Modal
@@ -77,6 +79,8 @@ export default function ImageNotesModal() {
     "Advanced PE",
     "Other",
   ];
+  const { t } = useTranslation("common");
+
 
   if (!open) {
     return null;
@@ -184,7 +188,7 @@ export default function ImageNotesModal() {
                   <AiOutlinePlus size={40} color="white" />
                 </div>
                 <p className={style.picture} id="uploadOtherPicture">
-                  Upload another picture
+                  {t("upload_another")}
                 </p>
               </section>
             </section>
@@ -197,8 +201,8 @@ export default function ImageNotesModal() {
               fontFamily: "var(--manrope-font)",
             }}
           >
-            {imageArray.length} image{imageArray.length == 1 ? "" : "s"}{" "}
-            uploaded
+            {imageArray.length} {t("image")}{imageArray.length == 1 ? "" : "s"}{" "}
+            {t("uploaded")}
           </p>
         </>
       )}
@@ -217,7 +221,7 @@ export default function ImageNotesModal() {
           />
           <textarea
             className={style.textarea}
-            placeholder="Description of notes (optional)"
+            placeholder={t("des_notes")}
             id="textarea"
           />
           <div className={style.dropdown} id="dropdownClass">
@@ -442,7 +446,7 @@ export default function ImageNotesModal() {
             <h1
               style={{ fontFamily: "var(--manrope-font)", marginLeft: "20px" }}
             >
-              Uploading images...
+              {t("uploading_images")}
             </h1>
           </div>
         </>
@@ -450,11 +454,11 @@ export default function ImageNotesModal() {
       {current == 4 && (
         <>
           {/* Congratulation page */}
-          <h1 className={style.title}>Congratulations 🎉</h1>
+          <h1 className={style.title}>{t("congrat")} 🎉</h1>
           <p className={style.subtext}>
-            You have successfully shared your notes and earned:
+          {t("earned")}
           </p>
-          <h1 className={style.points}>+{points} points</h1>
+          <h1 className={style.points}>+{points} {t("points")}</h1>
         </>
       )}
       <p
@@ -470,7 +474,7 @@ export default function ImageNotesModal() {
           }
         }}
       >
-        Back
+        {t("back")}
       </p>
       <button
         className={style.button}
@@ -511,6 +515,8 @@ export default function ImageNotesModal() {
                   type: "images",
                   images: imageArray,
                   date: date,
+                  school_id: JSON.parse(localStorage.getItem("userInfo")).schoolId 
+
                 }),
               });
               if (response.ok) {
@@ -593,7 +599,7 @@ export default function ImageNotesModal() {
           }
         }}
       >
-        {current == 2 ? "Publish" : current == 4 ? "Finish" : "Next"}
+        {current == 2 ? t("publish") : current == 4 ? t("finish") : t("next")}
       </button>
       <input
         type="file"

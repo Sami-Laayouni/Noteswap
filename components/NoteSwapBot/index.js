@@ -6,6 +6,8 @@ import { VscSend } from "react-icons/vsc";
 import { useState } from "react";
 import { BsFillChatSquareQuoteFill } from "react-icons/bs";
 import { useRouter } from "next/dist/client/router";
+import { useTranslation } from "next-i18next";
+
 const messages = [
   {
     role: "system",
@@ -24,6 +26,8 @@ export default function NoteSwapBot() {
   const [started, setStarted] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { t } = useTranslation("common");
+
 
   function extractTextFromHTML(htmlString) {
     const parser = new DOMParser();
@@ -153,7 +157,7 @@ export default function NoteSwapBot() {
         className={style.chatbox}
       >
         <section className={style.header}>
-          NoteSwap Bot {loading && "(Thinking...)"}
+          {t("noteswap_bot")} {loading && t("thinking")}
           <AiOutlineExpandAlt
             size={25}
             id="expand"
@@ -221,7 +225,7 @@ export default function NoteSwapBot() {
                 fontSize: "1.2rem",
               }}
             >
-              Start a conversation with the Noteswap Bot
+              {t("start_conv")}
             </p>
             <i
               style={{
@@ -229,8 +233,8 @@ export default function NoteSwapBot() {
                 fontSize: "0.7rem",
               }}
             >
-              Note: The Noteswap Bot does not reflect the methodologies or ideas
-              of Noteswap.
+              {t("")}
+              {t("note_notebot")}
             </i>
           </section>
         )}

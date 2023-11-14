@@ -20,8 +20,8 @@ export const ModalProvider = ({ children }) => {
   const [deleteModal, setDeleteModal] = useState(false); // Stores whether the delete account modal is closed or opened
   const [bookSession, setBookSession] = useState(false); // Stores whether the book a tutor modal is closed or opened
   const [bookSessionInfo, setBookSessionInfo] = useState(); // Stores the information of the tutor when booking a session
-  const [eventStatus, setEventStatus] = useState(false);
-  const [eventdata, setEventData] = useState("");
+  const [eventStatus, setEventStatus] = useState(false); // Create event 
+  const [eventData, setEventData] = useState("");
   const [shareOpen, setShareOpen] = useState(false); // Stores whether the share modal is closed or opened
   const [shareURL, setShareURL] = useState(""); // Stores the url of the page that wants to be shared
   const [citeOpen, setCiteOpen] = useState(false); // Stores whether the cite Modal is closed or opened
@@ -31,7 +31,10 @@ export const ModalProvider = ({ children }) => {
   const [editValue, setEditValue] = useState(""); // Stores the HTML of the notes that are being edited
   const [editTitle, setEditTitle] = useState(""); // Stores the edited title of the notes tht are being edited
   const [editId, setEditId] = useState(""); // Stores the id of the notes that are being edited
-  const [business, setBusiness] = useState(false); // Stores the id of the notes that are being edited
+  const [business, setBusiness] = useState(false); // Stores whether the business modal is opened or not
+  const [eventState, setEventState] = useState(false);
+  const [requestTutor, setRequestTutor] = useState(false);
+  const [requestInfo, setRequestInfo] = useState(false)
 
   // Return the JSX
   return (
@@ -49,7 +52,7 @@ export const ModalProvider = ({ children }) => {
         bookSession: [bookSession, setBookSession],
         bookSessionInfo: [bookSessionInfo, setBookSessionInfo],
         eventStatus: [eventStatus, setEventStatus],
-        eventdata: [eventdata, setEventData],
+        eventData: [eventData, setEventData],
         shareOpen: [shareOpen, setShareOpen],
         shareURL: [shareURL, setShareURL],
         citeOpen: [citeOpen, setCiteOpen],
@@ -60,6 +63,10 @@ export const ModalProvider = ({ children }) => {
         editTitle: [editTitle, setEditTitle],
         editId: [editId, setEditId],
         business: [business, setBusiness],
+        eventState: [eventState, setEventState],
+        requestTutor: [requestTutor, setRequestTutor],
+        requestInfo: [requestInfo, setRequestInfo]
+        
       }}
     >
       {children}

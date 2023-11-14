@@ -1,5 +1,7 @@
 import style from "./settingSidebar.module.css";
 import Link from "next/link";
+import { useTranslation } from "next-i18next";
+
 
 /**
  * Sidebar shown for every page in setting
@@ -9,23 +11,24 @@ import Link from "next/link";
  * @return {*}
  */
 export default function SettingSidebar() {
+  const { t } = useTranslation("common");
   return (
     <nav>
       <ul className={style.nav}>
-        <h1>Settings</h1>
+        <h1>{t("setting")}</h1>
         <div className={style.verticalAlign}></div>
         <Link href="/settings/account">
-          <li>Account</li>
+          <li>{t("account")}</li>
         </Link>
         <Link href="/settings/language">
-          <li>Language</li>
+          <li>{t("language")}</li>
         </Link>
 
         <Link href="/boring/terms-of-service">
-          <li>Terms of service</li>
+          <li>{t("terms_of_service")}</li>
         </Link>
         <Link href="/boring/privacy-policy">
-          <li>Privacy Policy</li>
+          <li>{t("privacy_policy")}</li>
         </Link>
       </ul>
     </nav>

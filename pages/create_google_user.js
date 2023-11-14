@@ -32,6 +32,7 @@ function CreateGoogleUserPage() {
        */
       async function createUser(data) {
         const role = localStorage.getItem("role");
+        const school = localStorage.getItem("schoolId")
         try {
           const response = await AuthServices.create_user_with_google(
             data.first,
@@ -39,7 +40,8 @@ function CreateGoogleUserPage() {
             data.email,
             data.profile,
             data.sub,
-            role
+            role,
+            school
           );
           if (response.token) {
             // Store the token in local storage

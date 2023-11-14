@@ -112,6 +112,7 @@ export default function Note() {
       classes: classes || null,
       type: type || null,
       id: JSON.parse(localStorage?.getItem("userInfo"))?._id || null,
+      school_id: JSON.parse(localStorage?.getItem("userInfo"))?.schoolId
     };
     const response = await fetch(`/api/notes/search_notes`, {
       method: "POST",
@@ -180,19 +181,19 @@ export default function Note() {
               className={style.input}
               id="title"
               min={5}
-              placeholder="Search by title"
+              placeholder={t("search_by_title")}
               onChange={(e) => {
                 setTitle(e.target.value);
               }}
             ></input>
-            <textarea id="desc" placeholder="Notes must include"></textarea>
+            <textarea id="desc" placeholder={t("notes_must_include")}></textarea>
             <select
               id="class"
               onChange={(e) => {
                 addRoutePath("classes", e.target.value);
               }}
             >
-              <option>Select a class</option>
+              <option>{t("select_a_class")}</option>
               <option>Science</option>
               <option>Biology</option>
               <option>Chemistry</option>
@@ -283,7 +284,7 @@ export default function Note() {
                 }}
                 onClick={() => addRoutePath("type", "foryou")}
               >
-                For you
+               {t("for_you")}
               </li>
             )}
             <li
@@ -299,7 +300,7 @@ export default function Note() {
               }}
               onClick={() => addRoutePath("type", "popular")}
             >
-              Quality
+              {t("quality")}
             </li>
             <li
               style={{
@@ -318,7 +319,7 @@ export default function Note() {
             </li>
           </ul>
           <p className={style.results}>
-            {notes?.length} result{notes?.length == 1 ? "" : "s"} found
+            {notes?.length} {t("result")}{notes?.length == 1 ? "" : "s"} {t("found")}
           </p>
 
           <section className={style.note}>
@@ -333,7 +334,7 @@ export default function Note() {
                 })
               ) : (
                 <div className={style.noNotes}>
-                  <p>No notes to show</p>
+                  <p>{t("no_notes_found")}</p>
                 </div>
               )
             ) : (
@@ -350,14 +351,14 @@ export default function Note() {
             size={20}
             style={{ marginRight: "5px", verticalAlign: "middle" }}
           />
-          Type out notes
+          {t("type_out_notes")}
         </li>
         <li onClick={() => document.getElementById("imageUploadInput").click()}>
           <TbFileUpload
             size={20}
             style={{ marginRight: "5px", verticalAlign: "middle" }}
           />
-          <span id="uploadNotes">Image of notes</span>
+          <span id="uploadNotes">{t("image_of_notes")}</span>
         </li>
       </ul>
       {role && role != "teacher" && (

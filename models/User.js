@@ -64,9 +64,9 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     required: false,
   },
-  schoolCode: {
-    type: String,
-    default: "123456",
+  schoolId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
   },
   is_tutor: {
     type: Boolean,
@@ -82,6 +82,10 @@ const userSchema = new mongoose.Schema({
     required: false,
   },
   certificates: {
+    type: Array,
+    required: false,
+  },
+  associations: {
     type: Array,
     required: false,
   },

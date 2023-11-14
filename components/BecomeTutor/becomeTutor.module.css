@@ -65,14 +65,15 @@
   border-radius: var(--third-party-login-card-radius);
   font-size: 16px;
   border: 1px solid rgba(234, 240, 238, 255);
-  background-color: rgba(234, 240, 238, 255);
   padding-left: 15px;
-  height: 32px;
-  width: 50%;
+  height: 46px;
+  width: 100%;
+  background-color: rgba(234, 240, 238, 255);
   transition: border-color 0.3s ease-in-out;
 }
 .input:focus {
   border-color: var(--accent-color);
+  background-color: white;
 }
 .dates {
   list-style: none;
@@ -117,15 +118,20 @@
   font-family: var(--manrope-font);
 }
 .textarea {
-  margin-top: 10px;
-  margin-left: 5px;
-  resize: none;
-  width: 75vw;
-  height: 300px;
-  padding-top: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
   outline: none;
+  box-shadow: none;
+  font-weight: 400;
+  font-family: var(--primary-font);
+  line-height: 20px;
+  border-radius: var(--third-party-login-card-radius);
+  font-size: 16px;
+  border: 1px solid rgba(234, 240, 238, 255);
+  padding-left: 15px;
+  padding-top: 15px;
+  height: 300px;
+  width: 75vw;
+  resize: none;
+  background-color: rgba(234, 240, 238, 255);
   font-family: var(--manrope-font);
 }
 .back {

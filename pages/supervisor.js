@@ -16,11 +16,12 @@ const Supervisor = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({}),
+        body: JSON.stringify({
+          school: JSON.parse(localStorage?.getItem("userInfo"))?.schoolId,
+        }),
       });
       if (currentSessions.ok) {
         const data = await currentSessions.json();
-        console.log(data);
         setCurrentSesions(data.sessions);
       }
     }
@@ -30,7 +31,9 @@ const Supervisor = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({}),
+        body: JSON.stringify({
+          school: JSON.parse(localStorage?.getItem("userInfo"))?.schoolId,
+        }),
       });
       if (currentTutors.ok) {
         const data = await currentTutors.json();
@@ -45,7 +48,9 @@ const Supervisor = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({}),
+          body: JSON.stringify({
+            school: JSON.parse(localStorage?.getItem("userInfo"))?.schoolId,
+          }),
         }
       );
       if (studentsWaitingForApproval.ok) {

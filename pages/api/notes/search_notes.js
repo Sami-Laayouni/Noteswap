@@ -17,9 +17,31 @@ export default async function handler(req, res) {
   let options = {};
 
   const body = req.body;
-  const { title, desc, date, classes, type, id } = body;
+  const { title, desc, date, classes, type, id, school } = body;
   res.setHeader("Cache-Control", "public, max-age=120");
   await connectDB();
+
+  if (school == "649d661a3a5a9f73e9e3fa62") {
+    options = {
+      $match: {
+        $or: [
+          { school_id: { $regex: school } },
+          { school_id: { $exists: false } },
+        ],
+      },
+    };
+    query.push(options)
+
+  } else {
+    options = {
+      $match: {
+        school_id: { $regex: school },
+      },
+    };
+    query.push(options)
+
+  }
+
   if (title) {
     options = {
       $match: {
@@ -46,6 +68,8 @@ export default async function handler(req, res) {
     };
     query.push(options);
   }
+
+  
 
   options = {
     $lookup: {
@@ -95,9 +119,9 @@ export default async function handler(req, res) {
   });
 
   if (type == "latest") {
-    query.push({ $sort: { createdAt: -1 } }, { $limit: 20 });
+    query.push({ $sort: { createdAt: -1 } }, { $limit: 15 });
   } else if (type == "popular") {
-    query.push({ $sort: { hot: -1, createdAt: -1 } }, { $limit: 20 });
+    query.push({ $sort: { hot: -1, createdAt: -1 } }, { $limit: 15 });
   } else {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_URL}api/ai/filtering/collaborative`,
@@ -112,6 +136,7 @@ export default async function handler(req, res) {
           desc: desc,
           date: date,
           classes: classes,
+          school: school
         }),
       }
     );

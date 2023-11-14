@@ -2,8 +2,10 @@
 .background {
   width: 100%;
   height: 100vh;
-  background-color: var(--accent-color);
+  background: var(--accent-color);
   position: absolute;
+  background-repeat:no-repeat;
+  background-size:cover; 
 }
 
 /* =========== Container =========== */

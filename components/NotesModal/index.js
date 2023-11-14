@@ -10,6 +10,8 @@ import katex from "katex";
 import "katex/dist/katex.min.css";
 import Image from "next/image";
 import LoadingCircle from "../LoadingCircle";
+import { useTranslation } from "next-i18next";
+
 
 /**
  * React Quil
@@ -115,6 +117,8 @@ export default function NotesModal() {
   const reactQuill = useRef(null);
   const currentDate = new Date().toISOString().split("T")[0];
   const [date, setDate] = useState(currentDate);
+  const { t } = useTranslation("common");
+
 
   const handlePaste = (e) => {
     // Prevent the default paste behavior
@@ -356,7 +360,7 @@ export default function NotesModal() {
             onPaste={handlePaste}
             onBlur={handleBlur}
             theme="snow"
-            placeholder="Start something wonderful..."
+            placeholder={t("start_something_w")}
             modules={{
               toolbar: [
                 [{ size: ["small", false, "large", "huge"] }],
@@ -392,7 +396,7 @@ export default function NotesModal() {
       ) : current == 1 ? (
         <>
           <h1 className={style.select}>
-            Select which day the notes were taken (default today):
+            {t("select_date")}
           </h1>
           <input
             style={{ outline: "none" }}
@@ -408,7 +412,7 @@ export default function NotesModal() {
           {/* Select class */}
           <div className={style.selectContainer}>
             <h1 className={style.select}>
-              Select which class the notes belong to:{" "}
+              {t("select_class")}{" "}
             </h1>
             <div
               className={style.dropdown}
@@ -630,7 +634,7 @@ export default function NotesModal() {
         >
           {/* Rubric page */}
           <p style={{ fontFamily: "var(--manrope-font)" }}>
-            Almost done! Please review the Noteswap rubric before publishing.
+           {t("almost_done")}
           </p>
           <Image
             src="/assets/images/rubric.png"
@@ -645,7 +649,7 @@ export default function NotesModal() {
       ) : current == 3 ? (
         <div id="feedback" style={{ width: "65vw" }}>
           {/* AI feedback*/}
-          <h1 className={style.title}>AI Feedback</h1>
+          <h1 className={style.title}>{t("ai_feedback")}</h1>
           <p id="feedbackText" className={style.feedback}>
             {feedback}
           </p>
@@ -653,11 +657,11 @@ export default function NotesModal() {
       ) : (
         <>
           {/* Congratulation page */}
-          <h1 className={style.title}>Congratulations 🎉</h1>
+          <h1 className={style.title}>{t("congrat")} 🎉</h1>
           <p className={style.subtext}>
-            You have successfully shared your notes and earned:
+            {t("earned")}
           </p>
-          <h1 className={style.points}>+{points} points</h1>
+          <h1 className={style.points}>+{points} {t("points")}</h1>
         </>
       )}
       <div
@@ -699,7 +703,7 @@ export default function NotesModal() {
             }
           }}
         >
-          Back
+          {t("back")}
         </p>
       )}
 
@@ -818,6 +822,7 @@ export default function NotesModal() {
                   type: "default",
                   images: [],
                   date: date,
+                  school_id: JSON.parse(localStorage.getItem("userInfo")).schoolId 
                 }),
               });
               if (response.ok) {
@@ -874,12 +879,12 @@ export default function NotesModal() {
         }}
       >
         {current == 1 || current == 2
-          ? "Publish"
+          ? t("publish")
           : current == 4
-          ? "Finish"
+          ? t("finish")
           : current == 3
-          ? "Edit "
-          : "Next"}
+          ? t("edit")
+          : t("next")}
       </button>
       {current == 2 || current == 3 ? (
         <button
@@ -938,6 +943,9 @@ export default function NotesModal() {
                     aiRating: parseInt(result),
                     type: "default",
                     images: [],
+                    school_id: JSON.parse(localStorage.getItem("userInfo")).schoolId 
+
+
                   }),
                 }).then(async () => {
                   await fetch("/api/profile/add_community_minutes", {
@@ -965,7 +973,7 @@ export default function NotesModal() {
           className={style.next}
           style={{ right: current == 2 ? "150px" : "120px" }}
         >
-          {current == 2 ? "Get AI Feedback" : "Publish"}
+          {current == 2 ? t("get_ai_feedback") : t("publish")}
         </button>
       ) : (
         <></>

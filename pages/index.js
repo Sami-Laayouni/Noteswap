@@ -63,7 +63,7 @@ export default function Home() {
       <section className={style.hero}>
         <section className={style.hero_left}>
           <h1>NoteSwap</h1>
-          <h2>Where opportunities are born</h2>
+          <h2>{t("slogan")}</h2>
           <h3>{t("desc")}</h3>
           <Link title="Signup to Noteswap" href="/signup">
             <button style={{ fontSize: "1rem", fontWeight: "bold" }}>
@@ -242,7 +242,7 @@ export default function Home() {
             />
             <h3>{t("question4")}</h3>
             <div>
-              <p id="answer4">{t("answer4")}</p>
+              <p id="answer4">{t("answer5")}</p>
             </div>
 
             <div className={style.borderLine}></div>

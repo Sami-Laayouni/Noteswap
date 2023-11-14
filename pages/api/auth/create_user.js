@@ -16,7 +16,7 @@ const jwtSecret = process.env.NEXT_PUBLIC_JWT_SECRET;
  */
 export default async function createUser(req, res) {
   if (req.method === "POST") {
-    const { email, password, first, last, role } = req.body;
+    const { email, password, first, last, role, schoolId } = req.body;
     try {
       await connectDB();
 
@@ -43,6 +43,7 @@ export default async function createUser(req, res) {
         createdAt: Date.now(),
         points: 0,
         tutor_hours: 0,
+        schoolId: schoolId,
         notes: [],
       });
       const savedUser = await newUser.save();

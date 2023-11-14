@@ -2,6 +2,8 @@ import SettingSidebar from "../../components/SettingSidebar";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import style from "../../styles/Settings.module.css";
 import { useRouter } from "next/router";
+import { useTranslation } from "next-i18next";
+
 
 /**
  * Get static props
@@ -32,18 +34,18 @@ export default function Language() {
     const locale = e.target.value;
     router.push(router.pathname, router.asPath, { locale });
   };
+  const { t } = useTranslation("common");
   return (
     <>
       <div className={style.grid}>
         <SettingSidebar />
         <div>
-          <h2 className={style.title}>Language</h2>
+          <h2 className={style.title}>{t("language")}</h2>
           <div className={style.line}></div>
           <p>
-            To provide you with the best experience, we support multiple
-            languages.
+           {t("language_info")}
           </p>
-          <label className={style.selectLanguage}>Select Language: </label>
+          <label className={style.selectLanguage}>{t("select_lang")}: </label>
           <select
             id="language-select"
             onChange={handleLanguageChange}
@@ -52,6 +54,7 @@ export default function Language() {
           >
             <option value="en">English</option>
             <option value="fr">Français</option>
+            <option value="ar">عربي</option>
             <option value="es">Español</option>
             <option value="de">Deutsch</option>
             <option value="it">Italiano</option>
@@ -59,7 +62,7 @@ export default function Language() {
             <option value="hi">हिन्दी</option>
             <option value="zh">中文</option>
             <option value="ru">Русский</option>
-            <option value="kr">Korean</option>
+            <option value="kr">한국인</option>
           </select>
         </div>
       </div>

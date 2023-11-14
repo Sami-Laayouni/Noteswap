@@ -1,8 +1,10 @@
 import style from "./eventCard.module.css";
 import Link from "next/link";
-import Image from "next/image";
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import ModalContext from "../../context/ModalContext";
+import { useTranslation } from "next-i18next";
+
 
 /**
  * Format date
@@ -60,6 +62,11 @@ export default function EventCard({ data }) {
   const router = useRouter();
   const [teacher, setTeacher] = useState(false);
   const [id, setId] = useState(null);
+  const {eventState, eventData} = useContext(ModalContext)
+  const [open, setOpen] = eventState
+  const [datai, setData] = eventData
+  const { t } = useTranslation("common");
+
   useEffect(() => {
     if (localStorage) {
       setTeacher(
@@ -72,31 +79,29 @@ export default function EventCard({ data }) {
     <div className={style.container}>
       <div
         style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          width:"100%",
+          height:"100%"
         }}
       >
         <Link href={`/profile/${data.userInfo[0]._id}`}>
-          <Image
+          <img
             src={data.userInfo[0].profile_picture}
             alt="User ¨Picture"
-            width={200}
-            height={200}
-            style={{ borderRadius: "50%", objectFit: "cover" }}
+         
+            style={{width:"100%", height:"100%", borderTopLeftRadius: "20px", borderBottomLeftRadius:"20px", objectFit: "cover" }}
             loading="lazy"
-          ></Image>
+          ></img>
         </Link>
       </div>
 
-      <section>
+      <section style={{paddingLeft:"15px"}} onClick={()=>{setOpen(true), setData(data)}}>
         <h1>{data?.title}</h1>
-        <h2>{data?.community_service_offered} hours offered</h2>
-        <h3>
-          From {formatDate(data?.date_of_events.split("to")[0])} to{" "}
+        <h2>
+          {t("from")} {formatDate(data?.date_of_events.split("to")[0])} {t("to")}{" "}
           {formatDate(data?.date_of_events.split("to")[1])}
-        </h3>
-        <h4>{data?.category}</h4>
+        </h2>
+        <h3>{data?.community_service_offered} {t("hours_offered")}</h3>
+      
 
         <p>{data?.desc}</p>
       </section>
@@ -108,7 +113,7 @@ export default function EventCard({ data }) {
               textAlign: "center",
             }}
           >
-            Event is full
+            {t("event_full")}
           </p>
         )}
         {!teacher && (
@@ -143,8 +148,10 @@ export default function EventCard({ data }) {
                 });
 
                 document.getElementById(`${data._id}button`).innerText =
-                  "Unsignup";
+                  t("unsignup");
                 if (response.ok) {
+                  setOpen(true)
+                  setData(data)
                   router.push(data?.link_to_event);
                 }
               }
@@ -165,7 +172,7 @@ export default function EventCard({ data }) {
                 data?.volunteers?.length > data?.max
               }
             >
-              {data?.volunteers?.includes(id) ? "Unsignup" : "Sign Up"}
+              {data?.volunteers?.includes(id) ? t("unsignup") : t("signup")}
             </button>
           </span>
         )}
@@ -181,7 +188,7 @@ export default function EventCard({ data }) {
               }}
               className={style.button}
             >
-              View Volunteers
+              {t("view_v")}
             </button>
           </Link>
         )}
@@ -193,7 +200,7 @@ export default function EventCard({ data }) {
             window.location.href = `mailto:${data?.contact_email}?subject=${data?.title}`;
           }}
         >
-          Contact
+          {t("contact")}
         </button>
       </section>
     </div>

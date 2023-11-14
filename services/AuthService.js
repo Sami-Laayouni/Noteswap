@@ -104,7 +104,8 @@ class AuthService {
     email,
     profilePicture,
     googleId,
-    role
+    role,
+    schoolId
   ) {
     if (!email) {
       console.error("No email given to signup with Google!");
@@ -123,6 +124,7 @@ class AuthService {
           email,
           profilePicture,
           role,
+          schoolId
         }),
       });
 
@@ -142,7 +144,8 @@ class AuthService {
     email,
     profilePicture,
     id,
-    role
+    role,
+    schoolId
   ) {
     if (!email) {
       console.error("No email given to signup with Microsoft!");
@@ -163,6 +166,7 @@ class AuthService {
             email,
             profilePicture,
             role,
+            schoolId
           }),
         }
       );
@@ -178,7 +182,7 @@ class AuthService {
   }
 
   /* ========== Sign up with email and password ========== */
-  async create_user(email, password, first, last, role) {
+  async create_user(email, password, first, last, role, schoolId) {
     if (!email) {
       console.error("No email given to create user!");
       return;
@@ -193,7 +197,7 @@ class AuthService {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password, first, last, role }),
+        body: JSON.stringify({ email, password, first, last, role, schoolId }),
       });
 
       const data = await response.json();

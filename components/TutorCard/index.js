@@ -5,6 +5,8 @@ import { useContext, useState } from "react";
 import ModalContext from "../../context/ModalContext";
 import StarRating from "../StarRating";
 import Image from "next/image";
+import { useTranslation } from "next-i18next";
+
 
 function calculateAverage(numbers) {
   if (numbers.length === 0) {
@@ -28,6 +30,8 @@ export default function TutorCard({ data }) {
   const [open, setOpen] = bookSession;
   const [info, setInfo] = bookSessionInfo;
   const ratings = calculateAverage(data?.userInfo[0]?.rating);
+  const { t } = useTranslation("common");
+
 
   return (
     <div className={style.container}>
@@ -72,7 +76,7 @@ export default function TutorCard({ data }) {
               className={style.center}
               style={{ fontFamily: "var(--manrope-font)", lineHeight: "10px" }}
             >
-              Rating: {roundToDecimal(ratings, 1)}/5
+              {t("rating")}: {roundToDecimal(ratings, 1)}/5
             </p>
           </>
         )}
@@ -84,7 +88,7 @@ export default function TutorCard({ data }) {
               textAlign: "center",
             }}
           >
-            No ratings yet
+            {t("no_rating")}
           </p>
         )}
         <button
@@ -100,7 +104,7 @@ export default function TutorCard({ data }) {
             setInfo({ data });
           }}
         >
-          Book a session
+         {t("book_session")}
         </button>
         <button
           onClick={() => {
@@ -109,7 +113,7 @@ export default function TutorCard({ data }) {
           className={style.button}
           style={{ right: "20px", top: "170px" }}
         >
-          Contact
+          {t("contact")}
         </button>
       </div>
     </div>

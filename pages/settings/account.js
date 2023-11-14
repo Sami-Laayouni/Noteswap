@@ -3,6 +3,7 @@ import { useEffect, useState, useContext } from "react";
 import ModalContext from "../../context/ModalContext";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "../../middleware/authenticate";
+import { useTranslation } from "next-i18next";
 import dynamic from "next/dynamic";
 const SettingSidebar = dynamic(() => import("../../components/SettingSidebar"));
 const DeleteAccount = dynamic(() =>
@@ -39,6 +40,7 @@ const Setting = () => {
   const [profile, setProfile] = useState("");
   const { deleteModal } = useContext(ModalContext);
   const [open, setOpen] = deleteModal;
+  const { t } = useTranslation("common");
   useEffect(() => {
     if (localStorage) {
       const userData = JSON.parse(localStorage.getItem("userInfo"));
@@ -74,7 +76,7 @@ const Setting = () => {
       <SettingSidebar />
       <DeleteAccount />
       <div className={style.paddingLeft}>
-        <h2 className={style.title}>Account</h2>
+        <h2 className={style.title}>{t("account")}</h2>
         <div style={{ marginTop: "60px", position: "relative" }}>
           <form
             onSubmit={async (e) => {
@@ -101,7 +103,7 @@ const Setting = () => {
             }}
           >
             <label className={style.labelForInput} htmlFor="First">
-              First Name
+              {t("first_name")}
             </label>
             <input
               id="First"
@@ -113,7 +115,7 @@ const Setting = () => {
               required
             ></input>
             <label className={style.labelForInput} htmlFor="Last">
-              Last Name
+              {t("last_name")}
             </label>
             <input
               id="Last"
@@ -125,7 +127,7 @@ const Setting = () => {
               required
             ></input>
             <label className={style.labelForInput} htmlFor="Bio">
-              Biography
+              {t("biography")}
             </label>
             <input
               id="Bio"
@@ -138,7 +140,7 @@ const Setting = () => {
               }}
             ></input>
             <button id="save" className={style.saveButton} type="submit">
-              Save
+              {t("save")}
             </button>
           </form>
 
@@ -154,14 +156,10 @@ const Setting = () => {
 
         <div className={style.line}></div>
 
-        <h2 className={style.title}>Delete your Account</h2>
-        <p className={style.padding}>
-          By deleting your Noteswap account, you agree to delete all publicly
-          posted information on your account, including notes. This process can
-          not be undone.
-        </p>
+        <h2 className={style.title}>{t("delete_account")}</h2>
+        <p className={style.padding}>{t("delete_info")}</p>
         <button className={style.delete} onClick={() => setOpen(true)}>
-          Delete Account
+          {t("delete_account")}
         </button>
         <input
           type="file"

@@ -39,7 +39,8 @@ const Signup = () => {
   const [first, setFirst] = useState("");
   const [last, setLast] = useState("");
   const [method, setMethod] = useState("email");
-  const [selectedRole, setSelectedRole] = useState();
+  const [selectedRole, setSelectedRole] = useState("");
+  const [schoolId, setSchoolId] = useState("649d661a3a5a9f73e9e3fa62");
 
   const { isLoggedIn } = useContext(AuthContext);
   const { errorSignup } = useContext(AuthContext);
@@ -88,7 +89,8 @@ const Signup = () => {
           password,
           first,
           last,
-          selectedRole
+          selectedRole,
+          schoolId
         );
         if (response.token) {
           localStorage.setItem("userInfo", JSON.stringify(response.user));
@@ -105,10 +107,12 @@ const Signup = () => {
         // Sign up with Google
         const data = await AuthServices.get_google_continue_url("signup");
         localStorage.setItem("role", selectedRole);
+        localStorage.setItem("schoolId", schoolId);
         // Redirect user to google url
         window.location.href = data.url;
       } else if (type === "microsoft") {
         localStorage.setItem("role", selectedRole);
+        localStorage.setItem("schoolId", schoolId);
         window.location.href = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize
         ?client_id=${process.env.NEXT_PUBLIC_MICROSOFT_APP_ID}
         &response_type=code
@@ -129,7 +133,17 @@ const Signup = () => {
   // Return the JSX
   return (
     <>
-      <div className={style.background}>
+      <div
+        className={style.background}
+        style={{
+          backgroundRepeat: !schoolId ? "no-repeat" : "no-repeat",
+          backgroundSize: !schoolId ? "cover" : "cover",
+          background: !schoolId
+            ? "var(--accent-color)"
+            : `url("/assets/schools/${schoolId}.jpg")`,
+       
+        }}
+      >
         <Head>
           <title>Signup | Noteswap</title> {/* Title of the page */}
         </Head>
@@ -160,30 +174,47 @@ const Signup = () => {
               className={style.form}
               onSubmit={(e) => {
                 e.preventDefault();
-                if (
-                  email.endsWith("@asifrane.org") ||
-                  email.endsWith("@asi.aui.ma") ||
-                  email.endsWith("@aui.ma")
-                ) {
-                  if (state == 0) {
-                    setState(1);
-                    setError("");
-                  } else {
-                    document.getElementById("createAccount").innerText =
-                      "Creating...";
-                    document.getElementById("createAccount").disabled = true;
-                    setError("");
-                    handleSignup(method);
-                  }
+
+                if (state == 0) {
+                  setState(1);
+                  setError("");
                 } else {
-                  setError(
-                    "You must use your school email ex: @asifrane.org, @asi.aui.ma, and @aui.ma"
-                  );
+                  document.getElementById("createAccount").innerText =
+                    "Creating...";
+                  document.getElementById("createAccount").disabled = true;
+                  setError("");
+                  handleSignup(method);
                 }
               }}
             >
               {!selectedRole && (
                 <>
+                  <p className={style.labelCenter}>I attend this school</p>
+                  <div>
+                    <select
+                      style={{
+                        textAlign: "center",
+                        width: "110%",
+                        border: "1px solid black",
+                        outline: "none",
+                        borderRadius: "3px",
+                        height: "33px",
+                      }}
+                      onChange={(e) => {
+                        setSchoolId(e.target.value);
+                      }}
+                      value={schoolId}
+                      name="schools"
+                      id="schools"
+                    >
+                      <option value="649d661a3a5a9f73e9e3fa62">
+                        Al Akhawayn School of Ifrane (ASI)
+                      </option>
+                      <option value="6549fb05bd461a666fe1f67e">
+                        Allal Fassi Lycée Ifrane
+                      </option>
+                    </select>
+                  </div>
                   <p className={style.labelCenter}>{t("i_am_joining_as")}</p>
                   <ul className={style.roles}>
                     <li id="student" onClick={() => setSelectedRole("student")}>
@@ -222,16 +253,13 @@ const Signup = () => {
                       className={style.input}
                       onChange={(e) => {
                         if (
-                          !e.target.value.endsWith("@asifrane.org") &&
-                          !e.target.value.endsWith("@asi.aui.ma") &&
-                          !e.target.value.endsWith("@aui.ma") &&
                           e.target.value.length > 15 &&
                           e.target.value.includes("@") &&
                           e.target.value.includes(".")
                         ) {
                           setEmail(e.target.value);
                           setError(
-                            "You must use your school email ex: @asifrane.org, @asi.aui.ma, and @aui.ma"
+                            "You must use a valid email"
                           );
                         } else {
                           setEmail(e.target.value);
@@ -356,7 +384,7 @@ const Signup = () => {
               {!selectedRole && (
                 <div
                   className={style.accountContainer}
-                  style={{ marginTop: "36vh", marginLeft: "1vw" }}
+                  style={{ marginTop: "30vh", marginLeft: "1vw" }}
                 >
                   <Link
                     style={{

@@ -44,6 +44,10 @@ const tutorSchema = new mongoose.Schema({
     type: Boolean,
     required: true,
   },
+  school_id:{
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
+  }
 });
 
 let Tutor;

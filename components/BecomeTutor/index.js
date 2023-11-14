@@ -168,6 +168,7 @@ export default function BecomeTutor() {
                   .map(([day, value]) => day)
                   .join(", "), // String of days that student is available (ex: Monday, Friday)
                 time_available: `${startTime}-${endTime}`, //The time the student is available
+                school_id: JSON.parse(localStorage.getItem("userInfo")).schoolId 
               }),
             });
             // Check if the response was succesful.

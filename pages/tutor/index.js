@@ -7,10 +7,11 @@ import Head from "next/head";
 import LoadingCircle from "../../components/LoadingCircle";
 import TutorCard from "../../components/TutorCard";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 import dynamic from "next/dynamic";
 const BecomeTutor = dynamic(() => import("../../components/BecomeTutor"));
 const BookASession = dynamic(() => import("../../components/BookASession"));
-import { toast } from "react-toastify";
+const RequestTutor = dynamic(()=>import("../../components/RequestTutor"))
 /**
  * Get static props
  * @date 8/13/2023 - 5:02:47 PM
@@ -35,8 +36,10 @@ export async function getStaticProps({ locale }) {
  * @return {*}
  */
 export default function Tutor() {
-  const { tutor } = useContext(ModalContext);
+  const { tutor, requestTutor, requestInfo } = useContext(ModalContext);
   const [open, setOpen] = tutor;
+  const [ropen, setRopen] = requestTutor;
+  const [info, setInfo] = requestInfo
   const mathClasses = [
     "Algebra I",
     "Algebra II",
@@ -92,6 +95,8 @@ export default function Tutor() {
   const [dataFromLocalStorage, setDataFromLocalStorage] = useState(null);
 
   const router = useRouter();
+  const { t } = useTranslation("common");
+
 
   // Add path to the route
   function addRoutePath(route, value) {
@@ -135,6 +140,7 @@ export default function Tutor() {
     const body = {
       subject: classes || null,
       days_available: available || null,
+      school: JSON.parse(localStorage?.getItem("userInfo"))?.schoolId
     };
     const response = await fetch(`/api/tutor/search_tutor`, {
       method: "POST",
@@ -178,16 +184,17 @@ export default function Tutor() {
       </Head>
       <BecomeTutor />
       <BookASession />
+      <RequestTutor/>
       <img
         className={style.background}
         src="/assets/images/users/Background-Image.webp"
         alt="Background image"
       ></img>
-      <h1 className={style.title}>Noteswap Tutor</h1>
-      <h2 className={style.subTitle}>Matching tutors with learners</h2>
+      <h1 className={style.title}>{t("noteswap_tutor")}</h1>
+      <h2 className={style.subTitle}>{t("noteswap_tutor_message")}</h2>
       <section className={style.search}>
         <section className={style.container}>
-          <span>I want to learn</span>
+          <span>{t("i_want_to_learn")}</span>
           <div
             className={style.dropdown}
             onClick={() => {
@@ -202,7 +209,7 @@ export default function Tutor() {
               }
             }}
           >
-            {schoolClass ? schoolClass : "Select a subject"}
+            {schoolClass ? schoolClass : t("select_a_subject")}
           </div>
           <div
             id="dropdownMenu"
@@ -381,7 +388,7 @@ export default function Tutor() {
         </section>
         <div className={style.line}></div>
         <section className={style.container}>
-          <span>I&apos;m available</span>
+          <span>{t("i_am_available")}</span>
           <div
             className={style.dropdown}
             onClick={() => {
@@ -397,7 +404,7 @@ export default function Tutor() {
               }
             }}
           >
-            {time ? time : "Select a time"}
+            {time ? time : t("select_time")}
           </div>
           <div
             id="dropdownMenu2"
@@ -414,7 +421,7 @@ export default function Tutor() {
                     "none";
                 }}
               >
-                Any time
+                {t("any_time")}
               </li>
               <li
                 key="Monday"
@@ -425,7 +432,7 @@ export default function Tutor() {
                     "none";
                 }}
               >
-                Monday
+                {t("monday")}
               </li>
               <li
                 key="Tuesday"
@@ -436,7 +443,7 @@ export default function Tutor() {
                     "none";
                 }}
               >
-                Tuesday
+                {t("tuesday")}
               </li>
               <li
                 key="Wednesday"
@@ -447,7 +454,7 @@ export default function Tutor() {
                     "none";
                 }}
               >
-                Wednesday
+               {t("wednesday")}
               </li>
               <li
                 key="Thursday"
@@ -458,7 +465,7 @@ export default function Tutor() {
                     "none";
                 }}
               >
-                Thursday
+                {t("thursday")}
               </li>
               <li
                 key="Friday"
@@ -469,14 +476,14 @@ export default function Tutor() {
                     "none";
                 }}
               >
-                Friday
+                {t("friday")}
               </li>
             </ul>
           </div>
         </section>
         <div className={style.line}></div>
         <section className={style.container}>
-          <span>At this time</span>
+          <span>{t("at_this_time")}</span>
           <br></br>
           <input
             type="time"
@@ -507,14 +514,14 @@ export default function Tutor() {
           <section className={style.loading_section}>
             <LoadingCircle />
 
-            <h2>Looking for best results</h2>
+            <h2>{t("looking")}</h2>
           </section>
         )}
 
         {tutors && tutors.length == 0 ? (
           <>
             <section className={style.loading_section}>
-              <h3 className={style.loading_text}>No tutors to display</h3>
+              <h3 className={style.loading_text}>{t("no_tutors")}</h3>
             </section>
           </>
         ) : (
@@ -527,8 +534,8 @@ export default function Tutor() {
             }}
           >
             <p className={style.result}>
-              {tutors?.length} result
-              {tutors?.length == 1 ? "" : "s"} found
+              {tutors?.length} {t("result")}
+              {tutors?.length == 1 ? "" : "s"} {t("found")}
             </p>
             {tutors?.map(function (value) {
               return <TutorCard key={value.userInfo[0]?._id} data={value} />;
@@ -542,6 +549,7 @@ export default function Tutor() {
           className={style.becomeButton}
           onClick={async () => {
             document.getElementById("dropout").innerText = "Sending...";
+            document.getElementById("dropout").disabled = true
             const response = await fetch("/api/tutor/request_dropout", {
               method: "POST",
               headers: {
@@ -556,16 +564,27 @@ export default function Tutor() {
               }),
             });
             if (response.ok) {
-              toast.success("Successfully sent message!");
               document.getElementById("dropout").innerText = "Success";
             } else {
-              toast.error("An error has occurred!");
               document.getElementById("dropout").innerText =
                 "An error has occured";
             }
           }}
         >
-          Request to dropout
+          {t("request_to_drop")}
+        </button>
+      )}
+    
+      {dataFromLocalStorage && !dataFromLocalStorage.role != "student" && (
+        <button
+          className={style.becomeButton}
+          style={{right:"220px"}}
+          onClick={() => {
+            setRopen(true)
+            setInfo(tutors)
+          }}
+        >
+          Request a tutoring session
         </button>
       )}
       {dataFromLocalStorage && !dataFromLocalStorage.is_tutor && (
@@ -575,7 +594,7 @@ export default function Tutor() {
             setOpen(true);
           }}
         >
-          Become a tutor
+          {t("become_tutor")}
         </button>
       )}
     </div>

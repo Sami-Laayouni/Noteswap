@@ -13,11 +13,33 @@ import { useRouter } from "next/router";
 
 import NoteCard from "../../components/NoteCard";
 import dynamic from "next/dynamic";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 const ImageNotesModal = dynamic(() =>
   import("../../components/ImageNotesModal")
 );
 const EditNotesModal = dynamic(() => import("../../components/EditNotesModal"));
 
+export async function getStaticPaths() {
+  // Use an empty array for paths since paths will be generated at request time
+  return { paths: [], fallback: true };
+}
+/**
+ * Get static props
+ * @date 8/13/2023 - 4:51:52 PM
+ *
+ * @export
+ * @async
+ * @param {{ locale: any; }} { locale }
+ * @return {unknown}
+ */
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
+}
 /**
  * Profile
  * @date 8/13/2023 - 4:58:02 PM
@@ -31,6 +53,8 @@ export default function Profile() {
   const [data, setData] = useState(null);
   const [notes, setNotes] = useState(null);
   const router = useRouter();
+  const { t } = useTranslation("common");
+
   useEffect(() => {
     async function getData(id) {
       const response = await fetch("/api/profile/get_user_profile", {
@@ -87,7 +111,7 @@ export default function Profile() {
         />
         <div>
           <h1 style={{ display: "inline-block" }}>
-            {data?.first_name ? data?.first_name : "Loading"}{" "}
+            {data?.first_name ? data?.first_name : t("loading")}{" "}
             {data?.last_name ? data?.last_name : ""}
           </h1>
           {usersId && data?._id == usersId && (
@@ -104,24 +128,23 @@ export default function Profile() {
           )}
 
           <h2>
-            {data?.bio ? data?.bio : "No bios available"} · Total community
-            service:{" "}
+            {data?.bio ? data?.bio : "No bios available"} · {t("total_community_ser")}:{" "}
             <span>
               {data?.points || data?.tutor_hours
                 ? Math.floor(data?.points / 20) +
                   Math.floor(data?.tutor_hours / 60)
                 : "0"}{" "}
-              minute
+              {t("minute")}
               {Math.floor(data?.points / 20) +
                 Math.floor(data?.tutor_hours / 60) ==
               1
                 ? ""
                 : "s"}
             </span>{" "}
-            · Community service earned by tutoring:{" "}
+            · {t("community_service_tutor")}:{" "}
             <span>
               {data?.tutor_hours ? Math.floor(data?.tutor_hours / 60) : "0"}{" "}
-              minute{Math.floor(data?.tutor_hours / 60) == 1 ? "" : "s"}
+              {t("minute")}{Math.floor(data?.tutor_hours / 60) == 1 ? "" : "s"}
             </span>
           </h2>
         </div>
@@ -141,7 +164,7 @@ export default function Profile() {
                   lineHeight: "0px",
                 }}
               >
-                {data?.email ? data?.email : "Loading..."}
+                {data?.email ? data?.email : `${t("loading")}...`}
               </p>
             </div>
             <div style={{ display: "block", height: "fit-content" }}>
@@ -156,7 +179,7 @@ export default function Profile() {
                   lineHeight: "0px",
                 }}
               >
-                {data?.role ? data?.role : "Loading..."}{" "}
+                {data?.role ? data?.role : `${t("loading")}...`}{" "}
               </p>
             </div>
             <div style={{ display: "block", height: "fit-content" }}>
@@ -172,11 +195,11 @@ export default function Profile() {
               >
                 {data?.is_tutor
                   ? `${
-                      data?.first_name ? data?.first_name : "Loading name"
-                    } is tutoring on Noteswap`
+                      data?.first_name ? data?.first_name : t("loading")
+                    } ${t("is_tutoring")}`
                   : `${
-                      data?.first_name ? data?.first_name : "Loading name"
-                    } is not tutoring on Noteswap`}
+                      data?.first_name ? data?.first_name : t("loading")
+                    } ${t("is_not_tutoring")}`}
               </p>
             </div>
           </section>
@@ -184,7 +207,7 @@ export default function Profile() {
           <div className={style.vertical_line} />
         </div>
         <div className={style.right}>
-          <h2>Latest notes</h2>
+          <h2>{t("latest_notes")}</h2>
           {notes?.notes.length == 0 && (
             <span>
               <MdOutlineSpeakerNotesOff
@@ -195,7 +218,7 @@ export default function Profile() {
                   marginRight: "auto",
                 }}
               />
-              <h3>No notes posted yet</h3>
+              <h3>{t("no_notes")}</h3>
             </span>
           )}
           {notes?.notes.length > 0 && (

@@ -18,6 +18,7 @@ import { IoMdTime } from "react-icons/io";
 import { RiCopperCoinLine } from "react-icons/ri";
 import { GrScan } from "react-icons/gr";
 import { SiGoogleanalytics } from "react-icons/si";
+import { HiUserGroup } from "react-icons/hi";
 
 import AuthService from "../../services/AuthService";
 import ModalContext from "../../context/ModalContext";
@@ -161,7 +162,7 @@ export default function Header() {
           </Link>
           {router.pathname.includes("business") &&
             userData?.role == "association" && (
-              <h1 className={style.business}>Business</h1>
+              <h1 className={style.business}>{t("business")}</h1>
             )}
         </div>
 
@@ -178,7 +179,7 @@ export default function Header() {
                       className={style.header_nav_a}
                       href="/notes"
                     >
-                      Notes
+                      {t("note")}
                     </Link>
                     {userData?.role != "teacher" && (
                       <Link
@@ -186,7 +187,7 @@ export default function Header() {
                         className={style.header_nav_a}
                         href="/tutor"
                       >
-                        Tutor
+                        {t("tutor")}
                       </Link>
                     )}
                   </>
@@ -197,7 +198,7 @@ export default function Header() {
                   className={style.header_nav_a}
                   href="/event"
                 >
-                  Events
+                  {t("events")}
                 </Link>
               )}
               {/* User info (Profile pic + name)*/}
@@ -397,7 +398,7 @@ export default function Header() {
                       "none";
                   }}
                 >
-                  My Profile
+                  {t("my_profile")}
                   <div className={style.borderLine} />
                 </li>
               </Link>
@@ -414,7 +415,7 @@ export default function Header() {
                         ).style.display = "none";
                       }}
                     >
-                      Notes
+                      {t("note")}
                       <div className={style.borderLine} />
                     </li>
                   </Link>
@@ -430,7 +431,7 @@ export default function Header() {
                           ).style.display = "none";
                         }}
                       >
-                        Tutor
+                        {t("tutor")}
                         <div className={style.borderLine} />
                       </li>
                     </Link>
@@ -447,28 +448,26 @@ export default function Header() {
                       "none";
                   }}
                 >
-                  Events
+                  {t("events")}
                   <div className={style.borderLine} />
                 </li>
               </Link>
-              {userData?.role == "teacher" ||
-                (userData?.role == "association" && (
-                  <Link href="/rewardcs">
-                    <li
-                      onClick={() => {
-                        document.getElementById(
-                          "hamburger_menu"
-                        ).style.display = "none";
-                        document.getElementById(
-                          "hamburger_overlay"
-                        ).style.display = "none";
-                      }}
-                    >
-                      Reward Community Service
-                      <div className={style.borderLine} />
-                    </li>
-                  </Link>
-                ))}
+              {userData?.role == "teacher" && (
+                <Link href="/rewardcs">
+                  <li
+                    onClick={() => {
+                      document.getElementById("hamburger_menu").style.display =
+                        "none";
+                      document.getElementById(
+                        "hamburger_overlay"
+                      ).style.display = "none";
+                    }}
+                  >
+                    {t("reward_cs")}
+                    <div className={style.borderLine} />
+                  </li>
+                </Link>
+              )}
               <Link href="/settings/account">
                 <li
                   onClick={() => {
@@ -478,7 +477,7 @@ export default function Header() {
                       "none";
                   }}
                 >
-                  Settings
+                  {t("setting")}
                   <div className={style.borderLine} />
                 </li>
               </Link>
@@ -494,7 +493,7 @@ export default function Header() {
                       ).style.display = "none";
                     }}
                   >
-                    Certificates
+                    {t("certicates")}
                     <div className={style.borderLine} />
                   </li>
                 ))}
@@ -510,7 +509,7 @@ export default function Header() {
                       ).style.display = "none";
                     }}
                   >
-                    Detect AI Text
+                    {t("detect_ai_text")}
                     <div className={style.borderLine} />
                   </li>
                 </Link>
@@ -527,7 +526,7 @@ export default function Header() {
                     "none";
                 }}
               >
-                Log out
+                {t("log_out")}
                 <div className={style.borderLine} />
               </li>
             </>
@@ -542,26 +541,45 @@ export default function Header() {
           </p>
           {userData?.role == "student" && (
             <p className={style.lightext}>
-              Your Daily Streak:{" "}
+              {t("your_daily_streak")}{" "}
               <span style={{ color: "var(--accent-color)" }}>
-                {streak} day{streak == 1 ? "" : "s"}{" "}
+                {streak} {t("day")}
+                {streak == 1 ? "" : "s"}{" "}
               </span>
             </p>
           )}
-          <p
-            className={style.lightext}
-            style={{ color: "var(--accent-color)" }}
-          >
-            Business Account
-          </p>
+          {userData?.role == "association" && (
+            <p
+              className={style.lightext}
+              style={{ color: "var(--accent-color)" }}
+            >
+              {t("business_account")}
+            </p>
+          )}
+          {userData?.role != "association" && (
+            <p
+              className={style.lightext}
+              style={{ color: "var(--accent-color)" }}
+            >
+             School Account
+            </p>
+          )}
 
           <div className={style.line}></div>
           <li>
             <Link href={`/profile/${userData?._id}`}>
               <CgProfile size={21} style={{ verticalAlign: "middle" }} />
-              <span>My Profile</span>
+              <span>{t("my_profile")}</span>
             </Link>
           </li>
+          {userData?.role == "association" && userData?.associations && (
+            <li>
+              <Link href={`/bprofile/${userData?.associations[0]}`}>
+                <HiUserGroup size={21} style={{ verticalAlign: "middle" }} />
+                <span>My Association</span>
+              </Link>
+            </li>
+          )}
           {userData?.role == "teacher" ||
             (userData?.role == "association" && (
               <li>
@@ -570,7 +588,7 @@ export default function Header() {
                     size={21}
                     style={{ verticalAlign: "middle" }}
                   />
-                  <span>Reward CS</span>
+                  <span>{t("reward_cs")}</span>
                 </Link>
               </li>
             ))}
@@ -578,7 +596,7 @@ export default function Header() {
             <li>
               <Link href="/productivity">
                 <IoMdTime size={21} style={{ verticalAlign: "middle" }} />
-                <span>My Productivity</span>
+                <span>{t("my_productivity")}</span>
               </Link>
             </li>
           )}
@@ -589,7 +607,7 @@ export default function Header() {
                   size={21}
                   style={{ verticalAlign: "middle" }}
                 />
-                <span>Admin Page</span>
+                <span>{t("admin_page")}</span>
               </Link>
             </li>
           )}
@@ -597,7 +615,7 @@ export default function Header() {
             <li>
               <Link href="/verify">
                 <GrScan size={21} style={{ verticalAlign: "middle" }} />
-                <span>Verify Certificate</span>
+                <span>{t("verify_certificate")}</span>
               </Link>
             </li>
           )}
@@ -605,7 +623,7 @@ export default function Header() {
             <li>
               <Link href="/business/edit">
                 <MdEdit size={21} style={{ verticalAlign: "middle" }} />
-                <span>Edit Association</span>
+                <span>{t("edit_association")}</span>
               </Link>
             </li>
           )}
@@ -616,27 +634,27 @@ export default function Header() {
                   size={21}
                   style={{ verticalAlign: "middle" }}
                 />
-                <span>Analytics</span>
+                <span>{t("analytics")}</span>
               </Link>
             </li>
           )}
           <li>
             <Link href="/settings/account">
               <FiSettings size={21} style={{ verticalAlign: "middle" }} />
-              <span>Settings</span>
+              <span>{t("setting")}</span>
             </Link>
           </li>
           {userData?.role != "teacher" && userData?.role != "association" && (
             <li onClick={() => setCertificate(true)}>
               <FiAward size={21} style={{ verticalAlign: "middle" }} />
-              <span>Certificates </span>
+              <span>{t("certicates")} </span>
             </li>
           )}
           {userData?.role == "teacher" && (
             <li>
               <Link href="/detect_ai">
                 <LuGlasses size={21} style={{ verticalAlign: "middle" }} />
-                <span>Detect AI Text</span>
+                <span>{t("detect_ai_text")}</span>
               </Link>
             </li>
           )}
@@ -649,7 +667,7 @@ export default function Header() {
             }}
           >
             <FiLogOut size={21} style={{ verticalAlign: "middle" }} />
-            <span>Log out</span> {/* Logout button */}
+            <span>{t("log_out")}</span> {/* Logout button */}
           </li>
         </ul>
       </section>

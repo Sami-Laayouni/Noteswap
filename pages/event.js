@@ -8,8 +8,11 @@ import EventCard from "../components/EventCard";
 import Head from "next/head";
 import dynamic from "next/dynamic";
 const CreateEvent = dynamic(() => import("../components/CreateEvent"));
+const ExpandedEvent = dynamic(()=>import("../components/ExpandedEvent"))
 import OneSignal from "react-onesignal";
 import { requireAuthentication } from "../middleware/authenticate";
+import { useTranslation } from "next-i18next";
+
 /**
  * Get Static props
  * @date 8/13/2023 - 4:53:53 PM
@@ -41,6 +44,8 @@ const Event = () => {
   const [events, setEvents] = useState();
   const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState("");
+  const { t } = useTranslation("common");
+
 
   useEffect(() => {
     addRoutePath("title", title);
@@ -77,6 +82,8 @@ const Event = () => {
         },
         body: JSON.stringify({
           title: title,
+          school: JSON.parse(localStorage?.getItem("userInfo"))?.schoolId
+
         }),
       });
       if (data.ok) {
@@ -147,14 +154,15 @@ const Event = () => {
         <title>Noteswap | Events</title>
       </Head>
       <CreateEvent />
+      <ExpandedEvent/>
       <img
         className={style.background}
         alt="Background Image"
-        src="/assets/images/users/Background-Image.webp"
+        src="/assets/fallback/background.png"
       ></img>
-      <h1 className={style.title}>Events</h1>
+      <h1 className={style.title}>{t("events")}</h1>
       <h2 className={style.subTitle}>
-        Earn community service by volunteering in events
+        {t("event_slogan")}
       </h2>
 
       <section className={style.search}>
@@ -163,7 +171,8 @@ const Event = () => {
           onChange={(e) => {
             setTitle(e.target.value);
           }}
-          placeholder="Search by event name"
+          style={{borderRadius:"10px"}}
+          placeholder={t("s_event_name")}
           autoFocus
         />
       </section>
@@ -173,14 +182,14 @@ const Event = () => {
           <section className={style.loading_section}>
             <LoadingCircle />
 
-            <h2>Looking for best results</h2>
+            <h2>{t("looking")}</h2>
           </section>
         )}
 
         {events && events.length == 0 ? (
           <>
             <section className={style.loading_section}>
-              <h3 className={style.loading_text}>No events to display</h3>
+              <h3 className={style.loading_text}>{t("no_events")}</h3>
             </section>
           </>
         ) : (
@@ -193,8 +202,8 @@ const Event = () => {
             }}
           >
             <p className={style.result}>
-              {events?.length} result
-              {events?.length == 1 ? "" : "s"} found
+              {events?.length} {t("result")}
+              {events?.length == 1 ? "" : "s"} {t("found")}
             </p>
             {events?.map(function (value) {
               return <EventCard key={value.id} data={value} />;
@@ -210,7 +219,7 @@ const Event = () => {
           className={style.createNewEvent}
           style={{ borderRadius: "4px" }}
         >
-          Create a new event
+          {t("create_new_event")}
         </section>
       )}
     </div>

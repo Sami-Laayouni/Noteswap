@@ -19,7 +19,6 @@ const ShareNotes = dynamic(() => import("../components/ShareNotes"), {
 });
 
 const Header = dynamic(() => import("../components/Header"));
-const TimeTracker = dynamic(() => import("../components/TimeTracker"));
 /**
  * Default layout
  * @date 6/17/2023 - 4:26:44 PM
@@ -36,7 +35,6 @@ const DefaultLayout = ({ children }) => {
           <Certificate />
           <LargenImage />
           <ShareNotes />
-          <TimeTracker />
           <main>{children}</main>
         </SocketProvider>
       </ModalProvider>

@@ -5,6 +5,8 @@ import Head from "next/head";
 import style from "../styles/404.module.css";
 import Link from "next/link";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
+
 
 /**
  * Get static props
@@ -31,6 +33,8 @@ export async function getStaticProps({ locale }) {
  */
 export default function InternalError() {
   // Return the JSX
+  const { t } = useTranslation("common");
+
   return (
     <>
       <Head>
@@ -52,9 +56,9 @@ export default function InternalError() {
             textAlign: "center",
           }}
         >
-          <h1 className={style.title}>An error occured!</h1>
+          <h1 className={style.title}>{t("an_error_occurred")}</h1>
           <Link href="/dashboard">
-            <button className={style.button}>Take me back </button>
+            <button className={style.button}>{t("take_me_back")}</button>
           </Link>
         </div>
       </section>

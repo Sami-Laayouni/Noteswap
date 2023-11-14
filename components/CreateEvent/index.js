@@ -220,6 +220,8 @@ export default function CreateEvent() {
                   location: location,
                   req: req,
                   createdAt: Date.now(),
+                  school_id: JSON.parse(localStorage.getItem("userInfo")).schoolId 
+
                 }),
               });
               if (response.ok) {

@@ -3,6 +3,8 @@ import style from "../styles/Productivity.module.css";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useTranslation } from "next-i18next";
+
 
 /**
  * Get static props
@@ -34,12 +36,14 @@ export default function Productivity() {
       setData(JSON.parse(localStorage.getItem("userInfo")));
     }
   }, []);
+  const { t } = useTranslation("common");
+
   // Return the JSX
   return (
     <>
       <section>
         <h1 className={style.title}>
-          <span>My</span> Productivity
+          <span>{t("my")}</span> {t("prod")}
         </h1>
         <div
           style={{
@@ -53,49 +57,49 @@ export default function Productivity() {
           {data?.points || data?.tutor_hours ? (
             <>
               <h2 className={style.subTitle}>
-                Keep up the good work! You have earned{" "}
+                {t("keep_up")}{" "}
                 <span style={{ color: "var(--accent-color)" }}>
                   {data?.points || data?.tutor_hours
                     ? Math.floor(data?.points / 20) +
                       Math.floor(data?.tutor_hours / 60)
                     : "0"}{" "}
                 </span>
-                minute
+                {t("minute")}
                 {Math.floor(data?.points / 20) +
                   Math.floor(data?.tutor_hours / 60) ==
                 1
                   ? ""
                   : "s"}{" "}
-                of Community Service so far.
+                {t("of_community")}.
               </h2>
               <h3 className={style.subsubTitle}>
-                You are{" "}
+                {t("you_are")}{" "}
                 <span>
-                  {((Math.floor(data?.points / 20) +
+                  {Math.floor(((Math.floor(data?.points / 20) +
                     Math.floor(data?.tutor_hours / 60)) /
                     1200) *
-                    100}
+                    100)}
                   %
                 </span>{" "}
-                complete with the total 20 hours you have to complete
+                {t("complete_with")}
               </h3>
               <h3 className={style.subsubTitle}>
-                You still need to complete{" "}
+                {t("you_still_need")}{" "}
                 <span>
                   {1200 -
                     (Math.floor(data?.points / 20) +
                       Math.floor(data?.tutor_hours / 60))}{" "}
                 </span>
-                minutes of community service
+                {("minutes_of")}
               </h3>
             </>
           ) : (
             <h2 className={style.subTitle}>
-              Start now, your future self will thank you. 🚀💫
+              {t("start_now")}. 🚀💫
             </h2>
           )}
           <Link href="/event">
-            <button className={style.button}>Explore Events</button>
+            <button className={style.button}>{t("explore_events")}</button>
           </Link>
         </div>
       </section>

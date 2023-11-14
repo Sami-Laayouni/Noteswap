@@ -1,5 +1,7 @@
 import style from "./Modal.module.css";
 import { IoIosClose } from "react-icons/io";
+import { useTranslation } from "next-i18next";
+
 
 /**
  * Modal
@@ -11,6 +13,8 @@ import { IoIosClose } from "react-icons/io";
  */
 export default function Modal({ children, isOpen, onClose, title, small }) {
   if (!isOpen) return null;
+  const { t } = useTranslation("common");
+
   return (
     <div
       className={style.overlay}
@@ -35,7 +39,7 @@ export default function Modal({ children, isOpen, onClose, title, small }) {
               marginRight: "10px",
             }}
           >
-            Close
+            {t("close")}
           </span>
           <div style={{ display: "inline-block", verticalAlign: "middle" }}>
             <span

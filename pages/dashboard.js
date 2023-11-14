@@ -9,6 +9,8 @@ import CalendarEvent from "../components/CalendarEvent";
 import LoadingCircle from "../components/LoadingCircle";
 import dynamic from "next/dynamic";
 const BusinessModal = dynamic(() => import("../components/BusinessModal"));
+import { useTranslation } from "next-i18next";
+
 
 /**
  * Get static props
@@ -41,6 +43,8 @@ const Dashboard = () => {
   const [calendar, setCalendar] = useState();
   const [loading, setLoading] = useState(true);
   const containerRef = useRef(null); // Create a ref for the <ul> container
+  const { t } = useTranslation("common");
+
 
   const handleScrollLeft = () => {
     // Scroll the <ul> container to the left
@@ -105,16 +109,16 @@ const Dashboard = () => {
         <h1 className={style.title}>
           {new Date().getHours() >= 0 && new Date().getHours() < 12
             ? new Date().getHours() >= 0 && new Date().getHours() < 5
-              ? "Go sleep"
-              : "Good morning"
+              ? t("go_sleep")
+              : t("good_morning")
             : new Date().getHours() >= 12 && new Date().getHours() < 18
-            ? "Good afternoon"
-            : "Good evening"}
+            ? t("good_afternoon")
+            : t("good_evening")}
           , <span>{userData?.first_name}</span>
         </h1>
-        <h2 className={style.subTitle}>Upcoming school events </h2>
+        <h2 className={style.subTitle}>{t("upcoming_school_events")} </h2>
         {loading && <LoadingCircle />}
-        {calendar?.length == 0 && <h3>No upcoming events</h3>}
+        {calendar?.length == 0 && <h3>{t("no_coming_events")}</h3>}
         <div
           style={{ position: "relative" }}
           onMouseEnter={() => {

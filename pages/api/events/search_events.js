@@ -15,9 +15,29 @@ export default async function handler(req, res) {
   let options = {};
 
   const body = req.body;
-  const { title } = body;
+  const { title, school } = body;
   res.setHeader("Cache-Control", "public, max-age=120");
 
+  if (school == "649d661a3a5a9f73e9e3fa62") {
+    options = {
+      $match: {
+        $or: [
+          { school_id: { $regex: school } },
+          { school_id: { $exists: false } },
+        ],
+      },
+    };
+    query.push(options)
+
+  } else {
+    options = {
+      $match: {
+        school_id: { $regex: school },
+      },
+    };
+    query.push(options)
+
+  }
   if (title) {
     options = {
       $match: {

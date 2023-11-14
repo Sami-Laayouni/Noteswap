@@ -1,0 +1,21 @@
+.container{
+    padding-right: 10px;
+}
+.container div h1{
+    font-family: var(--manrope-bold-font);
+    color: var(--accent-color);
+}
+.container div p{
+    font-family: var(--manrope-font);
+    word-break: normal;
+    white-space: pre-line;
+
+}
+.container div p span{
+    color: var(--accent-color);
+}
+.line{
+    width: 1px;
+    height: 100%;
+    background-color: black;
+}

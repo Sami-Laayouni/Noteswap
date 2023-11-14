@@ -1,6 +1,8 @@
 import style from "./certificate.module.css";
 import { useRef, useState } from "react";
 import html2canvas from "html2canvas";
+import { useTranslation } from "next-i18next";
+
 
 /**
  * Certificate Download
@@ -13,6 +15,7 @@ import html2canvas from "html2canvas";
 export default function CertificateDownload({ main, userData, url }) {
   const certificateRef = useRef(null);
   const [error, setError] = useState("");
+  const { t } = useTranslation("common");
 
   const downloadCertificate = async () => {
     if (!main) {
@@ -156,13 +159,12 @@ export default function CertificateDownload({ main, userData, url }) {
                   fontFamily: "var(--manrope-font)",
                 }}
               >
-                Has successfully completed{" "}
+                {t("has_succesfully")}{" "}
                 <span id="points" style={{ color: "var(--accent-color)" }}>
                   {Math.round(userData?.points / 20) +
                     Math.round(userData?.tutor_hours / 60)}
                 </span>{" "}
-                minute{Math.round(userData?.points / 20) == 1 ? "" : "s"} of
-                community service on Noteswap
+                {t("minute")}{Math.round(userData?.points / 20) == 1 ? "" : "s"} {t("of_com")}
                 {Math.round(userData?.tutor_hours / 60) != "0" ? (
                   `{" "}including{" "}
                 <span id="tutor_hours" style={{ color: "var(--accent-color)" }}>
@@ -183,29 +185,25 @@ export default function CertificateDownload({ main, userData, url }) {
             </div>
           </div>
           <div className={style.detail}>
-            <h1>Certificate Details</h1>
+            <h1>{t("cert_detail")}</h1>
             <i>
               {" "}
-              Notice: Certificates offered by Noteswap only cover note typing
-              and tutoring. For community service earned through volunteering
-              for events, please click on other certificates below.
+              {t("cert_notice")}
             </i>
             <h2>
-              <b>Offered by:</b> <span>NoteSwap</span>
+              <b>{t("offered_by")}:</b> <span>NoteSwap</span>
             </h2>
             <h2>
               <b>NoteSwap Id:</b> <span>{generateCode(17)}</span>{" "}
             </h2>
             <h2>
-              <b>Message:</b> {userData?.first_name} {userData?.last_name} has
-              successfully completed{" "}
+              <b>{t("message")}:</b> {userData?.first_name} {userData?.last_name} {t("has_succesfully")}{" "}
               <span>
                 {Math.round(userData?.points / 20) +
                   Math.round(userData?.tutor_hours / 60)}
               </span>{" "}
-              minute
-              {Math.round(userData?.points / 20) == 1 ? "" : "s"} of community
-              service on Noteswap
+              {t("minute")}
+              {Math.round(userData?.points / 20) == 1 ? "" : "s"} {t("of_com")}
               {Math.round(userData?.tutor_hours / 60) != "0" ? (
                 `{" "}including{" "}
               <span>{Math.round(userData?.tutor_hours / 60)}</span> minute
@@ -221,7 +219,7 @@ export default function CertificateDownload({ main, userData, url }) {
               }}
               className={style.button}
             >
-              Download Certificate
+              {t("download_cert")}
             </button>
           </div>
         </div>
@@ -270,14 +268,13 @@ export default function CertificateDownload({ main, userData, url }) {
             </div>
           </div>
           <div className={style.detail}>
-            <h1>Certificate Details</h1>
+            <h1>{t("cert_detail")}</h1>
             <i>
               {" "}
-              Notice: certificates can be checked by educational institutes.
-              Forged or modified ones will be detected.
+              {t("cert_notice")}
             </i>
             <h2>
-              <b>Offered by:</b> <span>Your school</span>
+              <b>{t("offered_by")}:</b> <span>{t("your_school")}</span>
             </h2>
             <h2>
               <b>NoteSwap Id:</b> <span>{generateCode(17)}</span>{" "}
@@ -289,7 +286,7 @@ export default function CertificateDownload({ main, userData, url }) {
               }}
               className={style.button}
             >
-              Download Certificate
+               {t("download_cert")}
             </button>
           </div>
         </div>
