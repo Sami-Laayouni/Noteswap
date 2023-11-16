@@ -31,7 +31,7 @@ function CreateMicrosoftUserPage() {
        */
       async function createUser(data) {
         const role = localStorage.getItem("role");
-        const school = localStorage.getItem("schoolId")
+        const school = localStorage.getItem("schoolId");
 
         try {
           const response = await AuthServices.create_user_with_microsoft(

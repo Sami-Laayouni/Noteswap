@@ -52,7 +52,6 @@
   "all_rights_reserved": "All Rights Reserved.",
   "loading_message": "Loading...Just kidding just wasting your time",
 
-
   "quality": "Quality",
   "for_you": "For You",
   "select_a_class": "Select a class",
@@ -117,7 +116,7 @@
   "thinking": "(Thinking...)",
   "start_con": "Start a conversation with the Noteswap Bot",
   "note_notebot": "Note: The Noteswap Bot does not reflect the methodologies or ideas of Noteswap.",
-  
+
   "log_out": "Log out",
   "detect_ai_text": "Detect AI Text",
   "certicates": "Certificates",
@@ -147,7 +146,7 @@
   "is_not_tutoring": "is not tutoring on Noteswap",
   "latest_notes": "Latest notes",
   "no_notes": "No notes posted yet",
-  "my":  "My",
+  "my": "My",
   "prod": "Productivity",
   "keep_up": "Keep up the good work! You have earned",
   "of_community": "of Community Service so far",
@@ -178,6 +177,4 @@
   "message": "Message",
   "download_cert": "Download Certificate",
   "your_school": "Your school"
-  
-
 }

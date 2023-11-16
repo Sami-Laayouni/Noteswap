@@ -7,7 +7,6 @@ import { MdOutlineArrowDropDown } from "react-icons/md";
 import LoadingCircle from "../LoadingCircle";
 import { useTranslation } from "next-i18next";
 
-
 /**
  * Image Notes Modal
  * @date 7/24/2023 - 7:28:27 PM
@@ -80,7 +79,6 @@ export default function ImageNotesModal() {
     "Other",
   ];
   const { t } = useTranslation("common");
-
 
   if (!open) {
     return null;
@@ -201,8 +199,8 @@ export default function ImageNotesModal() {
               fontFamily: "var(--manrope-font)",
             }}
           >
-            {imageArray.length} {t("image")}{imageArray.length == 1 ? "" : "s"}{" "}
-            {t("uploaded")}
+            {imageArray.length} {t("image")}
+            {imageArray.length == 1 ? "" : "s"} {t("uploaded")}
           </p>
         </>
       )}
@@ -455,10 +453,10 @@ export default function ImageNotesModal() {
         <>
           {/* Congratulation page */}
           <h1 className={style.title}>{t("congrat")} 🎉</h1>
-          <p className={style.subtext}>
-          {t("earned")}
-          </p>
-          <h1 className={style.points}>+{points} {t("points")}</h1>
+          <p className={style.subtext}>{t("earned")}</p>
+          <h1 className={style.points}>
+            +{points} {t("points")}
+          </h1>
         </>
       )}
       <p
@@ -515,8 +513,8 @@ export default function ImageNotesModal() {
                   type: "images",
                   images: imageArray,
                   date: date,
-                  school_id: JSON.parse(localStorage.getItem("userInfo")).schoolId 
-
+                  school_id: JSON.parse(localStorage.getItem("userInfo"))
+                    .schoolId,
                 }),
               });
               if (response.ok) {

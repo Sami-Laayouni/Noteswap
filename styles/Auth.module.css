@@ -4,8 +4,8 @@
   height: 100vh;
   background: var(--accent-color);
   position: absolute;
-  background-repeat:no-repeat;
-  background-size:cover; 
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 /* =========== Container =========== */

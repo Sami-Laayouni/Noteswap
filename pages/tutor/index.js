@@ -11,7 +11,7 @@ import { useTranslation } from "next-i18next";
 import dynamic from "next/dynamic";
 const BecomeTutor = dynamic(() => import("../../components/BecomeTutor"));
 const BookASession = dynamic(() => import("../../components/BookASession"));
-const RequestTutor = dynamic(()=>import("../../components/RequestTutor"))
+const RequestTutor = dynamic(() => import("../../components/RequestTutor"));
 /**
  * Get static props
  * @date 8/13/2023 - 5:02:47 PM
@@ -39,7 +39,7 @@ export default function Tutor() {
   const { tutor, requestTutor, requestInfo } = useContext(ModalContext);
   const [open, setOpen] = tutor;
   const [ropen, setRopen] = requestTutor;
-  const [info, setInfo] = requestInfo
+  const [info, setInfo] = requestInfo;
   const mathClasses = [
     "Algebra I",
     "Algebra II",
@@ -97,7 +97,6 @@ export default function Tutor() {
   const router = useRouter();
   const { t } = useTranslation("common");
 
-
   // Add path to the route
   function addRoutePath(route, value) {
     router.push(
@@ -140,7 +139,7 @@ export default function Tutor() {
     const body = {
       subject: classes || null,
       days_available: available || null,
-      school: JSON.parse(localStorage?.getItem("userInfo"))?.schoolId
+      school: JSON.parse(localStorage?.getItem("userInfo"))?.schoolId,
     };
     const response = await fetch(`/api/tutor/search_tutor`, {
       method: "POST",
@@ -184,7 +183,7 @@ export default function Tutor() {
       </Head>
       <BecomeTutor />
       <BookASession />
-      <RequestTutor/>
+      <RequestTutor />
       <img
         className={style.background}
         src="/assets/images/users/Background-Image.webp"
@@ -454,7 +453,7 @@ export default function Tutor() {
                     "none";
                 }}
               >
-               {t("wednesday")}
+                {t("wednesday")}
               </li>
               <li
                 key="Thursday"
@@ -549,7 +548,7 @@ export default function Tutor() {
           className={style.becomeButton}
           onClick={async () => {
             document.getElementById("dropout").innerText = "Sending...";
-            document.getElementById("dropout").disabled = true
+            document.getElementById("dropout").disabled = true;
             const response = await fetch("/api/tutor/request_dropout", {
               method: "POST",
               headers: {
@@ -574,14 +573,14 @@ export default function Tutor() {
           {t("request_to_drop")}
         </button>
       )}
-    
+
       {dataFromLocalStorage && !dataFromLocalStorage.role != "student" && (
         <button
           className={style.becomeButton}
-          style={{right:"220px"}}
+          style={{ right: "220px" }}
           onClick={() => {
-            setRopen(true)
-            setInfo(tutors)
+            setRopen(true);
+            setInfo(tutors);
           }}
         >
           Request a tutoring session

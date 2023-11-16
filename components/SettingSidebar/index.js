@@ -2,7 +2,6 @@ import style from "./settingSidebar.module.css";
 import Link from "next/link";
 import { useTranslation } from "next-i18next";
 
-
 /**
  * Sidebar shown for every page in setting
  * @date 7/24/2023 - 7:34:03 PM

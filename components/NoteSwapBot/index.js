@@ -28,7 +28,6 @@ export default function NoteSwapBot() {
   const router = useRouter();
   const { t } = useTranslation("common");
 
-
   function extractTextFromHTML(htmlString) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlString, "text/html");

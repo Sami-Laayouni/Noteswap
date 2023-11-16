@@ -3,7 +3,6 @@ import { useRef, useState } from "react";
 import html2canvas from "html2canvas";
 import { useTranslation } from "next-i18next";
 
-
 /**
  * Certificate Download
  * @date 8/13/2023 - 5:07:47 PM
@@ -164,7 +163,9 @@ export default function CertificateDownload({ main, userData, url }) {
                   {Math.round(userData?.points / 20) +
                     Math.round(userData?.tutor_hours / 60)}
                 </span>{" "}
-                {t("minute")}{Math.round(userData?.points / 20) == 1 ? "" : "s"} {t("of_com")}
+                {t("minute")}
+                {Math.round(userData?.points / 20) == 1 ? "" : "s"}{" "}
+                {t("of_com")}
                 {Math.round(userData?.tutor_hours / 60) != "0" ? (
                   `{" "}including{" "}
                 <span id="tutor_hours" style={{ color: "var(--accent-color)" }}>
@@ -186,10 +187,7 @@ export default function CertificateDownload({ main, userData, url }) {
           </div>
           <div className={style.detail}>
             <h1>{t("cert_detail")}</h1>
-            <i>
-              {" "}
-              {t("cert_notice")}
-            </i>
+            <i> {t("cert_notice")}</i>
             <h2>
               <b>{t("offered_by")}:</b> <span>NoteSwap</span>
             </h2>
@@ -197,7 +195,8 @@ export default function CertificateDownload({ main, userData, url }) {
               <b>NoteSwap Id:</b> <span>{generateCode(17)}</span>{" "}
             </h2>
             <h2>
-              <b>{t("message")}:</b> {userData?.first_name} {userData?.last_name} {t("has_succesfully")}{" "}
+              <b>{t("message")}:</b> {userData?.first_name}{" "}
+              {userData?.last_name} {t("has_succesfully")}{" "}
               <span>
                 {Math.round(userData?.points / 20) +
                   Math.round(userData?.tutor_hours / 60)}
@@ -269,10 +268,7 @@ export default function CertificateDownload({ main, userData, url }) {
           </div>
           <div className={style.detail}>
             <h1>{t("cert_detail")}</h1>
-            <i>
-              {" "}
-              {t("cert_notice")}
-            </i>
+            <i> {t("cert_notice")}</i>
             <h2>
               <b>{t("offered_by")}:</b> <span>{t("your_school")}</span>
             </h2>
@@ -286,7 +282,7 @@ export default function CertificateDownload({ main, userData, url }) {
               }}
               className={style.button}
             >
-               {t("download_cert")}
+              {t("download_cert")}
             </button>
           </div>
         </div>

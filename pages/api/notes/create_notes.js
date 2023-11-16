@@ -51,7 +51,7 @@ export default async function createUser(req, res) {
         type: type,
         images: images,
         createdNow: Date.now(),
-        school_id: school_id
+        school_id: school_id,
       });
       const savedNotes = await newNotes.save();
 

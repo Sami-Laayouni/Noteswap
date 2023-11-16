@@ -2,14 +2,14 @@ import { connectDB } from "../../../utils/db";
 import Association from "../../../models/Association";
 import User from "../../../models/User";
 function generateRandomObjectId() {
-    const characters = 'abcdef0123456789';
-    let objectId = '';
+  const characters = "abcdef0123456789";
+  let objectId = "";
 
-    for (let i = 0; i < 24; i++) {
-        objectId += characters[Math.floor(Math.random() * characters.length)];
-    }
+  for (let i = 0; i < 24; i++) {
+    objectId += characters[Math.floor(Math.random() * characters.length)];
+  }
 
-    return objectId;
+  return objectId;
 }
 
 /**
@@ -40,7 +40,7 @@ export default async function createAssociation(req, res) {
 
     try {
       await connectDB();
-      const aid = generateRandomObjectId()
+      const aid = generateRandomObjectId();
 
       await User.findByIdAndUpdate(
         id,
@@ -68,7 +68,7 @@ export default async function createAssociation(req, res) {
 
       res.status(200).json({ savedAssociation });
     } catch (error) {
-        console.log(error)
+      console.log(error);
       res.status(500).json({ error: error.message });
     }
   } else {

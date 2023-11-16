@@ -7,7 +7,6 @@ import Link from "next/link";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 
-
 /**
  * Get static props
  * @date 8/13/2023 - 4:31:01 PM

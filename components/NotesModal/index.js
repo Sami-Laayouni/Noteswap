@@ -12,7 +12,6 @@ import Image from "next/image";
 import LoadingCircle from "../LoadingCircle";
 import { useTranslation } from "next-i18next";
 
-
 /**
  * React Quil
  * @date 7/24/2023 - 7:30:32 PM
@@ -118,7 +117,6 @@ export default function NotesModal() {
   const currentDate = new Date().toISOString().split("T")[0];
   const [date, setDate] = useState(currentDate);
   const { t } = useTranslation("common");
-
 
   const handlePaste = (e) => {
     // Prevent the default paste behavior
@@ -395,9 +393,7 @@ export default function NotesModal() {
         </>
       ) : current == 1 ? (
         <>
-          <h1 className={style.select}>
-            {t("select_date")}
-          </h1>
+          <h1 className={style.select}>{t("select_date")}</h1>
           <input
             style={{ outline: "none" }}
             className={style.dropdown}
@@ -411,9 +407,7 @@ export default function NotesModal() {
           ></input>
           {/* Select class */}
           <div className={style.selectContainer}>
-            <h1 className={style.select}>
-              {t("select_class")}{" "}
-            </h1>
+            <h1 className={style.select}>{t("select_class")} </h1>
             <div
               className={style.dropdown}
               onClick={() => {
@@ -634,7 +628,7 @@ export default function NotesModal() {
         >
           {/* Rubric page */}
           <p style={{ fontFamily: "var(--manrope-font)" }}>
-           {t("almost_done")}
+            {t("almost_done")}
           </p>
           <Image
             src="/assets/images/rubric.png"
@@ -658,10 +652,10 @@ export default function NotesModal() {
         <>
           {/* Congratulation page */}
           <h1 className={style.title}>{t("congrat")} 🎉</h1>
-          <p className={style.subtext}>
-            {t("earned")}
-          </p>
-          <h1 className={style.points}>+{points} {t("points")}</h1>
+          <p className={style.subtext}>{t("earned")}</p>
+          <h1 className={style.points}>
+            +{points} {t("points")}
+          </h1>
         </>
       )}
       <div
@@ -822,7 +816,8 @@ export default function NotesModal() {
                   type: "default",
                   images: [],
                   date: date,
-                  school_id: JSON.parse(localStorage.getItem("userInfo")).schoolId 
+                  school_id: JSON.parse(localStorage.getItem("userInfo"))
+                    .schoolId,
                 }),
               });
               if (response.ok) {
@@ -943,9 +938,8 @@ export default function NotesModal() {
                     aiRating: parseInt(result),
                     type: "default",
                     images: [],
-                    school_id: JSON.parse(localStorage.getItem("userInfo")).schoolId 
-
-
+                    school_id: JSON.parse(localStorage.getItem("userInfo"))
+                      .schoolId,
                   }),
                 }).then(async () => {
                   await fetch("/api/profile/add_community_minutes", {

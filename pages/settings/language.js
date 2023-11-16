@@ -4,7 +4,6 @@ import style from "../../styles/Settings.module.css";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 
-
 /**
  * Get static props
  * @date 8/13/2023 - 5:00:49 PM
@@ -42,9 +41,7 @@ export default function Language() {
         <div>
           <h2 className={style.title}>{t("language")}</h2>
           <div className={style.line}></div>
-          <p>
-           {t("language_info")}
-          </p>
+          <p>{t("language_info")}</p>
           <label className={style.selectLanguage}>{t("select_lang")}: </label>
           <select
             id="language-select"

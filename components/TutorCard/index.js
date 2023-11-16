@@ -7,7 +7,6 @@ import StarRating from "../StarRating";
 import Image from "next/image";
 import { useTranslation } from "next-i18next";
 
-
 function calculateAverage(numbers) {
   if (numbers.length === 0) {
     return 0; // Handle case when the array is empty to avoid division by zero
@@ -31,7 +30,6 @@ export default function TutorCard({ data }) {
   const [info, setInfo] = bookSessionInfo;
   const ratings = calculateAverage(data?.userInfo[0]?.rating);
   const { t } = useTranslation("common");
-
 
   return (
     <div className={style.container}>
@@ -104,7 +102,7 @@ export default function TutorCard({ data }) {
             setInfo({ data });
           }}
         >
-         {t("book_session")}
+          {t("book_session")}
         </button>
         <button
           onClick={() => {

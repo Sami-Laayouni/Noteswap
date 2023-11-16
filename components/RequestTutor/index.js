@@ -403,7 +403,8 @@ export default function RequestTutor() {
                   "none" ||
                 !document.getElementById("dropdownMenu2").style.display
               ) {
-                document.getElementById("dropdownMenu2").style.display = "block";
+                document.getElementById("dropdownMenu2").style.display =
+                  "block";
               } else {
                 document.getElementById("dropdownMenu2").style.display = "none";
               }
@@ -431,13 +432,15 @@ export default function RequestTutor() {
                   <li
                     key={`${value.userInfo[0]._id}${index}`}
                     onClick={() => {
-                      setStudent(`${value.userInfo[0].first_name} ${value.userInfo[0].last_name}`);
-                      setInfo(value)
+                      setStudent(
+                        `${value.userInfo[0].first_name} ${value.userInfo[0].last_name}`
+                      );
+                      setInfo(value);
                       document.getElementById("dropdownMenu2").style.display =
                         "none";
                     }}
                   >
-                    {value.userInfo[0].first_name} {value.userInfo[0].last_name} 
+                    {value.userInfo[0].first_name} {value.userInfo[0].last_name}
                   </li>
                 ))}
               </ul>
@@ -511,8 +514,7 @@ export default function RequestTutor() {
         <>
           <h1 className={style.title}>
             Thank you for booking! A confirmation email has been sent to{" "}
-            {info?.userInfo[0].first_name}{" "}
-            {info?.userInfo[0].last_name}
+            {info?.userInfo[0].first_name} {info?.userInfo[0].last_name}
           </h1>
           <h2 className={style.subTitle}>
             Please ensure to check your email for comfirmation

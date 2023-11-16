@@ -124,7 +124,7 @@ class AuthService {
           email,
           profilePicture,
           role,
-          schoolId
+          schoolId,
         }),
       });
 
@@ -166,7 +166,7 @@ class AuthService {
             email,
             profilePicture,
             role,
-            schoolId
+            schoolId,
           }),
         }
       );

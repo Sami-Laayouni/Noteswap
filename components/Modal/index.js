@@ -2,7 +2,6 @@ import style from "./Modal.module.css";
 import { IoIosClose } from "react-icons/io";
 import { useTranslation } from "next-i18next";
 
-
 /**
  * Modal
  * @date 7/24/2023 - 7:29:57 PM
@@ -12,8 +11,9 @@ import { useTranslation } from "next-i18next";
  * @return {*}
  */
 export default function Modal({ children, isOpen, onClose, title, small }) {
-  if (!isOpen) return null;
   const { t } = useTranslation("common");
+
+  if (!isOpen) return null;
 
   return (
     <div

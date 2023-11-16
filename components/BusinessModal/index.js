@@ -47,7 +47,7 @@ export default function CreateAccount() {
     <Modal
       isOpen={open}
       onClose={() => {
-        setOpen(false)
+        setOpen(false);
         router.push("/shortcuts");
       }}
       title="Setup Your NoteSwap Business Account"
@@ -87,9 +87,9 @@ export default function CreateAccount() {
                   }),
                 }
               );
-              if(response.ok){
+              if (response.ok) {
                 router.push("/shortcuts");
-                setOpen(false)
+                setOpen(false);
               }
             }
           }}

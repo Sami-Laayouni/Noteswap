@@ -30,16 +30,14 @@ export default async function handler(req, res) {
         ],
       },
     };
-    query.push(options)
-
+    query.push(options);
   } else {
     options = {
       $match: {
         school_id: { $regex: school },
       },
     };
-    query.push(options)
-
+    query.push(options);
   }
 
   if (title) {
@@ -68,8 +66,6 @@ export default async function handler(req, res) {
     };
     query.push(options);
   }
-
-  
 
   options = {
     $lookup: {
@@ -136,7 +132,7 @@ export default async function handler(req, res) {
           desc: desc,
           date: date,
           classes: classes,
-          school: school
+          school: school,
         }),
       }
     );

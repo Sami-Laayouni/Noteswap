@@ -561,7 +561,7 @@ export default function Header() {
               className={style.lightext}
               style={{ color: "var(--accent-color)" }}
             >
-             School Account
+              School Account
             </p>
           )}
 

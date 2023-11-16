@@ -128,7 +128,8 @@ export default function Profile() {
           )}
 
           <h2>
-            {data?.bio ? data?.bio : "No bios available"} · {t("total_community_ser")}:{" "}
+            {data?.bio ? data?.bio : "No bios available"} ·{" "}
+            {t("total_community_ser")}:{" "}
             <span>
               {data?.points || data?.tutor_hours
                 ? Math.floor(data?.points / 20) +
@@ -144,7 +145,8 @@ export default function Profile() {
             · {t("community_service_tutor")}:{" "}
             <span>
               {data?.tutor_hours ? Math.floor(data?.tutor_hours / 60) : "0"}{" "}
-              {t("minute")}{Math.floor(data?.tutor_hours / 60) == 1 ? "" : "s"}
+              {t("minute")}
+              {Math.floor(data?.tutor_hours / 60) == 1 ? "" : "s"}
             </span>
           </h2>
         </div>
@@ -194,12 +196,12 @@ export default function Profile() {
                 }}
               >
                 {data?.is_tutor
-                  ? `${
-                      data?.first_name ? data?.first_name : t("loading")
-                    } ${t("is_tutoring")}`
-                  : `${
-                      data?.first_name ? data?.first_name : t("loading")
-                    } ${t("is_not_tutoring")}`}
+                  ? `${data?.first_name ? data?.first_name : t("loading")} ${t(
+                      "is_tutoring"
+                    )}`
+                  : `${data?.first_name ? data?.first_name : t("loading")} ${t(
+                      "is_not_tutoring"
+                    )}`}
               </p>
             </div>
           </section>

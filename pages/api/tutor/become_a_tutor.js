@@ -14,8 +14,15 @@ import User from "../../../models/User";
  */
 export default async function becomeTutor(req, res) {
   if (req.method === "POST") {
-    const { user_id, subject, days_available, time_available, email, desc, school_id } =
-      req.body;
+    const {
+      user_id,
+      subject,
+      days_available,
+      time_available,
+      email,
+      desc,
+      school_id,
+    } = req.body;
     try {
       await connectDB();
       const newTutor = new Tutor({
@@ -28,8 +35,7 @@ export default async function becomeTutor(req, res) {
         reviews: [],
         since: Date.now(),
         paused: true,
-        school_id: school_id
-
+        school_id: school_id,
       });
       const savedTutor = await newTutor.save();
       await User.findOneAndUpdate(

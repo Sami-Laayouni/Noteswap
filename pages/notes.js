@@ -112,7 +112,7 @@ export default function Note() {
       classes: classes || null,
       type: type || null,
       id: JSON.parse(localStorage?.getItem("userInfo"))?._id || null,
-      school_id: JSON.parse(localStorage?.getItem("userInfo"))?.schoolId
+      school_id: JSON.parse(localStorage?.getItem("userInfo"))?.schoolId,
     };
     const response = await fetch(`/api/notes/search_notes`, {
       method: "POST",
@@ -186,7 +186,10 @@ export default function Note() {
                 setTitle(e.target.value);
               }}
             ></input>
-            <textarea id="desc" placeholder={t("notes_must_include")}></textarea>
+            <textarea
+              id="desc"
+              placeholder={t("notes_must_include")}
+            ></textarea>
             <select
               id="class"
               onChange={(e) => {
@@ -284,7 +287,7 @@ export default function Note() {
                 }}
                 onClick={() => addRoutePath("type", "foryou")}
               >
-               {t("for_you")}
+                {t("for_you")}
               </li>
             )}
             <li
@@ -319,7 +322,8 @@ export default function Note() {
             </li>
           </ul>
           <p className={style.results}>
-            {notes?.length} {t("result")}{notes?.length == 1 ? "" : "s"} {t("found")}
+            {notes?.length} {t("result")}
+            {notes?.length == 1 ? "" : "s"} {t("found")}
           </p>
 
           <section className={style.note}>

@@ -5,7 +5,6 @@ import { useState, useEffect, useContext } from "react";
 import ModalContext from "../../context/ModalContext";
 import { useTranslation } from "next-i18next";
 
-
 /**
  * Format date
  * @date 8/13/2023 - 5:10:50 PM
@@ -62,9 +61,9 @@ export default function EventCard({ data }) {
   const router = useRouter();
   const [teacher, setTeacher] = useState(false);
   const [id, setId] = useState(null);
-  const {eventState, eventData} = useContext(ModalContext)
-  const [open, setOpen] = eventState
-  const [datai, setData] = eventData
+  const { eventState, eventData } = useContext(ModalContext);
+  const [open, setOpen] = eventState;
+  const [datai, setData] = eventData;
   const { t } = useTranslation("common");
 
   useEffect(() => {
@@ -79,29 +78,40 @@ export default function EventCard({ data }) {
     <div className={style.container}>
       <div
         style={{
-          width:"100%",
-          height:"100%"
+          width: "100%",
+          height: "100%",
         }}
       >
         <Link href={`/profile/${data.userInfo[0]._id}`}>
           <img
             src={data.userInfo[0].profile_picture}
             alt="User ¨Picture"
-         
-            style={{width:"100%", height:"100%", borderTopLeftRadius: "20px", borderBottomLeftRadius:"20px", objectFit: "cover" }}
+            style={{
+              width: "100%",
+              height: "100%",
+              borderTopLeftRadius: "20px",
+              borderBottomLeftRadius: "20px",
+              objectFit: "cover",
+            }}
             loading="lazy"
           ></img>
         </Link>
       </div>
 
-      <section style={{paddingLeft:"15px"}} onClick={()=>{setOpen(true), setData(data)}}>
+      <section
+        style={{ paddingLeft: "15px" }}
+        onClick={() => {
+          setOpen(true), setData(data);
+        }}
+      >
         <h1>{data?.title}</h1>
         <h2>
-          {t("from")} {formatDate(data?.date_of_events.split("to")[0])} {t("to")}{" "}
-          {formatDate(data?.date_of_events.split("to")[1])}
+          {t("from")} {formatDate(data?.date_of_events.split("to")[0])}{" "}
+          {t("to")} {formatDate(data?.date_of_events.split("to")[1])}
         </h2>
-        <h3>{data?.community_service_offered} {t("hours_offered")}</h3>
-      
+        <h3>
+          {data?.community_service_offered} {t("hours_offered")}
+        </h3>
 
         <p>{data?.desc}</p>
       </section>
@@ -150,8 +160,8 @@ export default function EventCard({ data }) {
                 document.getElementById(`${data._id}button`).innerText =
                   t("unsignup");
                 if (response.ok) {
-                  setOpen(true)
-                  setData(data)
+                  setOpen(true);
+                  setData(data);
                   router.push(data?.link_to_event);
                 }
               }

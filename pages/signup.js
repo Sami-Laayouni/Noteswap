@@ -141,7 +141,6 @@ const Signup = () => {
           background: !schoolId
             ? "var(--accent-color)"
             : `url("/assets/schools/${schoolId}.jpg")`,
-       
         }}
       >
         <Head>
@@ -258,9 +257,7 @@ const Signup = () => {
                           e.target.value.includes(".")
                         ) {
                           setEmail(e.target.value);
-                          setError(
-                            "You must use a valid email"
-                          );
+                          setError("You must use a valid email");
                         } else {
                           setEmail(e.target.value);
                           setError("");

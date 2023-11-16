@@ -11,7 +11,6 @@ import dynamic from "next/dynamic";
 const BusinessModal = dynamic(() => import("../components/BusinessModal"));
 import { useTranslation } from "next-i18next";
 
-
 /**
  * Get static props
  * @date 8/13/2023 - 4:51:52 PM
@@ -44,7 +43,6 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const containerRef = useRef(null); // Create a ref for the <ul> container
   const { t } = useTranslation("common");
-
 
   const handleScrollLeft = () => {
     // Scroll the <ul> container to the left

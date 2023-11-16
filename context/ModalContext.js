@@ -20,7 +20,7 @@ export const ModalProvider = ({ children }) => {
   const [deleteModal, setDeleteModal] = useState(false); // Stores whether the delete account modal is closed or opened
   const [bookSession, setBookSession] = useState(false); // Stores whether the book a tutor modal is closed or opened
   const [bookSessionInfo, setBookSessionInfo] = useState(); // Stores the information of the tutor when booking a session
-  const [eventStatus, setEventStatus] = useState(false); // Create event 
+  const [eventStatus, setEventStatus] = useState(false); // Create event
   const [eventData, setEventData] = useState("");
   const [shareOpen, setShareOpen] = useState(false); // Stores whether the share modal is closed or opened
   const [shareURL, setShareURL] = useState(""); // Stores the url of the page that wants to be shared
@@ -34,7 +34,7 @@ export const ModalProvider = ({ children }) => {
   const [business, setBusiness] = useState(false); // Stores whether the business modal is opened or not
   const [eventState, setEventState] = useState(false);
   const [requestTutor, setRequestTutor] = useState(false);
-  const [requestInfo, setRequestInfo] = useState(false)
+  const [requestInfo, setRequestInfo] = useState(false);
 
   // Return the JSX
   return (
@@ -65,8 +65,7 @@ export const ModalProvider = ({ children }) => {
         business: [business, setBusiness],
         eventState: [eventState, setEventState],
         requestTutor: [requestTutor, setRequestTutor],
-        requestInfo: [requestInfo, setRequestInfo]
-        
+        requestInfo: [requestInfo, setRequestInfo],
       }}
     >
       {children}

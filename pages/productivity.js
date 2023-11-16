@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useTranslation } from "next-i18next";
 
-
 /**
  * Get static props
  * @date 8/13/2023 - 4:31:01 PM
@@ -75,10 +74,12 @@ export default function Productivity() {
               <h3 className={style.subsubTitle}>
                 {t("you_are")}{" "}
                 <span>
-                  {Math.floor(((Math.floor(data?.points / 20) +
-                    Math.floor(data?.tutor_hours / 60)) /
-                    1200) *
-                    100)}
+                  {Math.floor(
+                    ((Math.floor(data?.points / 20) +
+                      Math.floor(data?.tutor_hours / 60)) /
+                      1200) *
+                      100
+                  )}
                   %
                 </span>{" "}
                 {t("complete_with")}
@@ -90,13 +91,11 @@ export default function Productivity() {
                     (Math.floor(data?.points / 20) +
                       Math.floor(data?.tutor_hours / 60))}{" "}
                 </span>
-                {("minutes_of")}
+                {"minutes_of"}
               </h3>
             </>
           ) : (
-            <h2 className={style.subTitle}>
-              {t("start_now")}. 🚀💫
-            </h2>
+            <h2 className={style.subTitle}>{t("start_now")}. 🚀💫</h2>
           )}
           <Link href="/event">
             <button className={style.button}>{t("explore_events")}</button>

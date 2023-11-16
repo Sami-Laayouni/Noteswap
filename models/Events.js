@@ -64,10 +64,10 @@ const eventSchema = new mongoose.Schema({
     type: Array,
     required: false,
   },
-  school_id:{
+  school_id: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true
-  }
+    required: true,
+  },
 });
 
 let Events;

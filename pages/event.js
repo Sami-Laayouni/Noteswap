@@ -8,7 +8,7 @@ import EventCard from "../components/EventCard";
 import Head from "next/head";
 import dynamic from "next/dynamic";
 const CreateEvent = dynamic(() => import("../components/CreateEvent"));
-const ExpandedEvent = dynamic(()=>import("../components/ExpandedEvent"))
+const ExpandedEvent = dynamic(() => import("../components/ExpandedEvent"));
 import OneSignal from "react-onesignal";
 import { requireAuthentication } from "../middleware/authenticate";
 import { useTranslation } from "next-i18next";
@@ -46,7 +46,6 @@ const Event = () => {
   const [title, setTitle] = useState("");
   const { t } = useTranslation("common");
 
-
   useEffect(() => {
     addRoutePath("title", title);
   }, [title]);
@@ -82,8 +81,7 @@ const Event = () => {
         },
         body: JSON.stringify({
           title: title,
-          school: JSON.parse(localStorage?.getItem("userInfo"))?.schoolId
-
+          school: JSON.parse(localStorage?.getItem("userInfo"))?.schoolId,
         }),
       });
       if (data.ok) {
@@ -154,16 +152,14 @@ const Event = () => {
         <title>Noteswap | Events</title>
       </Head>
       <CreateEvent />
-      <ExpandedEvent/>
+      <ExpandedEvent />
       <img
         className={style.background}
         alt="Background Image"
         src="/assets/fallback/background.png"
       ></img>
       <h1 className={style.title}>{t("events")}</h1>
-      <h2 className={style.subTitle}>
-        {t("event_slogan")}
-      </h2>
+      <h2 className={style.subTitle}>{t("event_slogan")}</h2>
 
       <section className={style.search}>
         <input
@@ -171,7 +167,7 @@ const Event = () => {
           onChange={(e) => {
             setTitle(e.target.value);
           }}
-          style={{borderRadius:"10px"}}
+          style={{ borderRadius: "10px" }}
           placeholder={t("s_event_name")}
           autoFocus
         />

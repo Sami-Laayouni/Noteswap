@@ -30,7 +30,7 @@ export default async function becomeTutor(req, res) {
       id,
       location,
       req,
-      school_id
+      school_id,
     } = req.body;
     try {
       await connectDB();
@@ -50,8 +50,7 @@ export default async function becomeTutor(req, res) {
         expiration_date: new Date(date_of_events.split("to")[1]),
         location: location,
         req: req,
-        school_id: JSON.parse(localStorage.getItem("userInfo")).schoolId 
-
+        school_id: JSON.parse(localStorage.getItem("userInfo")).schoolId,
       });
       const savedEvent = await newEvent.save();
 

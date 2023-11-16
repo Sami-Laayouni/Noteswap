@@ -15,7 +15,8 @@ const jwtSecret = process.env.NEXT_PUBLIC_JWT_SECRET;
  */
 export default async function createUserWithGoogle(req, res) {
   if (req.method === "POST") {
-    const { googleId, first, last, profilePicture, email, role, schoolId } = req.body;
+    const { googleId, first, last, profilePicture, email, role, schoolId } =
+      req.body;
 
     try {
       await connectDB();

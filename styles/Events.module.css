@@ -22,7 +22,7 @@
   color: white;
   font-family: var(--manrope-bold-font);
   font-size: 3rem;
-  text-decoration:dotted;
+  text-decoration: dotted;
 }
 .subTitle {
   position: absolute;
@@ -34,7 +34,6 @@
   font-size: 1.4rem;
   font-stretch: extra-expanded;
   text-decoration: underline;
-
 }
 .search {
   border: 2px solid var(--default-black-color);

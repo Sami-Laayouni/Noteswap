@@ -6,15 +6,14 @@ import {
   MdOutlineEmail,
   MdOutlineSpeakerNotesOff,
 } from "react-icons/md";
-import {AiOutlinePhone} from "react-icons/ai"
-import {CgWebsite} from "react-icons/cg"
-import {HiOutlineLocationMarker} from "react-icons/hi"
+import { AiOutlinePhone } from "react-icons/ai";
+import { CgWebsite } from "react-icons/cg";
+import { HiOutlineLocationMarker } from "react-icons/hi";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import {EventCard} from "../../components/EventCard"
+import { EventCard } from "../../components/EventCard";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
-
 
 export async function getStaticPaths() {
   // Use an empty array for paths since paths will be generated at request time
@@ -81,7 +80,6 @@ export default function BProfile() {
   }, [router.query.id]);
   return (
     <main className={style.background}>
-    
       <div className={style.image_container}>
         <img
           className={style.background_image}
@@ -95,11 +93,7 @@ export default function BProfile() {
       </div>
       <section className={style.userInfo}>
         <Image
-          src={
-            data?.icon
-              ? data?.icon
-              : "/assets/fallback/user.webp"
-          }
+          src={data?.icon ? data?.icon : "/assets/fallback/user.webp"}
           alt="Profile picture"
           width={190}
           height={190}
@@ -121,9 +115,7 @@ export default function BProfile() {
             </Link>
           )}
 
-          <h2>
-            {data?.desc ? data?.desc : "No bios available"} 
-          </h2>
+          <h2>{data?.desc ? data?.desc : "No bios available"}</h2>
         </div>
       </section>
 
@@ -141,10 +133,12 @@ export default function BProfile() {
                   lineHeight: "0px",
                 }}
               >
-                {data?.contact_email ? data?.contact_email : `${t("loading")}...`}
+                {data?.contact_email
+                  ? data?.contact_email
+                  : `${t("loading")}...`}
               </p>
             </div>
-           
+
             <div style={{ display: "block", height: "fit-content" }}>
               <AiOutlinePhone size={20} style={{ verticalAlign: "middle" }} />
               <p
@@ -157,11 +151,16 @@ export default function BProfile() {
                   lineHeight: "0px",
                 }}
               >
-                {data?.contact_phone ? data?.contact_phone : `${t("loading")}...`}
+                {data?.contact_phone
+                  ? data?.contact_phone
+                  : `${t("loading")}...`}
               </p>
             </div>
             <div style={{ display: "block", height: "fit-content" }}>
-              <HiOutlineLocationMarker size={20} style={{ verticalAlign: "middle" }} />
+              <HiOutlineLocationMarker
+                size={20}
+                style={{ verticalAlign: "middle" }}
+              />
               <p
                 style={{
                   display: "inline-block",
@@ -172,7 +171,9 @@ export default function BProfile() {
                   lineHeight: "0px",
                 }}
               >
-                {data?.country ? `${data?.country}, ${data?.city}` : `${t("loading")}...`}
+                {data?.country
+                  ? `${data?.country}, ${data?.city}`
+                  : `${t("loading")}...`}
               </p>
             </div>
             <div style={{ display: "block", height: "fit-content" }}>

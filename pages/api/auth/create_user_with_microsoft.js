@@ -16,44 +16,42 @@ const jwtSecret = process.env.NEXT_PUBLIC_JWT_SECRET;
 export default async function createUserWithGoogle(req, res) {
   if (req.method === "POST") {
     const { id, first, last, profilePicture, email, role, schoolId } = req.body;
-   
-      try {
-        await connectDB();
 
-        // Check if user with the same mircosoft subject id already exists
-        const existingUser = await User.findOne({ google_id: id });
-        if (existingUser) {
-          res.status(400).json({
-            error:
-              "User with the same Microsoft account or email already exists",
-          });
-          return;
-        }
+    try {
+      await connectDB();
 
-        // Create a new user
-        const newUser = new User({
-          first_name: first,
-          last_name: last,
-          google_id: id,
-          profile_picture: profilePicture,
-          email: email,
-          role: role,
-          createdAt: Date.now(),
-          points: 0,
-          tutor_hours: 0,
-          schoolId: schoolId,
-          notes: [],
+      // Check if user with the same mircosoft subject id already exists
+      const existingUser = await User.findOne({ google_id: id });
+      if (existingUser) {
+        res.status(400).json({
+          error: "User with the same Microsoft account or email already exists",
         });
-        const savedUser = await newUser.save();
-
-        // Generate JWT token
-        const token = jwt.sign({ userId: savedUser._id }, jwtSecret);
-
-        // Return the token
-        res.status(200).json({ token: token, user: savedUser });
-      } catch (error) {
-        res.status(500).json({ error: error.message });
+        return;
       }
-   
+
+      // Create a new user
+      const newUser = new User({
+        first_name: first,
+        last_name: last,
+        google_id: id,
+        profile_picture: profilePicture,
+        email: email,
+        role: role,
+        createdAt: Date.now(),
+        points: 0,
+        tutor_hours: 0,
+        schoolId: schoolId,
+        notes: [],
+      });
+      const savedUser = await newUser.save();
+
+      // Generate JWT token
+      const token = jwt.sign({ userId: savedUser._id }, jwtSecret);
+
+      // Return the token
+      res.status(200).json({ token: token, user: savedUser });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
     }
+  }
 }

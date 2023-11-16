@@ -33,14 +33,14 @@ export default async function handler(req, res) {
         ],
       },
     };
-    query.push(options)
+    query.push(options);
   } else {
     options = {
       $match: {
         school_id: { $regex: school },
       },
     };
-    query.push(options)
+    query.push(options);
   }
 
   if (subject) {
