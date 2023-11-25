@@ -151,7 +151,7 @@ const Event = () => {
       <Head>
         <title>Noteswap | Events</title>
       </Head>
-      <CreateEvent />
+      <CreateEvent business={false} />
       <ExpandedEvent />
       <img
         className={style.background}

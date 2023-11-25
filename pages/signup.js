@@ -39,8 +39,8 @@ const Signup = () => {
   const [first, setFirst] = useState("");
   const [last, setLast] = useState("");
   const [method, setMethod] = useState("email");
-  const [selectedRole, setSelectedRole] = useState("");
-  const [schoolId, setSchoolId] = useState("649d661a3a5a9f73e9e3fa62");
+  const [selectedRole, setSelectedRole] = useState("volunteer");
+  const [schoolId, setSchoolId] = useState("");
 
   const { isLoggedIn } = useContext(AuthContext);
   const { errorSignup } = useContext(AuthContext);
@@ -186,34 +186,8 @@ const Signup = () => {
                 }
               }}
             >
-              {!selectedRole && (
+              {!schoolId && (
                 <>
-                  <p className={style.labelCenter}>I attend this school</p>
-                  <div>
-                    <select
-                      style={{
-                        textAlign: "center",
-                        width: "110%",
-                        border: "1px solid black",
-                        outline: "none",
-                        borderRadius: "3px",
-                        height: "33px",
-                      }}
-                      onChange={(e) => {
-                        setSchoolId(e.target.value);
-                      }}
-                      value={schoolId}
-                      name="schools"
-                      id="schools"
-                    >
-                      <option value="649d661a3a5a9f73e9e3fa62">
-                        Al Akhawayn School of Ifrane (ASI)
-                      </option>
-                      <option value="6549fb05bd461a666fe1f67e">
-                        Allal Fassi Lycée Ifrane
-                      </option>
-                    </select>
-                  </div>
                   <p className={style.labelCenter}>{t("i_am_joining_as")}</p>
                   <ul className={style.roles}>
                     <li id="student" onClick={() => setSelectedRole("student")}>
@@ -229,11 +203,47 @@ const Signup = () => {
                       Volunteer
                     </li>
                   </ul>
+                  {selectedRole != "volunteer" && (
+                    <>
+                      <p className={style.labelCenter}>I attend this school</p>
+                      <div>
+                        <select
+                          style={{
+                            textAlign: "center",
+                            width: "110%",
+                            border: "1px solid black",
+                            outline: "none",
+                            borderRadius: "3px",
+                            height: "33px",
+                          }}
+                          onChange={(e) => {
+                            setSchoolId(e.target.value);
+                            localStorage.setItem("schoolId", e.target.value);
+                          }}
+                          value={schoolId}
+                          name="schools"
+                          id="schools"
+                        >
+                          <option value="" disabled>
+                            Select the school you attend
+                          </option>
+                          <option value="649d661a3a5a9f73e9e3fa62">
+                            Al Akhawayn School of Ifrane
+                          </option>
+                          <option value="6549fb05bd461a666fe1f67e">
+                            Allal Fassi Lycée Ifrane
+                          </option>
+                        </select>
+                      </div>
+                    </>
+                  )}
+
                   <p className={style.error}>{error}</p>
                 </>
               )}
 
               {selectedRole &&
+                schoolId &&
                 (state == 0 ? (
                   <>
                     <label
@@ -252,15 +262,34 @@ const Signup = () => {
                       className={style.input}
                       onChange={(e) => {
                         if (
-                          e.target.value.length > 15 &&
-                          e.target.value.includes("@") &&
-                          e.target.value.includes(".")
+                          (e.target.value.length < 15 &&
+                            !e.target.value.includes("@")) ||
+                          !e.target.value.includes(".")
                         ) {
                           setEmail(e.target.value);
                           setError("You must use a valid email");
                         } else {
                           setEmail(e.target.value);
                           setError("");
+                          const schoolId = localStorage.getItem("schoolId");
+                          if (schoolId == "649d661a3a5a9f73e9e3fa62") {
+                            if (
+                              !e.target.value.includes("@ifranschool.org") &&
+                              !e.target.value.includes("@asi.aui.ma") &&
+                              !e.target.value.includes("@aui.ma")
+                            ) {
+                              document.getElementById(
+                                "nextButton"
+                              ).disabled = true;
+                              setError(
+                                "When signing up to ASI your email must end with @ifranschool.org, @asi.aui.ma or @aui.ma"
+                              );
+                            } else {
+                              document.getElementById(
+                                "nextButton"
+                              ).disabled = false;
+                            }
+                          }
                         }
                       }}
                       required
@@ -293,7 +322,11 @@ const Signup = () => {
                       </button>
                     </div>
                     <p className={style.error}>{error}</p>
-                    <button type="submit" className={style.loginBtn}>
+                    <button
+                      id="nextButton"
+                      type="submit"
+                      className={style.loginBtn}
+                    >
                       {t("next")}
                     </button>
                     <p className={style.orText}>-{t("or")}-</p>
@@ -378,7 +411,7 @@ const Signup = () => {
                   {t("already_have_account")}
                 </Link>
               </div>
-              {!selectedRole && (
+              {selectedRole == "volunteer" && (
                 <div
                   className={style.accountContainer}
                   style={{ marginTop: "30vh", marginLeft: "1vw" }}
@@ -403,7 +436,8 @@ const Signup = () => {
                       setState(0);
                       setError("");
                     } else {
-                      setSelectedRole(null);
+                      setSelectedRole("volunteer");
+                      setSchoolId("");
                       setError("");
                     }
                   }}

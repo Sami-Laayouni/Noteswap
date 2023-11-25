@@ -94,3 +94,19 @@
 .detail h2 b {
   font-family: var(--manrope-bold-font);
 }
+.checkboxContainer {
+  height: 200px;
+  overflow-y: auto;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+.checkboxLabel {
+  display: block;
+  font-family: var(--manrope-font);
+  user-select: none;
+}
+.checkboxLabel:hover {
+  font-weight: bold;
+  cursor: pointer;
+}

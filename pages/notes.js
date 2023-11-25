@@ -112,7 +112,7 @@ export default function Note() {
       classes: classes || null,
       type: type || null,
       id: JSON.parse(localStorage?.getItem("userInfo"))?._id || null,
-      school_id: JSON.parse(localStorage?.getItem("userInfo"))?.schoolId,
+      school: JSON.parse(localStorage?.getItem("userInfo"))?.schoolId,
     };
     const response = await fetch(`/api/notes/search_notes`, {
       method: "POST",

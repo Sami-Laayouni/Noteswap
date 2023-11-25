@@ -58,6 +58,7 @@ function formatDate(inputDate) {
  * @return {*}
  */
 export default function EventCard({ data }) {
+  console.log(data);
   const router = useRouter();
   const [teacher, setTeacher] = useState(false);
   const [id, setId] = useState(null);
@@ -104,7 +105,12 @@ export default function EventCard({ data }) {
           setOpen(true), setData(data);
         }}
       >
-        <h1>{data?.title}</h1>
+        <h1>
+          {data?.title}{" "}
+          {data?.sponsored && (
+            <span className={style.sponsored}>Sponsored Event</span>
+          )}
+        </h1>
         <h2>
           {t("from")} {formatDate(data?.date_of_events.split("to")[0])}{" "}
           {t("to")} {formatDate(data?.date_of_events.split("to")[1])}

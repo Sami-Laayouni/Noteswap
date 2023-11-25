@@ -45,7 +45,7 @@ const tutorSchema = new mongoose.Schema({
     required: true,
   },
   school_id: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     required: true,
   },
 });

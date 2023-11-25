@@ -19,7 +19,7 @@ export default async function handler(req, res) {
     try {
       await connectDB();
 
-      const result = await School.findOne({ schoolJoinCode: id });
+      const result = await School.findOne({ _id: id });
 
       if (result) {
         res.status(200).json(result);

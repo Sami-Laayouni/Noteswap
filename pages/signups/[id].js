@@ -105,16 +105,43 @@ export default function SignUps() {
   }, [router]);
 
   async function giveCertificate(id) {
-    const response = await fetch("/api/events/give_certificate", {
+    const response = await fetch("/api/profile/add_community_minutes", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        userId: id,
-        certificate: data.certificate_link,
+        id: id,
+        points: Math.round(data.community_service_offered / 60) * 20,
       }),
     });
+    const currentDate = new Date();
+    // Format the date
+    const options = {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+    };
+    const formattedDate = currentDate.toLocaleDateString("en-US", options);
+
+    await fetch("/api/profile/add_task", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: id,
+        task: {
+          message: `${Math.round(data.community_service_offered / 60)}`,
+          minutes: Math.round(data.community_service_offered / 60),
+          rewardedOn: formattedDate,
+          organization: `${
+            JSON.parse(localStorage.getItem("userInfo")).first_name
+          } ${JSON.parse(localStorage.getItem("userInfo")).last_name}`,
+        },
+      }),
+    });
+
     if (response.ok) {
       document.getElementById(`give_certificate_${id}`).innerText = "Success";
     }
@@ -248,7 +275,7 @@ export default function SignUps() {
                 type="submit"
                 id={`award_custom__${volunteer._id}`}
               >
-                Award custom amount (will not receive certificate)
+                Award custom amount
               </button>
             </form>
 
@@ -259,7 +286,7 @@ export default function SignUps() {
             >
               {volunteer?.certificates?.includes(data.certificate_link)
                 ? "Already received"
-                : `Give Certificate (Full ${data.community_service_offered} hours)`}
+                : `Reward full amount (${data.community_service_offered} hours)`}
             </button>
             <button
               onClick={() =>

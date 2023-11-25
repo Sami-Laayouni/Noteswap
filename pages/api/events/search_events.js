@@ -24,6 +24,7 @@ export default async function handler(req, res) {
         $or: [
           { school_id: { $regex: school } },
           { school_id: { $exists: false } },
+          { sponsoredLocations: { $in: [school] } },
         ],
       },
     };
@@ -31,7 +32,10 @@ export default async function handler(req, res) {
   } else {
     options = {
       $match: {
-        school_id: { $regex: school },
+        $or: [
+          { school_id: { $regex: school } },
+          { sponsoredLocations: { $in: [school] } },
+        ],
       },
     };
     query.push(options);
@@ -60,6 +64,7 @@ export default async function handler(req, res) {
       max: 1,
       category: 1,
       volunteers: 1,
+      sponsored: 1,
     },
   });
 

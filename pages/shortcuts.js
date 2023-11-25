@@ -6,7 +6,6 @@ import { useContext } from "react";
 import ModalContext from "../context/ModalContext";
 import dynamic from "next/dynamic";
 const CreateEvent = dynamic(() => import("../components/CreateEvent"));
-const BusinessModal = dynamic(() => import("../components/BusinessModal"));
 
 /**
  * Get static props
@@ -40,8 +39,7 @@ export default function Shortcuts() {
       <Head>
         <title>Shortcuts | NoteSwap</title> {/* Title of the page*/}
       </Head>
-      <CreateEvent />
-      <BusinessModal />
+      <CreateEvent business={true} />
       <section
         style={{
           width: "100%",
@@ -58,14 +56,6 @@ export default function Shortcuts() {
           Easily navigate through NoteSwap.
         </p>
         <ul className={style.list}>
-          <li>
-            <Link href="/business/edit">
-              <h2>Edit your Association&apos;s Details</h2>
-            </Link>
-            <div>
-              <button>Go</button>
-            </div>
-          </li>
           <li style={{ marginTop: "20px" }}>
             <h2>Publish an event/campaign</h2>
             <div>
@@ -79,7 +69,7 @@ export default function Shortcuts() {
             </div>
           </li>
           <li style={{ marginTop: "20px" }}>
-            <h2>Reward Community Service for small tasks (No certificate) </h2>
+            <h2>Reward Community Service for small tasks</h2>
             <div>
               {" "}
               <Link href="/rewardcs">

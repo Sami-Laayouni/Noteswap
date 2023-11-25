@@ -66,7 +66,7 @@ export default function Business() {
 
         <section className={style.box}>
           <h1>NoteSwap</h1>
-          <h2>Prepare students for the 21st century using Noteswap.</h2>
+          <h2>Giving opportunities to students everywhere</h2>
           <Link title="Signup to Noteswap" href="/business/signup">
             <button>
               {t("get_started") ? t("get_started") : "Get Started"}

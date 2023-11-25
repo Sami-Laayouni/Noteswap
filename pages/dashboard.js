@@ -70,7 +70,7 @@ const Dashboard = () => {
       }
     }
     if (localStorage.getItem("userInfo")) {
-      getSchoolData(JSON.parse(localStorage.getItem("userInfo")).schoolCode);
+      getSchoolData(JSON.parse(localStorage.getItem("userInfo")).schoolId);
     }
   }, []);
   useEffect(() => {
@@ -86,6 +86,9 @@ const Dashboard = () => {
           return new Date(a.start.date) - new Date(b.start.date);
         });
         setCalendar(sortedEvents);
+      } else {
+        setCalendar([{}]);
+        setLoading(false);
       }
     }
     if (data) {

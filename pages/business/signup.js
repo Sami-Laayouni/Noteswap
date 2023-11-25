@@ -83,6 +83,7 @@ const Signup = () => {
    */
   const handleSignup = async (type) => {
     setOpen(true);
+    localStorage.setItem("schoolId", null);
     try {
       if (type === "email") {
         // Sign up with email and password
@@ -140,6 +141,8 @@ const Signup = () => {
         <div className={style.container}>
           <section className={style.left}>
             <h1>Enhance Your Business with NoteSwap</h1>
+
+            <p>Find the perfect volunteers for your association</p>
 
             <p style={{ paddingRight: "20px" }}>
               By creating a business account on Noteswap, you agree to our{" "}

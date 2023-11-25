@@ -1,8 +1,7 @@
 import style from "./createEvent.module.css";
 import Modal from "../Modal";
-import { useContext, useState, useRef } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import ModalContext from "../../context/ModalContext";
-import html2canvas from "html2canvas";
 import Link from "next/link";
 import OneSignal from "react-onesignal";
 
@@ -13,7 +12,7 @@ import OneSignal from "react-onesignal";
  * @export
  * @return {*}
  */
-export default function CreateEvent() {
+export default function CreateEvent({ business }) {
   const { eventStatus } = useContext(ModalContext);
   const [open, setOpen] = eventStatus;
   const [current, setCurrent] = useState(1);
@@ -26,17 +25,15 @@ export default function CreateEvent() {
   const [message, setMessage] = useState("");
   const [clicked, setClicked] = useState(false);
   const [max, setMax] = useState(50);
-  const canvasRef = useRef(null);
   const sectionRef = useRef(null);
-  const [drawing, setDrawing] = useState(false);
-  const [prevPosition, setPrevPosition] = useState({ x: 0, y: 0 });
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
   const [location, setLocation] = useState("");
   const [req, setReq] = useState("");
-  let cert;
   const [category, setCategory] = useState("");
+  const [tlocation, setTLocation] = useState([]);
   const today = new Date().toISOString().split("T")[0];
+  const [schools, setSchools] = useState("");
   function generateCode(length) {
     const charset = "abcdef0123456789";
     let password = "";
@@ -51,112 +48,23 @@ export default function CreateEvent() {
   let code;
   const [codes, setCodes] = useState(0);
 
-  const startDrawing = (e) => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    const { offsetX, offsetY } = e.nativeEvent;
-
-    ctx.beginPath();
-    ctx.moveTo(offsetX, offsetY);
-
-    setPrevPosition({ x: offsetX, y: offsetY });
-    setDrawing(true);
-  };
-
-  const draw = (e) => {
-    if (!drawing) return;
-
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    const { offsetX, offsetY } = e.nativeEvent;
-
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-    ctx.lineTo(offsetX, offsetY);
-    ctx.stroke();
-
-    setPrevPosition({ x: offsetX, y: offsetY });
-  };
-
-  const stopDrawing = () => {
-    setDrawing(false);
-  };
-
-  const clearWhiteboard = () => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-  };
-  const saveSignature = () => {
-    const canvas = canvasRef.current;
-
-    // Convert canvas to image and set as href for download
-    const url = canvas.toDataURL("image/png");
-    setUrl(url);
-  };
-  const saveImage = async () => {
-    const element = sectionRef.current;
-    const canvas = await html2canvas(element);
-    const image = canvas.toDataURL("image/png");
-    console.log(element, canvas, image);
-    const url = await fetch("/api/gcs/upload_base64", {
+  async function fetchSchools() {
+    const response = await fetch("/api/schools/get_schools", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        base64: image,
-      }),
+      body: JSON.stringify({}),
     });
-    const data = await url.json();
-    cert = data.url;
-    console.log(data.url);
-  };
-  function formatDate(inputDate) {
-    const months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
-
-    const dateParts = inputDate.split("-");
-    const year = dateParts[0];
-    const month = parseInt(dateParts[1], 10) - 1; // Adjust for zero-based month index
-    const day = parseInt(dateParts[2], 10);
-
-    const monthName = months[month];
-    const daySuffix = getDaySuffix(day);
-
-    return `${monthName} ${day}${daySuffix} ${year}`;
+    const data = await response.json();
+    setSchools(data);
+    console.log(data);
   }
 
-  function getDaySuffix(day) {
-    if (day >= 11 && day <= 13) {
-      return "th";
-    }
+  useEffect(() => {
+    fetchSchools();
+  }, []);
 
-    const lastDigit = day % 10;
-    switch (lastDigit) {
-      case 1:
-        return "st";
-      case 2:
-        return "nd";
-      case 3:
-        return "rd";
-      default:
-        return "th";
-    }
-  }
   if (!open) {
     return null;
   }
@@ -167,36 +75,18 @@ export default function CreateEvent() {
       onClose={() => {
         setOpen(false);
       }}
-      title={`${
-        current == 1
-          ? "Create a new event"
-          : current == 2 || current == 3
-          ? "Basic information"
-          : "Create a certificate"
-      }`}
+      title={`${current == 1 ? "Create a new event" : "Basic information"}`}
     >
       <section className={style.container}>
         <form
           style={{ marginTop: "20px", marginLeft: "10px" }}
           onSubmit={async (e) => {
             e.preventDefault();
-            if (current == 1) {
-              setCurrent(2);
-            } else if (current == 2) {
-              setCurrent(3);
-            } else if (current == 3) {
-              setCurrent(4);
-            } else if (current == 4) {
-              setCurrent(5);
-            } else if (current == 5) {
-              if (!name) {
-                saveSignature();
-              }
-              setCurrent(6);
-            } else if (current == 6) {
-              setClicked(true);
-              await saveImage();
+            setCurrent(current + 1);
 
+            if (current == 3 && business) {
+              setCurrent(4);
+            } else if (current == 3 && !business) {
               code = generateCode(24);
               setCodes(code);
               const response = await fetch("/api/events/create_event", {
@@ -212,13 +102,14 @@ export default function CreateEvent() {
                   community_service_offered: communityService,
                   teacher_id: JSON.parse(localStorage.getItem("userInfo"))._id,
                   date_of_events: `${startDate} to ${endDate}`,
-                  certificate_link: cert,
                   contact_email: JSON.parse(localStorage.getItem("userInfo"))
                     .email,
                   link_to_event: link ? link : "",
                   max: max,
                   location: location,
-                  req: req,
+                  reqi: req,
+                  sponsored: false,
+                  sponsoredLocations: [],
                   createdAt: Date.now(),
                   school_id: JSON.parse(localStorage.getItem("userInfo"))
                     .schoolId,
@@ -270,14 +161,14 @@ export default function CreateEvent() {
                     },
                   }),
                 };
-
+                /*
                 await fetch(
                   "https://onesignal.com/api/v1/notifications",
                   options
                 )
                   .then((response) => response.json())
                   .then((response) => console.log(response))
-                  .catch((err) => console.error(err));
+                  .catch((err) => console.error(err));*/
 
                 await fetch("/api/email/send_event_email", {
                   method: "POST",
@@ -298,8 +189,112 @@ export default function CreateEvent() {
               } else {
                 console.log(await response.text());
               }
-              setCurrent(7);
-            } else if (current == 7) {
+              setCurrent(5);
+            } else if (current == 4) {
+              code = generateCode(24);
+              setCodes(code);
+              const response = await fetch("/api/events/create_event", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  id: code,
+                  title: title,
+                  desc: desc,
+                  category: category,
+                  community_service_offered: communityService,
+                  teacher_id: JSON.parse(localStorage.getItem("userInfo"))._id,
+                  date_of_events: `${startDate} to ${endDate}`,
+                  contact_email: JSON.parse(localStorage.getItem("userInfo"))
+                    .email,
+                  link_to_event: link ? link : "",
+                  max: max,
+                  location: location,
+                  reqi: req,
+                  createdAt: Date.now(),
+                  sponsored: true,
+                  sponsoredLocations: tlocation,
+                  school_id: JSON.parse(localStorage.getItem("userInfo"))
+                    .schoolId,
+                }),
+              });
+              if (response.ok) {
+                const Tit = title;
+                const options = {
+                  method: "POST",
+                  headers: {
+                    Authorization: `Basic ${process.env.NEXT_PUBLIC_ONESIGNAL_REST}`,
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    included_segments: ["All"],
+                    app_id: "3b28d10b-3b88-426f-8025-507667803b2a",
+                    headings: {
+                      en: "New community service opportunity available!",
+                      es: "¡Nueva oportunidad de servicio comunitario disponible!",
+                      fr: "Nouvelle opportunité de service communautaire disponible !",
+                      de: "Neue Möglichkeiten für Gemeindearbeit verfügbar!",
+                      it: "Nuova opportunità di servizio alla comunità disponibile!",
+                      pt: "Nova oportunidade de serviço comunitário disponível!",
+                      nl: "Nieuwe gemeenschapsdienstmogelijkheid beschikbaar!",
+                      ru: "Доступна новая возможность обслуживания сообщества!",
+                      zh: "新的社区服务机会现已开放!",
+                      ja: "新しいコミュニティサービスの機会が利用可能です!",
+                      ar: "فرصة خدمة جديدة متاحة في المجتمع!",
+                      hi: "समुदाय सेवा का नया अवसर उपलब्ध है!",
+                      ko: "새로운 커뮤니티 서비스 기회가 있습니다!",
+                    },
+                    url: "https://www.noteswap.org/event",
+                    chrome_web_icon:
+                      "https://storage.googleapis.com/noteswap-images/circle.png",
+                    contents: {
+                      en: `New community service opportunity available! ${title}, ${communityService} hours offered`,
+                      es: `¡Nueva oportunidad de servicio comunitario disponible! ${title}, se ofrecen ${communityService} horas`,
+                      fr: `Nouvelle opportunité de service communautaire disponible ! ${title}, ${communityService} heures offertes`,
+                      de: `Neue Möglichkeiten für Gemeindearbeit verfügbar! ${title}, ${communityService} Stunden angeboten`,
+                      it: `Nuova opportunità di servizio alla comunità disponibile! ${title}, offerte ${communityService} ore`,
+                      pt: `Nova oportunidade de serviço comunitário disponível! ${title}, oferecidas ${communityService} horas`,
+                      nl: `Nieuwe gemeenschapsdienstmogelijkheid beschikbaar! ${title}, ${communityService} uur aangeboden`,
+                      ru: `Доступна новая возможность обслуживания сообщества! ${title}, предлагается ${communityService} часов`,
+                      zh: `新的社区服务机会现已开放！${title}，提供${communityService}小时`,
+                      ja: `新しいコミュニティサービスの機会が利用可能です！${title}、提供される${communityService}時間`,
+                      ar: `فرصة خدمة جديدة متاحة في المجتمع! ${title}، تُقدم ${communityService} ساعة`,
+                      hi: `समुदाय सेवा का नया अवसर उपलब्ध है! ${title}, ${communityService} घंटे प्रस्तावित किए जाते हैं`,
+                      ko: `새로운 커뮤니티 서비스 기회가 있습니다! ${title}, 제공되는 ${communityService} 시간`,
+                    },
+                  }),
+                };
+                /*
+                await fetch(
+                  "https://onesignal.com/api/v1/notifications",
+                  options
+                )
+                  .then((response) => response.json())
+                  .then((response) => console.log(response))
+                  .catch((err) => console.error(err));*/
+
+                await fetch("/api/email/send_event_email", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    name: `${
+                      JSON.parse(localStorage.getItem("userInfo")).first_name
+                    } ${
+                      JSON.parse(localStorage.getItem("userInfo")).last_name
+                    }`,
+                    email: JSON.parse(localStorage.getItem("userInfo")).email,
+                    event: Tit,
+                    url: `${process.env.NEXT_PUBLIC_URL}signups/${code}`,
+                  }),
+                });
+              } else {
+                console.log(await response.text());
+              }
+              setCurrent(5);
+            } else if (current == 5) {
               setCategory("");
               setCurrent(1);
               setTitle("");
@@ -493,268 +488,90 @@ export default function CreateEvent() {
                 required
               />
               <button className={style.button} type="submit">
-                Next
+                {business ? "Next" : "Finish"}
               </button>
             </>
           )}
-          {current == 4 && (
+          {current === 4 && (
             <>
               <label className={style.labelForInput}>
-                Link to signup to event (ex: Google Form)
+                Select the locations where you would like your event to show up.
               </label>
-              <input
-                placeholder="Enter link (optional)"
-                className={style.input}
-                value={link}
-                type="url"
-                onChange={(e) => {
-                  setLink(e.target.value);
-                }}
-              />
-              <label className={style.labelForInput}>
-                Award Message of Certificate (keep it short)
-              </label>
-              <textarea
-                className={style.input}
-                style={{ height: "70px", paddingTop: "10px", resize: "none" }}
-                placeholder="Enter message"
-                value={message}
-                onChange={(e) => {
-                  setMessage(e.target.value);
-                }}
-                required
-              />
-              <h1
-                style={{
-                  textAlign: "center",
-                  fontFamily: "var(--manrope-font)",
-                  lineHeight: "15px",
-                }}
-              >
-                This award is presented to
-              </h1>
-              <h2
-                style={{
-                  textAlign: "center",
-                  fontFamily: "var(--manrope-font)",
-                  lineHeight: "15px",
-                  color: "var(--accent-color)",
-                }}
-              >
-                John Doe
-              </h2>
-              <h3
-                style={{
-                  textAlign: "center",
-                  fontFamily: "var(--manrope-font)",
-                  lineHeight: "10px",
-                }}
-              >
-                For
-              </h3>
-              <h4
-                style={{
-                  textAlign: "center",
-                  fontFamily: "var(--manrope-font)",
-                  lineHeight: "17px",
-                  paddingLeft: "50px",
-                  paddingRight: "50px",
-                  width: "60vw",
-                  maxWidth: "60vw",
-                  wordBreak: "break-all",
-                  whiteSpace: "pre-wrap",
-                  marginLeft: "auto",
-                  marginRight: "auto",
-                }}
-              >
-                <i>
-                  {!message ? "[Your message goes here]" : message} between
-                  (dates) earning (hours)
-                </i>
-              </h4>
-              <button className={style.button} type="submit">
-                Next
-              </button>
-            </>
-          )}
-          {current == 5 && (
-            <>
-              <label className={style.labelForInput}>Type your signature</label>
-              <input
-                placeholder="Enter full name"
-                className={style.input}
-                id="signature"
-                maxLength={20}
-                value={name}
-                onChange={(e) => {
-                  setName(e.target.value);
-                }}
-                style={{ width: "50%" }}
-              />
-              <span
-                style={{
-                  marginLeft: "60px",
-                  fontSize: "2em",
-                  fontFamily: "var(--signature-font)",
-                }}
-              >
-                {name ? name : "Your signature will appear here"}
-              </span>
-              <label className={style.labelForInput}>
-                Or draw your signature (used in certificate)
-              </label>
-
-              <canvas
-                ref={canvasRef}
-                width={950}
-                height={200}
-                style={{
-                  border: "1px solid black",
-                  marginLeft: "auto",
-                  marginRight: "auto",
-                  marginTop: "5px",
-                  marginBottom: "5px",
-                }}
-                onMouseDown={startDrawing}
-                onMouseMove={draw}
-                onMouseUp={stopDrawing}
-                onMouseLeave={stopDrawing}
-              />
+              <div className={style.checkboxContainer}>
+                {schools.map(function (value) {
+                  return (
+                    <label key={value.name} className={style.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        value={value.id}
+                        checked={tlocation.includes(value.id)}
+                        onChange={(e) => {
+                          const selectedId = value.id;
+                          setTLocation((prevLocations) => {
+                            if (prevLocations.includes(selectedId)) {
+                              return prevLocations.filter(
+                                (id) => id !== selectedId
+                              );
+                            } else {
+                              return [...prevLocations, selectedId];
+                            }
+                          });
+                        }}
+                      />
+                      {value.name} ({value.location}) {value.users} user
+                      {value.users === 1 ? "" : "s"} from this school
+                    </label>
+                  );
+                })}
+              </div>
               <div>
-                <button
-                  type="button"
-                  style={{
-                    background: "var(--accent-color)",
-                    border: "none",
-                    color: "white",
-                    padding: "var(--button-default-padding)",
-                    borderRadius: "var(--button-default-border-radius)",
-                    outline: "none",
-                    cursor: "pointer",
-                  }}
-                  onClick={clearWhiteboard}
-                >
-                  Clear
-                </button>
-                <button id="create" className={style.button} type="submit">
-                  Create
-                </button>
-              </div>
-            </>
-          )}
-          {current == 6 && (
-            <>
-              <div
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  display: "grid",
-                  gridTemplateColumns: "50% 50%",
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    width: "100%",
-                    height: "60vh",
-                  }}
-                >
-                  <section ref={sectionRef}>
-                    <img
-                      style={{
-                        width: "500px",
-                        height: "360px",
-                      }}
-                      src="/assets/images/certificate/template.png"
-                      alt="Certificate"
-                    ></img>
-
-                    <p
-                      style={{
-                        position: "absolute",
-                        top: "52.53940455341506vh", // Adjust this value to position the <p> tag below the line
-                        left: "21.09375vw",
-                        width: "290px", // Adjust this value to control the width of the <p> tag
-                        padding: "10px",
-                        transform: "translate(-50%, -50%)",
-                        textAlign: "center",
-                        lineHeight: "1.2",
-                        whiteSpace: "pre-line",
-                        fontSize: "0.7rem",
-                        wordBreak: "break-word",
-                        fontFamily: "var(--manrope-font)",
-                      }}
-                    >
-                      For, {message.charAt(0).toLowerCase() + message.slice(1)}{" "}
-                      between {formatDate(startDate)} and {formatDate(endDate)}{" "}
-                      earning {communityService} community service hour
-                      {communityService != 1 ? "s" : ""}.
-                    </p>
-
-                    {!name && (
-                      <img
-                        style={{
-                          position: "absolute",
-                          top: "62vh", // Adjust this value to position the <p> tag below the line
-                          left: "21.09375vw",
-                          width: "500px", // Adjust this value to control the width of the <p> tag
-                          padding: "10px",
-                          transform: "translate(-50%, -50%)",
-                          textAlign: "center",
-                          lineHeight: "1.5",
-                          whiteSpace: "pre-line",
-                          wordBreak: "break-word",
-                          fontFamily: "var(--signature-font)",
-                        }}
-                        alt="Certificate image"
-                        src={url}
-                      ></img>
+                <p>
+                  A total of{" "}
+                  <span style={{ color: "var(--accent-color)" }}>
+                    {tlocation.reduce(
+                      (totalUsers, selectedId) =>
+                        totalUsers +
+                          schools.find((school) => school.id === selectedId)
+                            ?.users || 0,
+                      0
                     )}
-                    {name && (
-                      <h2
-                        style={{
-                          position: "absolute",
-                          top: "62vh", // Adjust this value to position the <p> tag below the line
-                          left: "21.09375vw",
-                          width: "500px", // Adjust this value to control the width of the <p> tag
-                          padding: "10px",
-                          transform: "translate(-50%, -50%)",
-                          textAlign: "center",
-                          lineHeight: "1.5",
-                          whiteSpace: "pre-line",
-                          wordBreak: "break-word",
-                          fontFamily: "var(--signature-font)",
-                        }}
-                      >
-                        {name}
-                      </h2>
-                    )}
-                  </section>
-                </div>
-                <div className={style.detail}>
-                  <h1>Certificate Details</h1>
-                  <i>
-                    {" "}
-                    Notice: certificates can be checked by educational
-                    institutes. Forged or modified ones will be detected.
-                  </i>
-                  <h2>
-                    <b>Offered by:</b> <span>You</span>
-                  </h2>
-                  <h2>
-                    <b>NoteSwap Id:</b> Example Id{" "}
-                  </h2>
-                </div>
+                  </span>{" "}
+                  users from{" "}
+                  <span style={{ color: "var(--accent-color)" }}>
+                    {tlocation.length}
+                  </span>{" "}
+                  school{tlocation.length == 1 ? "" : "s"} will be notified and
+                  have the oppurtunity to sign up for this event
+                </p>
+                <p>
+                  <span style={{ color: "var(--accent-color)" }}>Cost:</span>{" "}
+                  {tlocation.reduce(
+                    (totalUsers, selectedId) =>
+                      totalUsers +
+                        schools.find((school) => school.id === selectedId)
+                          ?.users || 0,
+                    0
+                  ) / 10}{" "}
+                  MAD{" "}
+                </p>
+                <p>
+                  <span style={{ color: "var(--accent-color)" }}>
+                    Discount:
+                  </span>{" "}
+                  Testers Discount (100%)
+                </p>
+                <p>
+                  <span style={{ color: "var(--accent-color)" }}>Total:</span> 0
+                  MAD
+                </p>
               </div>
-
-              <button disabled={clicked} className={style.button} type="submit">
-                Next
+              <button className={style.button} type="submit">
+                Finish
               </button>
             </>
           )}
-          {current == 7 && (
+
+          {current == 5 && (
             <div
               style={{
                 display: "flex",
@@ -797,18 +614,10 @@ export default function CreateEvent() {
           )}
         </form>
 
-        {current != 1 && current != 5 && current != 6 && (
+        {current != 1 && current != 4 && (
           <button
             onClick={() => {
-              if (current == 2) {
-                setCurrent(1);
-              } else if (current == 3) {
-                setCurrent(2);
-              } else if (current == 4) {
-                setCurrent(3);
-              } else if (current == 5) {
-                settCurrent(4);
-              }
+              setCurrent(current - 1);
             }}
             className={style.back}
           >

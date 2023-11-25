@@ -35,6 +35,7 @@ export default function Verify() {
     reader.onload = async () => {
       const base64 = reader.result;
       const sha256 = await computeSHA256(base64);
+      console.log(sha256);
       const response = await fetch("/api/certificate/verify_certificate", {
         method: "POST",
         headers: {
@@ -81,20 +82,20 @@ export default function Verify() {
         <h1
           style={{ fontFamily: "var(--manrope-bold-font)", lineHeight: "20px" }}
         >
-          Verify NoteSwap Certificate
+          Verify NoteSwap Transcript
         </h1>
         <p style={{ fontFamily: "var(--manrope-font)" }}>
-          Drag and drop a student&apos;s certificate to verify that it is valid
+          Drag and drop a student&apos;s transcript to verify that it is valid
           and not forged or modified.
         </p>
         {data &&
           (verified ? (
             <div className={style.container}>
-              <h1>This certificate is valid</h1>
+              <h1>This transcript is valid</h1>
             </div>
           ) : (
             <div className={style.container}>
-              <h1>This certificate is forged or modified</h1>
+              <h1>This transcript is forged or modified</h1>
             </div>
           ))}
         <div
@@ -109,13 +110,13 @@ export default function Verify() {
             fontFamily: "var(--manrope-font)",
           }}
         >
-          <p>Drag and drop a certificate or click here to verify</p>
+          <p>Drag and drop a transcript or click here to verify</p>
 
           <input
             type="file"
             ref={fileInputRef}
             style={{ display: "none" }}
-            accept="image/*"
+            accept="doc/*"
             onChange={handleFileInputChange}
           />
         </div>

@@ -1,4 +1,4 @@
-/* Certificate Model */
+/* Certificate Model now Transcript */
 
 import mongoose from "mongoose";
 

@@ -23,10 +23,6 @@ const eventSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  certificate_link: {
-    type: String,
-    required: true,
-  },
   contact_email: {
     type: String,
     required: true,
@@ -65,8 +61,16 @@ const eventSchema = new mongoose.Schema({
     required: false,
   },
   school_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
+    type: String,
+    required: false,
+  },
+  sponsored: {
+    type: Boolean,
+    required: false,
+  },
+  sponsoredLocations: {
+    type: Array,
+    required: false,
   },
 });
 

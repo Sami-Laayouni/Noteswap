@@ -50,7 +50,11 @@ function CreateMicrosoftUserPage() {
             localStorage.setItem("userInfo", JSON.stringify(response.user));
             localStorage.setItem("token", response.token);
             // Redirect to the dashboard page after successful login
-            router.push("/dashboard");
+            if (school == "null" || school == null) {
+              router.push("/shortcuts");
+            } else {
+              router.push("/dashboard");
+            }
             ran = true;
           } else {
             // An error has occured

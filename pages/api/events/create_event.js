@@ -22,15 +22,16 @@ export default async function becomeTutor(req, res) {
       community_service_offered,
       teacher_id,
       date_of_events,
-      certificate_link,
       link_to_event,
       contact_email,
       category,
       max,
       id,
       location,
-      req,
+      reqi,
       school_id,
+      sponsored,
+      sponsoredLocations,
     } = req.body;
     try {
       await connectDB();
@@ -41,7 +42,6 @@ export default async function becomeTutor(req, res) {
         community_service_offered: community_service_offered,
         teacher_id: teacher_id,
         date_of_events: date_of_events,
-        certificate_link: certificate_link,
         contact_email: contact_email,
         link_to_event: link_to_event,
         createdAt: Date.now(),
@@ -49,13 +49,16 @@ export default async function becomeTutor(req, res) {
         max: max,
         expiration_date: new Date(date_of_events.split("to")[1]),
         location: location,
-        req: req,
-        school_id: JSON.parse(localStorage.getItem("userInfo")).schoolId,
+        req: reqi,
+        school_id: school_id,
+        sponsored: sponsored,
+        sponsoredLocations: sponsoredLocations || null,
       });
       const savedEvent = await newEvent.save();
 
       res.status(200).json({ savedEvent });
     } catch (error) {
+      console.log(error.message);
       res.status(500).json({ error: error.message });
     }
   } else {

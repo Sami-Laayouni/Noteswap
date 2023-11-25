@@ -46,7 +46,9 @@ const RewardCommunityService = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({}),
+      body: JSON.stringify({
+        id: JSON.parse(localStorage?.getItem("userInfo"))?.schoolId,
+      }),
     });
     if (data.ok) {
       const students = await data.json();
@@ -249,7 +251,7 @@ const RewardCommunityService = () => {
                 </tr>
               </thead>
               <tbody>
-                {data.map(function (value) {
+                {data?.map(function (value) {
                   if (search) {
                     if (!value.first_name.toLowerCase().includes(search)) {
                       return <></>;
@@ -303,36 +305,43 @@ const RewardCommunityService = () => {
                                 }),
                               }
                             );
-                            const response2 = await fetch(
-                              "/api/profile/add_task",
-                              {
-                                method: "POST",
-                                headers: {
-                                  "Content-Type": "application/json",
+                            const currentDate = new Date();
+                            // Format the date
+                            const options = {
+                              year: "numeric",
+                              month: "numeric",
+                              day: "numeric",
+                            };
+                            const formattedDate =
+                              currentDate.toLocaleDateString("en-US", options);
+
+                            await fetch("/api/profile/add_task", {
+                              method: "POST",
+                              headers: {
+                                "Content-Type": "application/json",
+                              },
+                              body: JSON.stringify({
+                                id: value._id,
+                                task: {
+                                  message: `${
+                                    document.getElementById(
+                                      `input1_${value._id}`
+                                    ).value
+                                  }`,
+                                  minutes: document.getElementById(
+                                    `input_${value._id}`
+                                  ).value,
+                                  rewardedOn: formattedDate,
+                                  organization: `${
+                                    JSON.parse(localStorage.getItem("userInfo"))
+                                      .first_name
+                                  } ${
+                                    JSON.parse(localStorage.getItem("userInfo"))
+                                      .last_name
+                                  }`,
                                 },
-                                body: JSON.stringify({
-                                  id: value._id,
-                                  task: {
-                                    message: `${
-                                      document.getElementById(
-                                        `input1_${value._id}`
-                                      ).value
-                                    } (rewarded by ${
-                                      JSON.parse(
-                                        localStorage.getItem("userInfo")
-                                      ).first_name
-                                    } ${
-                                      JSON.parse(
-                                        localStorage.getItem("userInfo")
-                                      ).last_name
-                                    })`,
-                                    minutes: document.getElementById(
-                                      `input_${value._id}`
-                                    ).value,
-                                  },
-                                }),
-                              }
-                            );
+                              }),
+                            });
                             if (response.ok) {
                               document.getElementById(
                                 `reward_button_${value._id}`
@@ -429,7 +438,7 @@ const RewardCommunityService = () => {
             </table>
           </>
         )}
-        {!loading && data.length == 0 && <p>No students found</p>}
+        {!loading && data?.length == 0 && <p>No students found</p>}
       </section>
     </>
   );

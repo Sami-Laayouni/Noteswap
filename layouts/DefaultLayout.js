@@ -17,6 +17,7 @@ const LargenImage = dynamic(() => import("../components/LargenImage"), {
 const ShareNotes = dynamic(() => import("../components/ShareNotes"), {
   ssr: false,
 });
+const BusinessModal = dynamic(() => import("../components/BusinessModal"));
 
 const Header = dynamic(() => import("../components/Header"));
 /**
@@ -35,6 +36,7 @@ const DefaultLayout = ({ children }) => {
           <Certificate />
           <LargenImage />
           <ShareNotes />
+          <BusinessModal />
           <main>{children}</main>
         </SocketProvider>
       </ModalProvider>

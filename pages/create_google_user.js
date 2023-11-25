@@ -32,6 +32,7 @@ function CreateGoogleUserPage() {
        */
       async function createUser(data) {
         const role = localStorage.getItem("role");
+
         const school = localStorage.getItem("schoolId");
         try {
           const response = await AuthServices.create_user_with_google(
@@ -48,7 +49,11 @@ function CreateGoogleUserPage() {
             localStorage.setItem("userInfo", JSON.stringify(response.user));
             localStorage.setItem("token", response.token);
             // Redirect to the dashboard page after successful login
-            router.push("/dashboard");
+            if (school == "null" || school == null) {
+              router.push("/shortcuts");
+            } else {
+              router.push("/dashboard");
+            }
             setRan(true);
           } else {
             // An error has occured

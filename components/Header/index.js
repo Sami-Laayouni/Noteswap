@@ -37,9 +37,10 @@ import { getDailyStreak, updateDailyStreak } from "../../utils/streak";
  */
 export default function Header() {
   const { isLoggedIn } = useContext(AuthContext);
-  const { certificateModal } = useContext(ModalContext);
+  const { certificateModal, business } = useContext(ModalContext);
   const [loggedIn, setLoggedIn] = isLoggedIn;
   const [isCertificate, setCertificate] = certificateModal;
+  const [open, setOpen] = business;
   const [userData, setUserData] = useState();
   const router = useRouter();
   const AuthServices = new AuthService(setLoggedIn);
@@ -160,10 +161,9 @@ export default function Header() {
               priority
             ></Image>
           </Link>
-          {router.pathname.includes("business") &&
-            userData?.role == "association" && (
-              <h1 className={style.business}>{t("business")}</h1>
-            )}
+          {userData?.role == "association" && (
+            <h1 className={style.business}>{t("business")}</h1>
+          )}
         </div>
 
         {/* Header nav bar (for tablets and desktops)*/}
@@ -493,7 +493,7 @@ export default function Header() {
                       ).style.display = "none";
                     }}
                   >
-                    {t("certicates")}
+                    Transcript
                     <div className={style.borderLine} />
                   </li>
                 ))}
@@ -572,7 +572,7 @@ export default function Header() {
               <span>{t("my_profile")}</span>
             </Link>
           </li>
-          {userData?.role == "association" && userData?.associations && (
+          {userData?.role == "association" && userData?.associations[0] && (
             <li>
               <Link href={`/bprofile/${userData?.associations[0]}`}>
                 <HiUserGroup size={21} style={{ verticalAlign: "middle" }} />
@@ -580,18 +580,17 @@ export default function Header() {
               </Link>
             </li>
           )}
-          {userData?.role == "teacher" ||
-            (userData?.role == "association" && (
-              <li>
-                <Link href="/rewardcs">
-                  <RiCopperCoinLine
-                    size={21}
-                    style={{ verticalAlign: "middle" }}
-                  />
-                  <span>{t("reward_cs")}</span>
-                </Link>
-              </li>
-            ))}
+          {userData?.role == "teacher" && (
+            <li>
+              <Link href="/rewardcs">
+                <RiCopperCoinLine
+                  size={21}
+                  style={{ verticalAlign: "middle" }}
+                />
+                <span>{t("reward_cs")}</span>
+              </Link>
+            </li>
+          )}
           {userData?.role == "student" && (
             <li>
               <Link href="/productivity">
@@ -615,26 +614,36 @@ export default function Header() {
             <li>
               <Link href="/verify">
                 <GrScan size={21} style={{ verticalAlign: "middle" }} />
-                <span>{t("verify_certificate")}</span>
+                <span>Verify Transcript</span>
               </Link>
             </li>
           )}
           {userData?.role == "association" && (
-            <li>
-              <Link href="/business/edit">
-                <MdEdit size={21} style={{ verticalAlign: "middle" }} />
-                <span>{t("edit_association")}</span>
-              </Link>
+            <li
+              onClick={() => {
+                setOpen(true);
+              }}
+            >
+              <MdEdit size={21} style={{ verticalAlign: "middle" }} />
+              <span>{t("edit_association")}</span>
             </li>
           )}
           {userData?.role == "association" && (
             <li>
-              <Link href="/business/analytics">
+              <Link href="/comingsoon">
                 <SiGoogleanalytics
                   size={21}
                   style={{ verticalAlign: "middle" }}
                 />
                 <span>{t("analytics")}</span>
+              </Link>
+            </li>
+          )}
+          {userData?.role == "teacher" && (
+            <li>
+              <Link href="/detect_ai">
+                <LuGlasses size={21} style={{ verticalAlign: "middle" }} />
+                <span>{t("detect_ai_text")}</span>
               </Link>
             </li>
           )}
@@ -647,15 +656,7 @@ export default function Header() {
           {userData?.role != "teacher" && userData?.role != "association" && (
             <li onClick={() => setCertificate(true)}>
               <FiAward size={21} style={{ verticalAlign: "middle" }} />
-              <span>{t("certicates")} </span>
-            </li>
-          )}
-          {userData?.role == "teacher" && (
-            <li>
-              <Link href="/detect_ai">
-                <LuGlasses size={21} style={{ verticalAlign: "middle" }} />
-                <span>{t("detect_ai_text")}</span>
-              </Link>
+              <span>Transcript </span>
             </li>
           )}
 
