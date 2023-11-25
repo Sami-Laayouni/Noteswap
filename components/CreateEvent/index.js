@@ -161,14 +161,14 @@ export default function CreateEvent({ business }) {
                     },
                   }),
                 };
-                /*
+
                 await fetch(
                   "https://onesignal.com/api/v1/notifications",
                   options
                 )
                   .then((response) => response.json())
                   .then((response) => console.log(response))
-                  .catch((err) => console.error(err));*/
+                  .catch((err) => console.error(err));
 
                 await fetch("/api/email/send_event_email", {
                   method: "POST",
@@ -265,14 +265,14 @@ export default function CreateEvent({ business }) {
                     },
                   }),
                 };
-                /*
+
                 await fetch(
                   "https://onesignal.com/api/v1/notifications",
                   options
                 )
                   .then((response) => response.json())
                   .then((response) => console.log(response))
-                  .catch((err) => console.error(err));*/
+                  .catch((err) => console.error(err));
 
                 await fetch("/api/email/send_event_email", {
                   method: "POST",
