@@ -52,6 +52,7 @@ const RewardCommunityService = () => {
     });
     if (data.ok) {
       const students = await data.json();
+      console.log(students.students);
 
       setData(students.students);
       setLoading(false);
@@ -257,6 +258,12 @@ const RewardCommunityService = () => {
                       return <></>;
                     }
                   }
+                  const totalMinutes = value?.breakdown?.reduce(
+                    (accumulator, currentValue) => {
+                      return accumulator + parseInt(currentValue.minutes);
+                    },
+                    0
+                  );
                   return (
                     <tr key={`tableRow${value._id}`}>
                       <td
@@ -265,10 +272,53 @@ const RewardCommunityService = () => {
                         }}
                       >
                         {" "}
-                        {value.first_name.charAt(0).toUpperCase() +
-                          value.first_name.slice(1)}{" "}
-                        {value.last_name.charAt(0).toUpperCase() +
-                          value.last_name.slice(1)}
+                        <b>
+                          {value.first_name.charAt(0).toUpperCase() +
+                            value.first_name.slice(1)}{" "}
+                          {value.last_name.charAt(0).toUpperCase() +
+                            value.last_name.slice(1)}
+                        </b>
+                        <ul style={{ paddingLeft: "0px", listStyle: "none" }}>
+                          {value?.points != 0 &&
+                            value.breakdown &&
+                            value?.points - totalMinutes * 20 != 0 && (
+                              <li>
+                                Sharing notes on NoteSwap (
+                                {Math.round(
+                                  (value?.points - totalMinutes * 20) / 20
+                                )}{" "}
+                                minute
+                                {Math.round(
+                                  (value?.points - totalMinutes * 20) / 20
+                                ) == 1
+                                  ? ""
+                                  : "s"}{" "}
+                                )
+                              </li>
+                            )}
+                          {value?.points != 0 && !value.breakdown && (
+                            <li>
+                              Sharing notes on NoteSwap (
+                              {Math.round(value?.points / 20)} minute
+                              {Math.round(value?.points / 20) == 1 ? "" : "s"})
+                            </li>
+                          )}
+                          {value?.tutor_hours != 0 && (
+                            <li>
+                              Tutoring students ({value.tutor_hours / 60} minute
+                              {value.tutor_hours / 60 == 1 ? "" : "s"})
+                            </li>
+                          )}
+
+                          {value?.breakdown?.map(function (value, index) {
+                            return (
+                              <li key={index}>
+                                {value.message} ({value.minutes} minute
+                                {value.minutes == 1 ? "" : "s"})
+                              </li>
+                            );
+                          })}
+                        </ul>
                       </td>
                       <td>
                         <p id={`amount_community_${value._id}`}>
@@ -400,7 +450,7 @@ const RewardCommunityService = () => {
                               border: "1px solid var(--input-border-color)",
                               paddingLeft: "15px",
                               height: "32px",
-                              width: "50%",
+                              width: "40%",
                               marginLeft: "10px",
                               transition: "border-color 0.3s ease-in-out",
                               verticalAlign: "middle",
