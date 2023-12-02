@@ -168,6 +168,7 @@ export default function EventCard({ data }) {
                 if (response.ok) {
                   setOpen(true);
                   setData(data);
+                  console.log(data.link_to_event);
                   router.push(data?.link_to_event);
                 }
               }

@@ -107,7 +107,7 @@ export default function NoteSwapBot() {
       );
       const dataResponse = await data.json();
       const match = dataResponse.matches[0].metadata.paragraph;
-      if (dataResponse.matches[0].score >= 0.76) {
+      if (dataResponse.matches[0].score >= 0.8) {
         messages.push({
           role: "user",
           content: `Using this data from the ${

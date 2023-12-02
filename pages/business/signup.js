@@ -43,10 +43,8 @@ const Signup = () => {
 
   const { isLoggedIn } = useContext(AuthContext);
   const { errorSignup } = useContext(AuthContext);
-  const { business } = useContext(ModalContext);
   const [loggedIn, setLoggedIn] = isLoggedIn;
   const [error, setError] = errorSignup;
-  const [open, setOpen] = business;
   const AuthServices = new AuthService(setLoggedIn);
   const { t } = useTranslation("common");
 
@@ -82,7 +80,6 @@ const Signup = () => {
    * @license MIT
    */
   const handleSignup = async (type) => {
-    setOpen(true);
     localStorage.setItem("schoolId", null);
     try {
       if (type === "email") {

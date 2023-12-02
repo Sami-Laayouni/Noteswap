@@ -2,7 +2,7 @@ import Head from "next/head";
 import style from "../styles/GetStarted.module.css";
 import Link from "next/link";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import ModalContext from "../context/ModalContext";
 import dynamic from "next/dynamic";
 const CreateEvent = dynamic(() => import("../components/CreateEvent"));
@@ -32,8 +32,18 @@ export async function getStaticProps({ locale }) {
  */
 export default function Shortcuts() {
   // Return the JSX
-  const { eventStatus } = useContext(ModalContext);
+  const { eventStatus, business } = useContext(ModalContext);
   const [open, setOpen] = eventStatus;
+  const [bOpen, setBOpen] = business;
+  useEffect(() => {
+    if (localStorage.getItem("userInfo")) {
+      if (
+        JSON.parse(localStorage.getItem("userInfo")).associations?.length == 0
+      ) {
+        setBOpen(true);
+      }
+    }
+  }, []);
   return (
     <>
       <Head>
