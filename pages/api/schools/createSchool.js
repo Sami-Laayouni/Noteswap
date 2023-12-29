@@ -19,10 +19,10 @@ export default async function createSchool(req, res) {
       school_contact_person,
       school_contact_email,
       school_phone_number,
-      school_handbook,
-      school_join_code,
-      school_teacher_code,
-      school_editorial_code,
+      school_supported_emails,
+      school_community_service,
+      schoolLogo,
+      schoolCover: school_teacher_code,
     } = req.body;
 
     try {
@@ -47,10 +47,11 @@ export default async function createSchool(req, res) {
         schoolContactPerson: school_contact_person,
         schoolContactEmail: school_contact_email,
         schoolPhoneNumber: school_phone_number,
-        schoolHandbook: school_handbook,
-        schoolJoinCode: school_join_code,
         schoolTeacherCode: school_teacher_code,
-        schoolEditorialCode: school_editorial_code,
+        schoolSupportedEmails: school_supported_emails,
+        schoolCommunityService: school_community_service,
+        schoolLogo: schoolLogo,
+        schoolCover: schoolCover,
         upcoming_events_url: "url",
         createdAt: Date.now(),
       });

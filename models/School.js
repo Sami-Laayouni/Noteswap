@@ -26,18 +26,23 @@ const schoolSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  schoolHandbook: {
+  schoolSupportedEmails: {
     type: String,
+    required: true,
   },
-  schoolJoinCode: {
+  schoolCommunityService: {
+    type: Number,
+    required: true,
+  },
+  schoolLogo: {
+    type: String,
+    required: true,
+  },
+  schoolCover: {
     type: String,
     required: true,
   },
   schoolTeacherCode: {
-    type: String,
-    required: true,
-  },
-  schoolEditorialCode: {
     type: String,
     required: true,
   },

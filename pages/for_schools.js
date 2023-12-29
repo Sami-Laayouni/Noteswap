@@ -2,7 +2,7 @@ import Head from "next/head";
 import style from "../styles/createSchool.module.css";
 import { requireAuthentication } from "../middleware/authenticate";
 import Footer from "../components/Footer";
-import { useState } from "react";
+import React, { useState } from "react";
 import SchoolService from "../services/SchoolService";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
@@ -34,12 +34,20 @@ const ForSchools = () => {
   const [uploadError, setUploadError] = useState();
   const [firstPage, setFirstPage] = useState(true);
   const [schoolInfo, setSchoolInfo] = useState();
+  const [schoolLogo, setSchoolLogo] = useState("");
+  const [schoolCover, setSchoolCover] = useState("");
   const school = new SchoolService();
 
   // Function to handle upload pdf
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     setFile(selectedFile);
+  };
+
+  const handleDropFile = (event) => {
+    event.preventDefault();
+    const file = event.dataTransfer.files[0];
+    setFile(file);
   };
 
   // Function to handle the create school function
@@ -124,6 +132,57 @@ const ForSchools = () => {
     return password;
   }
 
+  /* Handle the drop of an image */
+
+  const handleDrop = (event) => {
+    event.preventDefault();
+    const file = event.dataTransfer.files[0];
+    handleImage(file, event.nativeEvent.srcElement.id);
+  };
+
+  /* Handle the drag over of an image */
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+  };
+
+  /* Handle a click */
+
+  const handleImageClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleFileInputChange = (event) => {
+    const file = event.target.files[0];
+    console.log(event.nativeEvent.srcElement.id);
+    handleImage(file, event.nativeEvent.srcElement.id);
+  };
+
+  const handleImage = async (file, type) => {
+    if (file) {
+      const img = new Image();
+      img.src = URL.createObjectURL(file);
+
+      img.onload = async function () {
+        const formData = new FormData();
+        formData.append("image", file);
+        const response = await fetch("/api/gcs/upload_image", {
+          method: "POST",
+          body: formData,
+        });
+
+        const { url } = await response.json();
+        if (type.contains("logo")) {
+          setSchoolLogo(url);
+        } else {
+          setSchoolCover(url);
+        }
+      };
+    }
+  };
+
+  const fileInputRef = React.createRef();
+
   // Return the JSX
   return (
     <>
@@ -167,9 +226,10 @@ const ForSchools = () => {
                     existingObject.School_contact_person,
                     existingObject.School_contact_email,
                     existingObject.School_phone_number,
-                    text,
-                    123456,
-                    generateNoteSwapCode(6),
+                    existingObject.School_Supported_Emails,
+                    existingObject.School_Community_Service,
+                    schoolLogo,
+                    schoolCover,
                     generateNoteSwapCode(6)
                   );
 
@@ -209,7 +269,7 @@ const ForSchools = () => {
                   />
                   <p className={style.labelForInput}>School acronym</p>
                   <input id="School_acronym" className={style.input} required />
-                  <p className={style.labelForInput}>School address</p>
+                  <p className={style.labelForInput}>City of School </p>
                   <input
                     id="School_address"
                     style={{ marginBottom: "30px" }}
@@ -218,7 +278,7 @@ const ForSchools = () => {
                   />
                   <div className={style.line}></div>
                   <h2 className={style.subtext}>Contact Information</h2>
-                  <p className={style.labelForInput}>School contact person</p>
+                  <p className={style.labelForInput}>School contact person </p>
                   <input
                     id="School_contact_person"
                     className={style.input}
@@ -237,8 +297,32 @@ const ForSchools = () => {
                   <input
                     id="School_phone_number"
                     className={style.input}
+                    required
+                    style={{ marginBottom: "30px" }}
                   ></input>{" "}
-                  required
+                  <div className={style.line}></div>
+                  <h2 className={style.subtext}>More Information</h2>
+                  <p className={style.labelForInput}>
+                    Email Addresses Used By Your School, separated by commas,
+                    (Ex: @yourschool.ma, @yourshool.2.ma){" "}
+                  </p>
+                  <input
+                    id="School_Supported_Emails"
+                    className={style.input}
+                    required
+                  />
+                  <p className={style.labelForInput}>
+                    Amount of Community Service Required Per Year (in hours)
+                  </p>
+                  <input
+                    id="School_Community_Service"
+                    style={{ marginBottom: "30px" }}
+                    className={style.input}
+                    type="number"
+                    min={1}
+                    max={1000000}
+                    required
+                  />
                   <button
                     type="submit"
                     id="hiddenButton"
@@ -250,26 +334,137 @@ const ForSchools = () => {
               </section>
               <section
                 className={style.handbook}
-                style={{ color: "white", textAlign: "center" }}
+                style={{
+                  color: "white",
+                  textAlign: "center",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <h1 className={style.subtext} style={{ paddingTop: "20px" }}>
+                  Upload Your School&apos;s Logo
+                </h1>
+                <p>Supported file types include jpeg, png, gif and webp</p>
+
+                <div
+                  onDrop={handleDrop}
+                  onDragOver={handleDragOver}
+                  onClick={handleImageClick}
+                  id="logod"
+                  style={{
+                    border: "2px dashed white",
+                    padding: "30px",
+                    width: "50%",
+                    textAlign: "center",
+                    cursor: "pointer",
+                    fontFamily: "var(--manrope-font)",
+                  }}
+                >
+                  <p>Drag and drop your school&apos;s logo or click here</p>
+
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    style={{ display: "none" }}
+                    id="logo"
+                    accept="image/jpeg, image/png, image/gif, image/webp"
+                    onChange={handleFileInputChange}
+                  />
+                </div>
+              </section>
+              <section
+                style={{
+                  textAlign: "center",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <h1 className={style.subtext} style={{ paddingTop: "20px" }}>
+                  Upload Your School&apos;s Cover Picture
+                </h1>
+                <p>Supported file types include jpeg, png, gif and webp</p>
+
+                <div
+                  onDrop={handleDrop}
+                  onDragOver={handleDragOver}
+                  onClick={handleImageClick}
+                  id="coverd"
+                  style={{
+                    border: "2px dashed black",
+                    padding: "30px",
+                    width: "50%",
+                    textAlign: "center",
+                    cursor: "pointer",
+                    fontFamily: "var(--manrope-font)",
+                  }}
+                >
+                  <p>
+                    Drag and drop your school&apos;s cover picture or click here
+                  </p>
+
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    style={{ display: "none" }}
+                    id="cover"
+                    accept="image/jpeg, image/png, image/gif, image/webp"
+                    onChange={handleFileInputChange}
+                  />
+                </div>
+              </section>
+              <section
+                className={style.handbook}
+                style={{
+                  color: "white",
+                  textAlign: "center",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexDirection: "column",
+                }}
               >
                 <section className={style.container}>
                   <h1 className={style.subtext} style={{ paddingTop: "20px" }}>
-                    To use the Noteswap bot upload school handbook as a word doc
+                    To use the Noteswap bot upload school handbook as a document
                     here.
                   </h1>
                   <p>Supported file types include pdf and word</p>
                   <p>Max size: 30MB</p>
-                  <p>{uploadError}</p>
-                  <label className={style.custom_input}>
+                  <div
+                    onDrop={handleDropFile}
+                    onDragOver={handleDragOver}
+                    onClick={() => {
+                      document.getElementById("handbookj").click();
+                    }}
+                    id="handbook"
+                    style={{
+                      border: "2px dashed white",
+                      padding: "30px",
+                      width: "100%",
+                      textAlign: "center",
+                      cursor: "pointer",
+                      fontFamily: "var(--manrope-font)",
+                    }}
+                  >
+                    <p>
+                      Drag and drop your school&apos;s handbook or click here
+                    </p>
                     <input
                       type="file"
+                      id="handbookj"
+                      style={{ display: "none" }}
                       accept=".pdf,.doc,.docx"
                       onChange={handleFileChange}
                     />
-                    Upload file
-                  </label>
+                  </div>
                 </section>
               </section>
+              <p>{uploadError}</p>
+
               <button
                 id="createSchool"
                 className={style.create}
@@ -294,12 +489,7 @@ const ForSchools = () => {
               }}
             >
               <h1 className={style.title}>Successfully created new school!</h1>
-              <b>
-                <h1 style={{ display: "inline" }}>School Code: </h1>
-                <h1 style={{ display: "inline" }}>
-                  {schoolInfo.schoolJoinCode}
-                </h1>
-              </b>
+
               <br></br>
               <b>
                 <h1 style={{ display: "inline" }}>Teacher Code: </h1>
@@ -308,23 +498,6 @@ const ForSchools = () => {
                 </h1>
               </b>
               <br></br>
-              <b>
-                <h1 style={{ display: "inline" }}>Editorial Code: </h1>
-                <h1 style={{ display: "inline" }}>
-                  {schoolInfo.schoolEditorialCode}
-                </h1>
-              </b>
-              <button
-                onClick={() => {
-                  navigator.clipboard.writeText(schoolInfo.schoolJoinCode);
-                  document.getElementById("copy").innerText = "Copied";
-                }}
-                className={style.create}
-                id="copy"
-                style={{ marginLeft: "0px" }}
-              >
-                Copy school code
-              </button>
             </div>
           )}
         </section>

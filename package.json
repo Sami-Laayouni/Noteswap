@@ -17,7 +17,6 @@
   },
   "dependencies": {
     "@google-cloud/storage": "^6.12.0",
-    "@pinecone-database/pinecone": "^0.1.6",
     "bcryptjs": "^2.4.3",
     "date-fns": "^2.30.0",
     "docxtemplater": "^3.42.1",

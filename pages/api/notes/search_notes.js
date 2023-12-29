@@ -20,7 +20,6 @@ export default async function handler(req, res) {
   const { title, desc, date, classes, type, id, school } = body;
   res.setHeader("Cache-Control", "public, max-age=120");
   await connectDB();
-  console.log(school);
   if (school == "649d661a3a5a9f73e9e3fa62") {
     options = {
       $match: {

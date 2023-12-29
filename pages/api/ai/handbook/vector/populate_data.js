@@ -1,8 +1,10 @@
-import { getPinecone } from "../../../../../utils/pinecone";
+import Vector from "../../../../../models/Vector";
 import { getOpenAIInstance } from "../../../../../utils/openAI";
+
 function removeNonASCII(inputString) {
   return inputString.replace(/[^\x00-\x7F]/g, "");
 }
+
 function generateRandomCode(length) {
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -15,6 +17,7 @@ function generateRandomCode(length) {
 
   return randomCode;
 }
+
 async function splitTextAndGenerateSections(text) {
   const paragraphs = removeNonASCII(text)
     .split("\n\n\n")
@@ -26,7 +29,6 @@ async function splitTextAndGenerateSections(text) {
 export default async function PopulateData(req, res) {
   const { text, category } = req.body;
 
-  const pinecone = await getPinecone();
   const openai = await getOpenAIInstance();
 
   async function getEmbedding(text) {
@@ -42,49 +44,47 @@ export default async function PopulateData(req, res) {
   }
 
   const paragraphs = await splitTextAndGenerateSections(text);
-  let embeddings = [];
-  while (paragraphs.length) {
-    let tokenCount = 0;
-    const bathcedInputs = [];
-    while (paragraphs.length && tokenCount < 4096) {
-      const input = paragraphs.shift();
-      bathcedInputs.push(input);
-      tokenCount += input.split(" ").length;
-    }
-    const embeddingResult = await getEmbedding(bathcedInputs);
-    embeddings = embeddings.concat(
-      embeddingResult.data.map((entry) => entry.embedding)
+  const embeddings = [];
+
+  for (const paragraph of paragraphs) {
+    console.log(paragraph);
+    const embeddingResult = await getEmbedding(paragraph);
+    embeddings.push(embeddingResult.data[0].embedding);
+    console.log(
+      "_________________________________________________________________________________________________________________"
     );
   }
-  const words = await splitTextAndGenerateSections(text);
 
-  const vectors = words.map((paragraph, i) => {
+  const vectors = paragraphs.map((paragraph, i) => {
     return {
       id: generateRandomCode(20),
       values: embeddings[i],
-
       metadata: {
         category: category,
         paragraph: paragraph,
       },
     };
   });
+
   try {
     const insertBatches = [];
-    while (vectors.length) {
-      const batchedVectors = vectors.splice(0, 250);
-
-      // Insert the batchedVectors into Pinecone
-      const pineconeResult = await pinecone.upsert({
-        upsertRequest: {
-          vectors: batchedVectors,
-          namespace: "noteswap-asi",
-        },
+    console.log(vectors);
+    for (const vector of vectors) {
+      console.log(vector);
+      // Create a new Vector document for each text and vector pair
+      const newVector = new Vector({
+        _id: vector.id,
+        text: vector.metadata.paragraph,
+        plot_embedding_hf: vector.values,
+        school_id: "649d661a3a5a9f73e9e3fa62", // Set to the default value "a"
       });
 
-      // Add the result to insertBatches
-      insertBatches.push(pineconeResult);
+      // Save the new Vector document
+      await newVector.save();
+
+      insertBatches.push({ vectorId: newVector._id });
     }
+
     res.status(200).send("Worked");
   } catch (error) {
     console.log(error);

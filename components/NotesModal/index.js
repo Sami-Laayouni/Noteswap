@@ -701,10 +701,7 @@ export default function NotesModal() {
         </p>
       )}
 
-      <p className={style.error}>
-        {error}
-        {elapsedTime}
-      </p>
+      <p className={style.error}>{error}</p>
       <button
         id="nextButton"
         className={style.next}
@@ -713,7 +710,7 @@ export default function NotesModal() {
             current == 0 &&
             content &&
             title &&
-            content.length >= 100 &&
+            content.length >= 200 &&
             title.length >= 3
           ) {
             setCurrent(1);
@@ -722,8 +719,8 @@ export default function NotesModal() {
           if (!content || !title) {
             setError("Please ensure you type out the title and notes.");
           }
-          if (content.length < 100) {
-            setError("Notes must be at least 100 characters long");
+          if (content.length < 200) {
+            setError("Notes must be at least 200 characters long");
           }
           if (title.length < 3) {
             setError("Title must be at least 3 characters long");
@@ -735,7 +732,6 @@ export default function NotesModal() {
             document.getElementById("nextButton").innerText = "Publishing...";
             document.getElementById("nextButton").style.opacity = "0.5";
 
-            // Rate the quality of the notes using the AI
             const response = await fetch("/api/ai/rate_text", {
               method: "POST",
               headers: {
@@ -745,38 +741,7 @@ export default function NotesModal() {
                 notes: content,
               }),
             });
-
-            let result = await response.json();
-            if (!result || result < 60) {
-              result = 70;
-            }
-
-            if (!localStorage.getItem("dailyNoteTimer")) {
-              localStorage.setItem(
-                "dailyNoteTimer",
-                JSON.stringify({
-                  date: new Date().toUTCString().slice(5, 16),
-                  time: 0,
-                })
-              );
-            }
-
-            if (
-              JSON.parse(localStorage.getItem("dailyNoteTimer")).date !=
-              new Date().toUTCString().slice(5, 16)
-            ) {
-              localStorage.setItem(
-                "dailyNoteTimer",
-                JSON.stringify({
-                  date: new Date().toUTCString().slice(5, 16),
-                  time: 0,
-                })
-              );
-            }
-
-            // Calculate the amount of time they get added to their account by taking a percantage of the elapsedTime
-            const minutesThatCount = elapsedTime * (result / 100);
-
+            const result = await response.json();
             let pastTime;
             if (localStorage.getItem("dailyNoteTimer")) {
               pastTime = JSON.parse(
@@ -785,22 +750,12 @@ export default function NotesModal() {
             } else {
               pastTime = 0;
             }
-
-            const time = calculateTotalTime(minutesThatCount, pastTime, 1200);
-
-            localStorage.setItem(
-              "dailyNoteTimer",
-              JSON.stringify({
-                date: new Date().toUTCString().slice(5, 16),
-                time: time.totalTime,
-              })
-            );
-
-            const minutes = time.elapsedTime / 60;
-
+            const minutes = ((elapsedTime - pastTime) * (result / 100)) / 60;
             setMessages("Saving notes...");
             try {
-              const response = await fetch("/api/notes/create_notes", {
+              console.log(result);
+
+              await fetch("/api/notes/create_notes", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
@@ -812,22 +767,13 @@ export default function NotesModal() {
                   publisherId: JSON.parse(localStorage.getItem("userInfo"))._id,
                   upvotes: 0,
                   downvotes: 0,
-                  aiRating: parseInt(result) ? parseInt(result) : 70,
+                  aiRating: parseInt(result) || 80,
                   type: "default",
                   images: [],
-                  date: date,
                   school_id: JSON.parse(localStorage.getItem("userInfo"))
                     .schoolId,
                 }),
-              });
-              if (response.ok) {
-                // In case somebody gets more than 20 minutes set it to 20 minutes
-                let points = null;
-                if (Math.round(minutes * 20) <= 400) {
-                  points = Math.round(minutes * 20);
-                } else {
-                  points = 350;
-                }
+              }).then(async () => {
                 await fetch("/api/profile/add_community_minutes", {
                   method: "POST",
                   headers: {
@@ -835,18 +781,16 @@ export default function NotesModal() {
                   },
                   body: JSON.stringify({
                     id: JSON.parse(localStorage.getItem("userInfo"))._id,
-                    points: points,
+                    points: Math.round(minutes * 20),
                   }),
                 });
-                if (Math.round(minutes * 20) <= 400) {
-                  setPoints(Math.round(minutes * 20));
-                } else {
-                  setPoints(350);
-                }
-                setCurrent(4);
+                document.getElementById("nextButton").style.display = "block";
+                setPoints(Math.round(minutes * 20));
                 localStorage.removeItem("autosave_notes");
                 localStorage.removeItem("autosave_title");
-              }
+
+                setCurrent(4);
+              });
             } catch (error) {
               setMessages(error.message);
             }

@@ -147,6 +147,7 @@ export default function Note() {
           rel="canonical"
           href={`${process.env.NEXT_PUBLIC_URL}note/${note?.note[0]?._id}`}
         />
+        <meta name="robots" content="index, follow" />
       </Head>
       <CiteModal />
       {!note?.note[0].images.length > 0 && <NoteSwapBot />}

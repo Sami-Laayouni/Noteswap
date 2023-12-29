@@ -41,7 +41,7 @@ export default async function createUser(req, res) {
         publisherId: publisherId,
         upvotes: upvotes,
         downvotes: downvotes,
-        aiRating: aiRating,
+        aiRating: aiRating || 80,
         comments: [],
         date: date
           ? date
@@ -58,6 +58,7 @@ export default async function createUser(req, res) {
       // Return the token
       res.status(200).json({ savedNotes });
     } catch (error) {
+      console.log(error);
       res.status(500).json({ error: error.message });
     }
   } else {
