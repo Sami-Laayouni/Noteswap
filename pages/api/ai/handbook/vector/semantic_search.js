@@ -1,4 +1,4 @@
-import { getPinecone } from "../../../../../utils/pinecone";
+/*import { getPinecone } from "../../../../../utils/pinecone";
 import { getOpenAIInstance } from "../../../../../utils/openAI";
 
 export default async function handler(req, res) {
@@ -42,3 +42,4 @@ export default async function handler(req, res) {
     res.status(500).send(error);
   }
 }
+*/
