@@ -51,7 +51,6 @@
   "send_support_email": "Wenn Sie allgemeine Fragen haben und mit unserem Expertenteam sprechen möchten, können Sie uns per E-Mail kontaktieren unter: support@noteswap.org",
   "all_rights_reserved": "Alle Rechte vorbehalten.",
   "loading_message": "Laden... Nur ein Scherz, ich verschwende nur Ihre Zeit",
-
   "quality": "Kwaliteit",
   "for_you": "Voor jou",
   "select_a_class": "Selecteer een klas",
@@ -114,7 +113,7 @@
   "uploading_images": "Afbeeldingen uploaden...",
   "noteswap_bot": "Noteswap Bot",
   "thinking": "(Aan het denken...)",
-  "start_con": "Begin een gesprek met de Noteswap Bot",
+  "start_conv": "Begin een gesprek met de Noteswap Bot",
   "note_notebot": "Let op: de Noteswap Bot weerspiegelt niet de methodologieën of ideeën van Noteswap.",
 
   "log_out": "Uitloggen",

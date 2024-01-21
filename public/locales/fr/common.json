@@ -51,7 +51,6 @@
   "send_support_email": "Si vous avez une question d'ordre général et souhaitez parler à notre équipe d'experts, vous pouvez nous contacter par e-mail à : support@noteswap.org",
   "all_rights_reserved": "Tous les droits sont réservés.",
   "loading_message": "Chargement...Je plaisante, je perds ton temps",
-
   "quality": "Qualité",
   "for_you": "Pour vous",
   "select_a_class": "Sélectionnez une classe",
@@ -114,7 +113,7 @@
   "uploading_images": "Téléchargement des images en cours...",
   "noteswap_bot": "Bot Noteswap",
   "thinking": "(Réflexion...)",
-  "start_con": "Commencez une conversation avec le Bot Noteswap",
+  "start_conv": "Commencez une conversation avec le Bot Noteswap",
   "note_notebot": "Note : Le Bot Noteswap ne reflète pas les méthodologies ou les idées de Noteswap.",
 
   "log_out": "Déconnexion",

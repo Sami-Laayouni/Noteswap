@@ -1,6 +1,5 @@
 import fs from "fs";
 import formidable from "formidable";
-import pdf from "pdf-parse";
 import mammoth from "mammoth";
 
 /**
@@ -13,19 +12,6 @@ export const config = {
   api: {
     bodyParser: false,
   },
-};
-
-/**
- * Extract text from pdf
- * @date 7/24/2023 - 7:00:15 PM
- *
- * @param {*} fileBuffer
- * @return {*}
- */
-const extractTextFromPDF = (fileBuffer) => {
-  return pdf(fileBuffer).then((data) => {
-    return data.text;
-  });
 };
 
 /**
@@ -62,7 +48,6 @@ export default function handler(req, res) {
       const fileType = file[0].mimetype;
 
       const allowedFileTypes = [
-        "application/pdf",
         "application/msword",
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
       ];
@@ -74,10 +59,7 @@ export default function handler(req, res) {
 
       let text = "";
 
-      if (fileType === "application/pdf") {
-        text = await extractTextFromPDF(fileBuffer);
-        res.status(200).json({ text });
-      } else if (
+      if (
         fileType === "application/msword" ||
         fileType ===
           "application/vnd.openxmlformats-officedocument.wordprocessingml.document"

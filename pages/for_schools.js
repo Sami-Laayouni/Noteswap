@@ -60,7 +60,6 @@ const ForSchools = () => {
 
     // Allowed file types to upload for the NoteSwap bot
     const allowedFileTypes = [
-      "application/pdf",
       "application/msword",
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     ];
@@ -140,6 +139,50 @@ const ForSchools = () => {
     handleImage(file, event.nativeEvent.srcElement.id);
   };
 
+  const handleDrop2 = (event) => {
+    event.preventDefault();
+    const file = event.dataTransfer.files[0];
+    handleImage(file, event.nativeEvent.srcElement.id);
+  };
+
+  const handleDragOver2 = (event) => {
+    event.preventDefault();
+  };
+
+  const handleImageClick2 = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleFileInputChange2 = (event) => {
+    const file = event.target.files[0];
+    handleImage2(file, event.nativeEvent.srcElement.id);
+  };
+
+  const handleImage2 = async (file, type) => {
+    if (file) {
+      const img = new Image();
+      img.src = URL.createObjectURL(file);
+
+      img.onload = async function () {
+        const formData = new FormData();
+        formData.append("image", file);
+        const response = await fetch("/api/gcs/upload_image", {
+          method: "POST",
+          body: formData,
+        });
+
+        const { url } = await response.json();
+        const string = type;
+
+        if (string?.includes("logo")) {
+          setSchoolLogo(url);
+        } else {
+          setSchoolCover(url);
+        }
+      };
+    }
+  };
+
   /* Handle the drag over of an image */
 
   const handleDragOver = (event) => {
@@ -154,7 +197,6 @@ const ForSchools = () => {
 
   const handleFileInputChange = (event) => {
     const file = event.target.files[0];
-    console.log(event.nativeEvent.srcElement.id);
     handleImage(file, event.nativeEvent.srcElement.id);
   };
 
@@ -172,7 +214,9 @@ const ForSchools = () => {
         });
 
         const { url } = await response.json();
-        if (type.contains("logo")) {
+        const string = type;
+
+        if (string?.includes("logo")) {
           setSchoolLogo(url);
         } else {
           setSchoolCover(url);
@@ -182,6 +226,7 @@ const ForSchools = () => {
   };
 
   const fileInputRef = React.createRef();
+  const fileInputRef2 = React.createRef();
 
   // Return the JSX
   return (
@@ -217,7 +262,6 @@ const ForSchools = () => {
                 if (response2.ok) {
                   setUploadError(response2.error);
                 }
-
                 try {
                   const response = await school.create_school(
                     existingObject.School_full_name,
@@ -368,7 +412,7 @@ const ForSchools = () => {
                     type="file"
                     ref={fileInputRef}
                     style={{ display: "none" }}
-                    id="logo"
+                    id="schoollogo"
                     accept="image/jpeg, image/png, image/gif, image/webp"
                     onChange={handleFileInputChange}
                   />
@@ -389,9 +433,9 @@ const ForSchools = () => {
                 <p>Supported file types include jpeg, png, gif and webp</p>
 
                 <div
-                  onDrop={handleDrop}
-                  onDragOver={handleDragOver}
-                  onClick={handleImageClick}
+                  onDrop={handleDrop2}
+                  onDragOver={handleDragOver2}
+                  onClick={handleImageClick2}
                   id="coverd"
                   style={{
                     border: "2px dashed black",
@@ -408,7 +452,7 @@ const ForSchools = () => {
 
                   <input
                     type="file"
-                    ref={fileInputRef}
+                    ref={fileInputRef2}
                     style={{ display: "none" }}
                     id="cover"
                     accept="image/jpeg, image/png, image/gif, image/webp"
@@ -432,7 +476,7 @@ const ForSchools = () => {
                     To use the Noteswap bot upload school handbook as a document
                     here.
                   </h1>
-                  <p>Supported file types include pdf and word</p>
+                  <p>Supported file type: word</p>
                   <p>Max size: 30MB</p>
                   <div
                     onDrop={handleDropFile}
@@ -457,7 +501,7 @@ const ForSchools = () => {
                       type="file"
                       id="handbookj"
                       style={{ display: "none" }}
-                      accept=".pdf,.doc,.docx"
+                      accept=".doc,.docx"
                       onChange={handleFileChange}
                     />
                   </div>

@@ -51,7 +51,6 @@
   "send_support_email": "일반적인 문의사항이 있으시며 전문가 팀과 대화를 원하신다면 support@noteswap.org으로 이메일로 연락하실 수 있습니다.",
   "all_rights_reserved": "판권 소유.",
   "loading_message": "로딩 중... 농담이에요. 시간을 낭비하고 있어요.",
-
   "quality": "품질",
   "for_you": "당신을 위해",
   "select_a_class": "수업 선택",
@@ -114,7 +113,7 @@
   "uploading_images": "이미지 업로드 중...",
   "noteswap_bot": "Noteswap 봇",
   "thinking": "(생각 중...)",
-  "start_con": "Noteswap 봇과 대화 시작",
+  "start_conv": "Noteswap 봇과 대화 시작",
   "note_notebot": "참고: Noteswap 봇은 Noteswap의 방법이나 아이디어를 반영하지 않습니다.",
 
   "log_out": "로그아웃",

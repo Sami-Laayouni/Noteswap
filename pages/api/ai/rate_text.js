@@ -1,4 +1,4 @@
-import { getOpenAIInstance } from "../../../utils/openAI";
+import genAI from "../../../utils/vertexAI";
 /**
  * Rate and grade text
  * @date 7/24/2023 - 6:55:10 PM
@@ -16,16 +16,11 @@ export default async function rateText(req, res) {
     res.status(405).json({ error: "Method Not Allowed" });
     return;
   }
-  const openai = getOpenAIInstance();
   const { notes } = req.body;
+  const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
   try {
-    const response = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
-      messages: [
-        {
-          role: "system",
-          content: `
+    const prompt = `
           You are a kind teacher that grades notes based on this rubric: 
           Organization and structure: 30%
           Proficient: Notes are well-organized and structured logically, with clear headings, subheadings, and bullet points. Information is grouped and categorized effectively.
@@ -41,14 +36,13 @@ export default async function rateText(req, res) {
           Min grade: 60
 
           Give the final grade out of 100 just the grade nothing else. No percentage sign; JUST THE NUMBER. NUMBER ONLY
-          `,
-        },
-        { role: "user", content: `Grade these notes: ${notes}` },
-      ],
-    });
+          `;
 
     // Calculate grades based on rubric criteria
-    let aiGrade = response.data.choices[0].message.content;
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+
+    let aiGrade = response.text();
     const organizationGrade = calculateOrganizationGrade(notes);
     const accuracyGrade = calculateAccuracyGrade(notes);
     const clarityGrade = calculateClarityGrade(notes);

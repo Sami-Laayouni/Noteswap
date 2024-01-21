@@ -1,6 +1,5 @@
 import Vector from "../../../../../models/Vector";
-import { getOpenAIInstance } from "../../../../../utils/openAI";
-
+import genAI from "../../../../../utils/vertexAI";
 function removeNonASCII(inputString) {
   return inputString.replace(/[^\x00-\x7F]/g, "");
 }
@@ -20,7 +19,7 @@ function generateRandomCode(length) {
 
 async function splitTextAndGenerateSections(text) {
   const paragraphs = removeNonASCII(text)
-    .split("\n\n\n")
+    .split("\n\n\n\n")
     .filter((word) => word.trim() !== "")
     .filter((paragraph) => paragraph.length >= 30);
   return paragraphs;
@@ -29,30 +28,22 @@ async function splitTextAndGenerateSections(text) {
 export default async function PopulateData(req, res) {
   const { text, category } = req.body;
 
-  const openai = await getOpenAIInstance();
-
   async function getEmbedding(text) {
-    const response = await openai.createEmbedding({
-      input: text,
-      model: "text-embedding-ada-002",
-    });
+    const model = genAI.getGenerativeModel({ model: "embedding-001" });
+    const result = await model.embedContent(text);
+    const embedding = result.embedding;
 
-    if (response.status == 200) {
-      const data = response.data;
+    if (embedding) {
+      const data = embedding.values;
       return data;
     }
   }
-
   const paragraphs = await splitTextAndGenerateSections(text);
   const embeddings = [];
 
   for (const paragraph of paragraphs) {
-    console.log(paragraph);
     const embeddingResult = await getEmbedding(paragraph);
-    embeddings.push(embeddingResult.data[0].embedding);
-    console.log(
-      "_________________________________________________________________________________________________________________"
-    );
+    embeddings.push(embeddingResult);
   }
 
   const vectors = paragraphs.map((paragraph, i) => {
@@ -68,15 +59,15 @@ export default async function PopulateData(req, res) {
 
   try {
     const insertBatches = [];
-    console.log(vectors);
+
     for (const vector of vectors) {
-      console.log(vector);
       // Create a new Vector document for each text and vector pair
       const newVector = new Vector({
         _id: vector.id,
         text: vector.metadata.paragraph,
         plot_embedding_hf: vector.values,
-        school_id: "649d661a3a5a9f73e9e3fa62", // Set to the default value "a"
+        school_id: "649d661a3a5a9f73e9e3fa62",
+        type: category,
       });
 
       // Save the new Vector document

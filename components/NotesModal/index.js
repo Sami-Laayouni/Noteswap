@@ -62,7 +62,9 @@ export default function NotesModal() {
   const [messages, setMessages] = useState(
     "Evaluating the notes . . . Poor me. This might take a while."
   );
-  const [feedback, setFeedback] = useState("Feedback: ");
+  const [feedback, setFeedback] = useState(
+    "Feedback: Loading this may take a while... "
+  );
   const mathClasses = [
     "Algebra I",
     "Algebra II",
@@ -275,62 +277,17 @@ export default function NotesModal() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        notes: [
-          {
-            role: "system",
-            content: `
-              You are a kind helpful teacher that gives constructive on notes based on this rubricc: 
-              Organization and structure,
-              Accuracy of information,
-              Clarity and readability,
-              Engagement and examples,
-              Grammar, usage & mechanics
-              `,
-          },
-          {
-            role: "user",
-            content: `Give me constructive feedback, use examples from the notes, on these notes: ${content}`,
-          },
-        ],
+        notes: ` You are a kind helpful teacher that gives constructive feedback on notes based on this rubric:
+            Organization and structure,
+            Accuracy of information,
+            Clarity and readability,
+            Engagement and examples,
+            Grammar, usage & mechanics. Give me constructive feedback, use examples from the notes, on these notes: ${content}`,
       }),
     });
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
-
-    // This data is a ReadableStream
-    const data = response.body;
-    if (!data) {
-      return;
-    }
-
-    const reader = data.getReader();
-    const decoder = new TextDecoder();
-    let done = false;
-
-    while (!done) {
-      const { value, done: doneReading } = await reader.read();
-      done = doneReading;
-      const chunkValue = decoder.decode(value);
-      setFeedback((prev) => prev + chunkValue);
-    }
+    const result = await response.json();
+    setFeedback(`Feedback: ${result.data}`);
   };
-
-  function calculateTotalTime(elapsedTime, pastTime, limit) {
-    // Calculate totalTime as the sum of pastTime and elapsedTime
-    let totalTime = pastTime + elapsedTime;
-
-    // Check if totalTime exceeds the limit
-    if (totalTime > limit) {
-      // If it does, set elapsedTime to the difference between limit and pastTime
-      elapsedTime = limit - pastTime;
-      // Set totalTime to limit
-      totalTime = limit;
-    }
-
-    // Return the updated elapsedTime and totalTime
-    return { elapsedTime, totalTime };
-  }
 
   // Return the JSX
   return (
@@ -664,7 +621,7 @@ export default function NotesModal() {
           width: "65vw",
           height: "450px",
           display: "flex",
-          justifyContent: "center",
+          justifyparts: "center",
           alignItems: "center",
           textAlign: "center",
 
@@ -830,7 +787,7 @@ export default function NotesModal() {
           id="aiFeedback"
           onClick={async () => {
             if (current == 2) {
-              setFeedback("Feedback: ");
+              setFeedback("Feedback: Loading this may take a while... ");
               setCurrent(3);
 
               try {

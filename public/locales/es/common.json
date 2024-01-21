@@ -50,7 +50,6 @@
   "ready_get_started": "¿Listo para empezar?",
   "send_support_email": "Si tienes una consulta general y deseas hablar con nuestro equipo de expertos, puedes contactarnos por correo electrónico a: support@noteswap.org",
   "all_rights_reserved": "Todos los derechos reservados.",
-
   "quality": "Calidad",
   "for_you": "Para ti",
   "select_a_class": "Selecciona una clase",
@@ -113,7 +112,7 @@
   "uploading_images": "Subiendo imágenes...",
   "noteswap_bot": "Bot de Noteswap",
   "thinking": "(Pensando...)",
-  "start_con": "Inicia una conversación con el Bot de Noteswap",
+  "start_conv": "Inicia una conversación con el Bot de Noteswap",
   "note_notebot": "Nota: El Bot de Noteswap no refleja las metodologías o ideas de Noteswap.",
 
   "log_out": "Cerrar sesión",

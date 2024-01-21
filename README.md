@@ -40,8 +40,6 @@ NEXT_PUBLIC_CALENDAR_KEY=google-calendar-key
 NEXT_PUBLIC_MICROSOFT_SECRET=microsoft-key
 NEXT_PUBLIC_MICROSOFT_APP_ID=microsoft-app-id
 
-HUGGING_FACE_API=example-hugging-face-api
-NEXT_PUBLIC_OPENAI_KEY=example-openai-key
 
 GOOGLE_CLIENT_EMAIL=google-client-email
 GOOGLE_PRIVATE_KEY=google-private-key-very-long

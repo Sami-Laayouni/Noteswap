@@ -1,45 +1,47 @@
-/*import { getPinecone } from "../../../../../utils/pinecone";
-import { getOpenAIInstance } from "../../../../../utils/openAI";
+import { connectDB } from "../../../../../utils/db";
+import genAI from "../../../../../utils/vertexAI";
+import Vector from "../../../../../models/Vector";
 
 export default async function handler(req, res) {
-  const openai = await getOpenAIInstance();
-  const pinecone = await getPinecone();
   const { text } = req.body;
 
   async function getEmbedding(text) {
-    const response = await openai.createEmbedding({
-      input: text,
-      model: "text-embedding-ada-002",
-    });
+    const model = genAI.getGenerativeModel({ model: "embedding-001" });
+    const result = await model.embedContent(text);
+    const embedding = result.embedding;
 
-    if (response.status === 200) {
-      const data = response.data;
-      return data.data[0].embedding;
+    if (embedding) {
+      const data = embedding.values;
+      return data;
     }
   }
   try {
     // Generate the embedding for the input text
     const inputEmbedding = await getEmbedding(text);
 
-    // Search for the nearest embedding in Pinecone
-    const pineconeResponse = await pinecone.query({
-      queryRequest: {
-        vector: inputEmbedding, // Embedding generated from OpenAI
-        topK: 1,
-        namespace: "noteswap-asi",
-        filter: {
-          category: "privacy",
+    await connectDB();
+
+    // Search for the nearest embedding in MongoDB
+
+    const agg = [
+      {
+        $vectorSearch: {
+          index: "handbookIndex",
+          path: "plot_embedding_hf",
+
+          queryVector: inputEmbedding,
+          numCandidates: 200,
+          limit: 1,
         },
-        includeMetadata: true,
       },
-    });
+    ];
 
-    console.log(pineconeResponse);
+    const result = await Vector.aggregate(agg);
+    console.log(result);
 
-    res.status(200).send(pineconeResponse);
+    res.status(200).send(result);
   } catch (error) {
     console.log(error);
     res.status(500).send(error);
   }
 }
-*/

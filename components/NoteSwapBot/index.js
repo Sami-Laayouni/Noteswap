@@ -10,8 +10,12 @@ import { useTranslation } from "next-i18next";
 
 const messages = [
   {
-    role: "system",
-    content: `You are a easy to understand, clear, kind AI trained on a school's handbook. Your responses are based on the data provided in the handbook.  If they ask what you can do don't use the data and just answer how you can help them .If you can answer a question using the information from the handbook, you'll provide a relevant  response. If the question doesn't require data, you'll respond accordingly. If you're unable to infer an answer from the data, you'll say, "Sorry, I don't have that information."`,
+    role: "user",
+    parts: `You are a easy to understand, clear, kind AI trained on a school's handbook. Your responses are based on the data provided in the handbook.  If they ask what you can do don't use the data and just answer how you can help them .If you can answer a question using the information from the handbook, you'll provide a relevant  response. If the question doesn't require data, you'll respond accordingly. If you're unable to infer an answer from the data, you'll say, "Sorry, I don't have that information."`,
+  },
+  {
+    role: "model",
+    parts: "Okay",
   },
 ];
 
@@ -44,6 +48,8 @@ export default function NoteSwapBot() {
     document.getElementById("box").innerHTML += `<li>You: ${message}</li>`;
     if (router.pathname.includes("note")) {
       const noteId = router.query.id;
+
+      // Get content of single note
       const res = await fetch("/api/notes/get_single_note", {
         method: "POST",
         headers: {
@@ -54,44 +60,57 @@ export default function NoteSwapBot() {
         }),
       });
       const json = await res.json();
-      const messagei = [
+
+      // History to send to AI
+      const history = [
         {
-          role: "system",
-          content: `You are an AI. You answer questions on these notes ${extractTextFromHTML(
+          role: "user",
+          parts: `You are an AI. You answer questions on these notes ${extractTextFromHTML(
             json.note[0].notes
           )}`,
         },
       ];
-      messagei.push({
-        role: "user",
-        content: `This student is asking this question ${message} on the notes.`,
-      });
+
       const response = await fetch("/api/ai/handbook/llm/conversation", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          messages: messagei,
+          history: history,
+          last_message: `This student is asking this question ${message} on the notes.`,
         }),
       });
 
       if (response.status == 200) {
+        messages.push({
+          role: "user",
+          parts: `This student is asking this question ${message} on the notes.`,
+        });
         const aiResponse = await response.text();
         messages.push({
-          role: "assistant",
-          content: aiResponse,
+          role: "model",
+          parts: aiResponse,
         });
         document.getElementById(
           "box"
         ).innerHTML += `<li style="color: #40b385">Noteswap Bot: ${aiResponse}</li>`;
       } else {
+        messages.push({
+          role: "user",
+          parts: `This student is asking this question ${message} on the notes.`,
+        });
+        messages.push({
+          role: "model",
+          parts: `An error has occured.`,
+        });
         document.getElementById(
           "box"
         ).innerHTML += `<li style="color: red">An error has occured</li>`;
       }
       setLoading(false);
     } else {
+      // Student is asking a question about handbook or privacy policy
       const link = router.pathname.includes("boring") ? "_privacy" : "";
       const data = await fetch(
         `/api/ai/handbook/vector/semantic_search${link}`,
@@ -102,23 +121,21 @@ export default function NoteSwapBot() {
           },
           body: JSON.stringify({
             text: message,
+            school_id: JSON.parse(localStorage.getItem("userInfo")).schoolId,
           }),
         }
       );
       const dataResponse = await data.json();
-      const match = dataResponse.matches[0].metadata.paragraph;
-      if (dataResponse.matches[0].score >= 0.8) {
-        messages.push({
-          role: "user",
-          content: `Using this data from the ${
-            router.pathname.includes("boring") ? "privacy policy" : "handbook"
-          }: ${match}. Answer in an clear and understable manner or provide relevant information about this prompt (ONLY IF YOU BELIEVE IN NEEDS DATA IF THEY ARE ASKING YOU A QUESTION THAT DOESN'T REQUIRE DATA DON'T USE THE DATA): ${message}`,
-        });
+      const match = dataResponse;
+      let last_message;
+      if (dataResponse.length > 0) {
+        last_message = `Using this data from the ${
+          router.pathname.includes("boring") ? "privacy policy" : "handbook"
+        }: ${
+          match[0].text
+        }. Answer in an clear and understable manner or provide relevant information about this prompt (ONLY IF YOU BELIEVE IN NEEDS DATA IF THEY ARE ASKING YOU A QUESTION THAT DOESN'T REQUIRE DATA DON'T USE THE DATA): ${message}`;
       } else {
-        messages.push({
-          role: "user",
-          content: `${message}`,
-        });
+        last_message = message;
       }
 
       const response = await fetch("/api/ai/handbook/llm/conversation", {
@@ -127,15 +144,20 @@ export default function NoteSwapBot() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          messages: messages,
+          history: messages,
+          last_message: last_message,
         }),
       });
 
       if (response.status == 200) {
         const aiResponse = await response.text();
         messages.push({
-          role: "assistant",
-          content: aiResponse,
+          role: "user",
+          parts: last_message,
+        });
+        messages.push({
+          role: "model",
+          parts: aiResponse,
         });
         document.getElementById(
           "box"
@@ -206,7 +228,7 @@ export default function NoteSwapBot() {
           <section
             style={{
               display: "flex",
-              justifyContent: "center",
+              justifyparts: "center",
               alignItems: "center",
               textAlign: "center",
               flexDirection: "column",

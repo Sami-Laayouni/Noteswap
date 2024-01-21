@@ -1,5 +1,4 @@
-import { getOpenAIInstance } from "../../../../../utils/openAI";
-
+import genAI from "../../../../../utils/vertexAI";
 /**
  * Conversation
  * @date 7/24/2023 - 6:49:46 PM
@@ -11,18 +10,30 @@ import { getOpenAIInstance } from "../../../../../utils/openAI";
  * @return {*}
  */
 export default async function handler(req, res) {
-  const { messages } = req.body;
+  const { last_message, history } = req.body;
   res.setHeader("Cache-Control", "s-maxage=10");
 
+  console.log(history, last_message);
+
   try {
-    const openai = getOpenAIInstance();
-    const response = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
-      messages: messages,
+    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    console.log(model);
+    const chat = model.startChat({
+      history: history,
+      generationConfig: {
+        maxOutputTokens: 2000,
+      },
     });
-    console.log(response.data);
-    res.status(200).send(response.data.choices[0].message.content);
+    console.log(chat);
+
+    const result = await chat.sendMessage(last_message);
+    console.log(result);
+    const response = await result.response;
+    console.log(response);
+    const text = response.text();
+    res.status(200).send(text);
   } catch (error) {
+    console.log(error);
     res.status(500).send(error);
   }
 }
