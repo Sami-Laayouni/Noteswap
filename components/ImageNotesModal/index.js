@@ -555,9 +555,9 @@ export default function ImageNotesModal() {
                 }
 
                 const pointstoAdd = imageArray.length * 100;
-                const time = calculateTotalTime(pointstoAdd, currentTime, 300);
+                const time = calculateTotalTime(pointstoAdd, currentTime, 600);
 
-                if (currentTime >= 300) {
+                if (currentTime >= 600) {
                   setCurrent(4);
                   setPoints(0);
                 } else {

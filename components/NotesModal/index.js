@@ -150,7 +150,7 @@ export default function NotesModal() {
   }, [title, reactQuill, open, router]);
   // Stop the timer after 10 minutes of typing (daily limit)
   useEffect(() => {
-    if (elapsedTime >= 1200 || current != 0) {
+    if (elapsedTime >= 2400 || current != 0) {
       clearInterval(timer);
       setTimer(null);
     }
