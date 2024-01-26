@@ -20,7 +20,7 @@ export default async function handler(req, res) {
   const { title, desc, date, classes, type, id, school } = body;
   res.setHeader("Cache-Control", "public, max-age=120");
   await connectDB();
-  if (school == "649d661a3a5a9f73e9e3fa62") {
+  /*if (school == "649d661a3a5a9f73e9e3fa62") {
     options = {
       $match: {
         $or: [
@@ -37,7 +37,7 @@ export default async function handler(req, res) {
       },
     };
     query.push(options);
-  }
+  }*/
 
   if (title) {
     options = {
