@@ -17,7 +17,6 @@ import { CgProfile } from "react-icons/cg";
 import { IoMdTime } from "react-icons/io";
 import { RiCopperCoinLine } from "react-icons/ri";
 import { GrScan } from "react-icons/gr";
-import { SiGoogleanalytics } from "react-icons/si";
 import { HiUserGroup } from "react-icons/hi";
 
 import AuthService from "../../services/AuthService";
@@ -162,7 +161,9 @@ export default function Header() {
             ></Image>
           </Link>
           {userData?.role == "association" && (
-            <h1 className={style.business}>{t("business")}</h1>
+            <h1 className={style.business}>
+              {t("business") == "business" ? "Business" : t("business")}
+            </h1>
           )}
         </div>
 
@@ -179,7 +180,7 @@ export default function Header() {
                       className={style.header_nav_a}
                       href="/notes"
                     >
-                      {t("note")}
+                      {t("note") == "note" ? "Note" : t("note")}
                     </Link>
                     {userData?.role != "teacher" && (
                       <Link
@@ -187,7 +188,7 @@ export default function Header() {
                         className={style.header_nav_a}
                         href="/tutor"
                       >
-                        {t("tutor")}
+                        {t("tutor") == "tutor" ? "Tutor" : t("tutor")}
                       </Link>
                     )}
                   </>
@@ -198,7 +199,7 @@ export default function Header() {
                   className={style.header_nav_a}
                   href="/event"
                 >
-                  {t("events")}
+                  {t("events") == "events" ? "Events" : t("events")}
                 </Link>
               )}
               {/* User info (Profile pic + name)*/}
@@ -361,7 +362,7 @@ export default function Header() {
                       "none";
                   }}
                 >
-                  {t("login")}
+                  {t("login") == "login" ? "Login" : t("login")}
                   <div className={style.borderLine} />
                 </li>
               </Link>
@@ -382,6 +383,8 @@ export default function Header() {
                 >
                   {router.pathname.includes("business")
                     ? "Create your business account"
+                    : t("signup") == "signup"
+                    ? "Signup"
                     : t("signup")}
                   <div className={style.borderLine} />
                 </li>
@@ -398,7 +401,9 @@ export default function Header() {
                       "none";
                   }}
                 >
-                  {t("my_profile")}
+                  {t("my_profile") == "my_profile"
+                    ? "My Profile"
+                    : t("my_profile")}
                   <div className={style.borderLine} />
                 </li>
               </Link>
@@ -415,7 +420,7 @@ export default function Header() {
                         ).style.display = "none";
                       }}
                     >
-                      {t("note")}
+                      {t("note") == "note" ? "Note" : t("note")}
                       <div className={style.borderLine} />
                     </li>
                   </Link>
@@ -431,7 +436,7 @@ export default function Header() {
                           ).style.display = "none";
                         }}
                       >
-                        {t("tutor")}
+                        {t("tutor") == "tutor" ? "Tutor" : t("tutor")}
                         <div className={style.borderLine} />
                       </li>
                     </Link>
@@ -448,7 +453,7 @@ export default function Header() {
                       "none";
                   }}
                 >
-                  {t("events")}
+                  {t("events") == "events" ? "Events" : t("events")}
                   <div className={style.borderLine} />
                 </li>
               </Link>
@@ -463,7 +468,9 @@ export default function Header() {
                       ).style.display = "none";
                     }}
                   >
-                    {t("reward_cs")}
+                    {t("reward_cs") == "reward_cs"
+                      ? "Reward CS"
+                      : t("reward_cs")}
                     <div className={style.borderLine} />
                   </li>
                 </Link>
@@ -477,7 +484,7 @@ export default function Header() {
                       "none";
                   }}
                 >
-                  {t("setting")}
+                  {t("setting") == "setting" ? "Settings" : t("setting")}
                   <div className={style.borderLine} />
                 </li>
               </Link>
@@ -509,7 +516,9 @@ export default function Header() {
                       ).style.display = "none";
                     }}
                   >
-                    {t("detect_ai_text")}
+                    {t("detect_ai_text") == "detect_ai_text"
+                      ? "Detect AI Text"
+                      : t("detect_ai_text")}
                     <div className={style.borderLine} />
                   </li>
                 </Link>
@@ -526,7 +535,7 @@ export default function Header() {
                     "none";
                 }}
               >
-                {t("log_out")}
+                {t("log_out") == "log_out" ? "Log Out" : t("log_out")}
                 <div className={style.borderLine} />
               </li>
             </>
@@ -541,7 +550,9 @@ export default function Header() {
           </p>
           {userData?.role == "student" && (
             <p className={style.lightext}>
-              {t("your_daily_streak")}{" "}
+              {t("your_daily_streak") == "your_daily_streak"
+                ? "Your Daily Streak"
+                : t("your_daily_streak")}{" "}
               <span style={{ color: "var(--accent-color)" }}>
                 {streak} {t("day")}
                 {streak == 1 ? "" : "s"}{" "}
@@ -553,7 +564,9 @@ export default function Header() {
               className={style.lightext}
               style={{ color: "var(--accent-color)" }}
             >
-              {t("business_account")}
+              {t("business_account") == "business_account"
+                ? "Business Account"
+                : t("business_account")}
             </p>
           )}
           {userData?.role != "association" && (
@@ -569,7 +582,11 @@ export default function Header() {
           <li>
             <Link href={`/profile/${userData?._id}`}>
               <CgProfile size={21} style={{ verticalAlign: "middle" }} />
-              <span>{t("my_profile")}</span>
+              <span>
+                {t("my_profile") == "my_profile"
+                  ? "My Profile"
+                  : t("my_profile")}
+              </span>
             </Link>
           </li>
           {userData?.role == "association" && userData?.associations[0] && (
@@ -587,7 +604,9 @@ export default function Header() {
                   size={21}
                   style={{ verticalAlign: "middle" }}
                 />
-                <span>{t("reward_cs")}</span>
+                <span>
+                  {t("reward_cs") == "reward_cs" ? "Reward CS" : t("reward_cs")}
+                </span>
               </Link>
             </li>
           )}
@@ -595,7 +614,11 @@ export default function Header() {
             <li>
               <Link href="/productivity">
                 <IoMdTime size={21} style={{ verticalAlign: "middle" }} />
-                <span>{t("my_productivity")}</span>
+                <span>
+                  {t("my_productivity") == "my_productivity"
+                    ? "My Productivity"
+                    : t("my_productivity")}
+                </span>
               </Link>
             </li>
           )}
@@ -606,7 +629,11 @@ export default function Header() {
                   size={21}
                   style={{ verticalAlign: "middle" }}
                 />
-                <span>{t("admin_page")}</span>
+                <span>
+                  {t("admin_page") == "admin_page"
+                    ? "Admin Page"
+                    : t("admin_page")}
+                </span>
               </Link>
             </li>
           )}
@@ -625,32 +652,32 @@ export default function Header() {
               }}
             >
               <MdEdit size={21} style={{ verticalAlign: "middle" }} />
-              <span>{t("edit_association")}</span>
+              <span>
+                {t("edit_association") == "edit_association"
+                  ? "Edit Association"
+                  : t("edit_association")}
+              </span>
             </li>
           )}
-          {userData?.role == "association" && (
-            <li>
-              <Link href="/comingsoon">
-                <SiGoogleanalytics
-                  size={21}
-                  style={{ verticalAlign: "middle" }}
-                />
-                <span>{t("analytics")}</span>
-              </Link>
-            </li>
-          )}
+
           {userData?.role == "teacher" && (
             <li>
               <Link href="/detect_ai">
                 <LuGlasses size={21} style={{ verticalAlign: "middle" }} />
-                <span>{t("detect_ai_text")}</span>
+                <span>
+                  {t("detect_ai_text") == "detect_ai_text"
+                    ? "Detect AI Text"
+                    : t("detect_ai_text")}
+                </span>
               </Link>
             </li>
           )}
           <li>
             <Link href="/settings/account">
               <FiSettings size={21} style={{ verticalAlign: "middle" }} />
-              <span>{t("setting")}</span>
+              <span>
+                {t("setting") == "setting" ? "Settings" : t("setting")}
+              </span>
             </Link>
           </li>
           {userData?.role != "teacher" && userData?.role != "association" && (
@@ -668,7 +695,10 @@ export default function Header() {
             }}
           >
             <FiLogOut size={21} style={{ verticalAlign: "middle" }} />
-            <span>{t("log_out")}</span> {/* Logout button */}
+            <span>
+              {t("log_out") == "log_out" ? "Log Out" : t("log_out")}
+            </span>{" "}
+            {/* Logout button */}
           </li>
         </ul>
       </section>
