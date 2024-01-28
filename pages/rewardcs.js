@@ -47,9 +47,7 @@ const RewardCommunityService = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        id: JSON.parse(localStorage?.getItem("userInfo"))?.schoolId
-          ? JSON.parse(localStorage?.getItem("userInfo"))?.schoolId
-          : "649d661a3a5a9f73e9e3fa62",
+        id: JSON.parse(localStorage?.getItem("userInfo"))?.schoolId,
       }),
     });
     if (data.ok) {
