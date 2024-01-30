@@ -54,7 +54,11 @@ const Certificate = () => {
 
   const handleDownload = () => {
     loadFile(
-      `${process.env.NEXT_PUBLIC_URL}assets/pdf/NoteSwap_Transcript.docx`,
+      `${
+        process.env.NEXT_PUBLIC_URL.includes("noteswap")
+          ? `https://www.noteswap.org/`
+          : process.env.NEXT_PUBLIC_URL
+      }assets/pdf/NoteSwap_Transcript.docx`,
       async function (error, content) {
         if (error) {
           throw error;
