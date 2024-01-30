@@ -49,7 +49,9 @@ export default async function createUser(req, res) {
       const savedUser = await newUser.save();
 
       // Generate JWT token
-      const token = jwt.sign({ userId: savedUser._id }, jwtSecret);
+      const token = jwt.sign({ userId: savedUser._id }, jwtSecret, {
+        expiresIn: "31d",
+      });
       // Return the token
       res.status(200).json({ token: token, user: savedUser });
     } catch (error) {

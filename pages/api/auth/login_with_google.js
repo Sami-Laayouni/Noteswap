@@ -31,7 +31,9 @@ export default async function loginUserWithGoogle(req, res) {
           .json({ error: "Account with that Google account does not exist" });
       }
 
-      const token = jwt.sign({ userId: user._id }, jwtSecret);
+      const token = jwt.sign({ userId: user._id }, jwtSecret, {
+        expiresIn: "31d",
+      });
       res.status(200).json({ token: token, user: user });
     } catch (error) {
       console.log(error);

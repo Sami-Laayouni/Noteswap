@@ -305,8 +305,12 @@ const RewardCommunityService = () => {
                           )}
                           {value?.tutor_hours != 0 && (
                             <li>
-                              Tutoring students ({value.tutor_hours / 60} minute
-                              {value.tutor_hours / 60 == 1 ? "" : "s"})
+                              Tutoring students (
+                              {Math.floor(value.tutor_hours / 60)} minute
+                              {Math.floor(value.tutor_hours / 60) == 1
+                                ? ""
+                                : "s"}
+                              )
                             </li>
                           )}
 

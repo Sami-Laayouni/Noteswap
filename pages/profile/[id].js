@@ -121,27 +121,32 @@ export default function Profile() {
           )}
 
           {/* Bio and community service information */}
+
           <h2>
-            {data?.bio ? data?.bio : "No bios available"} · Total community
-            service:{" "}
-            <span>
-              {data?.points || data?.tutor_hours
-                ? Math.floor(data?.points / 20) +
-                  Math.floor(data?.tutor_hours / 60)
-                : "0"}{" "}
-              minute
-              {Math.floor(data?.points / 20) +
-                Math.floor(data?.tutor_hours / 60) ==
-              1
-                ? ""
-                : "s"}
-            </span>{" "}
-            · {"Community service earned by tutoring"}:{" "}
-            <span>
-              {data?.tutor_hours ? Math.floor(data?.tutor_hours / 60) : "0"}{" "}
-              minute
-              {Math.floor(data?.tutor_hours / 60) == 1 ? "" : "s"}
-            </span>
+            {data?.bio ? data?.bio : "No bios available"}
+            {data?.role == "Student" && (
+              <>
+                · Total community service:{" "}
+                <span>
+                  {data?.points || data?.tutor_hours
+                    ? Math.floor(data?.points / 20) +
+                      Math.floor(data?.tutor_hours / 60)
+                    : "0"}{" "}
+                  minute
+                  {Math.floor(data?.points / 20) +
+                    Math.floor(data?.tutor_hours / 60) ==
+                  1
+                    ? ""
+                    : "s"}
+                </span>{" "}
+                · {"Community service earned by tutoring"}:{" "}
+                <span>
+                  {data?.tutor_hours ? Math.floor(data?.tutor_hours / 60) : "0"}{" "}
+                  minute
+                  {Math.floor(data?.tutor_hours / 60) == 1 ? "" : "s"}
+                </span>
+              </>
+            )}
           </h2>
         </div>
       </section>
@@ -184,28 +189,32 @@ export default function Profile() {
               </p>
             </div>
 
-            {/* Tutoring status */}
-            <div style={{ display: "block", height: "fit-content" }}>
-              <PiStudent size={20} style={{ verticalAlign: "middle" }} />
-              <p
-                style={{
-                  display: "inline-block",
-                  marginLeft: "5px",
-                  fontFamily: "var(--manrope-font)",
-                  marginTop: "35px",
-                  lineHeight: "0px",
-                }}
-              >
-                {data?.is_tutor
-                  ? `${data?.first_name ? data?.first_name : "Loading"} 
+            {data?.role == "Student" && (
+              <>
+                {/* Tutoring status */}
+                <div style={{ display: "block", height: "fit-content" }}>
+                  <PiStudent size={20} style={{ verticalAlign: "middle" }} />
+                  <p
+                    style={{
+                      display: "inline-block",
+                      marginLeft: "5px",
+                      fontFamily: "var(--manrope-font)",
+                      marginTop: "35px",
+                      lineHeight: "0px",
+                    }}
+                  >
+                    {data?.is_tutor
+                      ? `${data?.first_name ? data?.first_name : "Loading"} 
                       is tutoring on Noteswap
                     `
-                  : `${
-                      data?.first_name ? data?.first_name : "Loading"
-                    } is not tutoring on Noteswap
+                      : `${
+                          data?.first_name ? data?.first_name : "Loading"
+                        } is not tutoring on Noteswap
                     `}
-              </p>
-            </div>
+                  </p>
+                </div>
+              </>
+            )}
           </section>
 
           {/* Vertical line separator */}

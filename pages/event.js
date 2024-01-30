@@ -167,7 +167,7 @@ const Event = () => {
           onChange={(e) => {
             setTitle(e.target.value);
           }}
-          style={{ borderRadius: "10px" }}
+          style={{ borderRadius: "10px", width: "100%" }}
           placeholder={t("s_event_name")}
           autoFocus
         />

@@ -31,7 +31,9 @@ export default async function loginUserWithMicrosoft(req, res) {
         });
       }
 
-      const token = jwt.sign({ google_id: user._id }, jwtSecret);
+      const token = jwt.sign({ google_id: user._id }, jwtSecret, {
+        expiresIn: "31d",
+      });
       res.status(200).json({ token: token, user: user });
     } catch (error) {
       console.log(error);
