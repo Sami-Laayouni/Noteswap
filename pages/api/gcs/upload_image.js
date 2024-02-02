@@ -40,9 +40,12 @@ export default async function handler(req, res) {
       }
 
       // Compress the image using sharp
-      const compressedImageBuffer = await sharp(
-        imageFile[0].filepath
-      ).toBuffer();
+      const compressedImageBuffer = await sharp(imageFile[0].filepath)
+        .resize(400)
+        .png({ quality: 80 })
+        .jpeg({ quality: 80 })
+        .webp({ quality: 80 })
+        .toBuffer();
 
       // Continue with the rest of the code as before
       const storage = new Storage({
