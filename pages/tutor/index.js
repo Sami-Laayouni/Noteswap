@@ -51,7 +51,7 @@ export default function Tutor() {
     "World History I",
     "World History II",
     "U.S History",
-    "Comparative Gov.",
+    "Moroccan History",
     "AP World History",
   ];
   const englishClasses = [
@@ -59,32 +59,41 @@ export default function Tutor() {
     "English II",
     "American Literature",
     "British Literature",
+    "Moroccan History",
     "AP English",
   ];
   const scienceClasses = [
     "Biology",
     "Chemistry",
     "Physics",
-    "Environmental Science",
+    "Forensics",
     "AP Biology",
     "AP Chemistry",
     "AP Physics",
   ];
   const electives = [
-    "Women's Lit",
+    "Cybersecurity ",
     "Model U.N",
     "Digital Marketing",
     "Visual Art",
     "PE & Health",
     "Computer Science",
     "Spanish I",
-    "AP ART",
-    "AP Computer Science",
-    "Advanced PE",
+    "Advanced Art",
+    "Social Psychology",
+    "Team Sports",
+    "Speech & Debate",
+    "Intro to AI",
     "Other",
   ];
   const frenchClasses = ["French FL", "French I", "French II", "French III"];
-  const arabicClasses = ["Arabic FL", "Arabic I", "Arabic II", "Arabic III"];
+  const arabicClasses = [
+    "Arabic FL",
+    "Arabic I",
+    "Arabic II",
+    "Arabic III",
+    "Arabic Media",
+  ];
   const [schoolClass, setSchoolClass] = useState();
   const [time, setTime] = useState();
   const [tutors, setTutor] = useState();

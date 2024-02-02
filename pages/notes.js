@@ -201,7 +201,7 @@ export default function Note() {
               <option>Biology</option>
               <option>Chemistry</option>
               <option>Physics</option>
-              <option>Environmental Science</option>
+              <option>Forensics</option>
               <option>AP Biology</option>
               <option>AP Chemistry</option>
               <option>AP Physics</option>
@@ -209,7 +209,7 @@ export default function Note() {
               <option>World History I</option>
               <option>World History II</option>
               <option>U.S History</option>
-              <option>Comparative Gov.</option>
+              <option>Moroccan History</option>
               <option>AP World History</option>
               <option>ELA</option>
               <option>English I</option>
@@ -241,9 +241,9 @@ export default function Note() {
               <option>PE & Health</option>
               <option>Computer Science</option>
               <option>Spanish I</option>
-              <option>AP ART</option>
-              <option>AP Computer Science</option>
-              <option>Advanced PE</option>
+              <option>Advanced Art</option>
+              <option>Social Psychology</option>
+              <option>Team Sports</option>
               <option>Other</option>
             </select>
             <input
