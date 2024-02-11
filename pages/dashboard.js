@@ -2,14 +2,18 @@
 import { requireAuthentication } from "../middleware/authenticate";
 import Head from "next/head";
 import style from "../styles/Dashboard.module.css";
-import NoteSwapBot from "../components/NoteSwapBot";
+import NoteSwapBot from "../components/Overlay/NoteSwapBot";
 import { useState, useEffect, useRef } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import CalendarEvent from "../components/CalendarEvent";
-import LoadingCircle from "../components/LoadingCircle";
+import CalendarEvent from "../components/Cards/CalendarEvent";
+import LoadingCircle from "../components/Extra/LoadingCircle";
 import dynamic from "next/dynamic";
-const BusinessModal = dynamic(() => import("../components/BusinessModal"));
+const BusinessModal = dynamic(() =>
+  import("../components/Modals/BusinessModal")
+);
+const PWAModal = dynamic(() => import("../components/Modals/InstallPwaModal"));
 import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 
 /**
  * Get static props
@@ -43,6 +47,9 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const containerRef = useRef(null); // Create a ref for the <ul> container
   const { t } = useTranslation("common");
+
+  const router = useRouter();
+  const { installPWA } = router.query;
 
   const handleScrollLeft = () => {
     // Scroll the <ul> container to the left
@@ -106,6 +113,7 @@ const Dashboard = () => {
         <title>Dashboard | Noteswap</title> {/* Title page */}
       </Head>
       <BusinessModal />
+      {installPWA && <PWAModal />}
       <main className={style.background}>
         <h1 className={style.title}>
           {new Date().getHours() >= 0 && new Date().getHours() < 12

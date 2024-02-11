@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
 import Image from "next/image";
-import Footer from "../components/Footer";
+import Footer from "../components/Layout/Footer";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 

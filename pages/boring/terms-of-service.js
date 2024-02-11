@@ -2,18 +2,10 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import style from "../../styles/Legal.module.css";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import NoteSwapBot from "../../components/NoteSwapBot";
-const Footer = dynamic(() => import("../../components/Footer"));
+import NoteSwapBot from "../../components/Overlay/NoteSwapBot";
+const Footer = dynamic(() => import("../../components/Layout/Footer"));
 
-/**
- * Get static props
- * @date 8/13/2023 - 4:47:34 PM
- *
- * @export
- * @async
- * @param {{ locale: any; }} { locale }
- * @return {unknown}
- */
+// Used for translations reasons
 export async function getStaticProps({ locale }) {
   return {
     props: {
@@ -21,13 +13,8 @@ export async function getStaticProps({ locale }) {
     },
   };
 }
-/**
- * Terms of Service
- * @date 7/24/2023 - 7:08:46 PM
- *
- * @export
- * @return {*}
- */
+
+// Export the page
 export default function TermsOfService() {
   return (
     <>

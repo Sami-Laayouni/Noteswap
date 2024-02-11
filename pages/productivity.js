@@ -30,9 +30,13 @@ export async function getStaticProps({ locale }) {
  */
 export default function Productivity() {
   const [data, setData] = useState({});
+  const [communityServiceRequired, setCommunityServiceRequired] = useState("");
   useEffect(() => {
     if (localStorage) {
       setData(JSON.parse(localStorage.getItem("userInfo")));
+      setCommunityServiceRequired(
+        JSON.parse(localStorage.getItem("schoolInfo"))?.cs_required
+      );
     }
   }, []);
   const { t } = useTranslation("common");
@@ -77,7 +81,7 @@ export default function Productivity() {
                   {Math.floor(
                     ((Math.floor(data?.points / 20) +
                       Math.floor(data?.tutor_hours / 60)) /
-                      1200) *
+                      (communityServiceRequired * 60)) *
                       100
                   )}
                   %
@@ -87,11 +91,11 @@ export default function Productivity() {
               <h3 className={style.subsubTitle}>
                 {t("you_still_need")}{" "}
                 <span>
-                  {1200 -
+                  {communityServiceRequired * 60 -
                     (Math.floor(data?.points / 20) +
                       Math.floor(data?.tutor_hours / 60))}{" "}
                 </span>
-                {"minutes_of"}
+                {t("minutes_of")}
               </h3>
             </>
           ) : (

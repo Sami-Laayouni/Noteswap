@@ -1,26 +1,24 @@
 import style from "../../styles/Tutor.module.css";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
-import { useContext } from "react";
 import ModalContext from "../../context/ModalContext";
 import Head from "next/head";
-import LoadingCircle from "../../components/LoadingCircle";
-import TutorCard from "../../components/TutorCard";
+import LoadingCircle from "../../components/Extra/LoadingCircle";
+import TutorCard from "../../components/Cards/TutorCard";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import dynamic from "next/dynamic";
-const BecomeTutor = dynamic(() => import("../../components/BecomeTutor"));
-const BookASession = dynamic(() => import("../../components/BookASession"));
-const RequestTutor = dynamic(() => import("../../components/RequestTutor"));
-/**
- * Get static props
- * @date 8/13/2023 - 5:02:47 PM
- *
- * @export
- * @async
- * @param {{ locale: any; }} { locale }
- * @return {unknown}
- */
+const BecomeTutor = dynamic(() =>
+  import("../../components/Modals/BecomeTutor")
+);
+const BookASession = dynamic(() =>
+  import("../../components/Modals/BookASession")
+);
+const RequestTutor = dynamic(() =>
+  import("../../components/Modals/RequestTutor")
+);
+
+// Used for translation reasons
 export async function getStaticProps({ locale }) {
   return {
     props: {
@@ -40,60 +38,6 @@ export default function Tutor() {
   const [open, setOpen] = tutor;
   const [ropen, setRopen] = requestTutor;
   const [info, setInfo] = requestInfo;
-  const mathClasses = [
-    "Algebra I",
-    "Algebra II",
-    "Geometry",
-    "Pre-calculus",
-    "AP calculus",
-  ];
-  const socialClasses = [
-    "World History I",
-    "World History II",
-    "U.S History",
-    "Moroccan History",
-    "AP World History",
-  ];
-  const englishClasses = [
-    "English I",
-    "English II",
-    "American Literature",
-    "British Literature",
-    "Moroccan History",
-    "AP English",
-  ];
-  const scienceClasses = [
-    "Biology",
-    "Chemistry",
-    "Physics",
-    "Forensics",
-    "AP Biology",
-    "AP Chemistry",
-    "AP Physics",
-  ];
-  const electives = [
-    "Cybersecurity ",
-    "Model U.N",
-    "Digital Marketing",
-    "Visual Art",
-    "PE & Health",
-    "Computer Science",
-    "Spanish I",
-    "Advanced Art",
-    "Social Psychology",
-    "Team Sports",
-    "Speech & Debate",
-    "Intro to AI",
-    "Other",
-  ];
-  const frenchClasses = ["French FL", "French I", "French II", "French III"];
-  const arabicClasses = [
-    "Arabic FL",
-    "Arabic I",
-    "Arabic II",
-    "Arabic III",
-    "Arabic Media",
-  ];
   const [schoolClass, setSchoolClass] = useState();
   const [time, setTime] = useState();
   const [tutors, setTutor] = useState();
@@ -102,6 +46,8 @@ export default function Tutor() {
   const [endTime, setEndTime] = useState("16:30");
   const [pause, setPaused] = useState("");
   const [dataFromLocalStorage, setDataFromLocalStorage] = useState(null);
+  const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]; // Day of the week (hopefully we don't have to change)
+  const [courses, setCourses] = useState({});
 
   const router = useRouter();
   const { t } = useTranslation("common");
@@ -126,6 +72,7 @@ export default function Tutor() {
     updateValue();
     if (localStorage) {
       setDataFromLocalStorage(JSON.parse(localStorage.getItem("userInfo")));
+      setCourses(JSON.parse(localStorage.getItem("schoolInfo"))?.courses);
     }
   }, [router.query]);
 
@@ -225,172 +172,36 @@ export default function Tutor() {
             className={style.dropdownMenu}
           >
             <ul>
-              {/* Science classes*/}
-              <li
-                key="Science"
-                className={style.boldText}
-                onClick={() => {
-                  setSchoolClass("Science");
-
-                  document.getElementById("dropdownMenu").style.display =
-                    "none";
-                }}
-              >
-                Science
-              </li>
-              {scienceClasses?.map((value) => (
-                <li
-                  key={value}
-                  onClick={() => {
-                    setSchoolClass(value);
-                    document.getElementById("dropdownMenu").style.display =
-                      "none";
-                  }}
-                >
-                  {value}
-                </li>
-              ))}
-              <li
-                key="ELA"
-                className={style.boldText}
-                onClick={() => {
-                  setSchoolClass("ELA");
-                  document.getElementById("dropdownMenu").style.display =
-                    "none";
-                }}
-              >
-                ELA
-              </li>
-              {englishClasses?.map((value) => (
-                <li
-                  key={value}
-                  onClick={() => {
-                    setSchoolClass(value);
-
-                    document.getElementById("dropdownMenu").style.display =
-                      "none";
-                  }}
-                >
-                  {value}
-                </li>
-              ))}
-
-              <li
-                key="Social Study"
-                className={style.boldText}
-                onClick={() => {
-                  setSchoolClass("Social Study");
-                  document.getElementById("dropdownMenu").style.display =
-                    "none";
-                }}
-              >
-                Social Study
-              </li>
-              {socialClasses?.map((value) => (
-                <li
-                  key={value}
-                  onClick={() => {
-                    setSchoolClass(value);
-
-                    document.getElementById("dropdownMenu").style.display =
-                      "none";
-                  }}
-                >
-                  {value}
-                </li>
-              ))}
-              <li
-                key="Math"
-                className={style.boldText}
-                onClick={() => {
-                  setSchoolClass("Math");
-                  document.getElementById("dropdownMenu").style.display =
-                    "none";
-                }}
-              >
-                Math
-              </li>
-              {mathClasses?.map((value) => (
-                <li
-                  key={value}
-                  onClick={() => {
-                    setSchoolClass(value);
-                    document.getElementById("dropdownMenu").style.display =
-                      "none";
-                  }}
-                >
-                  {value}
-                </li>
-              ))}
-              <li
-                key="French"
-                className={style.boldText}
-                onClick={() => {
-                  setSchoolClass("French");
-                  document.getElementById("dropdownMenu").style.display =
-                    "none";
-                }}
-              >
-                French
-              </li>
-              {frenchClasses?.map((value) => (
-                <li
-                  key={value}
-                  onClick={() => {
-                    setSchoolClass(value);
-                    document.getElementById("dropdownMenu").style.display =
-                      "none";
-                  }}
-                >
-                  {value}
-                </li>
-              ))}
-              <li
-                key="Arabic"
-                className={style.boldText}
-                onClick={() => {
-                  setSchoolClass("Arabic");
-                  document.getElementById("dropdownMenu").style.display =
-                    "none";
-                }}
-              >
-                Arabic
-              </li>
-              {arabicClasses?.map((value) => (
-                <li
-                  key={value}
-                  onClick={() => {
-                    setSchoolClass(value);
-                    document.getElementById("dropdownMenu").style.display =
-                      "none";
-                  }}
-                >
-                  {value}
-                </li>
-              ))}
-              <li
-                key="Electives"
-                className={style.boldText}
-                onClick={() => {
-                  setSchoolClass("Electives");
-                  document.getElementById("dropdownMenu").style.display =
-                    "none";
-                }}
-              >
-                Electives
-              </li>
-              {electives?.map((value) => (
-                <li
-                  key={value}
-                  onClick={() => {
-                    setSchoolClass(value);
-                    document.getElementById("dropdownMenu").style.display =
-                      "none";
-                  }}
-                >
-                  {value}
-                </li>
-              ))}
+              <ul>
+                {Object.keys(courses).map((subject) => (
+                  <React.Fragment key={subject}>
+                    <li
+                      key={subject}
+                      className={style.boldText}
+                      onClick={() => {
+                        setSchoolClass(subject);
+                        document.getElementById("dropdownMenu").style.display =
+                          "none";
+                      }}
+                    >
+                      {subject}
+                    </li>
+                    {courses[subject].map((value) => (
+                      <li
+                        key={value}
+                        onClick={() => {
+                          setSchoolClass(value);
+                          document.getElementById(
+                            "dropdownMenu"
+                          ).style.display = "none";
+                        }}
+                      >
+                        {value}
+                      </li>
+                    ))}
+                  </React.Fragment>
+                ))}
+              </ul>
             </ul>
           </div>
         </section>
@@ -431,61 +242,19 @@ export default function Tutor() {
               >
                 {t("any_time")}
               </li>
-              <li
-                key="Monday"
-                className={style.boldText}
-                onClick={() => {
-                  setTime("Monday");
-                  document.getElementById("dropdownMenu2").style.display =
-                    "none";
-                }}
-              >
-                {t("monday")}
-              </li>
-              <li
-                key="Tuesday"
-                className={style.boldText}
-                onClick={() => {
-                  setTime("Tuesday");
-                  document.getElementById("dropdownMenu2").style.display =
-                    "none";
-                }}
-              >
-                {t("tuesday")}
-              </li>
-              <li
-                key="Wednesday"
-                className={style.boldText}
-                onClick={() => {
-                  setTime("Wednesday");
-                  document.getElementById("dropdownMenu2").style.display =
-                    "none";
-                }}
-              >
-                {t("wednesday")}
-              </li>
-              <li
-                key="Thursday"
-                className={style.boldText}
-                onClick={() => {
-                  setTime("Thursday");
-                  document.getElementById("dropdownMenu2").style.display =
-                    "none";
-                }}
-              >
-                {t("thursday")}
-              </li>
-              <li
-                key="Friday"
-                className={style.boldText}
-                onClick={() => {
-                  setTime("Friday");
-                  document.getElementById("dropdownMenu2").style.display =
-                    "none";
-                }}
-              >
-                {t("friday")}
-              </li>
+              {daysOfWeek.map((day) => (
+                <li
+                  key={day}
+                  className={style.boldText}
+                  onClick={() => {
+                    setTime(day);
+                    document.getElementById("dropdownMenu2").style.display =
+                      "none";
+                  }}
+                >
+                  {t(`${day.toLowerCase()}`)}
+                </li>
+              ))}
             </ul>
           </div>
         </section>
@@ -533,14 +302,7 @@ export default function Tutor() {
             </section>
           </>
         ) : (
-          <div
-            style={{
-              width: "70%",
-              marginLeft: "auto",
-              marginRight: "auto",
-              paddingTop: "100px",
-            }}
-          >
+          <div className={style.tutorSection}>
             <p className={style.result}>
               {tutors?.length} {t("result")}
               {tutors?.length == 1 ? "" : "s"} {t("found")}
@@ -585,14 +347,14 @@ export default function Tutor() {
 
       {dataFromLocalStorage && !dataFromLocalStorage.role != "student" && (
         <button
-          className={style.becomeButton}
-          style={{ right: "220px" }}
+          className={style.becomeButtonHide}
+          style={{ right: "250px" }}
           onClick={() => {
             setRopen(true);
             setInfo(tutors);
           }}
         >
-          Request a tutoring session
+          {t("request_tutoring")}
         </button>
       )}
       {dataFromLocalStorage && !dataFromLocalStorage.is_tutor && (

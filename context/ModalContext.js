@@ -35,6 +35,7 @@ export const ModalProvider = ({ children }) => {
   const [eventState, setEventState] = useState(false);
   const [requestTutor, setRequestTutor] = useState(false);
   const [requestInfo, setRequestInfo] = useState(false);
+  const [pwa, setPWA] = useState(true);
 
   // Return the JSX
   return (
@@ -66,6 +67,7 @@ export const ModalProvider = ({ children }) => {
         eventState: [eventState, setEventState],
         requestTutor: [requestTutor, setRequestTutor],
         requestInfo: [requestInfo, setRequestInfo],
+        pwa: [pwa, setPWA],
       }}
     >
       {children}

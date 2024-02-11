@@ -1,21 +1,19 @@
+/* Home/Landing Page */
+
 import style from "../styles/Home.module.css";
+
+// Import from Next
 import Link from "next/link";
 import Image from "next/image";
-import Footer from "../components/Footer";
+import { useRouter } from "next/router";
+
+import Footer from "../components/Layout/Footer";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { isAuthenticated } from "../utils/auth";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-/**
- * Get static props
- * @date 8/13/2023 - 4:55:01 PM
- *
- * @export
- * @async
- * @param {{ locale: any; }} { locale }
- * @return {unknown}
- */
+
+// Used for translations reasons
 export async function getStaticProps({ locale }) {
   return {
     props: {
@@ -37,11 +35,13 @@ export default function Home() {
   const [loggedIn, setLoggedIn] = useState(false);
   const router = useRouter();
 
+  // Check if user is authenticated
   useEffect(() => {
     const isLoggedIn = isAuthenticated();
     setLoggedIn(isLoggedIn);
   }, [setLoggedIn]);
 
+  // If user is authenticated redirect them
   useEffect(() => {
     if (loggedIn) {
       if (localStorage && localStorage.getItem("userInfo")) {

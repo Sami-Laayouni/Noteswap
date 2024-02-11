@@ -1,5 +1,5 @@
 import React from "react";
-import Footer from "../../components/Footer";
+import Footer from "../../components/Layout/Footer";
 import style from "../../styles/Note.module.css";
 import Link from "next/link";
 import { BiArrowBack } from "react-icons/bi";
@@ -7,13 +7,13 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState, useEffect, useContext } from "react";
 import ModalContext from "../../context/ModalContext";
-import LoadingCircle from "../../components/LoadingCircle";
-import NoteSwapBot from "../../components/NoteSwapBot";
+import LoadingCircle from "../../components/Extra/LoadingCircle";
+import NoteSwapBot from "../../components/Overlay/NoteSwapBot";
 import { FaShare } from "react-icons/fa";
 import { BiPencil } from "react-icons/bi";
 import dynamic from "next/dynamic";
 import Head from "next/head";
-const CiteModal = dynamic(() => import("../../components/CiteModal"));
+const CiteModal = dynamic(() => import("../../components/Modals/CiteModal"));
 
 /**
  * Note page

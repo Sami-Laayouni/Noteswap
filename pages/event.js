@@ -3,12 +3,14 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 import ModalContext from "../context/ModalContext";
-import LoadingCircle from "../components/LoadingCircle";
-import EventCard from "../components/EventCard";
+import LoadingCircle from "../components/Extra/LoadingCircle";
+import EventCard from "../components/Cards/EventCard";
 import Head from "next/head";
 import dynamic from "next/dynamic";
-const CreateEvent = dynamic(() => import("../components/CreateEvent"));
-const ExpandedEvent = dynamic(() => import("../components/ExpandedEvent"));
+const CreateEvent = dynamic(() => import("../components/Modals/CreateEvent"));
+const ExpandedEvent = dynamic(() =>
+  import("../components/Modals/ExpandedEvent")
+);
 import OneSignal from "react-onesignal";
 import { requireAuthentication } from "../middleware/authenticate";
 import { useTranslation } from "next-i18next";
@@ -95,6 +97,9 @@ const Event = () => {
 
   useEffect(() => {
     const initializeOneSignal = async () => {
+      const userId = JSON.parse(localStorage.getItem("userInfo"))._id;
+      const schoolId = JSON.parse(localStorage.getItem("userInfo")).schoolId;
+
       await OneSignal.init({
         appId: "3b28d10b-3b88-426f-8025-507667803b2a",
         safari_web_id:
@@ -156,7 +161,7 @@ const Event = () => {
       <img
         className={style.background}
         alt="Background Image"
-        src="/assets/fallback/background.png"
+        src="/assets/images/users/Background-Image.webp"
       ></img>
       <h1 className={style.title}>{t("events")}</h1>
       <h2 className={style.subTitle}>{t("event_slogan")}</h2>

@@ -128,6 +128,18 @@
   color: var(--default-white-color);
   font-family: var(--manrope-font);
 }
+.becomeButtonHide {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 15px 30px;
+  cursor: pointer;
+  border-radius: 8px;
+  border: none;
+  background-color: var(--accent-color);
+  color: var(--default-white-color);
+  font-family: var(--manrope-font);
+}
 .time {
   font-family: var(--manrope-font);
   user-select: none;
@@ -165,29 +177,42 @@
 .result {
   font-family: var(--manrope-font);
 }
+.tutorSection {
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 100px;
+}
 @media all and (max-width: 808px) {
   .title {
     text-align: center;
-    top: 35%;
+    top: 25%;
     width: 100%;
     font-size: 2.5rem;
   }
   .subTitle {
-    text-align: center;
-    top: 50%;
-    width: 100%;
+    display: none;
   }
   .search {
-    width: 90%;
+    width: 95%;
     grid-template-columns: 49% 1% 49% 1%;
   }
   .container {
     width: 100%;
+  }
+  .container span {
+    display: none;
   }
   .container:last-child {
     display: none;
   }
   .result {
     text-align: center;
+  }
+  .tutorSection {
+    width: 90%;
+  }
+  .becomeButtonHide {
+    display: none;
   }
 }

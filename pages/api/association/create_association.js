@@ -33,8 +33,7 @@ export default async function createAssociation(req, res) {
       category,
       country,
       city,
-      street,
-      postal_code,
+
       icon,
     } = req.body;
 
@@ -59,8 +58,6 @@ export default async function createAssociation(req, res) {
         category: category,
         country: country,
         city: city,
-        street: street,
-        postal_code: postal_code,
         icon: icon,
         created_at: Date.now(),
       });

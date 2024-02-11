@@ -21,7 +21,7 @@ const associationSchema = new mongoose.Schema({
   },
   website: {
     type: String,
-    required: true,
+    required: false,
   },
   category: {
     type: String,

@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 // Import dynamic loading from NEXTJS
 import dynamic from "next/dynamic";
-const LoadingPage = dynamic(() => import("../components/LoadingPage"));
+const LoadingPage = dynamic(() => import("../components/Overlay/LoadingPage"));
 import { verify } from "jsonwebtoken";
 
 export const requireAuthenticationAdmin = (WrappedComponent) => {

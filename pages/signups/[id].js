@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import LoadingCircle from "../../components/LoadingCircle";
+import LoadingCircle from "../../components/Extra/LoadingCircle";
 
 /**
  * Get static paths

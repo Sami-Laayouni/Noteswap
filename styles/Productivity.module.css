@@ -28,3 +28,13 @@
   outline: none;
   cursor: pointer;
 }
+@media all and (max-width: 780px) {
+  .subTitle {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .subsubTitle {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}

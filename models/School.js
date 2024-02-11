@@ -42,12 +42,32 @@ const schoolSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  urlOfEmail: {
+    type: Array,
+    required: true,
+  },
   schoolTeacherCode: {
     type: String,
     required: true,
   },
   upcoming_events_url: {
     type: String,
+    required: true,
+  },
+  courses: {
+    type: Object,
+    required: true,
+  },
+  dailyLimit: {
+    type: Number,
+    required: true,
+  },
+  dailyLimitImage: {
+    type: Number,
+    required: true,
+  },
+  cs_required: {
+    type: Number,
     required: true,
   },
   createdAt: {

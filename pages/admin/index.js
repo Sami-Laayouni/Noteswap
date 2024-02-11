@@ -1,4 +1,4 @@
-import AdminSidebar from "../../components/AdminSidebar";
+import AdminSidebar from "../../components/Layout/AdminSidebar";
 import { requireAuthenticationAdmin } from "../../middleware/admin";
 const Admin = () => {
   return (

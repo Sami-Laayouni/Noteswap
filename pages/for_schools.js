@@ -1,7 +1,7 @@
 import Head from "next/head";
 import style from "../styles/createSchool.module.css";
 import { requireAuthentication } from "../middleware/authenticate";
-import Footer from "../components/Footer";
+import Footer from "../components/Layout/Footer";
 import React, { useState } from "react";
 import SchoolService from "../services/SchoolService";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -272,6 +272,8 @@ const ForSchools = () => {
                     existingObject.School_phone_number,
                     existingObject.School_Supported_Emails,
                     existingObject.School_Community_Service,
+                    existingObject.Community_Service_Notes,
+                    existingObject.Community_Service_Notes_Image,
                     schoolLogo,
                     schoolCover,
                     generateNoteSwapCode(6)
@@ -360,6 +362,32 @@ const ForSchools = () => {
                   </p>
                   <input
                     id="School_Community_Service"
+                    style={{ marginBottom: "30px" }}
+                    className={style.input}
+                    type="number"
+                    min={1}
+                    max={1000000}
+                    required
+                  />
+                  <p className={style.labelForInput}>
+                    Amount of Community Service That Can Be Earned Per Day
+                    Through Typing (in minutes)
+                  </p>
+                  <input
+                    id="Community_Service_Notes"
+                    style={{ marginBottom: "30px" }}
+                    className={style.input}
+                    type="number"
+                    min={1}
+                    max={1000000}
+                    required
+                  />
+                  <p className={style.labelForInput}>
+                    Amount of Community Service That Can Be Earned Per Day
+                    Through Taking Picture of Notes (in minutes)
+                  </p>
+                  <input
+                    id="Community_Service_Notes_Image"
                     style={{ marginBottom: "30px" }}
                     className={style.input}
                     type="number"

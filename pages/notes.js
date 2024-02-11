@@ -2,21 +2,25 @@ import style from "../styles/Notes.module.css";
 import { IoIosCreate } from "react-icons/io";
 import { TbFileUpload } from "react-icons/tb";
 import { FiType } from "react-icons/fi";
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ModalContext from "../context/ModalContext";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import NoteCard from "../components/NoteCard";
-import LoadingCircle from "../components/LoadingCircle";
+import NoteCard from "../components/Cards/NoteCard";
+import LoadingCircle from "../components/Extra/LoadingCircle";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import { isAuthenticated } from "../utils/auth";
 
 import dynamic from "next/dynamic";
 
-const Notes = dynamic(() => import("../components/NotesModal"));
-const ImageNotesModal = dynamic(() => import("../components/ImageNotesModal"));
-const EditNotesModal = dynamic(() => import("../components/EditNotesModal"));
+const Notes = dynamic(() => import("../components/Modals/NotesModal"));
+const ImageNotesModal = dynamic(() =>
+  import("../components/Modals/ImageNotesModal")
+);
+const EditNotesModal = dynamic(() =>
+  import("../components/Modals/EditNotesModal")
+);
 
 /**
  * Get static props
@@ -60,6 +64,7 @@ export default function Note() {
   const nextDay = new Date(currentDate);
   nextDay.setDate(currentDate.getDate() + 1);
   const nextDayISO = nextDay.toISOString().split("T")[0];
+  const [courses, setCourses] = useState({});
 
   const { t } = useTranslation("common");
 
@@ -85,6 +90,7 @@ export default function Note() {
     if (localStorage) {
       if (localStorage.getItem("userInfo")) {
         setRole(JSON.parse(localStorage?.getItem("userInfo")).role);
+        setCourses(JSON.parse(localStorage.getItem("schoolInfo"))?.courses);
       }
     }
   }, [setLoggedIn]);
@@ -197,54 +203,14 @@ export default function Note() {
               }}
             >
               <option>{t("select_a_class")}</option>
-              <option>Science</option>
-              <option>Biology</option>
-              <option>Chemistry</option>
-              <option>Physics</option>
-              <option>Forensics</option>
-              <option>AP Biology</option>
-              <option>AP Chemistry</option>
-              <option>AP Physics</option>
-              <option>Social Study</option>
-              <option>World History I</option>
-              <option>World History II</option>
-              <option>U.S History</option>
-              <option>Moroccan History</option>
-              <option>AP World History</option>
-              <option>ELA</option>
-              <option>English I</option>
-              <option>English II</option>
-              <option>American Literature</option>
-              <option>British Literature</option>
-              <option>AP English</option>
-              <option>Math</option>
-              <option>Algebra I</option>
-              <option>Algebra II</option>
-              <option>Geometry</option>
-              <option>Pre-calculus</option>
-              <option>AP calculus</option>
-              <option>French</option>
-              <option>French FL</option>
-              <option>French I</option>
-              <option>French II</option>
-              <option>French III</option>
-              <option>Arabic</option>
-              <option>Arabic FL</option>
-              <option>Arabic I</option>
-              <option>Arabic II</option>
-              <option>Arabic III</option>
-              <option>Electives</option>
-              <option>Women&apos;s Lit</option>
-              <option>Model U.N</option>
-              <option>Digital Marketing</option>
-              <option>Visual Art</option>
-              <option>PE & Health</option>
-              <option>Computer Science</option>
-              <option>Spanish I</option>
-              <option>Advanced Art</option>
-              <option>Social Psychology</option>
-              <option>Team Sports</option>
-              <option>Other</option>
+              {Object.keys(courses).map((subject) => (
+                <React.Fragment key={subject}>
+                  <option>{subject}</option>
+                  {courses[subject].map((value) => (
+                    <option key={value}>{value}</option>
+                  ))}
+                </React.Fragment>
+              ))}
             </select>
             <input
               className={style.date}
@@ -290,21 +256,6 @@ export default function Note() {
                 {t("for_you")}
               </li>
             )}
-            <li
-              style={{
-                background:
-                  router?.query?.type == "popular"
-                    ? "white"
-                    : "var(--accent-color)",
-                color:
-                  router?.query?.type == "popular"
-                    ? "var(--accent-color)"
-                    : "white",
-              }}
-              onClick={() => addRoutePath("type", "popular")}
-            >
-              {t("quality")}
-            </li>
             <li
               style={{
                 background:

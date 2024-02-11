@@ -5,7 +5,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useContext, useEffect } from "react";
 import ModalContext from "../context/ModalContext";
 import dynamic from "next/dynamic";
-const CreateEvent = dynamic(() => import("../components/CreateEvent"));
+const CreateEvent = dynamic(() => import("../components/Modals/CreateEvent"));
 
 /**
  * Get static props
@@ -49,7 +49,7 @@ export default function Shortcuts() {
       <Head>
         <title>Shortcuts | NoteSwap</title> {/* Title of the page*/}
       </Head>
-      <CreateEvent business={true} />
+      <CreateEvent business={bOpen} />
       <section
         style={{
           width: "100%",
@@ -76,15 +76,6 @@ export default function Shortcuts() {
               >
                 Go
               </button>
-            </div>
-          </li>
-          <li style={{ marginTop: "20px" }}>
-            <h2>Reward Community Service for small tasks</h2>
-            <div>
-              {" "}
-              <Link href="/rewardcs">
-                <button>Go</button>
-              </Link>
             </div>
           </li>
         </ul>

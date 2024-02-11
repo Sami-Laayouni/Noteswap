@@ -5,7 +5,7 @@ import Head from "next/head";
 import style from "../styles/RewardCS.module.css";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useEffect, useState } from "react";
-import LoadingCircle from "../components/LoadingCircle";
+import LoadingCircle from "../components/Extra/LoadingCircle";
 import { useRouter } from "next/router";
 import { requireAuthenticationTeacher } from "../middleware/teacher";
 import Script from "next/script";

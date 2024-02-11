@@ -5,9 +5,11 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "../../middleware/authenticate";
 import { useTranslation } from "next-i18next";
 import dynamic from "next/dynamic";
-const SettingSidebar = dynamic(() => import("../../components/SettingSidebar"));
+const SettingSidebar = dynamic(() =>
+  import("../../components/Layout/SettingSidebar")
+);
 const DeleteAccount = dynamic(() =>
-  import("../../components/DeleteAccountModal")
+  import("../../components/Modals/DeleteAccountModal")
 );
 
 /**

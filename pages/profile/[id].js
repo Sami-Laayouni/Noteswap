@@ -12,12 +12,14 @@ import { PiStudent } from "react-icons/pi";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-import NoteCard from "../../components/NoteCard";
+import NoteCard from "../../components/Cards/NoteCard";
 import dynamic from "next/dynamic";
 const ImageNotesModal = dynamic(() =>
-  import("../../components/ImageNotesModal")
+  import("../../components/Modals/ImageNotesModal")
 );
-const EditNotesModal = dynamic(() => import("../../components/EditNotesModal"));
+const EditNotesModal = dynamic(() =>
+  import("../../components/Modals/EditNotesModal")
+);
 
 /**
  * Profile component to display user profile information

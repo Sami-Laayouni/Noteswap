@@ -2,8 +2,8 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import style from "../../styles/Legal.module.css";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-const Footer = dynamic(() => import("../../components/Footer"));
-import NoteSwapBot from "../../components/NoteSwapBot";
+const Footer = dynamic(() => import("../../components/Layout/Footer"));
+import NoteSwapBot from "../../components/Overlay/NoteSwapBot";
 
 /**
  * Get static props

@@ -215,12 +215,12 @@
     grid-template-columns: 100%;
   }
   .searchContainer {
-    width: 95vw;
+    width: 100vw;
     padding-left: 0px;
     padding-right: 0px;
     border-right: none;
     padding: 0px;
-    height: 200px;
+    height: 260px;
   }
   .searchContainer form {
     width: 90%;
@@ -229,19 +229,22 @@
     width: 97%;
   }
   .searchContainer form .input {
-    width: 100%;
+    width: 99%;
+    height: 55px;
   }
   .searchContainer form textarea {
     display: none;
   }
   .searchContainer form select {
     display: inline-block;
-    width: 45%;
+    height: 38px;
+    width: 47%;
   }
   .date {
     display: inline-block;
-    width: 45%;
-    margin-left: 30px;
+    width: 47%;
+    height: 38px;
+    margin-left: 15px;
   }
   .clearStyle {
     text-align: center;
@@ -252,7 +255,10 @@
   .notes ul {
     display: none;
   }
+  .note {
+    width: 100%;
+  }
   .notes {
-    height: 50vh;
+    height: 60vh;
   }
 }

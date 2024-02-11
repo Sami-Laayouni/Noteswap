@@ -1,0 +1,110 @@
+.card {
+  width: 90%;
+  max-width: 90%;
+  border-radius: 5px;
+  height: 200px;
+  max-height: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-right: 2px solid var(--accent-color);
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  margin-top: 10px;
+  margin-left: 50px;
+  padding-left: 10px;
+  padding-top: 10px;
+  cursor: pointer;
+  position: relative;
+  padding-bottom: 10px;
+}
+.card h1 {
+  line-height: 110%;
+  font-family: var(--manrope-bold-font);
+}
+.card div {
+  font-family: var(--manrope-font);
+  max-width: 95%;
+
+  word-break: break-all;
+}
+.image {
+  border-radius: 8px;
+  display: inline-block;
+  margin-right: 20px;
+  cursor: pointer;
+  object-fit: cover;
+}
+.imageScroll {
+  width: 100%;
+  margin-top: 20px;
+  height: 100%;
+
+  white-space: nowrap;
+  overflow-x: scroll;
+  scrollbar-width: none;
+}
+.left {
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  outline: none;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+.right {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  outline: none;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+.more {
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  cursor: pointer;
+  background-color: white;
+  border: none;
+
+  outline: none;
+}
+.dropdown {
+  position: absolute;
+  top: 40px;
+  right: 25px;
+  background-color: whitesmoke;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  border-radius: 3px;
+  display: none;
+}
+.dropdown ol {
+  padding: 0px;
+  list-style: none;
+}
+.dropdown ol li {
+  padding: 10px 20px;
+}
+.dropdown ol li:hover {
+  color: var(--accent-color);
+}
+@media all and (max-width: 808px) {
+  .card {
+    margin-left: 15px;
+  }
+}

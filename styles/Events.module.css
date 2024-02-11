@@ -86,13 +86,11 @@
 @media all and (max-width: 808px) {
   .title {
     text-align: center;
-    top: 35%;
+    top: 25%;
     width: 100%;
   }
   .subTitle {
-    text-align: center;
-    top: 50%;
-    width: 100%;
+    display: none;
   }
   .search {
     width: 90%;

@@ -1,0 +1,154 @@
+.input {
+  width: 65vw;
+  outline: none;
+  border: none;
+  line-height: 25px;
+  font-size: 25px;
+  margin-top: 30px;
+  padding-bottom: 5px;
+  font-family: var(--manrope-font);
+  border-bottom: 2px solid var(--accent-color);
+}
+.next {
+  outline: none;
+  padding: 15px 35px;
+  border: none;
+  background-color: var(--accent-color);
+  color: var(--default-white-color);
+  border-radius: 5px;
+  bottom: 20px;
+  right: 20px;
+  position: absolute;
+  cursor: pointer;
+}
+
+.back {
+  color: var(--accent-color);
+  cursor: pointer;
+  bottom: 10px;
+  left: 20px;
+  position: absolute;
+}
+.back:hover {
+  text-decoration: underline;
+}
+
+.select {
+  display: inline-block;
+  font-size: 1.5rem;
+  font-family: var(--manrope-font);
+  margin-right: 10px;
+  margin-top: 20px;
+  user-select: none;
+}
+.selectContainer {
+  width: 65vw;
+}
+.dropdown {
+  display: inline;
+  cursor: pointer;
+  font-family: var(--manrope-font);
+  padding: 10px 30px;
+  border: 1px solid var(--default-black-color);
+  border-radius: 5px;
+  user-select: none;
+}
+.dropdownMenu {
+  position: absolute;
+  left: 22px;
+  bottom: 150px;
+  width: 203px;
+  background-color: white;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  height: 250px;
+  border-radius: 5px;
+}
+
+.dropdownMenu ul {
+  list-style: none;
+  width: 193px;
+  padding: 0;
+}
+.dropdownMenu ul span {
+  width: 100%;
+  background-color: green;
+  text-align: center;
+}
+.dropdownMenu ul li {
+  width: 100%;
+  cursor: pointer;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: center;
+}
+.boldText {
+  font-family: var(--manrope-bold-font);
+  cursor: default;
+}
+.error {
+  position: relative;
+  top: 55px;
+  left: 10px;
+  color: var(--accent-color);
+  font-family: var(--manrope-font);
+}
+/* ========= Rubric =========== */
+
+.image {
+  border-radius: 10px;
+  width: 45vw;
+  height: 360px;
+}
+
+/* ========= Feedback ========= */
+.feedback {
+  height: 320px;
+  overflow-y: auto;
+  white-space: break-spaces;
+}
+.feedback::-webkit-scrollbar {
+  width: 10px;
+  border-radius: 8px;
+}
+.feedback::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+.feedback::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 8px;
+}
+/* ========= Final page ========= */
+.title {
+  font-family: var(--manrope-bold-font);
+  text-align: center;
+}
+.subtext {
+  text-align: center;
+  font-family: var(--manrope-font);
+}
+.points {
+  font-family: var(--manrope-bold-font);
+  font-size: 6rem;
+  text-align: center;
+  color: var(--accent-color);
+  line-height: 150%;
+}
+@media all and (max-width: 1080px) {
+  .mobileHide {
+    display: none;
+  }
+  .image {
+    width: 60vw;
+    height: 300px;
+  }
+}
+@media all and (max-width: 780px) {
+  .image {
+    border-radius: 10px;
+    width: 68vw;
+    height: 300px;
+  }
+}

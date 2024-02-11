@@ -1,7 +1,7 @@
 import style from "../../styles/Home.module.css";
 import Link from "next/link";
 import Image from "next/image";
-import Footer from "../../components/Footer";
+import Footer from "../../components/Layout/Footer";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { isAuthenticated } from "../../utils/auth";

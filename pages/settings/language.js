@@ -1,4 +1,4 @@
-import SettingSidebar from "../../components/SettingSidebar";
+import SettingSidebar from "../../components/Layout/SettingSidebar";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import style from "../../styles/Settings.module.css";
 import { useRouter } from "next/router";
@@ -35,7 +35,7 @@ export default function Language() {
   };
   const { t } = useTranslation("common");
   return (
-    <>
+    <div className={style.pad}>
       <div className={style.grid}>
         <SettingSidebar />
         <div>
@@ -63,6 +63,6 @@ export default function Language() {
           </select>
         </div>
       </div>
-    </>
+    </div>
   );
 }

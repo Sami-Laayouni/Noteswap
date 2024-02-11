@@ -15,6 +15,8 @@ class SchoolService {
     school_phone_number,
     school_supported_emails,
     school_community_service,
+    cs_notes,
+    cs_image_notes,
     schoolLogo,
     schoolCover,
     school_teacher_code

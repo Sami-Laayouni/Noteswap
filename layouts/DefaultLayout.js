@@ -8,18 +8,23 @@ import { ModalProvider } from "../context/ModalContext";
 import { SocketProvider } from "../context/SocketContext";
 // Import dynamic loading from NEXTJS
 import dynamic from "next/dynamic";
-const Certificate = dynamic(() => import("../components/CertificateModal"), {
+const Transcript = dynamic(
+  () => import("../components/Modals/TranscriptModal"),
+  {
+    ssr: false,
+  }
+);
+const LargenImage = dynamic(() => import("../components/Modals/LargenImage"), {
   ssr: false,
 });
-const LargenImage = dynamic(() => import("../components/LargenImage"), {
+const ShareNotes = dynamic(() => import("../components/Modals/ShareNotes"), {
   ssr: false,
 });
-const ShareNotes = dynamic(() => import("../components/ShareNotes"), {
-  ssr: false,
-});
-const BusinessModal = dynamic(() => import("../components/BusinessModal"));
+const BusinessModal = dynamic(() =>
+  import("../components/Modals/BusinessModal")
+);
 
-const Header = dynamic(() => import("../components/Header"));
+const Header = dynamic(() => import("../components/Layout/Header"));
 /**
  * Default layout
  * @date 6/17/2023 - 4:26:44 PM
@@ -33,7 +38,7 @@ const DefaultLayout = ({ children }) => {
       <ModalProvider>
         <SocketProvider>
           <Header />
-          <Certificate />
+          <Transcript />
           <LargenImage />
           <ShareNotes />
           <BusinessModal />

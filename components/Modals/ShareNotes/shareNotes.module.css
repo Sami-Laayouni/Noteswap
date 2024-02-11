@@ -1,0 +1,38 @@
+.input {
+  width: 40vw;
+  display: grid;
+  grid-template-columns: 90% 10%;
+  margin-top: 20px;
+  border: 1px solid black;
+  border-radius: 6px;
+  text-overflow: ellipsis;
+}
+.share {
+  list-style: none;
+  display: grid;
+  height: auto;
+  grid-template-columns: 25% 25% 25% 25%;
+  padding-left: 0px;
+  gap: 20px;
+}
+.share li {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+@media all and (max-width: 830px) {
+  .input {
+    width: 80vw;
+  }
+  .input p {
+    max-width: 80vw;
+    text-overflow: clip;
+    overflow: hidden;
+  }
+  .share {
+    grid-template-columns: 50% 50%;
+  }
+}

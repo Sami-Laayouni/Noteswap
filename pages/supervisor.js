@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import style from "../styles/Supervisor.module.css";
-import LoadingCircle from "../components/LoadingCircle";
+import LoadingCircle from "../components/Extra/LoadingCircle";
 import { requireAuthentication } from "../middleware/authenticate";
 import { useRouter } from "next/router";
 

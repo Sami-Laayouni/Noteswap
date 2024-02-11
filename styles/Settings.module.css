@@ -96,4 +96,7 @@
   .grid {
     grid-template-columns: 100%;
   }
+  .pad {
+    padding-left: 40px;
+  }
 }

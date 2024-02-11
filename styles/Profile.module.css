@@ -156,6 +156,7 @@
   .right section {
     width: 100%;
     display: flex;
+    height: auto;
     justify-content: center;
     align-items: center;
     flex-direction: column;

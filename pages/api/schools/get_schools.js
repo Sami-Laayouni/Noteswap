@@ -26,6 +26,8 @@ export default async function handler(req, res) {
             id: school._id,
             name: school.schoolFullName,
             location: school.schoolAddress,
+            backgroundImage: school.schoolCover,
+            urlOfEmails: school.urlOfEmail,
             users: userCount,
           };
         })

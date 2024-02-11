@@ -1,7 +1,7 @@
 import User from "../../../models/User";
 import TutorSession from "../../../models/TutorSession";
 import ReactDOMServer from "react-dom/server";
-import ReserveEmail from "../../../components/ReserveTutor";
+import ReserveEmail from "../../../components/Email/ReserveTutor";
 import nodemailer from "nodemailer";
 
 /**

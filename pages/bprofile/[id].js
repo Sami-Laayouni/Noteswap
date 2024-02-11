@@ -11,7 +11,7 @@ import { CgWebsite } from "react-icons/cg";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { EventCard } from "../../components/EventCard";
+import { EventCard } from "../../components/Cards/EventCard";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 
@@ -114,14 +114,16 @@ export default function BProfile() {
               />
             </Link>
           )}
-
-          <h2>{data?.desc ? data?.desc : "No bios available"}</h2>
         </div>
       </section>
 
       <section className={style.notes}>
         <div className={style.left}>
           <section>
+            <div style={{ paddingRight: "80px", paddingTop: "15px" }}>
+              {" "}
+              {data?.desc}
+            </div>
             <div style={{ display: "block", height: "fit-content" }}>
               <MdOutlineEmail size={18} style={{ verticalAlign: "middle" }} />
               <p

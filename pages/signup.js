@@ -8,12 +8,13 @@ import Head from "next/head";
 import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
 import Image from "next/image";
-import Footer from "../components/Footer";
+import Footer from "../components/Layout/Footer";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import dynamic from "next/dynamic";
-const Warning = dynamic(() => import("../components/Warning"));
+const Warning = dynamic(() => import("../components/Modals/Warning"));
 
+// Used for translation reasons
 export async function getStaticProps({ locale }) {
   return {
     props: {
@@ -21,6 +22,7 @@ export async function getStaticProps({ locale }) {
     },
   };
 }
+
 /**
  * Signup Page
  *
@@ -41,6 +43,7 @@ const Signup = () => {
   const [method, setMethod] = useState("email");
   const [selectedRole, setSelectedRole] = useState("volunteer");
   const [schoolId, setSchoolId] = useState("");
+  const [schools, setSchools] = useState(null);
 
   const { isLoggedIn } = useContext(AuthContext);
   const { errorSignup } = useContext(AuthContext);
@@ -71,6 +74,28 @@ const Signup = () => {
       }
     }
   }, [error]);
+
+  // Get schools
+  useEffect(() => {
+    async function getSingleSchool() {
+      const response = await fetch("/api/schools/get_schools", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({}),
+      });
+      console.log(response);
+      if (response.ok) {
+        const data = await response.json();
+        setSchools(data);
+      }
+    }
+    if (!schools) {
+      getSingleSchool();
+    }
+  }, []);
+
   /**
    * Handles the signup action when the user clicks the signup button.
    *
@@ -151,19 +176,19 @@ const Signup = () => {
           <section className={style.left}>
             <h1>{t("sign_up_to_noteswap")}</h1>
 
-            <p>Where opportunities are born!</p>
+            <p>{t("slogan")}</p>
 
             <p style={{ paddingRight: "20px" }}>
-              By signing up to Noteswap, you agree to our{" "}
+              {t("by_signing_up")}{" "}
               <Link href="/boring/terms-of-service">
                 <span style={{ textDecoration: "underline" }}>
-                  Terms of Service
+                  {t("terms_of_service")}
                 </span>
               </Link>{" "}
-              and <span></span>
+              {t("and")} <span></span>
               <Link href="/boring/privacy-policy">
                 <span style={{ textDecoration: "underline" }}>
-                  Privacy Policy
+                  {t("privacy_policy")}
                 </span>
               </Link>
             </p>
@@ -200,12 +225,14 @@ const Signup = () => {
                       id="volunteer"
                       onClick={() => setSelectedRole("volunteer")}
                     >
-                      Volunteer
+                      {t("volunteer")}
                     </li>
                   </ul>
                   {selectedRole != "volunteer" && (
                     <>
-                      <p className={style.labelCenter}>I attend this school</p>
+                      <p className={style.labelCenter}>
+                        {t("i_attend_this_school")}
+                      </p>
                       <div>
                         <select
                           style={{
@@ -225,14 +252,15 @@ const Signup = () => {
                           id="schools"
                         >
                           <option value="" disabled>
-                            Select the school you attend
+                            {t("select_school")}
                           </option>
-                          <option value="649d661a3a5a9f73e9e3fa62">
-                            Al Akhawayn School of Ifrane
-                          </option>
-                          <option value="6549fb05bd461a666fe1f67e">
-                            Allal Fassi Lycée Ifrane
-                          </option>
+                          {schools?.map(function (value) {
+                            return (
+                              <option key={value.id} value={value.id}>
+                                {value.name}
+                              </option>
+                            );
+                          })}
                         </select>
                       </div>
                     </>
