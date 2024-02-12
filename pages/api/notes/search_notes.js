@@ -1,6 +1,7 @@
 import Notes from "../../../models/Notes";
 import User from "../../../models/User";
 import { connectDB } from "../../../utils/db";
+import mongoose from "mongoose";
 
 /**
  * Search notes
@@ -15,16 +16,18 @@ import { connectDB } from "../../../utils/db";
 export default async function handler(req, res) {
   const query = [];
   let options = {};
+  const { ObjectId } = mongoose.Types;
 
   const body = req.body;
   const { title, desc, date, classes, type, id, school } = body;
   res.setHeader("Cache-Control", "public, max-age=120");
   await connectDB();
-  /*if (school == "649d661a3a5a9f73e9e3fa62") {
+  if (school == "649d661a3a5a9f73e9e3fa62") {
+    console.log("_________________________________");
     options = {
       $match: {
         $or: [
-          { school_id: { $regex: school } },
+          { school_id: new ObjectId("649d661a3a5a9f73e9e3fa62") },
           { school_id: { $exists: false } },
         ],
       },
@@ -33,11 +36,11 @@ export default async function handler(req, res) {
   } else {
     options = {
       $match: {
-        school_id: { $regex: school },
+        school_id: { $regex: ObjectId(school) },
       },
     };
     query.push(options);
-  }*/
+  }
 
   if (title) {
     options = {

@@ -44,7 +44,8 @@ export const requireAuthenticationTeacher = (WrappedComponent) => {
             if (
               user.role == "teacher" ||
               user.role == "association" ||
-              user.first_name == "Sami"
+              user.first_name == "Sami" ||
+              user.first_name == "Ali"
             ) {
               setIsLoading(false); // Update loading state once authentication status is determined
               return decodedToken;
