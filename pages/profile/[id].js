@@ -126,7 +126,7 @@ export default function Profile() {
 
           <h2>
             {data?.bio ? data?.bio : "No bios available"}
-            {data?.role == "Student" && (
+            {data?.role == "student" && (
               <>
                 · Total community service:{" "}
                 <span>
