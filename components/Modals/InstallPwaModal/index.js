@@ -3,7 +3,7 @@ the PWA version of the website on their mobile or desktop
 devices */
 
 import Modal from "../../Template/Modal";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import ModalContext from "../../../context/ModalContext";
 
 // Import the style
@@ -13,50 +13,25 @@ import style from "./installPwa.module.css";
 export default function InstallPWa() {
   // Used to store whether the Modal is closed or opned
   const { pwa } = useContext(ModalContext);
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [open, setOpen] = pwa;
 
   // Function used to install the PWA
   const handleInstallClick = async () => {
-    try {
-      if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.ready.then(async (registration) => {
-          // Ensure the service worker is activated
-          if (registration.active) {
-            const promptEvent = new Promise((resolve) => {
-              // Check for an existing beforeinstallprompt event
-              const existingEvent =
-                registration.installing || registration.waiting;
-              if (existingEvent) {
-                // If an event exists, resolve immediately
-                resolve(existingEvent);
-              } else {
-                // Otherwise, listen for the event
-                window.addEventListener("beforeinstallprompt", (event) => {
-                  resolve(event);
-                });
-              }
-            });
-
-            const event = await promptEvent;
-
-            // Display the installation prompt
-            event.prompt();
-
-            // Wait for the user to respond to the prompt
-            const userChoice = await event.userChoice;
-
-            if (userChoice.outcome === "accepted") {
-              console.log("User accepted the PWA installation");
-            } else {
-              console.log("User declined the PWA installation");
-            }
-          }
-        });
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === "accepted") {
+        setDeferredPrompt(null);
       }
-    } catch (error) {
-      console.error("Error handling PWA installation:", error);
     }
   };
+
+  useEffect(() => {
+    window.addEventListener("beforeinstallprompt", (e) => {
+      setDeferredPrompt(e);
+    });
+  }, []);
 
   return (
     <Modal

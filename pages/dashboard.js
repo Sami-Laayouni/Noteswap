@@ -11,7 +11,9 @@ import dynamic from "next/dynamic";
 const BusinessModal = dynamic(() =>
   import("../components/Modals/BusinessModal")
 );
-const PWAModal = dynamic(() => import("../components/Modals/InstallPwaModal"));
+const InstallPWa = dynamic(() =>
+  import("../components/Modals/InstallPwaModal")
+);
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 
@@ -113,7 +115,7 @@ const Dashboard = () => {
         <title>Dashboard | Noteswap</title> {/* Title page */}
       </Head>
       <BusinessModal />
-      {installPWA && <PWAModal />}
+      {installPWA && <InstallPWa />}
       <main className={style.background}>
         <h1 className={style.title}>
           {new Date().getHours() >= 0 && new Date().getHours() < 12
