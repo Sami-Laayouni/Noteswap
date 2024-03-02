@@ -1,101 +1,97 @@
-/* Redirect URL for the create google user method */
-
-// Import from React
 import { useEffect, useState, useContext } from "react";
 import AuthService from "../services/AuthService";
 import AuthContext from "../context/AuthContext";
-// Import from NEXTJS
 import { useRouter } from "next/router";
 
-/**
- * Create Google User Page
- * @date 6/23/2023 - 9:32:54 PM
- *
- * @return {JSX.Element} The rendered page
- */
 function CreateGoogleUserPage() {
-  const router = useRouter(); // Intialize NEXTJS Router
-  const { isLoggedIn } = useContext(AuthContext);
-  const [loggedIn, setLoggedIn] = isLoggedIn; // Stores whether or not the user is logged in
+  const router = useRouter();
+  const { isLoggedIn, errorSignup } = useContext(AuthContext);
+  const [loggedIn, setLoggedIn] = isLoggedIn;
   const AuthServices = new AuthService(setLoggedIn);
-  const { errorSignup } = useContext(AuthContext); // Used to store error messages
-  const [ran, setRan] = useState(false); // Not important just ignore
+  const [ran, setRan] = useState(false);
   const [error, setError] = errorSignup;
 
   useEffect(() => {
     if (!ran) {
-      /**
-       * Create the google user with the information in the Url
-       * @date 6/23/2023 - 9:32:54 PM
-       *
-       * @param {*} data
-       */
-      async function createUser(data) {
+      const createUser = async (data) => {
         const role = localStorage.getItem("role");
-
         const school = localStorage.getItem("schoolId");
-        try {
-          const response = await AuthServices.create_user_with_google(
-            data.first,
-            data.last,
-            data.email,
-            data.profile,
-            data.sub,
-            role,
-            school
-          );
-          if (response.token) {
-            // Store the token in local storage
-            localStorage.setItem("userInfo", JSON.stringify(response.user));
-            localStorage.setItem("token", response.token);
-            // Redirect to the dashboard page after successful login
-            if (school == "null" || school == null) {
-              router.push("/shortcuts");
-            } else {
-              router.push("/dashboard");
-            }
-            setRan(true);
-          } else {
-            // An error has occured
-            localStorage.setItem("errorSignup", response.error);
+        let emailValidationPassed = true; // Assume validation passes initially
 
-            setError(response.error);
-            // Redirect to the signup page
+        // Email domain validation if schoolEmail is set
+        const schoolofEmail = localStorage.getItem("schoolEmail");
+        if (schoolofEmail) {
+          const urlOfEmail = JSON.parse(schoolofEmail);
+          if (urlOfEmail.length > 0) {
+            emailValidationPassed = urlOfEmail.some((domain) =>
+              data.email.endsWith(domain)
+            );
+
+            if (!emailValidationPassed) {
+              localStorage.setItem(
+                "errorSignup",
+                `To sign up to this school, your email must contain one of the following: ${urlOfEmail.join(
+                  ", "
+                )}`
+              );
+              router.push("/signup");
+            }
+          }
+        }
+
+        // Proceed with user creation if email validation passed or was not necessary
+        if (emailValidationPassed) {
+          try {
+            const response = await AuthServices.create_user_with_google(
+              data.first,
+              data.last,
+              data.email,
+              data.profile,
+              data.sub,
+              role,
+              school
+            );
+            if (response.token) {
+              localStorage.setItem("userInfo", JSON.stringify(response.user));
+              localStorage.setItem("token", response.token);
+              router.push(
+                role === "school"
+                  ? "/for_schools"
+                  : role === "association"
+                  ? "/shortcuts"
+                  : "/dashboard"
+              );
+              setRan(true);
+            } else {
+              localStorage.setItem("errorSignup", response.error);
+              setError(response.error);
+              router.push("/signup");
+            }
+          } catch (error) {
+            localStorage.setItem("errorSignup", error.message);
+            setError(error.message);
             router.push("/signup");
           }
-        } catch (error) {
-          // An error has occured
-          localStorage.setItem("errorSignup", error.message);
-
-          setError(error.message);
-          // Redirect to the signup page
+        } else {
+          // If email validation failed, redirect to signup page
           router.push("/signup");
         }
-      }
+      };
 
+      // Retrieve and parse profile data from the URL
       // Retrieve the query string from the URL
       const queryParams = new URLSearchParams(window.location.search);
 
       // Extract the profile data from the query string
       const profileDataString = queryParams.get("");
       const decodedProfileDataString = decodeURIComponent(profileDataString);
-      const parsedProfileData = JSON.parse(decodedProfileDataString);
-
-      try {
-        if (!ran) {
-          createUser(parsedProfileData);
-          setRan(true);
-        }
-      } catch (error) {
-        // An error has occured
-        setError(error.message);
-        // Redirect to the signup page
-        router.push("/signup");
+      const parsedProfileData = JSON.parse(decodedProfileDataString); // Assuming the correct query parameter is named "profileData"
+      if (parsedProfileData) {
+        createUser(parsedProfileData);
       }
     }
-  }, []);
+  }, [ran, router, setLoggedIn, setError]);
 
-  // Return the JSX
   return (
     <div
       style={{

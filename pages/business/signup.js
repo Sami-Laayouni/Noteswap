@@ -95,7 +95,11 @@ const Signup = () => {
         if (response.token) {
           localStorage.setItem("userInfo", JSON.stringify(response.user));
           localStorage.setItem("token", response.token); // Store the token in local storage
-          router.push("/shortcuts"); // Redirect to the dashboard page
+          if (selectedRole != "school") {
+            router.push("/shortcuts"); // Redirect to the dashboard page
+          } else {
+            router.push("/for_schools");
+          }
         } else {
           // An error has occured
           setError(response.error);
@@ -187,12 +191,7 @@ const Signup = () => {
                     >
                       Association
                     </li>
-                    <li
-                      id="school"
-                      onClick={() =>
-                        setError("School creation currently not supported")
-                      }
-                    >
+                    <li id="school" onClick={() => setSelectedRole("school")}>
                       School
                     </li>
                   </ul>

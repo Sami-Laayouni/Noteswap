@@ -162,6 +162,10 @@ export default function Note() {
     document.getElementById("uploadNotes").innerText = "Image of notes";
   };
 
+  function addSpaceBetweenCapitals(str) {
+    return str.replace(/([a-z])([A-Z])/g, "$1 $2");
+  }
+
   return (
     <div>
       <Head>
@@ -205,7 +209,13 @@ export default function Note() {
               <option>{t("select_a_class")}</option>
               {Object.keys(courses).map((subject) => (
                 <React.Fragment key={subject}>
-                  <option>{subject}</option>
+                  <option>
+                    {t(
+                      addSpaceBetweenCapitals(subject)
+                        .toLowerCase()
+                        .replace(" ", "_")
+                    )}
+                  </option>
                   {courses[subject].map((value) => (
                     <option key={value}>{value}</option>
                   ))}

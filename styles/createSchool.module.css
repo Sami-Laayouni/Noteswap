@@ -47,6 +47,8 @@
   font-family: var(--primary-font);
   display: block;
   margin-top: 7px;
+  font-size: 1.2rem;
+  line-height: 20px;
   margin-bottom: 7px;
 }
 .input {
@@ -54,13 +56,13 @@
   box-shadow: none;
   font-weight: 400;
   font-family: var(--primary-font);
-  line-height: 20px;
+  line-height: 30px;
   border-radius: var(--third-party-login-card-radius);
-  font-size: 16px;
+  font-size: 18px;
   border: 1px solid var(--default-black-color);
   padding-left: 15px;
-  height: 32px;
-  width: 30%;
+  height: 50px;
+  width: 100%;
   transition: border-color 0.3s ease-in-out;
 }
 .input:focus {

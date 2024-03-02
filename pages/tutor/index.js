@@ -132,6 +132,10 @@ export default function Tutor() {
     setEndTime(event.target.value);
   };
 
+  function addSpaceBetweenCapitals(str) {
+    return str.replace(/([a-z])([A-Z])/g, "$1 $2");
+  }
+
   return (
     <div>
       <Head>
@@ -184,7 +188,11 @@ export default function Tutor() {
                           "none";
                       }}
                     >
-                      {subject}
+                      {t(
+                        addSpaceBetweenCapitals(subject)
+                          .toLowerCase()
+                          .replace(" ", "_")
+                      )}
                     </li>
                     {courses[subject].map((value) => (
                       <li

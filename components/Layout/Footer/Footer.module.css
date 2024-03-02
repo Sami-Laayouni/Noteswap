@@ -51,13 +51,14 @@
 }
 /* Media Queries */
 
-@media all and (max-width: 767px) {
+@media all and (max-width: 800px) {
   .footer_top {
     padding-left: 0px;
     padding-right: 0px;
   }
   .footer_bottom {
     width: 100%;
+
     display: block;
     text-align: center;
   }

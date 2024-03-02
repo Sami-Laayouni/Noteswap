@@ -19,7 +19,8 @@ class SchoolService {
     cs_image_notes,
     schoolLogo,
     schoolCover,
-    school_teacher_code
+    school_teacher_code,
+    courses
   ) {
     try {
       const response = await fetch(`${this.API_URL}/createSchool`, {
@@ -34,11 +35,14 @@ class SchoolService {
           school_contact_person: school_contact_person, // School contact person name
           school_contact_email: school_contact_email, // School contact email
           school_phone_number: school_phone_number, // School phone number
-          school_supported_emails: school_supported_emails,
+          urlOfEmail: school_supported_emails,
           school_community_service: school_community_service,
           schoolLogo: schoolLogo,
           schoolCover: schoolCover,
+          dailyLimit: cs_notes,
+          dailyLimitImage: cs_image_notes,
           school_teacher_code: school_teacher_code, // School teacher code
+          courses: courses,
         }),
       });
       const data = await response.json();

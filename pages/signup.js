@@ -85,7 +85,6 @@ const Signup = () => {
         },
         body: JSON.stringify({}),
       });
-      console.log(response);
       if (response.ok) {
         const data = await response.json();
         setSchools(data);
@@ -133,11 +132,21 @@ const Signup = () => {
         const data = await AuthServices.get_google_continue_url("signup");
         localStorage.setItem("role", selectedRole);
         localStorage.setItem("schoolId", schoolId);
+        localStorage.setItem(
+          "schoolEmail",
+          JSON.stringify(getSchoolReq(schoolId))
+        );
+
         // Redirect user to google url
         window.location.href = data.url;
       } else if (type === "microsoft") {
         localStorage.setItem("role", selectedRole);
         localStorage.setItem("schoolId", schoolId);
+        localStorage.setItem(
+          "schoolEmail",
+          JSON.stringify(getSchoolReq(schoolId))
+        );
+
         window.location.href = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize
         ?client_id=${process.env.NEXT_PUBLIC_MICROSOFT_APP_ID}
         &response_type=code
@@ -155,6 +164,21 @@ const Signup = () => {
     }
   };
 
+  function getSchoolBackgroundImage(schoolId) {
+    const school = schools.find((school) => school.id === schoolId);
+    return school ? school.backgroundImage : null;
+  }
+
+  function getSchoolLogoImage(schoolId) {
+    const school = schools.find((school) => school.id === schoolId);
+    return school ? school.logoImage : null;
+  }
+
+  function getSchoolReq(schoolId) {
+    const school = schools.find((school) => school.id === schoolId);
+    return school ? school.urlOfEmails : null;
+  }
+
   // Return the JSX
   return (
     <>
@@ -165,13 +189,22 @@ const Signup = () => {
           backgroundSize: !schoolId ? "cover" : "cover",
           background: !schoolId
             ? "var(--accent-color)"
-            : `url("/assets/schools/${schoolId}.jpg")`,
+            : `url("${getSchoolBackgroundImage(schoolId)}")`,
         }}
       >
         <Head>
           <title>Signup | Noteswap</title> {/* Title of the page */}
         </Head>
         <Warning />
+        {schoolId && (
+          <Image
+            src={getSchoolLogoImage(schoolId)}
+            alt="School Logo"
+            width={150}
+            height={150}
+            style={{ marginTop: "30px", marginLeft: "30px" }}
+          ></Image>
+        )}
         <div className={style.container}>
           <section className={style.left}>
             <h1>{t("sign_up_to_noteswap")}</h1>
@@ -223,7 +256,9 @@ const Signup = () => {
                     </li>
                     <li
                       id="volunteer"
-                      onClick={() => setSelectedRole("volunteer")}
+                      onClick={() =>
+                        setError("Currently not supported for early access")
+                      }
                     >
                       {t("volunteer")}
                     </li>
@@ -300,17 +335,22 @@ const Signup = () => {
                           setEmail(e.target.value);
                           setError("");
                           const schoolId = localStorage.getItem("schoolId");
-                          if (schoolId == "649d661a3a5a9f73e9e3fa62") {
-                            if (
-                              !e.target.value.includes("@ifranschool.org") &&
-                              !e.target.value.includes("@asi.aui.ma") &&
-                              !e.target.value.includes("@aui.ma")
-                            ) {
+                          const urlOfEmail = getSchoolReq(schoolId); // Assuming this returns an array of strings like ['@ifranschool.org', '@asi.aui.ma', '@aui.ma']
+                          console.log(urlOfEmail);
+                          if (urlOfEmail.length > 0) {
+                            // Check if the email ends with any of the domains in urlOfEmail array
+                            const emailIsValid = urlOfEmail.some((domain) =>
+                              e.target.value.endsWith(domain)
+                            );
+
+                            if (!emailIsValid) {
                               document.getElementById(
                                 "nextButton"
                               ).disabled = true;
                               setError(
-                                "When signing up to ASI your email must end with @ifranschool.org, @asi.aui.ma or @aui.ma"
+                                `To sign up to this school, your email must contain one of the following: ${urlOfEmail.join(
+                                  ", "
+                                )}`
                               );
                             } else {
                               document.getElementById(
@@ -450,7 +490,7 @@ const Signup = () => {
                       color: "var(--accent-color)",
                       textDecoration: "underline",
                     }}
-                    href="/business"
+                    href="/business/signup"
                   >
                     I am joining as a school or association
                   </Link>

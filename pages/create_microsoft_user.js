@@ -1,104 +1,96 @@
-/* Redirect URL for the create microsoft user method */
-
-import { useEffect } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useRouter } from "next/router";
 import AuthService from "../services/AuthService";
-import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
 
-/**
- * Create Microsoft User Page
- * @date 6/23/2023 - 9:32:54 PM
- *
- * @return {JSX.Element} The rendered page
- */
 function CreateMicrosoftUserPage() {
   const router = useRouter();
-  const { isLoggedIn } = useContext(AuthContext);
-  const [loggedIn, setLoggedIn] = isLoggedIn;
-  const AuthServices = new AuthService(setLoggedIn);
-  const { errorSignup } = useContext(AuthContext);
-  let ran = false;
-  const [error, setError] = errorSignup;
+  const { isLoggedIn, errorSignup } = useContext(AuthContext);
+  const [loggedIn, setLoggedIn] = isLoggedIn; // This destructuring assumes isLoggedIn is an array; adjust if it's not the case
+  const [ran, setRan] = useState(false);
+  const [error, setError] = errorSignup; // Assuming errorSignup is an array; adjust if needed
 
   useEffect(() => {
     if (!ran) {
-      /**
-       * Create the microsoft user with the information in the Url
-       * @date 6/23/2023 - 9:32:54 PM
-       *
-       * @param {*} data
-       */
-      async function createUser(data) {
+      const createUser = async (data) => {
         const role = localStorage.getItem("role");
         const school = localStorage.getItem("schoolId");
+        let proceedWithCreation = true; // Assume we can proceed with user creation
 
-        try {
-          const response = await AuthServices.create_user_with_microsoft(
-            data.firstName,
-            data.lastName,
-            data.email,
-            data.profilePicture,
-            data.uid,
-            role,
-            school
-          );
-          console.log(response);
-          if (response.token) {
-            // Store the token in local storage
-            setLoggedIn(true);
-            localStorage.setItem("userInfo", JSON.stringify(response.user));
-            localStorage.setItem("token", response.token);
-            // Redirect to the dashboard page after successful login
-            if (school == "null" || school == null) {
-              router.push("/shortcuts");
-            } else {
-              router.push("/dashboard");
-            }
-            ran = true;
-          } else {
-            // An error has occured
-            localStorage.setItem("errorSignup", response.error);
-            setTimeout(() => {
+        // Email domain validation if schoolEmail is set
+        const schoolofEmail = localStorage.getItem("schoolEmail");
+        if (schoolofEmail) {
+          const urlOfEmail = JSON.parse(schoolofEmail);
+          if (urlOfEmail.length > 0) {
+            const emailIsValid = urlOfEmail.some((domain) =>
+              data.email.endsWith(domain)
+            );
+
+            if (!emailIsValid) {
+              localStorage.setItem(
+                "errorSignup",
+                `To sign up to this school, your email must contain one of the following: ${urlOfEmail.join(
+                  ", "
+                )}`
+              );
+              proceedWithCreation = false; // Do not prevent user creation; just flag that validation failed
+
               router.push("/signup");
-            }, 1000);
-            // Redirect to the signup page
+              return null;
+            }
           }
-        } catch (error) {
-          // An error has occured
-          localStorage.setItem("errorSignup", error.message);
-
-          // Redirect to the signup page
-          setTimeout(() => {
-            router.push("/signup");
-          }, 1000);
         }
-      }
 
-      // Retrieve the query string from the URL
-      const queryParams = new URLSearchParams(window.location.search);
+        // Only proceed if above check passes or is not applicable
+        if (proceedWithCreation) {
+          try {
+            const response = await new AuthService().create_user_with_microsoft(
+              data.firstName,
+              data.lastName,
+              data.email,
+              data.profilePicture,
+              data.uid,
+              role,
+              school
+            );
+            if (response.token) {
+              setLoggedIn(true);
+              localStorage.setItem("userInfo", JSON.stringify(response.user));
+              localStorage.setItem("token", response.token);
+              router.push(
+                role === "school"
+                  ? "/for_schools"
+                  : role === "association"
+                  ? "/shortcuts"
+                  : "/dashboard"
+              );
+            } else {
+              localStorage.setItem("errorSignup", response.error);
+              setError(response.error);
+              router.push("/signup");
+            }
+          } catch (error) {
+            localStorage.setItem("errorSignup", error.message);
+            setError(error.message);
+            router.push("/signup");
+          }
+        } else {
+          // If email validation explicitly failed, direct to signup
+          router.push("/signup");
+        }
+      };
 
-      // Extract the profile data from the query string
+      // Retrieve and parse profile data from the URL
       const profileDataString = queryParams.get("");
       const decodedProfileDataString = decodeURIComponent(profileDataString);
-      const parsedProfileData = JSON.parse(decodedProfileDataString);
-
-      try {
-        if (!ran && localStorage.getItem("role")) {
-          ran = true;
-          createUser(parsedProfileData);
-          setRan(true);
-        }
-      } catch (error) {
-        // An error has occured
-        setError(error.message);
-        // Redirect to the signup page
-        router.push("/signup");
+      const parsedProfileData = JSON.parse(decodedProfileDataString); // Adjust parameter name as needed
+      if (parsedProfileData) {
+        createUser(parsedProfileData);
+        setRan(true);
       }
     }
-  }, []);
+  }, [ran, router, setLoggedIn, setError]);
 
-  // Return the JSX
   return (
     <div
       style={{

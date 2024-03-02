@@ -9,6 +9,7 @@ const schoolSchema = new mongoose.Schema({
   },
   schoolAcronym: {
     type: String,
+    required: false,
   },
   schoolAddress: {
     type: String,
@@ -26,10 +27,6 @@ const schoolSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  schoolSupportedEmails: {
-    type: String,
-    required: true,
-  },
   schoolCommunityService: {
     type: Number,
     required: true,
@@ -44,7 +41,7 @@ const schoolSchema = new mongoose.Schema({
   },
   urlOfEmail: {
     type: Array,
-    required: true,
+    required: false,
   },
   schoolTeacherCode: {
     type: String,

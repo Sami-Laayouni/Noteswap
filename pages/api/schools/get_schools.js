@@ -18,7 +18,10 @@ export default async function handler(req, res) {
     try {
       await connectDB();
 
-      const schools = await School.find({}, "schoolFullName schoolAddress _id"); // Only retrieve the 'name' field
+      const schools = await School.find(
+        {},
+        "schoolFullName schoolLogo urlOfEmail schoolCover schoolAddress _id"
+      ); // Only retrieve the 'name' field
       const schoolDetails = await Promise.all(
         schools.map(async (school) => {
           const userCount = await User.countDocuments({ schoolId: school._id });
@@ -27,6 +30,7 @@ export default async function handler(req, res) {
             name: school.schoolFullName,
             location: school.schoolAddress,
             backgroundImage: school.schoolCover,
+            logoImage: school.schoolLogo,
             urlOfEmails: school.urlOfEmail,
             users: userCount,
           };
@@ -34,7 +38,6 @@ export default async function handler(req, res) {
       );
       res.status(200).json(schoolDetails);
     } catch (error) {
-      console.log(error);
       res.status(500).json({ message: "Internal server error" });
     }
   } else {

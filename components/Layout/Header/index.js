@@ -471,7 +471,8 @@ export default function Header() {
                 </li>
               </Link>
 
-              {userData?.role == "teacher" && (
+              {(userData?.role === "teacher" ||
+                userData?.role === "school") && (
                 <Link href="/rewardcs">
                   <li
                     onClick={() => {
@@ -489,52 +490,44 @@ export default function Header() {
                   </li>
                 </Link>
               )}
-              <Link href="/settings/account">
-                <li
-                  onClick={() => {
-                    document.getElementById("hamburger_menu").style.display =
-                      "none";
-                    document.getElementById("hamburger_overlay").style.display =
-                      "none";
-                  }}
-                >
-                  {t("setting") == "setting" ? "Settings" : t("setting")}
-                  <div className={style.borderLine} />
-                </li>
-              </Link>
 
               {userData?.role == "student" && (
-                <li
-                  onClick={() => {
-                    setCertificate(true);
-                    document.getElementById("hamburger_menu").style.display =
-                      "none";
-                    document.getElementById("hamburger_overlay").style.display =
-                      "none";
-                  }}
-                >
-                  {t("transcript")}
-                  <div className={style.borderLine} />
-                </li>
+                <>
+                  <li
+                    onClick={() => {
+                      setCertificate(true);
+                      document.getElementById("hamburger_menu").style.display =
+                        "none";
+                      document.getElementById(
+                        "hamburger_overlay"
+                      ).style.display = "none";
+                    }}
+                  >
+                    {t("transcript")}
+                    <div className={style.borderLine} />
+                  </li>
+                  <Link href="/productivity">
+                    <li
+                      onClick={() => {
+                        document.getElementById(
+                          "hamburger_menu"
+                        ).style.display = "none";
+                        document.getElementById(
+                          "hamburger_overlay"
+                        ).style.display = "none";
+                      }}
+                    >
+                      {t("my_productivity") == "my_productivity"
+                        ? "My Productivity"
+                        : t("my_productivity")}{" "}
+                      <div className={style.borderLine} />
+                    </li>
+                  </Link>
+                </>
               )}
 
-              <Link href="/productivity">
-                <li
-                  onClick={() => {
-                    document.getElementById("hamburger_menu").style.display =
-                      "none";
-                    document.getElementById("hamburger_overlay").style.display =
-                      "none";
-                  }}
-                >
-                  {t("my_productivity") == "my_productivity"
-                    ? "My Productivity"
-                    : t("my_productivity")}{" "}
-                  <div className={style.borderLine} />
-                </li>
-              </Link>
-
-              {userData?.role == "teacher" && (
+              {(userData?.role === "teacher" ||
+                userData?.role === "school") && (
                 <Link href="/detect_ai">
                   <li
                     onClick={() => {
@@ -552,6 +545,20 @@ export default function Header() {
                   </li>
                 </Link>
               )}
+
+              <Link href="/settings/account">
+                <li
+                  onClick={() => {
+                    document.getElementById("hamburger_menu").style.display =
+                      "none";
+                    document.getElementById("hamburger_overlay").style.display =
+                      "none";
+                  }}
+                >
+                  {t("setting") == "setting" ? "Settings" : t("setting")}
+                  <div className={style.borderLine} />
+                </li>
+              </Link>
 
               <li
                 onClick={() => {
@@ -634,7 +641,7 @@ export default function Header() {
               </Link>
             </li>
           )}
-          {userData?.role == "teacher" && (
+          {(userData?.role === "teacher" || userData?.role === "school") && (
             <li>
               <Link href="/rewardcs">
                 <RiCopperCoinLine
@@ -674,7 +681,7 @@ export default function Header() {
               </Link>
             </li>
           )}
-          {userData?.role == "teacher" && (
+          {(userData?.role === "teacher" || userData?.role === "school") && (
             <li>
               <Link href="/verify">
                 <GrScan size={21} style={{ verticalAlign: "middle" }} />
@@ -697,7 +704,7 @@ export default function Header() {
             </li>
           )}
 
-          {userData?.role == "teacher" && (
+          {(userData?.role === "teacher" || userData?.role === "school") && (
             <li>
               <Link href="/detect_ai">
                 <LuGlasses size={21} style={{ verticalAlign: "middle" }} />
@@ -709,6 +716,15 @@ export default function Header() {
               </Link>
             </li>
           )}
+
+          {userData?.role == "school" && (
+            <li>
+              <Link href="for_schools">
+                <MdEdit size={21} style={{ verticalAlign: "middle" }} />
+                <span>Create new school</span>
+              </Link>
+            </li>
+          )}
           <li>
             <Link href="/settings/account">
               <FiSettings size={21} style={{ verticalAlign: "middle" }} />
@@ -717,7 +733,8 @@ export default function Header() {
               </span>
             </Link>
           </li>
-          {userData?.role != "teacher" && userData?.role != "association" && (
+
+          {userData?.role == "student" && (
             <li onClick={() => setCertificate(true)}>
               <FiAward size={21} style={{ verticalAlign: "middle" }} />
               <span>{t("transcript")} </span>
