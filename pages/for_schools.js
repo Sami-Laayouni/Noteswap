@@ -660,14 +660,6 @@ const ForSchools = () => {
               }}
             >
               <h1 className={style.title}>{t("success")}</h1>
-
-              <br></br>
-              <b>
-                <h1 style={{ display: "inline" }}>Teacher Code: </h1>
-                <h1 style={{ display: "inline" }}>
-                  {schoolInfo.schoolTeacherCode}
-                </h1>
-              </b>
               <br></br>
             </div>
           )}

@@ -212,7 +212,7 @@ const Event = () => {
           </div>
         )}
       </section>
-      {data?.role == "teacher" && (
+      {data?.role != "student" && (
         <section
           onClick={() => {
             setOpen(true);
