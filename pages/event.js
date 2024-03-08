@@ -97,9 +97,6 @@ const Event = () => {
 
   useEffect(() => {
     const initializeOneSignal = async () => {
-      const userId = JSON.parse(localStorage.getItem("userInfo"))._id;
-      const schoolId = JSON.parse(localStorage.getItem("userInfo")).schoolId;
-
       await OneSignal.init({
         appId: "3b28d10b-3b88-426f-8025-507667803b2a",
         safari_web_id:
@@ -114,12 +111,12 @@ const Event = () => {
                 type: "push", // current types are "push" & "category"
                 autoPrompt: true,
                 text: {
-                  /* limited to 90 characters */
+                  // limited to 90 characters
                   actionMessage:
                     "We would like to show you notifications for the latest community service opportunities and updates.",
-                  /* acceptButton limited to 15 characters */
+                  // acceptButton limited to 15 characters
                   acceptButton: "Allow",
-                  /* cancelButton limited to 15 characters */
+                  // cancelButton limited to 15 characters
                   cancelButton: "Cancel",
                 },
                 delay: {
@@ -132,22 +129,53 @@ const Event = () => {
         },
         allowLocalhostAsSecureOrigin: true,
       });
+
+      // Attempt to tag the user with their schoolId after successful subscription
+      try {
+        // Assuming userInfo is stored in localStorage and contains _id and schoolId
+        const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+        if (userInfo && userInfo.schoolId) {
+          OneSignal.sendTag("schoolId", userInfo.schoolId.toString())
+            .then(() => {
+              console.log(`User tagged with schoolId: ${userInfo.schoolId}`);
+            })
+            .catch((error) => {
+              console.error("Error tagging user with schoolId:", error);
+            });
+        }
+      } catch (error) {
+        console.error("Error retrieving userInfo from localStorage:", error);
+      }
     };
 
+    initializeOneSignal();
+
+    // We'll use this function to prompt the user for notification permissions
     const askForNotificationPermission = async () => {
       try {
-        await OneSignal.Slidedown.promptPush();
+        await OneSignal.showSlidedownPrompt();
       } catch (error) {
         console.error("Error requesting notification permission:", error);
       }
     };
-    initializeOneSignal();
-    document
-      .getElementById("container")
-      .addEventListener("click", askForNotificationPermission);
 
+    // Add event listener to the 'container' element for user interaction
+    const containerElement = document.getElementById("container");
+    if (containerElement) {
+      containerElement.addEventListener("click", askForNotificationPermission);
+    }
+
+    // Cleanup function to remove event listener
     return () => {
-      window.OneSignal = undefined;
+      if (containerElement) {
+        containerElement.removeEventListener(
+          "click",
+          askForNotificationPermission
+        );
+      }
+      // It might not be necessary or recommended to unset OneSignal here
+      // as it could interfere with OneSignal's functionality in your app
+      // window.OneSignal = undefined;
     };
   }, []);
 

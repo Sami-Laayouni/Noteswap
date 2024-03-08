@@ -83,11 +83,13 @@ function CreateGoogleUserPage() {
       const queryParams = new URLSearchParams(window.location.search);
 
       // Extract the profile data from the query string
-      const profileDataString = queryParams.get("");
-      const decodedProfileDataString = decodeURIComponent(profileDataString);
-      const parsedProfileData = JSON.parse(decodedProfileDataString); // Assuming the correct query parameter is named "profileData"
-      if (parsedProfileData) {
+      const { query } = router;
+      if (query[""]) {
+        // Decode and parse the profile data directly from the URL query parameter
+
+        const parsedProfileData = JSON.parse(query[""]);
         createUser(parsedProfileData);
+        setRan(true);
       }
     }
   }, [ran, router, setLoggedIn, setError]);

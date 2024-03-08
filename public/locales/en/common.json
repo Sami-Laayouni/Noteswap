@@ -324,5 +324,8 @@
   "electives": "Electives",
   "other": "Other",
 
-  "not_connected_calendar": "This School Does Not Have A Calendar Connected Yet"
+  "not_connected_calendar": "This School Does Not Have A Calendar Connected Yet",
+
+  "sign_up_as_school": "I am joining as a school or association",
+  "teacher_code": " Teacher Code (Make Sure To Save this number and share it to teachers to allow them to signup):"
 }

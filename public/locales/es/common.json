@@ -308,5 +308,8 @@
   "other_languages": "Otros Idiomas",
   "performing_arts": "Artes Escénicas",
   "electives": "Electivas",
-  "other": "Otro"
+  "other": "Otro",
+  "not_connected_calendar": "Esta escuela aún no tiene un calendario conectado",
+  "sign_up_as_school": "Me estoy uniendo como una escuela o asociación",
+  "teacher_code": "Código de profesor (Asegúrese de guardar este número y compartirlo con los profesores para permitirles registrarse):"
 }

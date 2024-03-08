@@ -309,5 +309,8 @@
   "other_languages": "기타 언어",
   "performing_arts": "공연 예술",
   "electives": "선택 과목",
-  "other": "기타"
+  "other": "기타",
+  "not_connected_calendar": "이 학교는 아직 달력이 연결되지 않았습니다",
+  "sign_up_as_school": "학교 또는 협회로 가입하고 있습니다",
+  "teacher_code": "교사 코드 (이 번호를 저장하고 교사가 가입할 수 있도록 공유하는 것이 중요합니다):"
 }

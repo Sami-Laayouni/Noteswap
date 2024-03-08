@@ -356,7 +356,6 @@ const ForSchools = () => {
                     placeholder="NSS"
                     id="School_acronym"
                     className={style.input}
-                    required
                   />
                   <p className={style.labelForInput}>{t("city_school")} * </p>
                   <input
@@ -661,6 +660,12 @@ const ForSchools = () => {
             >
               <h1 className={style.title}>{t("success")}</h1>
               <br></br>
+              <b>
+                <h1 style={{ display: "inline" }}>{t("teacher_code")} </h1>
+                <h1 style={{ display: "inline" }}>
+                  {schoolInfo.schoolTeacherCode}
+                </h1>
+              </b>
             </div>
           )}
         </section>

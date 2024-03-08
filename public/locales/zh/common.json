@@ -248,5 +248,8 @@
   "other_languages": "其他语言",
   "performing_arts": "表演艺术",
   "electives": "选修课",
-  "other": "其他"
+  "other": "其他",
+  "not_connected_calendar": "这所学校还没有连接日历",
+  "sign_up_as_school": "我以学校或协会的身份加入",
+  "teacher_code": "教师代码（确保保存此号码并与教师分享以允许他们注册）："
 }

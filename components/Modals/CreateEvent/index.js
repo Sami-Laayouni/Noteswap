@@ -153,61 +153,7 @@ export default function CreateEvent({ business }) {
 
               if (response.ok) {
                 const Tit = title;
-                const options = {
-                  method: "POST",
-                  headers: {
-                    Authorization: `Basic ${process.env.NEXT_PUBLIC_ONESIGNAL_REST}`,
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({
-                    included_segments: ["All"],
-                    app_id: "3b28d10b-3b88-426f-8025-507667803b2a",
-                    headings: {
-                      en: "New community service opportunity available!",
-                      es: "¡Nueva oportunidad de servicio comunitario disponible!",
-                      fr: "Nouvelle opportunité de service communautaire disponible !",
-                      de: "Neue Möglichkeiten für Gemeindearbeit verfügbar!",
-                      it: "Nuova opportunità di servizio alla comunità disponibile!",
-                      pt: "Nova oportunidade de serviço comunitário disponível!",
-                      nl: "Nieuwe gemeenschapsdienstmogelijkheid beschikbaar!",
-                      ru: "Доступна новая возможность обслуживания сообщества!",
-                      zh: "新的社区服务机会现已开放!",
-                      ja: "新しいコミュニティサービスの機会が利用可能です!",
-                      ar: "فرصة خدمة جديدة متاحة في المجتمع!",
-                      hi: "समुदाय सेवा का नया अवसर उपलब्ध है!",
-                      ko: "새로운 커뮤니티 서비스 기회가 있습니다!",
-                    },
-                    url: "https://www.noteswap.org/event",
-                    chrome_web_icon:
-                      "https://storage.googleapis.com/noteswap-images/circle.png",
-                    contents: {
-                      en: `New community service opportunity available! ${title}, ${communityService} hours offered`,
-                      es: `¡Nueva oportunidad de servicio comunitario disponible! ${title}, se ofrecen ${communityService} horas`,
-                      fr: `Nouvelle opportunité de service communautaire disponible ! ${title}, ${communityService} heures offertes`,
-                      de: `Neue Möglichkeiten für Gemeindearbeit verfügbar! ${title}, ${communityService} Stunden angeboten`,
-                      it: `Nuova opportunità di servizio alla comunità disponibile! ${title}, offerte ${communityService} ore`,
-                      pt: `Nova oportunidade de serviço comunitário disponível! ${title}, oferecidas ${communityService} horas`,
-                      nl: `Nieuwe gemeenschapsdienstmogelijkheid beschikbaar! ${title}, ${communityService} uur aangeboden`,
-                      ru: `Доступна новая возможность обслуживания сообщества! ${title}, предлагается ${communityService} часов`,
-                      zh: `新的社区服务机会现已开放！${title}，提供${communityService}小时`,
-                      ja: `新しいコミュニティサービスの機会が利用可能です！${title}、提供される${communityService}時間`,
-                      ar: `فرصة خدمة جديدة متاحة في المجتمع! ${title}، تُقدم ${communityService} ساعة`,
-                      hi: `समुदाय सेवा का नया अवसर उपलब्ध है! ${title}, ${communityService} घंटे प्रस्तावित किए जाते हैं`,
-                      ko: `새로운 커뮤니티 서비스 기회가 있습니다! ${title}, 제공되는 ${communityService} 시간`,
-                    },
-                  }),
-                };
-
-                // Notify all subscribed users
-
-                await fetch(
-                  "https://onesignal.com/api/v1/notifications",
-                  options
-                )
-                  .then((response) => response.json())
-                  .then((response) => console.log(response))
-                  .catch((err) => console.error(err));
-
+                const userInfo = JSON.parse(localStorage.getItem("userInfo"));
                 await fetch("/api/email/send_event_email", {
                   method: "POST",
                   headers: {
@@ -224,6 +170,71 @@ export default function CreateEvent({ business }) {
                     url: `${process.env.NEXT_PUBLIC_URL}signups/${code}`,
                   }),
                 });
+                if (userInfo && userInfo.schoolId) {
+                  const schoolId = userInfo.schoolId;
+                  const options = {
+                    method: "POST",
+                    headers: {
+                      Authorization: `Basic ${process.env.NEXT_PUBLIC_ONESIGNAL_REST}`,
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      included_segments: ["All"],
+                      app_id: "3b28d10b-3b88-426f-8025-507667803b2a",
+                      filters: [
+                        {
+                          field: "tag",
+                          key: "schoolId",
+                          relation: "=",
+                          value: schoolId,
+                        },
+                      ],
+                      headings: {
+                        en: "New community service opportunity available!",
+                        es: "¡Nueva oportunidad de servicio comunitario disponible!",
+                        fr: "Nouvelle opportunité de service communautaire disponible !",
+                        de: "Neue Möglichkeiten für Gemeindearbeit verfügbar!",
+                        it: "Nuova opportunità di servizio alla comunità disponibile!",
+                        pt: "Nova oportunidade de serviço comunitário disponível!",
+                        nl: "Nieuwe gemeenschapsdienstmogelijkheid beschikbaar!",
+                        ru: "Доступна новая возможность обслуживания сообщества!",
+                        zh: "新的社区服务机会现已开放!",
+                        ja: "新しいコミュニティサービスの機会が利用可能です!",
+                        ar: "فرصة خدمة جديدة متاحة في المجتمع!",
+                        hi: "समुदाय सेवा का नया अवसर उपलब्ध है!",
+                        ko: "새로운 커뮤니티 서비스 기회가 있습니다!",
+                      },
+                      url: "https://www.noteswap.org/event",
+                      chrome_web_icon:
+                        "https://storage.googleapis.com/noteswap-images/circle.png",
+                      contents: {
+                        en: `New community service opportunity available! ${title}, ${communityService} hours offered`,
+                        es: `¡Nueva oportunidad de servicio comunitario disponible! ${title}, se ofrecen ${communityService} horas`,
+                        fr: `Nouvelle opportunité de service communautaire disponible ! ${title}, ${communityService} heures offertes`,
+                        de: `Neue Möglichkeiten für Gemeindearbeit verfügbar! ${title}, ${communityService} Stunden angeboten`,
+                        it: `Nuova opportunità di servizio alla comunità disponibile! ${title}, offerte ${communityService} ore`,
+                        pt: `Nova oportunidade de serviço comunitário disponível! ${title}, oferecidas ${communityService} horas`,
+                        nl: `Nieuwe gemeenschapsdienstmogelijkheid beschikbaar! ${title}, ${communityService} uur aangeboden`,
+                        ru: `Доступна новая возможность обслуживания сообщества! ${title}, предлагается ${communityService} часов`,
+                        zh: `新的社区服务机会现已开放！${title}，提供${communityService}小时`,
+                        ja: `新しいコミュニティサービスの機会が利用可能です！${title}、提供される${communityService}時間`,
+                        ar: `فرصة خدمة جديدة متاحة في المجتمع! ${title}، تُقدم ${communityService} ساعة`,
+                        hi: `समुदाय सेवा का नया अवसर उपलब्ध है! ${title}, ${communityService} घंटे प्रस्तावित किए जाते हैं`,
+                        ko: `새로운 커뮤니티 서비스 기회가 있습니다! ${title}, 제공되는 ${communityService} 시간`,
+                      },
+                    }),
+                  };
+
+                  // Notify all subscribed users
+
+                  await fetch(
+                    "https://onesignal.com/api/v1/notifications",
+                    options
+                  )
+                    .then((response) => response.json())
+                    .then((response) => console.log(response))
+                    .catch((err) => console.error(err));
+                }
               } else {
                 console.log(await response.text());
               }

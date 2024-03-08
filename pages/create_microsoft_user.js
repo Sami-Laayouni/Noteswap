@@ -9,6 +9,7 @@ function CreateMicrosoftUserPage() {
   const [loggedIn, setLoggedIn] = isLoggedIn; // This destructuring assumes isLoggedIn is an array; adjust if it's not the case
   const [ran, setRan] = useState(false);
   const [error, setError] = errorSignup; // Assuming errorSignup is an array; adjust if needed
+  const AuthServices = new AuthService(setLoggedIn);
 
   useEffect(() => {
     if (!ran) {
@@ -44,7 +45,7 @@ function CreateMicrosoftUserPage() {
         // Only proceed if above check passes or is not applicable
         if (proceedWithCreation) {
           try {
-            const response = await new AuthService().create_user_with_microsoft(
+            const response = await AuthServices.create_user_with_microsoft(
               data.firstName,
               data.lastName,
               data.email,
@@ -80,11 +81,11 @@ function CreateMicrosoftUserPage() {
         }
       };
 
-      // Retrieve and parse profile data from the URL
-      const profileDataString = queryParams.get("");
-      const decodedProfileDataString = decodeURIComponent(profileDataString);
-      const parsedProfileData = JSON.parse(decodedProfileDataString); // Adjust parameter name as needed
-      if (parsedProfileData) {
+      const { query } = router;
+      if (query[""]) {
+        // Decode and parse the profile data directly from the URL query parameter
+
+        const parsedProfileData = JSON.parse(query[""]);
         createUser(parsedProfileData);
         setRan(true);
       }

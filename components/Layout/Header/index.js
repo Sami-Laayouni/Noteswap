@@ -208,15 +208,16 @@ export default function Header() {
                     >
                       {t("note") == "note" ? "Note" : t("note")}
                     </Link>
-                    {userData?.role != "teacher" && (
-                      <Link
-                        title="Visit Tutor"
-                        className={style.header_nav_a}
-                        href="/tutor"
-                      >
-                        {t("tutor") == "tutor" ? "Tutor" : t("tutor")}
-                      </Link>
-                    )}
+                    {userData?.role != "teacher" &&
+                      userData?.schoolId == "649d661a3a5a9f73e9e3fa62" && (
+                        <Link
+                          title="Visit Tutor"
+                          className={style.header_nav_a}
+                          href="/tutor"
+                        >
+                          {t("tutor") == "tutor" ? "Tutor" : t("tutor")}
+                        </Link>
+                      )}
                   </>
                 )}
               {userData?.role != "association" && (
@@ -437,23 +438,24 @@ export default function Header() {
                     </li>
                   </Link>
 
-                  {userData?.role != "teacher" && (
-                    <Link href="/tutor">
-                      <li
-                        onClick={() => {
-                          document.getElementById(
-                            "hamburger_menu"
-                          ).style.display = "none";
-                          document.getElementById(
-                            "hamburger_overlay"
-                          ).style.display = "none";
-                        }}
-                      >
-                        {t("tutor") == "tutor" ? "Tutor" : t("tutor")}
-                        <div className={style.borderLine} />
-                      </li>
-                    </Link>
-                  )}
+                  {userData?.role != "teacher" &&
+                    userData?.schoolId == "649d661a3a5a9f73e9e3fa62" && (
+                      <Link href="/tutor">
+                        <li
+                          onClick={() => {
+                            document.getElementById(
+                              "hamburger_menu"
+                            ).style.display = "none";
+                            document.getElementById(
+                              "hamburger_overlay"
+                            ).style.display = "none";
+                          }}
+                        >
+                          {t("tutor") == "tutor" ? "Tutor" : t("tutor")}
+                          <div className={style.borderLine} />
+                        </li>
+                      </Link>
+                    )}
                 </>
               )}
 

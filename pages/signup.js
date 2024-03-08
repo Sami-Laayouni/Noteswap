@@ -44,6 +44,7 @@ const Signup = () => {
   const [selectedRole, setSelectedRole] = useState("volunteer");
   const [schoolId, setSchoolId] = useState("");
   const [schools, setSchools] = useState(null);
+  const [teacherCode, setTeacherCode] = useState(null);
 
   const { isLoggedIn } = useContext(AuthContext);
   const { errorSignup } = useContext(AuthContext);
@@ -179,14 +180,24 @@ const Signup = () => {
     return school ? school.urlOfEmails : null;
   }
 
+  function verifySchoolCode(code) {
+    const school = schools.find((school) => school.id === schoolId);
+    const schoolCode = school.teacherCode;
+    if (code == schoolCode) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   // Return the JSX
   return (
     <>
       <div
         className={style.background}
         style={{
-          backgroundRepeat: !schoolId ? "no-repeat" : "no-repeat",
-          backgroundSize: !schoolId ? "cover" : "cover",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
           background: !schoolId
             ? "var(--accent-color)"
             : `url("${getSchoolBackgroundImage(schoolId)}")`,
@@ -244,14 +255,39 @@ const Signup = () => {
                 }
               }}
             >
-              {!schoolId && (
+              {!schoolId || (selectedRole === "teacher" && !teacherCode) ? (
                 <>
                   <p className={style.labelCenter}>{t("i_am_joining_as")}</p>
                   <ul className={style.roles}>
-                    <li id="student" onClick={() => setSelectedRole("student")}>
+                    <li
+                      id="student"
+                      onClick={() => {
+                        setTeacherCode("- - - - - - ");
+                        setSelectedRole("student");
+                      }}
+                      style={{
+                        background:
+                          selectedRole == "student"
+                            ? "var(--accent-color)"
+                            : "white",
+                        color: selectedRole == "student" ? "white" : "black",
+                      }}
+                    >
                       {t("student")}
                     </li>
-                    <li id="teacher" onClick={() => setSelectedRole("teacher")}>
+                    <li
+                      id="teacher"
+                      onClick={() => {
+                        setSelectedRole("teacher");
+                      }}
+                      style={{
+                        background:
+                          selectedRole == "teacher"
+                            ? "var(--accent-color)"
+                            : "white",
+                        color: selectedRole == "teacher" ? "white" : "black",
+                      }}
+                    >
                       {t("teacher")}
                     </li>
                     <li
@@ -300,13 +336,44 @@ const Signup = () => {
                       </div>
                     </>
                   )}
+                  {schoolId && selectedRole == "teacher" && (
+                    <>
+                      <p className={style.labelCenter}>Enter Teacher Code</p>
+
+                      <input
+                        id="teacherCode"
+                        placeholder="Enter the teacher code given to you"
+                        onChange={(e) => {
+                          if (e.target.value.length == 6) {
+                            const correct = verifySchoolCode(e.target.value);
+                            if (correct) {
+                              setTeacherCode(e.target.value);
+                            } else {
+                              setError("Incorrect teacher code");
+                            }
+                          } else {
+                            setError("");
+                          }
+                        }}
+                        aria-required="true"
+                        aria-invalid="true"
+                        minLength={1}
+                        maxLength={6}
+                        className={style.input}
+                        style={{ width: "110%", textAlign: "center" }}
+                      />
+                    </>
+                  )}
 
                   <p className={style.error}>{error}</p>
                 </>
+              ) : (
+                <></>
               )}
 
               {selectedRole &&
                 schoolId &&
+                teacherCode &&
                 (state == 0 ? (
                   <>
                     <label
@@ -492,7 +559,7 @@ const Signup = () => {
                     }}
                     href="/business/signup"
                   >
-                    I am joining as a school or association
+                    {t("sign_up_as_school")}
                   </Link>
                 </div>
               )}
@@ -502,10 +569,12 @@ const Signup = () => {
                   onClick={() => {
                     if (state != 0) {
                       setState(0);
+                      setTeacherCode("");
                       setError("");
                     } else {
                       setSelectedRole("volunteer");
                       setSchoolId("");
+                      setTeacherCode("");
                       setError("");
                     }
                   }}

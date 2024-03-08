@@ -20,7 +20,7 @@ export default async function handler(req, res) {
 
       const schools = await School.find(
         {},
-        "schoolFullName schoolLogo urlOfEmail schoolCover schoolAddress _id"
+        "schoolFullName schoolLogo urlOfEmail schoolCover schoolTeacherCode schoolAddress _id"
       ); // Only retrieve the 'name' field
       const schoolDetails = await Promise.all(
         schools.map(async (school) => {
@@ -32,6 +32,7 @@ export default async function handler(req, res) {
             backgroundImage: school.schoolCover,
             logoImage: school.schoolLogo,
             urlOfEmails: school.urlOfEmail,
+            teacherCode: school.schoolTeacherCode,
             users: userCount,
           };
         })
