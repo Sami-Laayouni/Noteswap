@@ -19,7 +19,7 @@ export default async function createSchool(req, res) {
       school_contact_person,
       school_contact_email,
       school_phone_number,
-      school_supported_emails,
+      urlOfEmail,
       school_community_service,
       schoolLogo,
       schoolCover,
@@ -52,7 +52,6 @@ export default async function createSchool(req, res) {
         schoolContactEmail: school_contact_email,
         schoolPhoneNumber: school_phone_number,
         schoolTeacherCode: school_teacher_code,
-        schoolSupportedEmails: school_supported_emails,
         schoolCommunityService: school_community_service || 40,
         cs_required: school_community_service || 40,
         dailyLimit: 2400,
@@ -63,6 +62,7 @@ export default async function createSchool(req, res) {
           "https://www.altavia.hu/wp-content/uploads/2020/11/Hero-Banner-Placeholder-Light-1024x480-1.png",
         upcoming_events_url: "url",
         createdAt: Date.now(),
+        urlOfEmail: urlOfEmail,
         courses: courses,
       });
       const savedSchool = await newSchool.save();

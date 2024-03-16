@@ -255,15 +255,17 @@ const ForSchools = () => {
     e.preventDefault(); // Prevent form from refreshing the page
 
     const { name, category } = currentCourse;
-    // Check if the category already exists, and if not, initialize it as an empty array
-    const updatedCourses = { ...courses };
-    if (!updatedCourses[category]) {
-      updatedCourses[category] = [];
-    }
-    updatedCourses[category].push(name); // Add the current course name to the correct category
+    if (name && category) {
+      // Check if the category already exists, and if not, initialize it as an empty array
+      const updatedCourses = { ...courses };
+      if (!updatedCourses[category]) {
+        updatedCourses[category] = [];
+      }
+      updatedCourses[category].push(name); // Add the current course name to the correct category
 
-    setCourses(updatedCourses); // Update the state
-    setCurrentCourse({ name: "", category: "" }); // Reset input fields
+      setCourses(updatedCourses); // Update the state
+      setCurrentCourse({ name: "", category: "" }); // Reset input fields
+    }
   };
 
   // Return the JSX
