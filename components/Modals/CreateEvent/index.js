@@ -270,7 +270,7 @@ export default function CreateEvent({ business }) {
               });
               if (response.ok) {
                 const Tit = title;
-                const options = {
+                /*const options = {
                   method: "POST",
                   headers: {
                     Authorization: `Basic ${process.env.NEXT_PUBLIC_ONESIGNAL_REST}`,
@@ -321,7 +321,7 @@ export default function CreateEvent({ business }) {
                 )
                   .then((response) => response.json())
                   .then((response) => console.log(response))
-                  .catch((err) => console.error(err));
+                  .catch((err) => console.error(err));*/
 
                 await fetch("/api/email/send_event_email", {
                   method: "POST",

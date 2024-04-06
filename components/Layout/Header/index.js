@@ -26,7 +26,6 @@ import { HiUserGroup } from "react-icons/hi";
 import AuthService from "../../../services/AuthService";
 import ModalContext from "../../../context/ModalContext";
 import { useTranslation } from "next-i18next";
-import { getDailyStreak, updateDailyStreak } from "../../../utils/streak";
 
 /**
  * Header component
@@ -48,17 +47,6 @@ export default function Header() {
   const router = useRouter();
   const AuthServices = new AuthService(setLoggedIn);
   const { t } = useTranslation("common");
-
-  const [streak, setStreak] = useState(0);
-
-  // Update daily streak
-  useEffect(() => {
-    if (localStorage) {
-      updateDailyStreak();
-      const streakCount = getDailyStreak();
-      setStreak(streakCount);
-    }
-  }, []);
 
   /*
      This function checks if the current user is logged in
@@ -269,7 +257,12 @@ export default function Header() {
                         paddingLeft: "10px",
                       }}
                     >
-                      {userData?.first_name} {userData?.last_name}
+                      {userData?.first_name}{" "}
+                      {userData?.first_name?.length +
+                        userData?.last_name?.length <
+                      15
+                        ? userData?.last_name
+                        : ""}
                     </p>
 
                     {/* Dropdown button */}
@@ -586,17 +579,7 @@ export default function Header() {
           <p className={style.lightext}>
             {userData?.email ? userData?.email : "Could not be found"}
           </p>
-          {userData?.role == "student" && (
-            <p className={style.lightext}>
-              {t("your_daily_streak") == "your_daily_streak"
-                ? "Your Daily Streak"
-                : t("your_daily_streak")}{" "}
-              <span style={{ color: "var(--accent-color)" }}>
-                {streak} {t("day")}
-                {streak == 1 ? "" : "s"}{" "}
-              </span>
-            </p>
-          )}
+
           {userData?.role == "association" && (
             <p
               className={style.lightext}

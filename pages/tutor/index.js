@@ -14,9 +14,6 @@ const BecomeTutor = dynamic(() =>
 const BookASession = dynamic(() =>
   import("../../components/Modals/BookASession")
 );
-const RequestTutor = dynamic(() =>
-  import("../../components/Modals/RequestTutor")
-);
 
 // Used for translation reasons
 export async function getStaticProps({ locale }) {
@@ -34,10 +31,8 @@ export async function getStaticProps({ locale }) {
  * @return {*}
  */
 export default function Tutor() {
-  const { tutor, requestTutor, requestInfo } = useContext(ModalContext);
+  const { tutor } = useContext(ModalContext);
   const [open, setOpen] = tutor;
-  const [ropen, setRopen] = requestTutor;
-  const [info, setInfo] = requestInfo;
   const [schoolClass, setSchoolClass] = useState();
   const [time, setTime] = useState();
   const [tutors, setTutor] = useState();
@@ -143,14 +138,13 @@ export default function Tutor() {
       </Head>
       <BecomeTutor />
       <BookASession />
-      <RequestTutor />
       <img
         className={style.background}
         src="/assets/images/users/Background-Image.webp"
         alt="Background image"
+        style={{ objectPosition: "bottom" }}
       ></img>
-      <h1 className={style.title}>{t("noteswap_tutor")}</h1>
-      <h2 className={style.subTitle}>{t("noteswap_tutor_message")}</h2>
+      <h1 className={style.title}>NoteSwap Tutors</h1>
       <section className={style.search}>
         <section className={style.container}>
           <span>{t("i_want_to_learn")}</span>
@@ -353,18 +347,6 @@ export default function Tutor() {
         </button>
       )}
 
-      {dataFromLocalStorage && !dataFromLocalStorage.role != "student" && (
-        <button
-          className={style.becomeButtonHide}
-          style={{ right: "250px" }}
-          onClick={() => {
-            setRopen(true);
-            setInfo(tutors);
-          }}
-        >
-          {t("request_tutoring")}
-        </button>
-      )}
       {dataFromLocalStorage && !dataFromLocalStorage.is_tutor && (
         <button
           className={style.becomeButton}

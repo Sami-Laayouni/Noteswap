@@ -208,9 +208,11 @@ export default function BecomeTutor() {
         {current == 1 && (
           <>
             {/* First page where the student gives us basic information about themselves */}
-            <label className={style.labelForInput}>
-              {t("i_want_to_teach")}{" "}
-            </label>
+            <b>
+              <label className={style.labelForInput}>
+                {t("i_want_to_teach")}{" "}
+              </label>
+            </b>
             <div
               className={style.dropdown}
               id="dropdownClass"
@@ -275,9 +277,11 @@ export default function BecomeTutor() {
               </div>
             </div>
             {/* Select dates available */}
-            <label className={style.labelForInput}>
-              {t("available_dates")}
-            </label>
+            <b>
+              <label className={style.labelForInput}>
+                {t("available_dates")}
+              </label>
+            </b>
             <ul className={style.dates}>
               {daysOfWeek.map((day) => (
                 <li key={day}>
@@ -295,7 +299,11 @@ export default function BecomeTutor() {
             </ul>
             {/* Select the time the student is available*/}
             <section className={style.container}>
-              <label className={style.labelForInput}>{t("at_this_time")}</label>
+              <b>
+                <label className={style.labelForInput}>
+                  {t("at_this_time")}
+                </label>
+              </b>
               <input
                 type="time"
                 id="startTime"
@@ -303,8 +311,8 @@ export default function BecomeTutor() {
                 value={startTime}
                 onChange={handleStartTimeChange}
                 className={style.time}
-                min="15:40"
-                max="16:30"
+                min="5:00"
+                max="20:00"
               />
               <span style={{ marginLeft: "10px", marginRight: "10px" }}>-</span>
               <input
@@ -314,19 +322,10 @@ export default function BecomeTutor() {
                 value={endTime}
                 onChange={handleEndTimeChange}
                 className={style.time}
-                min="15:40"
-                max="16:30"
+                min="5:00"
+                max="20:00"
               />
             </section>
-            {/* Quick message */}
-            <p
-              style={{
-                color: "var(--accent-color)",
-                fontFamily: "var(--manrope-font)",
-              }}
-            >
-              {t("tutor_text")}
-            </p>
           </>
         )}
 

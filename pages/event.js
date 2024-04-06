@@ -14,6 +14,7 @@ const ExpandedEvent = dynamic(() =>
 import OneSignal from "react-onesignal";
 import { requireAuthentication } from "../middleware/authenticate";
 import { useTranslation } from "next-i18next";
+import { FaSearch } from "react-icons/fa";
 
 /**
  * Get Static props
@@ -96,88 +97,101 @@ const Event = () => {
   }, [title]);
 
   useEffect(() => {
-    const initializeOneSignal = async () => {
-      await OneSignal.init({
-        appId: "3b28d10b-3b88-426f-8025-507667803b2a",
-        safari_web_id:
-          "web.onesignal.auto.65a2ca34-f112-4f9d-a5c6-253c0b61cb9f",
-        notifyButton: {
-          enable: false,
-        },
-        promptOptions: {
-          slidedown: {
-            prompts: [
-              {
-                type: "push", // current types are "push" & "category"
-                autoPrompt: true,
-                text: {
-                  // limited to 90 characters
-                  actionMessage:
-                    "We would like to show you notifications for the latest community service opportunities and updates.",
-                  // acceptButton limited to 15 characters
-                  acceptButton: "Allow",
-                  // cancelButton limited to 15 characters
-                  cancelButton: "Cancel",
-                },
-                delay: {
-                  pageViews: 1,
-                  timeDelay: 20,
-                },
-              },
-            ],
+    if (localStorage && localStorage.getItem("userInfo")) {
+      const initializeOneSignal = async () => {
+        await OneSignal.init({
+          appId: "3b28d10b-3b88-426f-8025-507667803b2a",
+          safari_web_id:
+            "web.onesignal.auto.65a2ca34-f112-4f9d-a5c6-253c0b61cb9f",
+          notifyButton: {
+            enable: false,
           },
-        },
-        allowLocalhostAsSecureOrigin: true,
-      });
+          promptOptions: {
+            slidedown: {
+              prompts: [
+                {
+                  type: "push", // current types are "push" & "category"
+                  autoPrompt: true,
+                  text: {
+                    // limited to 90 characters
+                    actionMessage:
+                      "Stay updated on the latest opportunities and updates: Allow notifications to never miss out!",
+                    // acceptButton limited to 15 characters
+                    acceptButton: "Allow",
+                    // cancelButton limited to 15 characters
+                    cancelButton: "Cancel",
+                  },
+                  delay: {
+                    pageViews: 1,
+                    timeDelay: 20,
+                  },
+                },
+              ],
+            },
+          },
+          allowLocalhostAsSecureOrigin: true,
+        });
 
-      // Attempt to tag the user with their schoolId after successful subscription
-      try {
-        // Assuming userInfo is stored in localStorage and contains _id and schoolId
-        const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-        if (userInfo && userInfo.schoolId) {
-          OneSignal.sendTag("schoolId", userInfo.schoolId.toString())
-            .then(() => {
-              console.log(`User tagged with schoolId: ${userInfo.schoolId}`);
+        // Attempt to tag the user with their schoolId after successful subscription
+        try {
+          // Assuming userInfo is stored in localStorage and contains _id and schoolId
+          const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+          const schoolInfo = JSON.parse(localStorage.getItem("schoolInfo"));
+          if (userInfo && userInfo.schoolId) {
+            // Information on user
+            OneSignal.sendTags({
+              schoolId: userInfo.schoolId,
+              schoolLocation: schoolInfo.schoolAddress,
+              schoolName: schoolInfo.schoolFullName,
+              role: userInfo.role,
+              user_id: userInfo._id,
+              name: userInfo.first_name,
             })
-            .catch((error) => {
-              console.error("Error tagging user with schoolId:", error);
-            });
+              .then(() => {
+                console.log(`User tagged with schoolId: ${userInfo.schoolId}`);
+              })
+              .catch((error) => {
+                console.error("Error tagging user with schoolId:", error);
+              });
+          }
+        } catch (error) {
+          console.error("Error retrieving userInfo from localStorage:", error);
         }
-      } catch (error) {
-        console.error("Error retrieving userInfo from localStorage:", error);
-      }
-    };
+      };
 
-    initializeOneSignal();
+      initializeOneSignal();
 
-    // We'll use this function to prompt the user for notification permissions
-    const askForNotificationPermission = async () => {
-      try {
-        await OneSignal.showSlidedownPrompt();
-      } catch (error) {
-        console.error("Error requesting notification permission:", error);
-      }
-    };
+      // We'll use this function to prompt the user for notification permissions
+      const askForNotificationPermission = async () => {
+        try {
+          await OneSignal.showSlidedownPrompt();
+        } catch (error) {
+          console.error("Error requesting notification permission:", error);
+        }
+      };
 
-    // Add event listener to the 'container' element for user interaction
-    const containerElement = document.getElementById("container");
-    if (containerElement) {
-      containerElement.addEventListener("click", askForNotificationPermission);
-    }
-
-    // Cleanup function to remove event listener
-    return () => {
+      // Add event listener to the 'container' element for user interaction
+      const containerElement = document.getElementById("container");
       if (containerElement) {
-        containerElement.removeEventListener(
+        containerElement.addEventListener(
           "click",
           askForNotificationPermission
         );
       }
-      // It might not be necessary or recommended to unset OneSignal here
-      // as it could interfere with OneSignal's functionality in your app
-      // window.OneSignal = undefined;
-    };
-  }, []);
+
+      // Cleanup function to remove event listener
+      return () => {
+        if (containerElement) {
+          containerElement.removeEventListener(
+            "click",
+            askForNotificationPermission
+          );
+        }
+
+        //window.OneSignal = undefined;
+      };
+    }
+  }, [localStorage]);
 
   return (
     <div id="container">
@@ -191,22 +205,28 @@ const Event = () => {
         alt="Background Image"
         src="/assets/images/users/Background-Image.webp"
       ></img>
-      <h1 className={style.title}>{t("events")}</h1>
-      <h2 className={style.subTitle}>{t("event_slogan")}</h2>
+      <h1 className={style.mainTitle}>{t("events")}</h1>
 
-      <section className={style.search}>
-        <input
-          value={title}
-          onChange={(e) => {
-            setTitle(e.target.value);
-          }}
-          style={{ borderRadius: "10px", width: "100%" }}
-          placeholder={t("s_event_name")}
-          autoFocus
-        />
-      </section>
+      <div style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
+        <section className={style.search}>
+          <input
+            value={title}
+            onChange={(e) => {
+              setTitle(e.target.value);
+            }}
+            style={{ borderRadius: "10px", width: "100%" }}
+            placeholder={`Search for events by name`}
+            autoFocus
+          />
+          <button className={style.buttonSearch}>
+            <FaSearch size={30} />
+          </button>
+        </section>
+      </div>
+
       {/* Events */}
       <section className={style.event_section}>
+        <h1 className={style.title}>Explore Opportunities</h1>
         {loading && (
           <section className={style.loading_section}>
             <LoadingCircle />

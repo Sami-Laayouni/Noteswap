@@ -79,7 +79,10 @@ const Dashboard = () => {
         setLoading(false);
       }
     }
-    if (localStorage.getItem("userInfo")) {
+    if (
+      localStorage.getItem("userInfo") &&
+      localStorage.getItem("schoolInfo")
+    ) {
       getSchoolData(JSON.parse(localStorage.getItem("userInfo")).schoolId);
       setCalendarId(
         JSON.parse(localStorage.getItem("schoolInfo")).upcoming_events_url
