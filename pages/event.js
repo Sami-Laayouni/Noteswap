@@ -191,7 +191,7 @@ const Event = () => {
         //window.OneSignal = undefined;
       };
     }
-  }, [localStorage]);
+  }, [router]);
 
   return (
     <div id="container">
