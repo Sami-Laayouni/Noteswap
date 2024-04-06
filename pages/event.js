@@ -139,7 +139,7 @@ const Event = () => {
           const schoolInfo = JSON.parse(localStorage.getItem("schoolInfo"));
           if (userInfo && userInfo.schoolId) {
             // Information on user
-            OneSignal.sendTags({
+            OneSignal.User.addTags({
               schoolId: userInfo.schoolId,
               schoolLocation: schoolInfo.schoolAddress,
               schoolName: schoolInfo.schoolFullName,
