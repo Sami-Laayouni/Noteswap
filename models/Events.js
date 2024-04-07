@@ -72,6 +72,14 @@ const eventSchema = new mongoose.Schema({
     type: Array,
     required: false,
   },
+  associationId: {
+    type: String,
+    required: false,
+  },
+  associationProfilePic: {
+    type: String,
+    required: false,
+  },
 });
 
 let Events;

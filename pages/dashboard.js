@@ -80,6 +80,7 @@ const Dashboard = () => {
       }
     }
     if (
+      localStorage &&
       localStorage.getItem("userInfo") &&
       localStorage.getItem("schoolInfo")
     ) {
@@ -93,25 +94,27 @@ const Dashboard = () => {
     }
   }, []);
   useEffect(() => {
-    async function getCalendar(id) {
-      const currentTime = new Date().toISOString();
-      const API_KEY = process.env.NEXT_PUBLIC_CALENDAR_KEY;
-      const response = await fetch(
-        `https://www.googleapis.com/calendar/v3/calendars/${id}/events?key=${API_KEY}&timeMin=${currentTime}&maxResults=40&fields=items(summary,description,start,end,location,htmlLink)`
-      );
-      if (response.ok) {
-        const data = await response.json();
-        const sortedEvents = data.items.sort((a, b) => {
-          return new Date(a.start.date) - new Date(b.start.date);
-        });
-        setCalendar(sortedEvents);
-      } else {
-        setCalendar([{}]);
-        setLoading(false);
+    if (localStorage && localStorage.getItem("schoolId")) {
+      async function getCalendar(id) {
+        const currentTime = new Date().toISOString();
+        const API_KEY = process.env.NEXT_PUBLIC_CALENDAR_KEY;
+        const response = await fetch(
+          `https://www.googleapis.com/calendar/v3/calendars/${id}/events?key=${API_KEY}&timeMin=${currentTime}&maxResults=40&fields=items(summary,description,start,end,location,htmlLink)`
+        );
+        if (response.ok) {
+          const data = await response.json();
+          const sortedEvents = data.items.sort((a, b) => {
+            return new Date(a.start.date) - new Date(b.start.date);
+          });
+          setCalendar(sortedEvents);
+        } else {
+          setCalendar([{}]);
+          setLoading(false);
+        }
       }
-    }
-    if (data) {
-      getCalendar(data.upcoming_events_url);
+      if (data) {
+        getCalendar(data.upcoming_events_url);
+      }
     }
   }, [data]);
   useEffect(() => {

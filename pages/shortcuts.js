@@ -37,9 +37,7 @@ export default function Shortcuts() {
   const [bOpen, setBOpen] = business;
   useEffect(() => {
     if (localStorage.getItem("userInfo")) {
-      if (
-        JSON.parse(localStorage.getItem("userInfo")).associations?.length == 0
-      ) {
+      if (!localStorage.getItem("associationInfo")) {
         setBOpen(true);
       }
     }

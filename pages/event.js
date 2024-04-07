@@ -141,11 +141,7 @@ const Event = () => {
             // Information on user
             OneSignal.User.addTags({
               schoolId: userInfo.schoolId,
-              schoolLocation: schoolInfo.schoolAddress,
-              schoolName: schoolInfo.schoolFullName,
-              role: userInfo.role,
               user_id: userInfo._id,
-              name: userInfo.first_name,
             })
               .then(() => {
                 console.log(`User tagged with schoolId: ${userInfo.schoolId}`);

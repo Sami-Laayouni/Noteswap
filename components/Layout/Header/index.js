@@ -39,10 +39,9 @@ import { useTranslation } from "next-i18next";
  */
 export default function Header() {
   const { isLoggedIn } = useContext(AuthContext);
-  const { certificateModal, business } = useContext(ModalContext);
+  const { certificateModal } = useContext(ModalContext);
   const [loggedIn, setLoggedIn] = isLoggedIn;
   const [isCertificate, setCertificate] = certificateModal;
-  const [open, setOpen] = business;
   const [userData, setUserData] = useState();
   const router = useRouter();
   const AuthServices = new AuthService(setLoggedIn);
@@ -89,23 +88,24 @@ export default function Header() {
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem("userInfo", JSON.stringify(data));
+        if (data.role != "association") {
+          const schoolRequestInfo = {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ id: data?.schoolId }),
+          };
+          // Get School Info
+          const schoolResponse = await fetch(
+            "/api/schools/get_single_school",
+            schoolRequestInfo
+          );
 
-        const schoolRequestInfo = {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ id: data?.schoolId }),
-        };
-        // Get School Info
-        const schoolResponse = await fetch(
-          "/api/schools/get_single_school",
-          schoolRequestInfo
-        );
-
-        if (schoolResponse.ok) {
-          const schoolData = await schoolResponse.json();
-          localStorage.setItem("schoolInfo", JSON.stringify(schoolData));
+          if (schoolResponse.ok) {
+            const schoolData = await schoolResponse.json();
+            localStorage.setItem("schoolInfo", JSON.stringify(schoolData));
+          }
         }
       }
     }
@@ -452,19 +452,63 @@ export default function Header() {
                 </>
               )}
 
-              <Link href="/event">
-                <li
-                  onClick={() => {
-                    document.getElementById("hamburger_menu").style.display =
-                      "none";
-                    document.getElementById("hamburger_overlay").style.display =
-                      "none";
-                  }}
+              {userData?.role != "association" && (
+                <Link href="/event">
+                  <li
+                    onClick={() => {
+                      document.getElementById("hamburger_menu").style.display =
+                        "none";
+                      document.getElementById(
+                        "hamburger_overlay"
+                      ).style.display = "none";
+                    }}
+                  >
+                    {t("events") == "events" ? "Events" : t("events")}
+                    <div className={style.borderLine} />
+                  </li>
+                </Link>
+              )}
+
+              {userData?.role == "association" && userData?.associations[0] && (
+                <Link
+                  href={`/association/${
+                    userData?.associations[userData?.associations.length - 1]
+                  }`}
                 >
-                  {t("events") == "events" ? "Events" : t("events")}
-                  <div className={style.borderLine} />
-                </li>
-              </Link>
+                  <li
+                    onClick={() => {
+                      document.getElementById("hamburger_menu").style.display =
+                        "none";
+                      document.getElementById(
+                        "hamburger_overlay"
+                      ).style.display = "none";
+                    }}
+                  >
+                    {" "}
+                    {t("my_association")}
+                    <div className={style.borderLine} />
+                  </li>
+                </Link>
+              )}
+
+              {userData?.role == "association" && userData?.associations[0] && (
+                <Link href={`/business/edit`}>
+                  <li
+                    onClick={() => {
+                      document.getElementById("hamburger_menu").style.display =
+                        "none";
+                      document.getElementById(
+                        "hamburger_overlay"
+                      ).style.display = "none";
+                    }}
+                  >
+                    {t("edit_association") == "edit_association"
+                      ? "Edit Association"
+                      : t("edit_association")}
+                    <div className={style.borderLine} />
+                  </li>
+                </Link>
+              )}
 
               {(userData?.role === "teacher" ||
                 userData?.role === "school") && (
@@ -617,7 +661,7 @@ export default function Header() {
           {userData?.role == "association" && userData?.associations[0] && (
             <li>
               <Link
-                href={`/bprofile/${
+                href={`/association/${
                   userData?.associations[userData?.associations.length - 1]
                 }`}
               >
@@ -675,17 +719,15 @@ export default function Header() {
             </li>
           )}
           {userData?.role == "association" && (
-            <li
-              onClick={() => {
-                setOpen(true);
-              }}
-            >
-              <MdEdit size={21} style={{ verticalAlign: "middle" }} />
-              <span>
-                {t("edit_association") == "edit_association"
-                  ? "Edit Association"
-                  : t("edit_association")}
-              </span>
+            <li>
+              <Link href={`/business/edit`}>
+                <MdEdit size={21} style={{ verticalAlign: "middle" }} />
+                <span>
+                  {t("edit_association") == "edit_association"
+                    ? "Edit Association"
+                    : t("edit_association")}
+                </span>
+              </Link>
             </li>
           )}
 

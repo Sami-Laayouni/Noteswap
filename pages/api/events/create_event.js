@@ -32,6 +32,8 @@ export default async function becomeTutor(req, res) {
       school_id,
       sponsored,
       sponsoredLocations,
+      associationProfilePic,
+      associationId,
     } = req.body;
     try {
       await connectDB();
@@ -53,6 +55,8 @@ export default async function becomeTutor(req, res) {
         school_id: school_id,
         sponsored: sponsored,
         sponsoredLocations: sponsoredLocations || null,
+        associationProfilePic: associationProfilePic,
+        associationId: associationId,
       });
       const savedEvent = await newEvent.save();
 

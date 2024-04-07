@@ -33,7 +33,8 @@ export default async function createAssociation(req, res) {
       category,
       country,
       city,
-
+      street,
+      postalCode,
       icon,
     } = req.body;
 
@@ -59,6 +60,9 @@ export default async function createAssociation(req, res) {
         country: country,
         city: city,
         icon: icon,
+        verified: false,
+        street: street,
+        postalCode: postalCode,
         created_at: Date.now(),
       });
       const savedAssociation = await newAssociation.save();

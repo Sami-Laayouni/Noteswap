@@ -51,6 +51,10 @@ const associationSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  verified: {
+    type: Boolean,
+    required: true,
+  },
 });
 
 let Association;

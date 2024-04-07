@@ -42,8 +42,12 @@ export default function CreateAccount() {
   const [category, setCategory] = useState("");
   const [country, setCountry] = useState("");
   const [city, setCity] = useState("");
+  const [street, setStreet] = useState("");
+  const [postalCode, setPostalCode] = useState("");
 
-  const [profile, setProfile] = useState("./assets/fallback/user.webp");
+  const [profile, setProfile] = useState(
+    "https://api.dicebear.com/8.x/shapes/svg?seed=Shado"
+  );
   const { t } = useTranslation();
 
   const router = useRouter();
@@ -74,7 +78,7 @@ export default function CreateAccount() {
     <Modal
       isOpen={open}
       onClose={() => {
-        setOpen(false);
+        setOpen(true);
         router.push("/shortcuts");
       }}
       title={t("set_up_business")}
@@ -108,15 +112,21 @@ export default function CreateAccount() {
                     category: category,
                     country: country,
                     city: city,
-
+                    street: street,
+                    postalCode: postalCode,
                     icon: profile,
                   }),
                 }
               );
               if (response.ok) {
-                router.push("/shortcuts");
+                const data = await response.json();
+                console.log(data);
+                localStorage.setItem(
+                  "associationInfo",
+                  JSON.stringify(data.savedAssociation)
+                );
                 setOpen(false);
-                location.reload();
+                router.push("/shortcuts");
               }
             }
           }}
@@ -125,7 +135,7 @@ export default function CreateAccount() {
           {current == 1 && (
             <>
               <label className={style.labelForInput} htmlFor="namelSignup">
-                {t("association_name")}
+                Name of the Association (The full legal name as registered)
               </label>
               <input
                 id="namelSignup"
@@ -138,6 +148,7 @@ export default function CreateAccount() {
                 onChange={(e) => setName(e.target.value)}
                 required
                 autoFocus
+                minLength={3}
               />
               <label
                 className={style.labelForInput}
@@ -155,6 +166,7 @@ export default function CreateAccount() {
                 className={style.input}
                 onChange={(e) => setDesc(e.target.value)}
                 required
+                minLength={100}
               />
             </>
           )}
@@ -191,7 +203,7 @@ export default function CreateAccount() {
                 required
               />
               <label className={style.labelForInput} htmlFor="webSignup">
-                {t("association_website")}{" "}
+                Association Website
               </label>
               <input
                 id="webSignup"
@@ -202,6 +214,7 @@ export default function CreateAccount() {
                 aria-invalid="true"
                 className={style.input}
                 onChange={(e) => setWeb(e.target.value)}
+                required
               />
               <label className={style.labelForInput}>
                 {t("association_category")}{" "}
@@ -231,12 +244,12 @@ export default function CreateAccount() {
           {current == 3 && (
             <>
               <label className={style.labelForInput} htmlFor="countrySignup">
-                {t("country")}
+                Country of Operation
               </label>
               <input
                 id="countrySignup"
                 type="text"
-                placeholder={t("enter_location")}
+                placeholder="Enter the country in which your association operates"
                 value={country}
                 aria-required="true"
                 aria-invalid="true"
@@ -246,18 +259,50 @@ export default function CreateAccount() {
                 autoFocus
               />
               <label className={style.labelForInput} htmlFor="citySignup">
-                {t("city")}
+                City of Operation
               </label>
               <input
                 id="citySignup"
                 type="text"
-                placeholder="Enter your association city"
+                placeholder="Enter the city in which your association operates"
                 value={city}
                 aria-required="true"
                 aria-invalid="true"
                 className={style.input}
                 onChange={(e) => setCity(e.target.value)}
                 required
+              />
+              <label className={style.labelForInput} htmlFor="citySignup">
+                Street
+              </label>
+              <input
+                id="street"
+                type="text"
+                placeholder="Enter the street in which your association operates"
+                aria-required="true"
+                aria-invalid="true"
+                className={style.input}
+                required
+                value={street}
+                onChange={(e) => {
+                  setStreet(e.target.value);
+                }}
+              />
+              <label className={style.labelForInput} htmlFor="citySignup">
+                Post Code
+              </label>
+              <input
+                id="postalCode"
+                type="text"
+                placeholder="Enter your postal code"
+                aria-required="true"
+                aria-invalid="true"
+                className={style.input}
+                required
+                value={postalCode}
+                onChange={(e) => {
+                  setPostalCode(e.target.value);
+                }}
               />
             </>
           )}
@@ -270,8 +315,10 @@ export default function CreateAccount() {
                   justifyContent: "center",
                   alignItems: "center",
                   height: "55vh",
+                  flexDirection: "column",
                 }}
               >
+                <h1>Upload your association&apos;s profile picture</h1>
                 <img
                   alt="Profile"
                   src={profile}

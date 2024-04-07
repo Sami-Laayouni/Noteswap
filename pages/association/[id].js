@@ -1,5 +1,4 @@
 import style from "../../styles/Profile.module.css";
-import Image from "next/image";
 import Link from "next/link";
 import {
   MdModeEditOutline,
@@ -43,7 +42,7 @@ export async function getStaticProps({ locale }) {
  * @param {{ data: any; notes: any; }} { data, notes }
  * @return {*}
  */
-export default function BProfile() {
+export default function Association() {
   const [usersId, setUsersId] = useState();
   const [data, setData] = useState(null);
   const [event, setEvents] = useState(null);
@@ -92,12 +91,7 @@ export default function BProfile() {
         />
       </div>
       <section className={style.userInfo}>
-        <Image
-          src={data?.icon ? data?.icon : "/assets/fallback/user.webp"}
-          alt="Profile picture"
-          width={190}
-          height={190}
-        />
+        <img src={data?.icon} alt="Profile picture" width={190} height={190} />
         <div>
           <h1 style={{ display: "inline-block" }}>
             {data?.name ? data?.name : t("loading")}{" "}

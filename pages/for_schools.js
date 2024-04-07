@@ -358,6 +358,7 @@ const ForSchools = () => {
                     placeholder="NSS"
                     id="School_acronym"
                     className={style.input}
+                    required
                   />
                   <p className={style.labelForInput}>{t("city_school")} * </p>
                   <input

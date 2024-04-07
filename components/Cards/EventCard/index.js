@@ -83,7 +83,13 @@ export default function EventCard({ data }) {
           height: "100%",
         }}
       >
-        <Link href={`/profile/${data.userInfo[0]._id}`}>
+        <Link
+          href={
+            data?.sponsored
+              ? `/association/${data.associationId}`
+              : `/profile/${data.userInfo[0]._id}`
+          }
+        >
           <img
             src={data.userInfo[0].profile_picture}
             alt="User ¨Picture"
