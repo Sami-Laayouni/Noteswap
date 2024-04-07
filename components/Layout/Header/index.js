@@ -14,13 +14,13 @@ import {
   MdOutlineArrowDropDown,
   MdOutlineAdminPanelSettings,
   MdEdit,
+  MdOutlineEmojiEvents,
 } from "react-icons/md";
 import { FiSettings, FiLogOut, FiAward } from "react-icons/fi";
 import { LuGlasses } from "react-icons/lu";
 import { CgProfile } from "react-icons/cg";
 import { IoMdTime } from "react-icons/io";
 import { RiCopperCoinLine } from "react-icons/ri";
-import { GrScan } from "react-icons/gr";
 import { HiUserGroup } from "react-icons/hi";
 
 import AuthService from "../../../services/AuthService";
@@ -502,6 +502,22 @@ export default function Header() {
                       ).style.display = "none";
                     }}
                   >
+                    My events <div className={style.borderLine} />
+                  </li>
+                </Link>
+              )}
+
+              {userData?.role == "association" && userData?.associations[0] && (
+                <Link href={`/business/edit`}>
+                  <li
+                    onClick={() => {
+                      document.getElementById("hamburger_menu").style.display =
+                        "none";
+                      document.getElementById(
+                        "hamburger_overlay"
+                      ).style.display = "none";
+                    }}
+                  >
                     {t("edit_association") == "edit_association"
                       ? "Edit Association"
                       : t("edit_association")}
@@ -670,6 +686,28 @@ export default function Header() {
               </Link>
             </li>
           )}
+          {userData?.role == "association" && userData?.associations[0] && (
+            <li>
+              <Link href={`/business/events`}>
+                <MdOutlineEmojiEvents
+                  size={21}
+                  style={{ verticalAlign: "middle" }}
+                />
+                <span>My events</span>
+              </Link>
+            </li>
+          )}
+          {userData?.role == "teacher" && (
+            <li>
+              <Link href={`/teacher/events`}>
+                <MdOutlineEmojiEvents
+                  size={21}
+                  style={{ verticalAlign: "middle" }}
+                />
+                <span>My events</span>
+              </Link>
+            </li>
+          )}
           {(userData?.role === "teacher" || userData?.role === "school") && (
             <li>
               <Link href="/rewardcs">
@@ -710,14 +748,7 @@ export default function Header() {
               </Link>
             </li>
           )}
-          {(userData?.role === "teacher" || userData?.role === "school") && (
-            <li>
-              <Link href="/verify">
-                <GrScan size={21} style={{ verticalAlign: "middle" }} />
-                <span>{t("verify_transcript")}</span>
-              </Link>
-            </li>
-          )}
+
           {userData?.role == "association" && (
             <li>
               <Link href={`/business/edit`}>

@@ -169,6 +169,24 @@ export default function SignUps() {
     }
   }
 
+  async function removeUser(userId) {
+    const { id } = router.query;
+
+    const response = await fetch("/api/events/unsignup_event", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: id,
+        userId: userId,
+      }),
+    });
+    if (response.ok) {
+      document.getElementById(`volunteer_${userId}`).remove();
+    }
+  }
+
   return (
     <>
       <h1 className={style.header}>Volunteers who signed up for your event</h1>
@@ -180,6 +198,7 @@ export default function SignUps() {
       >
         Refresh the page to see changes
       </p>
+
       {loading && (
         <div
           style={{ width: "100%", display: "flex", justifyContent: "center" }}
@@ -189,7 +208,7 @@ export default function SignUps() {
       )}
       <ul className={style.list}>
         {volunteersData.map((volunteer, index) => (
-          <li key={index}>
+          <li id={`volunteer_${volunteer._id}`} key={index}>
             <Link href={`/profile/${volunteer._id}`}>
               <Image
                 src={volunteer.profile_picture}
@@ -218,7 +237,7 @@ export default function SignUps() {
               >
                 {volunteer.first_name} {volunteer.last_name}
               </span>{" "}
-              Email:{" "}
+              Email (used to contact):{" "}
               <span
                 style={{ color: "var(--accent-color)", marginRight: "20px" }}
               >
@@ -302,6 +321,14 @@ export default function SignUps() {
               id={`notify_them_${volunteer.email}`}
             >
               Notify them that they have been accepted for the event
+            </button>
+            <button
+              onClick={() => removeUser(volunteer._id)}
+              className={style.button}
+              style={{ background: "red" }}
+              id={`remove_them_${volunteer.email}`}
+            >
+              Remove {volunteer.first_name} from event
             </button>
           </li>
         ))}

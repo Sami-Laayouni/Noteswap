@@ -65,6 +65,9 @@ export default async function handler(req, res) {
       category: 1,
       volunteers: 1,
       sponsored: 1,
+      associationId: 1,
+      associationProfilePic: 1,
+      location: 1,
     },
   });
 

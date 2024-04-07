@@ -29,7 +29,6 @@
   font-size: 2.5rem;
   text-decoration: dotted;
   text-align: center;
-  line-height: 0px;
   margin-top: 70px;
 }
 .search {
@@ -88,7 +87,24 @@
   font-family: var(--manrope-font);
   color: var(--default-light-grey-color);
 }
+.adapt {
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 50px;
+  display: grid;
+  grid-template-columns: 33% 33% 33%;
+  gap: 20px;
+}
 @media all and (max-width: 808px) {
+  .adapt {
+    grid-template-columns: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
   .title {
     text-align: center;
     top: 25%;
@@ -106,8 +122,5 @@
   }
   .container:last-child {
     display: none;
-  }
-  .result {
-    text-align: center;
   }
 }

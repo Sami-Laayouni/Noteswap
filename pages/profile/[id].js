@@ -225,7 +225,7 @@ export default function Profile() {
 
         {/* Latest notes section */}
         <div className={style.right}>
-          <h2>Latest Notes</h2>
+          <h2>{data?.role != "teacher" ? "Latest Notes" : "Latest Events"}</h2>
 
           {/* Display message if no notes are posted */}
           {notes?.notes.length == 0 && (

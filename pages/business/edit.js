@@ -28,7 +28,8 @@ export async function getStaticProps({ locale }) {
  */
 export default function Edit() {
   const [name, setName] = useState("");
-  const [profile, setProfile] = useState("");
+  const [desc, setDesc] = useState("");
+
   // Return the JSX
   return (
     <>
@@ -37,13 +38,15 @@ export default function Edit() {
       </Head>
 
       <div className={style.paddingLeft} style={{ paddingLeft: "80px" }}>
-        <h2 className={style.title}>Edit Your Business Information</h2>
-        <div style={{ marginTop: "60px", position: "relative" }}>
+        <h2 className={style.title} style={{ marginTop: "50px" }}>
+          Edit Your Business Information
+        </h2>
+        <div style={{ marginTop: "40px", position: "relative" }}>
           <form
             onSubmit={async (e) => {
               e.preventDefault();
               document.getElementById("save").innerText = "Saving...";
-              const response = await fetch("/api/profile/update_profile", {
+              /*const response = await fetch("/api/profile/update_profile", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
@@ -55,7 +58,7 @@ export default function Edit() {
                   bio: bio,
                   profile: profile,
                 }),
-              });
+              });*/
               if (response.ok) {
                 document.getElementById("save").innerText = "Save";
                 localStorage.setItem("userInfo", await response.text());
@@ -75,20 +78,23 @@ export default function Edit() {
               className={style.input}
               required
             ></input>
+            <label className={style.labelForInput} htmlFor="First">
+              Association Description
+            </label>
+            <textarea
+              id="Description"
+              value={desc}
+              onChange={(e) => {
+                setDesc(e.target.value);
+              }}
+              className={style.input}
+              required
+            ></textarea>
 
             <button id="save" className={style.saveButton} type="submit">
               Save
             </button>
           </form>
-
-          <img
-            alt="Profile"
-            src={profile}
-            className={style.profile}
-            onClick={() => {
-              document.getElementById("imageUploadInput").click();
-            }}
-          ></img>
         </div>
       </div>
     </>

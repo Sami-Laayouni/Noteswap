@@ -47,7 +47,7 @@ export default function Shortcuts() {
       <Head>
         <title>Shortcuts | NoteSwap</title> {/* Title of the page*/}
       </Head>
-      <CreateEvent business={bOpen} />
+      <CreateEvent business={true} />
       <section
         style={{
           width: "100%",

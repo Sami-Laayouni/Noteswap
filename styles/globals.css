@@ -22,7 +22,7 @@ a {
   --button-accent-color: #40b385;
   --button-hover-color: darkgreen;
   --button-default-padding: 12px 32px;
-  --button-default-border-radius: 2px;
+  --button-default-border-radius: 4px;
 
   --default-white-color: white;
   --default-black-color: black;

@@ -136,12 +136,12 @@ const Event = () => {
         try {
           // Assuming userInfo is stored in localStorage and contains _id and schoolId
           const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-          const schoolInfo = JSON.parse(localStorage.getItem("schoolInfo"));
           if (userInfo && userInfo.schoolId) {
             // Information on user
+            OneSignal.setExternalUserId(userInfo._id);
+            OneSignal.User.addEmail(userInfo.email);
             OneSignal.User.addTags({
               schoolId: userInfo.schoolId,
-              user_id: userInfo._id,
             })
               .then(() => {
                 console.log(`User tagged with schoolId: ${userInfo.schoolId}`);
@@ -223,13 +223,6 @@ const Event = () => {
       {/* Events */}
       <section className={style.event_section}>
         <h1 className={style.title}>Explore Opportunities</h1>
-        {loading && (
-          <section className={style.loading_section}>
-            <LoadingCircle />
-
-            <h2>{t("looking")}</h2>
-          </section>
-        )}
 
         {events && events.length == 0 ? (
           <>
@@ -238,22 +231,24 @@ const Event = () => {
             </section>
           </>
         ) : (
-          <div
-            style={{
-              width: "70%",
-              marginLeft: "auto",
-              marginRight: "auto",
-              paddingTop: "100px",
-            }}
-          >
-            <p className={style.result}>
+          <>
+            <p style={{ textAlign: "center", paddingTop: "20px" }}>
               {events?.length} {t("result")}
               {events?.length == 1 ? "" : "s"} {t("found")}
             </p>
-            {events?.map(function (value) {
-              return <EventCard key={value.id} data={value} />;
-            })}
-          </div>
+            <div className={style.adapt}>
+              {events?.map(function (value) {
+                return <EventCard key={value.id} data={value} />;
+              })}
+            </div>
+          </>
+        )}
+        {loading && (
+          <section className={style.loading_section}>
+            <LoadingCircle />
+
+            <h2>{t("looking")}</h2>
+          </section>
         )}
       </section>
       {data?.role != "student" && (
@@ -262,7 +257,7 @@ const Event = () => {
             setOpen(true);
           }}
           className={style.createNewEvent}
-          style={{ borderRadius: "4px" }}
+          style={{ borderRadius: "6px" }}
         >
           {t("create_new_event")}
         </section>

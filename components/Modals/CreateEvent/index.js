@@ -115,7 +115,13 @@ export default function CreateEvent({ business }) {
             e.preventDefault();
 
             // Increase current stage in the pipeline
-            setCurrent(current + 1);
+            if (current != 4) {
+              setCurrent(current + 1);
+            } else {
+              if (tlocation.length > 0) {
+                setCurrent(current + 1);
+              }
+            }
 
             if (current == 3 && business) {
               setCurrent(4);
@@ -242,140 +248,136 @@ export default function CreateEvent({ business }) {
               }
               setCurrent(5);
             } else if (current == 4) {
-              code = generateCode(24);
-              setCodes(code);
-              function createFiltersForSchoolIds(schoolIds) {
-                // Initialize an empty array for the filters
-                const filters = [];
+              if (tlocation.length > 0) {
+                code = generateCode(24);
+                setCodes(code);
+                function createFiltersForSchoolIds(schoolIds) {
+                  // Initialize an empty array for the filters
+                  const filters = [];
 
-                // Iterate through each schoolId in the array
-                schoolIds.forEach((schoolId, index) => {
-                  // Add a condition for the current schoolId
-                  filters.push({
-                    field: "tag",
-                    key: "schoolId",
-                    relation: "=",
-                    value: schoolId.toString(),
+                  // Iterate through each schoolId in the array
+                  schoolIds.forEach((schoolId, index) => {
+                    // Add a condition for the current schoolId
+                    filters.push({
+                      field: "tag",
+                      key: "schoolId",
+                      relation: "=",
+                      value: schoolId.toString(),
+                    });
+
+                    // If this is not the last item, add an OR operator
+                    if (index < schoolIds.length - 1) {
+                      filters.push({ operator: "OR" });
+                    }
                   });
 
-                  // If this is not the last item, add an OR operator
-                  if (index < schoolIds.length - 1) {
-                    filters.push({ operator: "OR" });
-                  }
-                });
-
-                return filters;
-              }
-              const associationInfo = JSON.parse(
-                localStorage.getItem("associationInfo")
-              );
-              const response = await fetch("/api/events/create_event", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  id: code,
-                  title: title,
-                  desc: desc,
-                  category: category,
-                  community_service_offered: communityService,
-                  teacher_id: JSON.parse(localStorage.getItem("userInfo"))._id,
-                  date_of_events: `${startDate} to ${endDate}`,
-                  contact_email: JSON.parse(localStorage.getItem("userInfo"))
-                    .email,
-                  link_to_event: link ? link : "",
-                  max: max,
-                  location: location,
-                  reqi: req,
-                  createdAt: Date.now(),
-                  sponsored: true,
-                  associationId: associationInfo._id,
-                  associationProfilePic: associationInfo.icon,
-                  sponsoredLocations: tlocation,
-                  school_id: JSON.parse(localStorage.getItem("userInfo"))
-                    .schoolId,
-                }),
-              });
-              // Add sponsored locations filter
-              if (response.ok) {
-                const Tit = title;
-                const userProfile = JSON.parse(
-                  localStorage.getItem("userInfo")
-                ).profile_picture;
-                const options = {
-                  method: "POST",
-                  headers: {
-                    Authorization: `Basic ${process.env.NEXT_PUBLIC_ONESIGNAL_REST}`,
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({
-                    included_segments: ["All"],
-                    filters: createFiltersForSchoolIds(tlocation),
-                    app_id: "3b28d10b-3b88-426f-8025-507667803b2a",
-                    headings: {
-                      en: "New opportunity available!",
-                      es: "¡Nueva oportunidad disponible!",
-                      fr: "Nouvelle opportunité disponible !",
-                      de: "Neue Möglichkeit verfügbar!",
-                      it: "Nuova opportunità disponibile!",
-                      pt: "Nova oportunidade disponível!",
-                      nl: "Nieuwe mogelijkheid beschikbaar!",
-                      ru: "Доступна новая возможность!",
-                      zh: "新的机会现已开放!",
-                      ja: "新しい機会が利用可能です!",
-                      ar: "فرصة جديدة متاحة!",
-                      hi: "नया अवसर उपलब्ध है!",
-                      ko: "새로운 기회가 있습니다!",
-                    },
-                    url: "https://www.noteswap.org/event",
-                    chrome_web_icon: userProfile,
-                    contents: {
-                      en: `New community service opportunity available! ${title}, ${communityService} hours offered`,
-                      es: `¡Nueva oportunidad de servicio comunitario disponible! ${title}, se ofrecen ${communityService} horas`,
-                      fr: `Nouvelle opportunité de service communautaire disponible ! ${title}, ${communityService} heures offertes`,
-                      de: `Neue Möglichkeiten für Gemeindearbeit verfügbar! ${title}, ${communityService} Stunden angeboten`,
-                      it: `Nuova opportunità di servizio alla comunità disponibile! ${title}, offerte ${communityService} ore`,
-                      pt: `Nova oportunidade de serviço comunitário disponível! ${title}, oferecidas ${communityService} horas`,
-                      nl: `Nieuwe gemeenschapsdienstmogelijkheid beschikbaar! ${title}, ${communityService} uur aangeboden`,
-                      ru: `Доступна новая возможность обслуживания сообщества! ${title}, предлагается ${communityService} часов`,
-                      zh: `新的社区服务机会现已开放！${title}，提供${communityService}小时`,
-                      ja: `新しいコミュニティサービスの機会が利用可能です！${title}、提供される${communityService}時間`,
-                      ar: `فرصة خدمة جديدة متاحة في المجتمع! ${title}، تُقدم ${communityService} ساعة`,
-                      hi: `समुदाय सेवा का नया अवसर उपलब्ध है! ${title}, ${communityService} घंटे प्रस्तावित किए जाते हैं`,
-                      ko: `새로운 커뮤니티 서비스 기회가 있습니다! ${title}, 제공되는 ${communityService} 시간`,
-                    },
-                  }),
-                };
-
-                await fetch(
-                  "https://onesignal.com/api/v1/notifications",
-                  options
-                )
-                  .then((response) => response.json())
-                  .then((response) => console.log(response))
-                  .catch((err) => console.error(err));
-
-                await fetch("/api/email/send_event_email", {
+                  return filters;
+                }
+                const associationInfo = JSON.parse(
+                  localStorage.getItem("associationInfo")
+                );
+                const response = await fetch("/api/events/create_event", {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",
                   },
                   body: JSON.stringify({
-                    name: `${
-                      JSON.parse(localStorage.getItem("userInfo")).first_name
-                    } ${
-                      JSON.parse(localStorage.getItem("userInfo")).last_name
-                    }`,
-                    email: JSON.parse(localStorage.getItem("userInfo")).email,
-                    event: Tit,
-                    url: `${process.env.NEXT_PUBLIC_URL}signups/${code}`,
+                    id: code,
+                    title: title,
+                    desc: desc,
+                    category: category,
+                    community_service_offered: communityService,
+                    teacher_id: JSON.parse(localStorage.getItem("userInfo"))
+                      ._id,
+                    date_of_events: `${startDate} to ${endDate}`,
+                    contact_email: JSON.parse(localStorage.getItem("userInfo"))
+                      .email,
+                    link_to_event: link ? link : "",
+                    max: max,
+                    location: location,
+                    reqi: req,
+                    createdAt: Date.now(),
+                    sponsored: true,
+                    associationId: associationInfo._id,
+                    associationProfilePic: associationInfo.icon,
+                    sponsoredLocations: tlocation,
+                    school_id: JSON.parse(localStorage.getItem("userInfo"))
+                      .schoolId,
                   }),
                 });
-              } else {
-                console.log(await response.text());
+                // Add sponsored locations filter
+                if (response.ok) {
+                  const Tit = title;
+                  const userProfile = JSON.parse(
+                    localStorage.getItem("userInfo")
+                  ).profile_picture;
+                  const associationInfo = JSON.parse(
+                    localStorage.getItem("associationInfo")
+                  );
+
+                  const options = {
+                    method: "POST",
+                    headers: {
+                      Authorization: `Basic ${process.env.NEXT_PUBLIC_ONESIGNAL_REST}`,
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      included_segments: ["All"],
+                      filters: createFiltersForSchoolIds(tlocation),
+                      app_id: "3b28d10b-3b88-426f-8025-507667803b2a",
+                      headings: {
+                        en: "New opportunity available!",
+                        es: "¡Nueva oportunidad disponible!",
+                        fr: "Nouvelle opportunité disponible !",
+                        de: "Neue Möglichkeit verfügbar!",
+                        it: "Nuova opportunità disponibile!",
+                        pt: "Nova oportunidade disponível!",
+                        nl: "Nieuwe mogelijkheid beschikbaar!",
+                        ru: "Доступна новая возможность!",
+                        zh: "新的机会现已开放!",
+                        ja: "新しい機会が利用可能です!",
+                        ar: "فرصة جديدة متاحة!",
+                        hi: "नया अवसर उपलब्ध है!",
+                        ko: "새로운 기회가 있습니다!",
+                      },
+                      url: "https://www.noteswap.org/event",
+                      chrome_web_icon: associationInfo?.icon,
+                      contents: {
+                        en: `${associationInfo.name} posted a new event '${title}' offering ${communityService} hours.`,
+                      },
+                    }),
+                  };
+                  console.log(options);
+
+                  await fetch(
+                    "https://onesignal.com/api/v1/notifications",
+                    options
+                  )
+                    .then((response) => response.json())
+                    .then((response) => console.log(response))
+                    .catch((err) => console.error(err));
+
+                  await fetch("/api/email/send_event_email", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      name: `${
+                        JSON.parse(localStorage.getItem("userInfo")).first_name
+                      } ${
+                        JSON.parse(localStorage.getItem("userInfo")).last_name
+                      }`,
+                      email: JSON.parse(localStorage.getItem("userInfo")).email,
+                      event: Tit,
+                      url: `${process.env.NEXT_PUBLIC_URL}signups/${code}`,
+                    }),
+                  });
+                } else {
+                  console.log(await response.text());
+                }
+                setCurrent(5);
               }
-              setCurrent(5);
             } else if (current == 5) {
               setCategory("");
               setCurrent(1);
@@ -581,7 +583,7 @@ export default function CreateEvent({ business }) {
                           });
                         }}
                       />
-                      {value.name} ({value.location}) {value.users}
+                      {value.name} ({value.location}) {value.users}{" "}
                       {value.users === 1 ? t("user") : t("users")}{" "}
                       {t("from_this_school")}
                     </label>

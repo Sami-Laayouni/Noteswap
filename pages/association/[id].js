@@ -10,7 +10,7 @@ import { CgWebsite } from "react-icons/cg";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { EventCard } from "../../components/Cards/EventCard";
+import EventCard from "../../components/Cards/EventCard";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 
@@ -67,7 +67,8 @@ export default function Association() {
         },
         body: JSON.stringify({ id: apiData._id }),
       });
-      setEvents(await secondRequestOptions.json());
+      const data = await secondRequestOptions.json();
+      setEvents(data.events);
     }
     if (localStorage && localStorage.getItem("userInfo")) {
       setUsersId(JSON.parse(localStorage.getItem("userInfo")).associations[0]);
@@ -193,7 +194,7 @@ export default function Association() {
         </div>
         <div className={style.right}>
           <h2>Latest Events</h2>
-          {event?.events.length == 0 && (
+          {event?.length == 0 && (
             <span>
               <MdOutlineSpeakerNotesOff
                 size={70}
@@ -206,11 +207,17 @@ export default function Association() {
               <h3>No events posted yet</h3>
             </span>
           )}
-          {event?.events.length > 0 && (
-            <section>
-              {event?.events.map(function (value, index) {
-                value["userInfo"] = data;
-                return <EventCard key={index} data={value} />;
+          {event?.length > 0 && (
+            <section
+              style={{
+                maxWidth: "900px",
+                display: "grid",
+                gridTemplateColumns: "50% 50%",
+                padding: "20px",
+              }}
+            >
+              {event?.map(function (value) {
+                return <EventCard key={value._id} data={value} />;
               })}
             </section>
           )}

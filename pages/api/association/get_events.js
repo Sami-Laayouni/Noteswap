@@ -14,11 +14,10 @@ import Events from "../../../models/Events";
  */
 export default async function handler(req, res) {
   const { id } = req.body;
-
   await connectDB();
 
   try {
-    const response = await Events.find({ teacher_id: id })
+    const response = await Events.find({ associationId: id })
       .sort({
         createdAt: -1, // Sort by createdAt field in descending order
       })
