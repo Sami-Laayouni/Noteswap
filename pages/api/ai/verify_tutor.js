@@ -32,7 +32,7 @@ export default async function handler(req, res) {
       res.status(200).send("true");
     }
 
-    const prompt = `You validate tutoring sessions return true if you consider the text a tutoring session and false if you think they are doing something else. Return just true or false. Just true or false. Don't be to harsh. This is the text recorded from a tutoring session: ${truncateString(
+    const prompt = `You validate tutoring sessions. Return true if you consider the text a valid tutoring session trasncript and false if you think they are doing something else. Return just true or false. This is the text recorded from a tutoring session: ${truncateString(
       speech,
       700
     )} return true or false

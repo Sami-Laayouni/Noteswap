@@ -44,6 +44,7 @@
   justify-content: center;
   gap: 10px; /* Adjust space between text and arrow */
   transition: all 0.3s ease;
+  max-width: 280px;
 }
 .button:hover {
   padding: 10px 45px;
@@ -66,98 +67,3 @@
 .learnMore:hover {
   text-decoration: underline;
 }
-/*.container {
-  width: 100%;
-  display: grid;
-  grid-template-columns: 25% 49% 26%;
-  margin-top: 20px;
-  background-color: white;
-  border-radius: 20px;
-  cursor: pointer;
-  height: fit-content;
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-}
-.container h1 {
-  font-family: var(--manrope-font);
-  font-size: 1.5rem;
-  line-height: 10px;
-}
-.container h2 {
-  font-family: var(--manrope-font);
-  font-size: 1.2rem;
-  color: var(--accent-color);
-}
-.container h3 {
-  font-family: var(--manrope-font);
-  font-size: 1rem;
-  color: black;
-}
-.container h4 {
-  line-height: 10px;
-  font-family: var(--manrope-font);
-  color: grey;
-  font-size: 1rem;
-  font-style: italic;
-}
-
-.container p {
-  font-family: var(--manrope-font);
-  width: 100%;
-  word-break: normal;
-  height: 100%;
-  padding-right: 10px;
-  padding-right: 20px;
-  white-space: pre-line;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.button {
-  width: 95%;
-  padding: 15px 10px;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  border-radius: 8px;
-  position: absolute;
-  font-family: var(--manrope-font);
-}
-.sponsored {
-  background-color: var(--secondary-color);
-  color: white;
-  padding: 5px 20px;
-  border-radius: 5px;
-  font-size: 16px;
-}
-@media all and (max-width: 808px) {
-  .container {
-    height: 100%;
-    grid-template-columns: 100%;
-  }
-  .container h1 {
-    text-align: center;
-  }
-  .container h2 {
-    text-align: center;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .container h3 {
-    text-align: center;
-    padding-left: 30px;
-    padding-right: 30px;
-    line-height: 150%;
-  }
-  .container p {
-    text-align: center;
-    height: fit-content;
-  }
-  .button {
-    width: 45%;
-    position: initial;
-    display: inline-block;
-    bottom: 0px;
-    margin-left: 10px;
-    margin-bottom: 10px;
-  }
-}
-*/

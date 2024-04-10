@@ -1,7 +1,8 @@
 .title {
   text-align: center;
   font-family: var(--manrope-bold-font);
-  line-height: 10px;
+  max-width: 800px;
+  font-size: 1.8rem;
 }
 .desc {
   text-align: center;
@@ -47,29 +48,47 @@
   overflow: hidden;
   max-height: calc(100vh - var(--header-height));
   overflow-x: hidden;
-  background-color: var(--accent-color);
+  background-color: whitesmoke;
+}
+@keyframes pulseAnimation {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 .center_circle {
   z-index: 5;
   background-color: var(--default-white-color);
   border-radius: 50%;
   padding: 20px;
+  animation: pulseAnimation 2s infinite ease-in-out;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 .button {
-  padding: var(--button-default-padding);
-  border-radius: var(--button-default-border-radius);
-  outline: none;
+  background-color: #008577;
+  color: white;
   border: none;
+  padding: 15px 30px;
+  font-size: 1em;
   cursor: pointer;
-  margin-top: 30px;
-  background-color: var(--default-white-color);
+  border-radius: 5px;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
 }
-.time {
-  position: absolute;
-  top: var(--header-height);
-  left: 10px;
-  color: var(--default-white-color);
-  font-family: var(--manrope-font);
+.button:hover {
+  background-color: #00695c;
+}
+.timer {
+  font-size: 2.5em;
+  margin: 20px 0;
+  margin-top: 35px;
+  color: #333;
+  text-align: center;
 }
 .ratingStars {
   display: inline-block;
@@ -91,6 +110,7 @@
   padding: 20px;
   text-align: center;
   border-radius: 8px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 .center h1 {
   font-family: var(--manrope-bold-font);
@@ -108,4 +128,9 @@
   margin-top: 5px;
   color: var(--default-white-color);
   background-color: var(--accent-color);
+}
+@media all and (max-width: 767px) {
+  .center {
+    width: 350px;
+  }
 }

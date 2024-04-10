@@ -1,6 +1,5 @@
 /* Modal to book a session with a tutor. Sends a confirmation email to the tutor so that they 
-can either confirm or deny the tutoring session with the user. When confirmed it will show up for the
-supervisors on the /supervisor page. */
+can either confirm or deny the tutoring session with the user.*/
 
 // Import the style
 import style from "./bookASession.module.css";
@@ -264,7 +263,6 @@ export default function BookASession() {
             {t("booking_confirmed")} {info?.data?.userInfo[0].first_name}{" "}
             {info?.data?.userInfo[0].last_name}
           </h1>
-          <h2 className={style.subTitle}>{t("check_email")} </h2>
           <div
             style={{
               display: "flex",

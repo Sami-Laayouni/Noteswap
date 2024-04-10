@@ -48,8 +48,7 @@ GOOGLE_BUCKET_NAME=google-bucket-name
 
 NEXT_PUBLIC_EMAIL=next-public-email
 NEXT_PUBLIC_PASSWORD=next-public-password
-NEXT_PUBLIC_SUPERVISOR_EMAIL=next-public-supervisors-email
-NEXT_PUBLIC_SUPERVISOR_NAME=next-public-supervisors-name
+
 
 NEXT_PUBLIC_URL=http://localhost:3000/
 NEXT_PUBLIC_JWT_SECRET=example-jwt-secret

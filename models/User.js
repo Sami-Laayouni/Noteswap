@@ -81,10 +81,15 @@ const userSchema = new mongoose.Schema({
     type: Array,
     required: false,
   },
+  tutoring_breakdown: {
+    type: Array,
+    required: false,
+  },
   associations: {
     type: Array,
     required: false,
   },
+
   createdAt: {
     type: Date,
     default: Date.now,

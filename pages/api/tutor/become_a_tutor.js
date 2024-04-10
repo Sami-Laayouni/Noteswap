@@ -34,14 +34,14 @@ export default async function becomeTutor(req, res) {
         desc: desc,
         reviews: [],
         since: Date.now(),
-        paused: true,
+        paused: false,
         school_id: school_id,
       });
       const savedTutor = await newTutor.save();
       await User.findOneAndUpdate(
         { _id: user_id },
         {
-          $set: { is_tutor: false },
+          $set: { is_tutor: true },
         },
         {
           returnNewDocument: true,

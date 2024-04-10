@@ -137,9 +137,13 @@ const Event = () => {
           // Assuming userInfo is stored in localStorage and contains _id and schoolId
           const userInfo = JSON.parse(localStorage.getItem("userInfo"));
           if (userInfo && userInfo.schoolId) {
+            await OneSignal.login(userInfo._id);
+
+            // Add email and tags
+            if (userInfo.email) {
+              OneSignal.User.addEmail(userInfo.email);
+            }
             // Information on user
-            OneSignal.setExternalUserId(userInfo._id);
-            OneSignal.User.addEmail(userInfo.email);
             OneSignal.User.addTags({
               schoolId: userInfo.schoolId,
             })

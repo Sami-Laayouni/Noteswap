@@ -35,7 +35,7 @@ export default async function handler(req, res) {
     
     Hello ${name}, 
       
-    Thank you for your interest in Noteswap for Events. In order to award the certificates to volunteers for the ${event}, please check out this page.
+    Thank you for your interest in Noteswap for Events. In order to award community service to volunteers for the ${event}, please check out this page.
 
     ${url}
 
@@ -72,8 +72,8 @@ export default async function handler(req, res) {
             <b>Hello {name},</b>
             <p>
               Thank you for your interest in Noteswap for Events. In order to
-              award the certificates to volunteers for the {event}, please check
-              out this page.
+              award community service to volunteers for the {event}, please
+              check out this page.
             </p>{" "}
             <a href={url}>
               <button

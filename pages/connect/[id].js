@@ -1,8 +1,10 @@
 import { useRouter } from "next/router";
 import { requireAuthentication } from "../../middleware/authenticate";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import style from "../../styles/Connect.module.css";
 import { useSocket } from "../../context/SocketContext";
+import QRCodeComponent from "../../components/Extra/QRCode";
+import Image from "next/image";
 
 /**
  * Connect
@@ -15,18 +17,9 @@ const Connect = () => {
   const socket = useSocket();
   const [data, setData] = useState();
   const [tutorData, setTutorData] = useState();
+  const [students, setStudents] = useState([]);
+  let studentsArray = [];
 
-  function parseQueryString(queryString) {
-    const keyValuePairs = queryString.split("&");
-    const result = {};
-
-    keyValuePairs.forEach((keyValuePair) => {
-      const [key, value] = keyValuePair.split("=");
-      result[key] = value;
-    });
-
-    return result;
-  }
   const socketInitializer = async (id) => {
     try {
       socket.emit("joinGroup", id);
@@ -34,8 +27,9 @@ const Connect = () => {
         console.log(`connect_error due to ${err}`);
       });
       socket.on("start", () => {
-        const data = { ...tutorData, started: true };
-        setTutorData(data);
+        const { query } = router;
+        const { tutoringSessionId } = query;
+        router.push(`/connect?isTheTutor=false&id=${tutoringSessionId}`);
       });
 
       // Handle other socket events and functionalities here if needed.
@@ -45,17 +39,56 @@ const Connect = () => {
   };
 
   useEffect(() => {
+    async function addStudent(data) {
+      const { query } = router;
+      const { tutoringSessionId } = query;
+
+      await fetch("/api/tutor/join_tutoring_session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: data.userId,
+          first: data.firstName,
+          last: data.lastName,
+          profile: data.profilePic,
+          tutoringId: tutoringSessionId,
+        }),
+      });
+    }
     if (router.query.id && socket) {
       const { query } = router;
-      const { tutoringSessionId } = parseQueryString(query.id);
+      const { tutoringSessionId } = query;
       socket.on("connect", () => {
         socket.emit("joinGroup", tutoringSessionId);
         socketInitializer(tutoringSessionId);
+
+        socket.on("join", (data) => {
+          const currentUserId = JSON.parse(localStorage.getItem("userInfo"));
+          const newUser = {
+            userId: data.userId,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            profilePic: data.profile,
+          };
+
+          const isExistingUser = studentsArray.some(
+            (student) => String(student.userId) === String(newUser.userId)
+          );
+
+          if (data.userId !== currentUserId && !isExistingUser) {
+            setStudents((prevStudents) => [...prevStudents, newUser]);
+            studentsArray.push(newUser);
+
+            addStudent(newUser);
+          }
+        });
       });
     }
   }, [socket]);
   useEffect(() => {
-    async function fetchTutorData(id) {
+    async function fetchTutorData(id, isTheTutor) {
       const response = await fetch("/api/tutor/get_tutoring_session", {
         method: "POST",
         headers: {
@@ -66,25 +99,61 @@ const Connect = () => {
         }),
       });
       if (response.ok) {
-        setTutorData(await response.json());
+        const data = await response.json();
+        const userData = JSON.parse(localStorage.getItem("userInfo"));
+        if (isTheTutor == "false") {
+          if (data?.started != true) {
+            if (data?.tutor == userData._id) {
+              document.getElementById("joinedText").innerText =
+                "Nice try, you can't join your own tutoring session.";
+              document.getElementById("joinedDesc").innerText =
+                "Better luck next time.";
+            } else {
+              const isExistingUser = data?.members?.some(
+                (student) => String(student.userId) === String(userData._id)
+              );
+
+              if (!isExistingUser) {
+                await socket.emit("joined", {
+                  tutoringSessionId: data._id,
+                  userId: data.tutor,
+                  firstName: userData.first_name,
+                  lastName: userData.last_name,
+                  profile: userData.profile_picture,
+                });
+              }
+            }
+          } else {
+            document.getElementById("joinedText").innerText =
+              "Tutoring session has already started.";
+            document.getElementById("joinedDesc").innerText =
+              "Cannot join tutoring session late.";
+          }
+        }
+        if (isTheTutor == "true" && data?.members?.length > 0) {
+          setStudents(data?.members);
+          studentsArray = data?.members;
+        }
+
+        setTutorData(data);
       }
     }
+    if (socket) {
+      const { query } = router;
 
-    const { query } = router;
+      if (query.id) {
+        const { tutoringSessionId, isTheTutor, joinCode } = query;
 
-    if (query.id) {
-      const { tutoringSessionId, isTheTutor, joinCode } = parseQueryString(
-        query.id
-      );
+        fetchTutorData(tutoringSessionId, isTheTutor);
 
-      fetchTutorData(tutoringSessionId);
-      setData({
-        tutoringSessionId: tutoringSessionId,
-        isTheTutor: isTheTutor,
-        joinCode: joinCode,
-      });
+        setData({
+          tutoringSessionId: tutoringSessionId,
+          isTheTutor: isTheTutor,
+          joinCode: joinCode,
+        });
+      }
     }
-  }, [router]);
+  }, [router, socket]);
 
   const requestMicrophoneAccess = async () => {
     try {
@@ -105,37 +174,71 @@ const Connect = () => {
       document.getElementById("start").innerText = "Awaiting Microphone access";
     }
   };
-
   return (
     <>
       {data?.isTheTutor == "true" && (
         <>
           <div className={style.container}>
             <div className={style.box}>
-              <h1 className={style.title}>
-                Ready to start the tutoring session?
-              </h1>
-              <p className={style.desc}>
-                When you are ready to start click the button below to start the
-                tutoring session.
-              </p>
-              <div className={style.texts}>
-                <p style={{ textAlign: "center" }}>
-                  To ensure accurate time tracking on NoteSwap, follow these
-                  practices:
-                </p>
-                <ul>
-                  <li>Do not close the Noteswap page.</li>
-                  <li>If not using your device keep it on standby.</li>
-                  <li>Speak in a loud and clear voice.</li>
-                  <li>
-                    Grant NoteSwap microphone access for secure AI session
-                    validation. No information is saved, recorded or shown to
-                    any human; everything is deleted after the session.{" "}
-                  </li>
-                </ul>
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <QRCodeComponent
+                  url={`${process.env.NEXT_PUBLIC_URL}connect/${data._id}?tutoringSessionId=${data._id}&isTheTutor=false&joinCode=${data.joinCode}`}
+                />
               </div>
+              <h1 className={style.title}>
+                To begin, have your student(s) scan the QR code above.
+              </h1>
+              <p style={{ textAlign: "center" }}>
+                Note: All data from this session is deleted after the tutoring
+                session
+              </p>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "33% 33% 33% ",
+                  maxHeight: "150px",
+                  overflowY: "auto",
+                }}
+              >
+                {students?.length > 0 &&
+                  students?.map(function (value) {
+                    return (
+                      <div
+                        style={{
+                          display: "block",
+                          marginTop: "10px",
+                          marginRight: "10px",
+                        }}
+                        key={value.userId}
+                      >
+                        {(value?.profile || value?.profilePic) && (
+                          <Image
+                            width={40}
+                            height={40}
+                            src={value.profile || value.profilePic}
+                            alt="Profile Picture"
+                            style={{
+                              borderRadius: "50%",
+                              display: "inline-block",
+                              verticalAlign: "middle",
+                            }}
+                          />
+                        )}
 
+                        <p style={{ display: "inline", marginLeft: "10px" }}>
+                          {value.firstName} {value.lastName}
+                        </p>
+                      </div>
+                    );
+                  })}
+              </div>
               <div
                 style={{
                   width: "100%",
@@ -147,11 +250,12 @@ const Connect = () => {
                 <button
                   className={style.start}
                   id="start"
+                  disabled={students?.length == 0}
                   onClick={() => {
                     requestMicrophoneAccess();
                   }}
                 >
-                  Start
+                  {students?.length == 0 ? "Waiting for students" : "Start"}
                 </button>
               </div>
             </div>
@@ -162,47 +266,12 @@ const Connect = () => {
         <>
           <div className={style.container}>
             <div className={style.box}>
-              <h1 className={style.title}>
-                Ready to join the tutoring session?
+              <h1 className={style.title} id="joinedText">
+                You have joined the tutoring session!
               </h1>
-              <p className={style.desc}>
-                When you are ready to join click the button below to join the
-                tutoring session.
+              <p className={style.desc} id="joinedDesc">
+                We hope you enjoy your session.
               </p>
-              <div
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <button
-                  className={style.start}
-                  disabled={
-                    tutorData?.started
-                      ? tutorData?.ended
-                        ? true
-                        : false
-                      : true
-                  }
-                  style={{
-                    cursor: tutorData?.started ? "pointer" : "not-allowed",
-                  }}
-                  onClick={async () => {
-                    await socket.emit("joined", data.tutoringSessionId);
-                    router.push(
-                      `/connect?isTheTutor=false&id=${data.tutoringSessionId}`
-                    );
-                  }}
-                >
-                  {tutorData?.started
-                    ? tutorData?.ended
-                      ? "Session has ended"
-                      : "Join"
-                    : "Waiting for the session to start"}
-                </button>
-              </div>
             </div>
           </div>
         </>

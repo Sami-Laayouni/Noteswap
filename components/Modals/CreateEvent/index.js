@@ -235,13 +235,13 @@ export default function CreateEvent({ business }) {
                   };
 
                   // Notify users at the same school
-                  await fetch(
+                  /*await fetch(
                     "https://onesignal.com/api/v1/notifications",
                     options
                   )
                     .then((response) => response.json())
                     .then((response) => console.log(response))
-                    .catch((err) => console.error(err));
+                    .catch((err) => console.error(err));*/
                 }
               } else {
                 console.log(await response.text());

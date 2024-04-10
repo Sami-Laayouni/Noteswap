@@ -25,23 +25,20 @@ const tutorSessionSchema = new mongoose.Schema({
   },
   date: {
     type: String,
-    required: true,
+    required: false,
   },
   time: {
     type: String,
-    required: true,
+    required: false,
   },
   tutor: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
   },
-  learner: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-  },
-  id: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
+
+  members: {
+    type: Array,
+    required: false,
   },
 });
 

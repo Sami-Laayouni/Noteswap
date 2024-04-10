@@ -5,9 +5,13 @@ import {
   MdOutlineEmail,
   MdOutlineSpeakerNotesOff,
 } from "react-icons/md";
+import { MdAlternateEmail } from "react-icons/md";
+
 import { AiOutlinePhone } from "react-icons/ai";
 import { CgWebsite } from "react-icons/cg";
 import { HiOutlineLocationMarker } from "react-icons/hi";
+import { PiStudent } from "react-icons/pi";
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import EventCard from "../../components/Cards/EventCard";
@@ -59,6 +63,7 @@ export default function Association() {
         body: JSON.stringify({ information: id }),
       });
       const apiData = await response.json();
+      console.log(apiData);
       setData(apiData);
       const secondRequestOptions = await fetch("/api/association/get_events", {
         method: "POST",
@@ -79,149 +84,148 @@ export default function Association() {
     }
   }, [router.query.id]);
   return (
-    <main className={style.background}>
-      <div className={style.image_container}>
-        <img
-          className={style.background_image}
-          src={
-            data?.background_image
-              ? data?.background_image
-              : "/assets/fallback/background.png"
-          }
-          alt="Background image"
-        />
+    <main>
+      <div style={{ position: "relative", width: "100%", height: "100%" }}>
+        {/* Banner image */}
+        <div>
+          <img
+            src={
+              data?.background_image
+                ? data?.background_image
+                : "/assets/fallback/background.png"
+            }
+            alt="Background image"
+            style={{
+              width: "100%",
+              height: "250px",
+              objectFit: "cover",
+            }}
+          />
+          {/* Profile picture */}
+          <img
+            src={data?.icon ? data?.icon : "/assets/fallback/user.webp"}
+            alt="Profile picture"
+            width={190}
+            height={190}
+            className={style.profile_pic}
+          />
+        </div>
       </div>
       <section className={style.userInfo}>
-        <img src={data?.icon} alt="Profile picture" width={190} height={190} />
         <div>
-          <h1 style={{ display: "inline-block" }}>
-            {data?.name ? data?.name : t("loading")}{" "}
-          </h1>
-          {usersId && data?._id == usersId && (
-            <Link href="/business/edit">
-              <MdModeEditOutline
-                size={21}
-                style={{
-                  display: "inline-block",
-                  marginLeft: "10px",
-                  cursor: "pointer",
-                }}
-              />
-            </Link>
-          )}
+          {/* User name and edit button if user is logged in */}
+          <div>
+            <h1 style={{ display: "inline-block" }}>
+              {data?.name ? data?.name : "Loading"}{" "}
+            </h1>
+            {usersId && data?._id == usersId && (
+              <Link href="/business/edit">
+                <MdModeEditOutline
+                  size={21}
+                  style={{
+                    display: "inline-block",
+                    marginLeft: "10px",
+                    cursor: "pointer",
+                  }}
+                />
+              </Link>
+            )}
+
+            {/* Bio and community service information */}
+
+            <h2>{data?.desc ? data?.desc : "No Description available"}</h2>
+
+            <span
+              style={{
+                display: "inline",
+                color: "gray",
+                fontSize: "1.1rem",
+              }}
+            >
+              <MdAlternateEmail
+                color="black"
+                style={{ verticalAlign: "middle" }}
+              />{" "}
+              <p style={{ display: "inline" }}>
+                {data?.contact_email?.toLowerCase()}
+              </p>
+            </span>
+
+            <span
+              style={{
+                display: "inline",
+                color: "gray",
+                fontSize: "1.1rem",
+              }}
+            >
+              <AiOutlinePhone
+                color="black"
+                style={{ verticalAlign: "middle", marginLeft: "10px" }}
+              />{" "}
+              <p style={{ display: "inline" }}>{data?.contact_phone}</p>
+            </span>
+
+            <span
+              style={{
+                display: "inline",
+                color: "gray",
+                fontSize: "1.1rem",
+              }}
+            >
+              <HiOutlineLocationMarker
+                color="black"
+                style={{ verticalAlign: "middle", marginLeft: "10px" }}
+              />{" "}
+              <p style={{ display: "inline" }}>{data?.country}</p>
+            </span>
+            <span
+              style={{
+                display: "inline",
+                color: "gray",
+                fontSize: "1.1rem",
+              }}
+            >
+              <CgWebsite
+                color="black"
+                style={{ verticalAlign: "middle", marginLeft: "10px" }}
+              />{" "}
+              <p style={{ display: "inline" }}>{data?.website}</p>
+            </span>
+          </div>
         </div>
       </section>
 
-      <section className={style.notes}>
-        <div className={style.left}>
-          <section>
-            <div style={{ paddingRight: "80px", paddingTop: "15px" }}>
-              {" "}
-              {data?.desc}
-            </div>
-            <div style={{ display: "block", height: "fit-content" }}>
-              <MdOutlineEmail size={18} style={{ verticalAlign: "middle" }} />
-              <p
-                style={{
-                  display: "inline-block",
-                  marginLeft: "5px",
-                  fontFamily: "var(--manrope-font)",
-                  marginTop: "35px",
-                  lineHeight: "0px",
-                }}
-              >
-                {data?.contact_email
-                  ? data?.contact_email
-                  : `${t("loading")}...`}
-              </p>
-            </div>
-
-            <div style={{ display: "block", height: "fit-content" }}>
-              <AiOutlinePhone size={20} style={{ verticalAlign: "middle" }} />
-              <p
-                style={{
-                  display: "inline-block",
-                  marginLeft: "5px",
-                  fontFamily: "var(--manrope-font)",
-                  textTransform: "capitalize",
-                  marginTop: "35px",
-                  lineHeight: "0px",
-                }}
-              >
-                {data?.contact_phone
-                  ? data?.contact_phone
-                  : `${t("loading")}...`}
-              </p>
-            </div>
-            <div style={{ display: "block", height: "fit-content" }}>
-              <HiOutlineLocationMarker
-                size={20}
-                style={{ verticalAlign: "middle" }}
-              />
-              <p
-                style={{
-                  display: "inline-block",
-                  marginLeft: "5px",
-                  fontFamily: "var(--manrope-font)",
-                  textTransform: "capitalize",
-                  marginTop: "35px",
-                  lineHeight: "0px",
-                }}
-              >
-                {data?.country
-                  ? `${data?.country}, ${data?.city}`
-                  : `${t("loading")}...`}
-              </p>
-            </div>
-            <div style={{ display: "block", height: "fit-content" }}>
-              <CgWebsite size={20} style={{ verticalAlign: "middle" }} />
-              <p
-                style={{
-                  display: "inline-block",
-                  marginLeft: "5px",
-                  fontFamily: "var(--manrope-font)",
-                  textTransform: "capitalize",
-                  marginTop: "35px",
-                  lineHeight: "0px",
-                }}
-              >
-                {data?.website ? data?.website : "No website found"}
-              </p>
-            </div>
-          </section>
-
-          <div className={style.vertical_line} />
-        </div>
-        <div className={style.right}>
-          <h2>Latest Events</h2>
-          {event?.length == 0 && (
-            <span>
-              <MdOutlineSpeakerNotesOff
-                size={70}
-                style={{
-                  display: "block",
-                  marginLeft: "auto",
-                  marginRight: "auto",
-                }}
-              />
-              <h3>No events posted yet</h3>
-            </span>
-          )}
-          {event?.length > 0 && (
-            <section
+      <section className={style.contentContainer}>
+        <h2>Latest Events</h2>
+        {event?.length == 0 && (
+          <span>
+            <MdOutlineSpeakerNotesOff
+              size={70}
               style={{
-                maxWidth: "900px",
-                display: "grid",
-                gridTemplateColumns: "50% 50%",
-                padding: "20px",
+                display: "block",
+                marginLeft: "auto",
+                marginRight: "auto",
               }}
-            >
-              {event?.map(function (value) {
-                return <EventCard key={value._id} data={value} />;
-              })}
-            </section>
-          )}
-        </div>
+            />
+            <h3>No events at the moment</h3>
+          </span>
+        )}
+        {event?.length > 0 && (
+          <section
+            style={{
+              maxWidth: "900px",
+              display: "grid",
+              gridTemplateColumns: "50% 50%",
+              padding: "20px",
+              gap: "30px",
+              overflowX: "hidden",
+            }}
+          >
+            {event?.map(function (value) {
+              return <EventCard key={value._id} data={value} />;
+            })}
+          </section>
+        )}
       </section>
     </main>
   );

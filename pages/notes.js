@@ -293,7 +293,7 @@ export default function Note() {
                 notes?.map(function (value) {
                   return (
                     <>
-                      <NoteCard data={value} />
+                      <NoteCard data={value} padding={true} />
                     </>
                   );
                 })

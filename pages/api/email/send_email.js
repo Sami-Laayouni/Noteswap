@@ -55,29 +55,24 @@ export default async function handler(req, res) {
     
     Hello ${receiverName}, 
       
-    Thank you for your interest in becoming a tutor on Noteswap. We have received a request from a student who is looking to be tutored on ${subject} by you.  
+    Thank you for your interest in becoming a tutor on Noteswap. We have received a request from a student who is looking to be tutored by you.  
 
-        Student’s Name: ${name}
-        Student’s Email: ${senderEmail}
-        Preferred Tutoring Schedule: ${date} from ${time}
+    Student’s Name: ${name}
+    Student’s Email: ${senderEmail}
+    Preferred Tutoring Schedule: ${date} from ${time}
       
 
     Additionally, a personalized message from ${name} has been sent to you: ${message}
 
-    If you are interested in tutoring this student, please click the link below to be redirected to Noteswap and accept the request:
+    If you are interested in tutoring this student, please click the link below:
 
-    ${process.env.NEXT_PUBLIC_URL}confirm/${Object.keys(queryParams)
-        .map(
-          (key) =>
-            `${encodeURIComponent(key)}=${encodeURIComponent(queryParams[key])}`
-        )
-        .join("&")}
+    ${process.env.NEXT_PUBLIC_URL}confirm
 
     In case you need to further contact ${name} please reach out to the email address provided above. We thank you again for considering the opportunity to make a positive impact on a student’s academic journey. 
 
     Best regards, 
 
-    The Noteswap team
+    The NoteSwap team
     `,
 
       html: ReactDOMServer.renderToString(
@@ -111,7 +106,7 @@ export default async function handler(req, res) {
             <p>
               Thank you for your interest in becoming a tutor on Noteswap. We
               have received a request from a student who is looking to be
-              tutored on {subject} by you.
+              tutored by you.
             </p>{" "}
             <p>
               Student’s Name: {name}
@@ -126,20 +121,9 @@ export default async function handler(req, res) {
             <p>
               {" "}
               If you are interested in tutoring this student, please click the
-              link below to be redirected to Noteswap and accept the request:
+              link below:
             </p>
-            <a
-              href={`${process.env.NEXT_PUBLIC_URL}confirm/${Object.keys(
-                queryParams
-              )
-                .map(
-                  (key) =>
-                    `${encodeURIComponent(key)}=${encodeURIComponent(
-                      queryParams[key]
-                    )}`
-                )
-                .join("&")}`}
-            >
+            <a href={`${process.env.NEXT_PUBLIC_URL}confirm`}>
               <button
                 style={{
                   backgroundColor: "#40b385",

@@ -81,12 +81,12 @@
 }
 .title {
   text-align: center;
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-family: var(--manrope-bold-font);
   padding-left: 100px;
   padding-right: 100px;
   width: 75vw;
-  margin-top: 100px;
+  margin-top: 170px;
 }
 .subTitle {
   text-align: center;

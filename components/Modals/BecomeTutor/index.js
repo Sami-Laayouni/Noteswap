@@ -1,6 +1,5 @@
 /* Modal used by students in order to apply to be a tutor. Allows students to select 
-the subject they want to teach the days they are available and sends an acceptance email to 
-the supervisors selected by the school. */
+the subject they want to teach the days they are available */
 
 // Import the default Modal component
 import Modal from "../../Template/Modal";
@@ -9,6 +8,7 @@ import style from "./becomeTutor.module.css";
 // React
 import React, { useContext, useEffect, useState } from "react";
 import ModalContext from "../../../context/ModalContext";
+import { useRouter } from "next/router";
 // React icons
 import { MdOutlineArrowDropDown } from "react-icons/md";
 // Used for translation
@@ -41,6 +41,7 @@ export default function BecomeTutor() {
   const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]; // Day of the week (hopefully we don't have to change)
   const [courses, setCourses] = useState({});
   const { t } = useTranslation("common");
+  const router = useRouter();
 
   // Function used to change the availability of a certain day
   const handleCheckboxChange = (event) => {
@@ -73,38 +74,45 @@ export default function BecomeTutor() {
     return null;
   }
 
+  async function startTutoringSession() {
+    const response = await fetch("/api/tutor/create_tutoring_session", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: JSON.parse(localStorage.getItem("userInfo"))._id,
+      }),
+    });
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data);
+      router.push(
+        `/connect/${data?.tutoringSessionId}?tutoringSessionId=${data?.tutoringSessionId}&isTheTutor=true&joinCode=${data?.joinCode}`
+      );
+    }
+  }
+
   // Return the JSX
   return (
     <Modal
       isOpen={open}
       onClose={() => setOpen(false)}
-      title="Become a tutor on Noteswap"
+      title={
+        current != 3
+          ? "Before you start please enter some information about you"
+          : ""
+      }
     >
-      {/* Form (on submit send the email to the supervisors) */}
+      {/* Form */}
       <form
         onSubmit={async (e) => {
           //Prevent reload of the page
           e.preventDefault();
           if (current == 2) {
             // Feedback to the user telling them that the email is being sent
-            document.getElementById("finish").innerText = "Sending...";
-            // Send the email to the supervisors
-            await fetch("/api/email/send_supervisor", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                tutor_email: process.env.NEXT_PUBLIC_SUPERVISOR_EMAIL, // The supervisors email
-                tutor_name:
-                  process.env.NEXT_PUBLIC_SUPERVISOR_NAME || "Supervisors", // The supervisors name default Supervisor
-                name: `${
-                  JSON.parse(localStorage.getItem("userInfo")).first_name
-                } ${JSON.parse(localStorage.getItem("userInfo")).last_name}`, // Name of the student that wants to become a tutor
-                subject: schoolClass, // Subject that the student wants to teach
-                email: email, // Email of the student that wants to become a tutor
-              }),
-            });
+            document.getElementById("finish").innerText = "Working on it...";
+
             // Add student's name to the list of students that want to become tutors
             const response = await fetch("/api/tutor/become_a_tutor", {
               method: "POST",
@@ -127,29 +135,28 @@ export default function BecomeTutor() {
             });
             // Check if the response was succesful.
             if (response.ok) {
-              // Notify the user that the email was sent
-              document.getElementById("finish").innerText = "Sent";
+              document.getElementById("finish").innerText = "Finish";
               // Switch to the next page
-              setCurrent(3);
+              setOpen(false);
+              startTutoringSession();
+              // When the student closes the Modal we reset all the values
+              setCheckboxes({
+                Monday: false,
+                Tuesday: false,
+                Wednesday: false,
+                Thursday: false,
+                Friday: false,
+              }); // Reset the days the student are available to none
+              setError(); // Reset error message to none
+              setStartTime("15:40"); // Set start time to the min amount allowed by the school
+              setEndTime("16:30"); // Set end time to the max amount allowed by the school
+              setSchoolClass(); // Set subject to none
+              setCurrent(1); // Set page back to the first one
+              setOpen(false); // Close the modal
             } else {
               // An error has occured, display that to the users
               setError(await response.text());
             }
-          } else if (current == 3) {
-            // When the student closes the Modal we reset all the values
-            setCheckboxes({
-              Monday: false,
-              Tuesday: false,
-              Wednesday: false,
-              Thursday: false,
-              Friday: false,
-            }); // Reset the days the student are available to none
-            setError(); // Reset error message to none
-            setStartTime("15:40"); // Set start time to the min amount allowed by the school
-            setEndTime("16:30"); // Set end time to the max amount allowed by the school
-            setSchoolClass(); // Set subject to none
-            setCurrent(1); // Set page back to the first one
-            setOpen(false); // Close the modal
           } else {
             // Switch to the second page
             setCurrent(2);
@@ -171,38 +178,6 @@ export default function BecomeTutor() {
               autoSave // Auto Save
             ></textarea>
           </>
-        )}
-        {current == 3 && (
-          <div
-            style={{
-              height: "75vh",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "column",
-            }}
-          >
-            {/* Third page where we thank them for their intrest in becoming a tutor */}
-            <h1
-              style={{
-                fontFamily: "var(--bold-manrope-font)",
-                textAlign: "center",
-                color: "var(--accent-color)",
-                fontSize: "2.2rem",
-              }}
-            >
-              {t("thank_you_for_your_interest")}{" "}
-            </h1>
-            <h2
-              style={{
-                fontFamily: "var(--manrope-font)",
-                textAlign: "center",
-                fontSize: "1.3rem",
-              }}
-            >
-              {t("tutor_message")}
-            </h2>
-          </div>
         )}
 
         {current == 1 && (
@@ -301,7 +276,7 @@ export default function BecomeTutor() {
             <section className={style.container}>
               <b>
                 <label className={style.labelForInput}>
-                  {t("at_this_time")}
+                  Select available time
                 </label>
               </b>
               <input

@@ -1,0 +1,18 @@
+.container {
+  padding: 50px;
+  overflow-x: hidden;
+}
+.container h1 {
+  font-family: var(--manrope-bold-font);
+}
+
+.subContainer {
+  display: grid;
+  grid-template-columns: 33% 33% 33%;
+  gap: 30px;
+}
+@media all and (max-width: 1023px) {
+  .subContainer {
+    grid-template-columns: 100%;
+  }
+}

@@ -131,6 +131,24 @@ export default function Tutor() {
     return str.replace(/([a-z])([A-Z])/g, "$1 $2");
   }
 
+  async function startTutoringSession() {
+    const response = await fetch("/api/tutor/create_tutoring_session", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: JSON.parse(localStorage.getItem("userInfo"))._id,
+      }),
+    });
+    if (response.ok) {
+      const data = await response.json();
+      router.push(
+        `/connect/${data?.tutoringSessionId}?tutoringSessionId=${data?.tutoringSessionId}&isTheTutor=true&joinCode=${data?.joinCode}`
+      );
+    }
+  }
+
   return (
     <div>
       <Head>
@@ -309,30 +327,29 @@ export default function Tutor() {
               {tutors?.length} {t("result")}
               {tutors?.length == 1 ? "" : "s"} {t("found")}
             </p>
-            {tutors?.map(function (value) {
-              return <TutorCard key={value.userInfo[0]?._id} data={value} />;
-            })}
+            <div className={style.grid}>
+              {tutors?.map(function (value) {
+                return <TutorCard key={value.userInfo[0]?._id} data={value} />;
+              })}
+            </div>
           </div>
         )}
       </section>
-      {dataFromLocalStorage && dataFromLocalStorage.is_tutor && (
+      {/*{dataFromLocalStorage && dataFromLocalStorage.is_tutor && (
         <button
           id="dropout"
           className={style.becomeButton}
           onClick={async () => {
             document.getElementById("dropout").innerText = "Sending...";
             document.getElementById("dropout").disabled = true;
-            const response = await fetch("/api/tutor/request_dropout", {
+            const response = await fetch("/api/tutor/pause_tutoring", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
-                tutor_name: process.env.NEXT_PUBLIC_SUPERVISOR_NAME,
-                tutor_email: process.env.NEXT_PUBLIC_SUPERVISOR_EMAIL,
-                name: `${
-                  JSON.parse(localStorage.getItem("userInfo")).first_name
-                } ${JSON.parse(localStorage.getItem("userInfo")).last_name}`,
+                id: JSON.parse(localStorage.getItem("userInfo"))._id,
+                value: true,
               }),
             });
             if (response.ok) {
@@ -343,10 +360,19 @@ export default function Tutor() {
             }
           }}
         >
-          {t("request_to_drop")}
+          Stop Tutoring
+        </button>
+      )}*/}
+      {dataFromLocalStorage && dataFromLocalStorage.is_tutor && (
+        <button
+          className={style.becomeButton}
+          onClick={() => {
+            startTutoringSession();
+          }}
+        >
+          Start A Tutoring Session
         </button>
       )}
-
       {dataFromLocalStorage && !dataFromLocalStorage.is_tutor && (
         <button
           className={style.becomeButton}
@@ -354,7 +380,7 @@ export default function Tutor() {
             setOpen(true);
           }}
         >
-          {t("become_tutor")}
+          Start A Tutoring Session
         </button>
       )}
     </div>

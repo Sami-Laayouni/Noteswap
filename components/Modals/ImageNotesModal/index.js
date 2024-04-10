@@ -120,7 +120,6 @@ export default function ImageNotesModal() {
                   textAlign: "center",
                   fontFamily: "var(--manrope-family)",
                   color: "var(--danger-color)",
-                  lineHeight: "0px",
                 }}
               >
                 {error}

@@ -1,10 +1,9 @@
 import style from "./tutorCard.module.css";
-import { LuBook } from "react-icons/lu";
-import { useRouter } from "next/router";
+import { CiStar } from "react-icons/ci";
+import Link from "next/link";
 import { useContext } from "react";
 import ModalContext from "../../../context/ModalContext";
 import StarRating from "../../Extra/StarRating";
-import Image from "next/image";
 import { useTranslation } from "next-i18next";
 
 function calculateAverage(numbers) {
@@ -24,7 +23,6 @@ function roundToDecimal(number, decimalPlaces) {
 }
 
 export default function TutorCard({ data }) {
-  const router = useRouter();
   const { bookSession, bookSessionInfo } = useContext(ModalContext);
   const [open, setOpen] = bookSession;
   const [info, setInfo] = bookSessionInfo;
@@ -33,85 +31,59 @@ export default function TutorCard({ data }) {
 
   return (
     <div className={style.container}>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          alignContent: "center",
-          padding: "10px",
-        }}
-      >
-        <Image
-          className={style.imageContainer}
-          src={data?.userInfo[0]?.profile_picture}
-          alt={data?.userInfo[0]?.first_name}
-          width={200}
-          height={200}
-          onClick={() => {
-            router.push(`/profile/${data?.userInfo[0]?._id}`);
-          }}
-          loading="lazy"
-        />
-      </div>
-
-      <span>
-        <h1 className={style.name}>
-          {data?.userInfo[0].first_name} {data?.userInfo[0].last_name}
-        </h1>
-        <h2 className={style.subject}>
-          <LuBook size={15} style={{ verticalAlign: "middle" }} />
-          <span style={{ verticalAlign: "middle", marginLeft: "5px" }}>
-            {data?.subject}
-          </span>
-        </h2>
-        <p className={style.textBox}>{data?.desc}</p>
-      </span>
-      <div>
-        {ratings != 0 && (
-          <>
-            <StarRating rating={ratings} />
-            <p
-              className={style.center}
-              style={{ fontFamily: "var(--manrope-font)", lineHeight: "10px" }}
-            >
-              {t("rating")}: {roundToDecimal(ratings, 1)}/5
-            </p>
-          </>
-        )}
-        {!ratings && (
-          <p
+      <Link href={`/profile/${data?.userInfo[0]?._id}`}>
+        <div style={{ position: "relative", width: "100%", height: "100%" }}>
+          <img
+            src={data?.userInfo[0]?.profile_picture}
+            alt={`${data?.userInfo[0]?.first_name} ${data?.userInfo[0]?.last_name} Profile Picture`}
+            loading="lazy"
+          />
+          <div
             style={{
-              fontFamily: "var(--manrope-font)",
-              paddingTop: "30px",
-              textAlign: "center",
+              position: "absolute",
+              top: "0",
+              right: "0",
+              background: "rgba(0, 0, 0, 0.5)",
+              color: "white",
+              padding: "6px",
+              borderTopRightRadius: "10px",
+              borderBottomLeftRadius: "10px",
             }}
           >
-            {t("no_rating")}
+            {data?.subject}
+          </div>
+        </div>
+      </Link>
+      <div className={style.moreInfo}>
+        <div style={{ height: "140px" }}>
+          <h1>
+            {data?.userInfo[0]?.first_name} {data?.userInfo[0]?.last_name}
+          </h1>
+          <p>
+            {data?.desc.slice(0, 100)}
+            {data?.desc?.length > 100 ? "..." : ""}
           </p>
-        )}
+        </div>
+
+        <span className={style.lightText}>
+          <CiStar style={{ verticalAlign: "middle" }} />{" "}
+          {ratings != 0 && (
+            <>
+              <StarRating rating={ratings} />
+              {t("rating")}: {roundToDecimal(ratings, 1)}/5
+            </>
+          )}
+          {!ratings && t("no_rating")}
+        </span>
+        <br></br>
         <button
           className={style.button}
-          style={{
-            right: "20px",
-            top: "120px",
-            background: "var(--accent-color)",
-            color: "var(--default-white-color)",
-          }}
           onClick={() => {
             setOpen(true);
             setInfo({ data });
           }}
         >
           {t("book_session")}
-        </button>
-        <button
-          onClick={() => {
-            window.location.href = `mailto:${data?.email}?subject=Noteswap Tutor`;
-          }}
-          className={style.button}
-          style={{ right: "20px", top: "170px" }}
-        >
-          {t("contact_email")}
         </button>
       </div>
     </div>

@@ -1,164 +1,76 @@
-.background {
-  width: 100%;
-  height: 100%;
-  min-height: 100vh;
-  background-color: whitesmoke;
-}
-/*========= Image ========= */
-.image_container {
-  position: relative;
-  overflow: hidden;
-}
-
-.image_container::before,
-.image_container::after {
-  content: "";
+.profile_pic {
   position: absolute;
-  left: 0;
-  width: 100%;
-  height: 0px;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 1;
-}
-
-.image_container::after {
-  bottom: 0;
-  box-shadow: 0 -4px 10px 8px rgba(0, 0, 0, 0.1);
-}
-
-.image_container img {
-  display: block;
-  width: 100%;
-  height: 220px;
-  object-fit: cover;
-}
-/*========= User Info ========= */
-.userInfo {
-  width: 100%;
-  height: 120px;
-  position: relative;
-  background-color: var(--default-white-color);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-}
-
-.userInfo img {
-  position: absolute;
-  border-radius: 50%;
+  top: 150px;
   left: 100px;
-  bottom: 100px;
-  top: -100px;
-  opacity: 1;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  display: inline-block;
+  border-radius: 50%;
+  padding: 5px;
+  background-color: white;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
-.userInfo div {
-  margin-left: 320px;
-}
-.userInfo div h1 {
-  line-height: 10px;
-  font-family: var(--manrope-bold-font);
-  margin-top: 30px;
-  font-size: 2rem;
-  display: block;
-}
-.userInfo div h2 {
-  line-height: 10px;
-  font-family: var(--manrope-font);
-  color: var(--default-light-grey-color);
-  font-size: 1rem;
-}
-.userInfo div h2 span {
-  color: var(--accent-color);
-}
+.userInfo {
+  padding: 100px;
+  padding-bottom: 0px;
 
-/*========= Notes ========= */
-.notes {
-  width: 100%;
-  height: 100%;
+  margin-top: 10px;
   display: grid;
-  grid-template-columns: 35% 65%;
-  position: relative;
+  grid-template-columns: 50% 50%;
 }
-.vertical_line {
-  height: 80%;
-  width: 1.5px;
-  background: black;
-  position: absolute;
-  left: 30%;
-  bottom: 9px;
+.userInfo h1 {
+  font-family: var(--primary-font);
+  font-size: 2.3rem;
 }
-
-.left {
-  text-align: left;
+.userInfo h2 {
+  font-family: var(--primary-font);
+  font-size: 1.4rem;
+  font-weight: lighter;
 }
-.left section {
-  padding-left: 30px;
-  padding-right: 30px;
-  margin-left: auto;
-  margin-right: auto;
+.line {
+  width: calc(
+    100% - 200px
+  ); /* Adjust the total width by subtracting padding values from 100% */
+  height: 1px;
+  background-color: lightgray;
+  margin-top: 20px;
+  margin-left: auto; /* Center the line */
+  margin-right: auto; /* Center the line */
 }
-.right section {
+.end {
   width: 100%;
-  height: 400px;
-  overflow-y: auto;
-}
-.right div {
-  margin-left: 0px;
-}
-.right h1 {
-  font-family: var(--manrope-bold-font);
-  font-weight: bold;
-}
-.right h3 {
-  text-align: center;
-  font-family: var(--manrope-font);
-}
-.right span {
-  align-items: center;
-  width: 200px;
 
-  margin-left: auto;
-  margin-right: auto;
+  display: flex;
+  justify-content: end;
+}
+.button {
+  padding: 0px 25px;
+  height: 45px;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  border-radius: 6px;
+  background-color: black;
+  margin-left: 10px;
+  color: white;
+  position: relative;
+  top: 0px;
+  right: 10px;
+}
+.contentContainer {
+  padding-left: 100px;
+  padding-right: 100px;
+}
+.contentContainer h1 {
+  font-size: 1.4rem;
 }
 
 @media all and (max-width: 1023px) {
+  .profile_pic {
+    left: 30%;
+  }
   .userInfo {
-    height: 210px;
-  }
-  .userInfo div {
-    margin-left: 0px;
-    padding-left: 50px;
-    padding-right: 50px;
-    width: 100%;
-    text-align: center;
-    padding-top: 50px;
-  }
-  .userInfo h1 {
+    display: block;
     text-align: center;
   }
-  .userInfo div h2 {
-    line-height: 120%;
-  }
-  .userInfo img {
-    left: 50%;
-    top: -65%;
-    transform: translate(-50%);
-  }
-  .notes {
-    grid-template-columns: 100%;
-  }
-  .left {
-    display: none;
-  }
-  .right h2 {
-    text-align: center;
-  }
-  .right section {
-    width: 100%;
-    display: flex;
-    height: auto;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+  .end {
+    margin-top: 20px;
   }
 }

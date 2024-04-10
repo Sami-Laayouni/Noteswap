@@ -1,9 +1,10 @@
 import Image from "next/image";
 import style from "../../styles/Connect.module.css";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useSocket } from "../../context/SocketContext";
+import FlexibleAudioPlayer from "../../components/Extra/Audio";
 
 /**
  * Connect page
@@ -19,45 +20,29 @@ export default function Connect() {
   const [numberTimes, setNumberTimes] = useState(0);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [data, setData] = useState("");
-  const [runEffect, setRunEffect] = useState(true);
-  const [started, setStarted] = useState(false);
   const [ended, setEnded] = useState(false);
   const [verified, setVerified] = useState();
   const [selectedRating, setSelectedRating] = useState(0);
   const [selectedRating2, setSelectedRating2] = useState(0);
   const [selectedRating3, setSelectedRating3] = useState(0);
   const [recognition, setRecognition] = useState(null);
+  const [userId, setUserId] = useState(null);
   const [rated, setRated] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const verifiedAudio = useRef(null);
+  const notVerfiedAudio = useRef(null);
+
   let speech = "Speech: ";
-  console.log(socket);
   useEffect(() => {
     if (socket) {
       socket.on("connect", () => {
-        socket.on("join", () => {
-          if (data?.isTutor) {
-            startTimer();
-            speechToText();
-            setStarted(true);
-          }
-        });
-
         socket.on("end", () => {
           setEnded(true);
         });
       });
     }
   }, [socket]);
-  function formatTime(totalSeconds) {
-    const totalMinutes = Math.floor(totalSeconds / 60);
 
-    const seconds = totalSeconds % 60;
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = totalMinutes % 60;
-
-    const padZero = (num) => (num < 10 ? `0${num}` : num);
-
-    return `${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)}`;
-  }
   function startTimer() {
     const startTime = Date.now() - elapsedTime;
 
@@ -65,29 +50,66 @@ export default function Connect() {
       setElapsedTime(Date.now() - startTime);
     }, 1000);
   }
-  async function speechToText() {
-    try {
-      await navigator.mediaDevices.getUserMedia({ audio: true });
 
-      const newRecognition = new webkitSpeechRecognition();
-      newRecognition.lang = "en-US";
-      newRecognition.continuous = true;
-
-      newRecognition.onresult = (event) => {
-        const currentSpeech =
-          event.results[event.results.length - 1][0].transcript;
-
-        if (currentSpeech.trim() != "" || numberTimes == 0) {
-          speech += ` ${currentSpeech}`;
-          setAllSpeech(speech);
-          setNumberTimes(1);
-        }
-      };
-
-      setRecognition(newRecognition);
-    } catch (error) {
-      console.error("Error accessing microphone:", error);
+  useEffect(() => {
+    // This code runs only on the client-side
+    if (window.speechSynthesis) {
+      const voices = window.speechSynthesis.getVoices();
+      // Log available voices
+      console.log(voices);
     }
+  }, []);
+
+  async function speechToText() {
+    if (!ended) {
+      try {
+        await navigator.mediaDevices.getUserMedia({ audio: true });
+
+        const newRecognition = new webkitSpeechRecognition();
+        newRecognition.lang = "en-US";
+        newRecognition.continuous = true;
+
+        newRecognition.onresult = (event) => {
+          const currentSpeech =
+            event.results[event.results.length - 1][0].transcript;
+
+          if (currentSpeech.trim() != "" || numberTimes == 0) {
+            speech += ` ${currentSpeech}`;
+            if (
+              currentSpeech.toLowerCase().replace(/\s/g, "") ==
+                "okayfinishedtutoring" ||
+              currentSpeech.toLowerCase().replace(/\s/g, "") ==
+                "okayfinishtutoring"
+            ) {
+              finishMeeting();
+            }
+            document.getElementById("lastSaidText").innerText = currentSpeech;
+            setAllSpeech(speech);
+            setNumberTimes(1);
+          }
+        };
+
+        setRecognition(newRecognition);
+      } catch (error) {
+        console.error("Error accessing microphone:", error);
+      }
+    }
+  }
+
+  function formatTime(milliseconds) {
+    let remainingTime = milliseconds;
+    const hours = Math.floor(remainingTime / (1000 * 60 * 60));
+    remainingTime -= hours * (1000 * 60 * 60);
+    const minutes = Math.floor(remainingTime / (1000 * 60));
+    remainingTime -= minutes * (1000 * 60);
+    const seconds = Math.floor(remainingTime / 1000);
+
+    // Pad the numbers with leading zeros
+    const paddedHours = String(hours).padStart(2, "0");
+    const paddedMinutes = String(minutes).padStart(2, "0");
+    const paddedSeconds = String(seconds).padStart(2, "0");
+
+    return `${paddedHours}:${paddedMinutes}:${paddedSeconds}`;
   }
 
   useEffect(() => {
@@ -96,7 +118,6 @@ export default function Connect() {
 
       return () => {
         recognition.stop();
-        setRunEffect(false);
       };
     }
   }, [recognition]);
@@ -107,15 +128,22 @@ export default function Connect() {
         isTutor: router.query.isTheTutor,
         id: router.query.id,
       });
+      if (router.query.isTheTutor == "true") {
+        startTimer();
+        speechToText();
+        setUserId(JSON.parse(localStorage.getItem("userInfo"))._id);
+      }
     }
-  }, []);
+  }, [router]);
 
   async function finishMeeting() {
-    setRunEffect(false);
+    setEnded(true);
+    // Stop the transcript
     if (recognition) {
       recognition.stop();
     }
 
+    // End the tutoring session
     await fetch("/api/tutor/end_session", {
       method: "POST",
       headers: {
@@ -125,46 +153,62 @@ export default function Connect() {
         id: data?.id,
       }),
     });
-    const response = await fetch("/api/ai/verify_tutor", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        speech: allSpeech,
-      }),
-    });
-    if (response.ok) {
-      const datas = await response.text();
-      await socket.emit("ended", data.id);
-      setEnded(true);
-      if (datas.toLowerCase().includes("true")) {
-        setVerified(true);
-        await fetch("/api/profile/add_community_minutes", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            id: JSON.parse(localStorage.getItem("userInfo"))._id,
-            points: Math.round(elapsedTime / 1000 / 60) * 20,
-          }),
-        });
-        await fetch("/api/profile/add_tutor_minutes", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            id: JSON.parse(localStorage.getItem("userInfo"))._id,
-            points: Math.round(elapsedTime / 1000),
-          }),
-        });
-      } else if (datas.toLowerCase().includes("false")) {
-        setVerified(false);
-      } else {
-        setVerified(true);
+
+    // Notify the others
+    //await socket.emit("ended", data.id);
+
+    if (allSpeech.trim() != "Speech:") {
+      const response = await fetch("/api/ai/verify_tutor", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          speech: allSpeech,
+        }),
+      });
+
+      if (response.ok) {
+        setLoading(false);
+        const datas = await response.text();
+
+        setEnded(true);
+        console.log(datas);
+        if (datas.toLowerCase().includes("true")) {
+          verifiedAudio.current.playAudio();
+          setVerified(true);
+          await fetch("/api/profile/add_tutor_minutes", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              id: JSON.parse(localStorage.getItem("userInfo"))._id,
+              points: Math.round(elapsedTime / 1000),
+            }),
+          });
+        } else if (datas.toLowerCase().includes("false")) {
+          notVerfiedAudio.current.playAudio();
+
+          setVerified(false);
+        } else {
+          setVerified(true);
+          await fetch("/api/profile/add_tutor_minutes", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              id: JSON.parse(localStorage.getItem("userInfo"))._id,
+              points: Math.round(elapsedTime / 1000),
+            }),
+          });
+        }
       }
+    } else {
+      setLoading(false);
+      setEnded(true);
+      setVerified(false);
     }
   }
 
@@ -191,21 +235,50 @@ export default function Connect() {
     <div className={style.circleBackground}>
       {!ended ? (
         <>
-          {data?.isTutor == "true" && (
-            <p className={style.time}>
-              {started
-                ? ` Time elapsed: ${formatTime(Math.round(elapsedTime / 1000))}`
-                : "Waiting for other to join"}
-            </p>
-          )}{" "}
           <Image
             className={style.center_circle}
-            width={200}
-            height={200}
-            src="/assets/icons/circle.png"
+            width={220}
+            height={220}
+            src="/assets/icons/tutoring.png"
             alt="Noteswap image"
             priority
           />
+          {data?.isTutor == "true" && (
+            <p className={style.timer}> {formatTime(elapsedTime)}</p>
+          )}
+          {data?.isTutor == "false" && (
+            <p className={style.timer}>Your tutoring has started</p>
+          )}
+          {data?.isTutor == "true" && (
+            <>
+              <p
+                style={{
+                  textAlign: "center",
+                  textTransform: "capitalize",
+                  paddingLeft: "50px",
+                  paddingRight: "50px",
+                  maxHeight: "150px",
+                  textOverflow: "ellipsis",
+                  fontSize: "1rem",
+                  overflowY: "hidden",
+                }}
+                id="lastSaidText"
+              ></p>
+              <i
+                style={{
+                  textAlign: "center",
+                  textTransform: "capitalize",
+                  paddingLeft: "50px",
+                  paddingRight: "50px",
+                  fontSize: "0.8rem",
+                }}
+              >
+                Note: Say the words &quot;Okay Finished Tutoring&quot; to end
+                the session
+              </i>
+            </>
+          )}
+
           {data?.isTutor == "true" && (
             <button
               onClick={() => {
@@ -213,52 +286,71 @@ export default function Connect() {
               }}
               className={style.button}
             >
-              Done
+              Finish
             </button>
           )}
         </>
       ) : (
         <>
-          {data?.isTutor == "true" &&
-            (verified ? (
-              <>
-                <div className={style.center}>
-                  <h1>Congratulations</h1>
-                  <p>
-                    Thank you for tutoring on Noteswap! Your session has been
-                    validated by our AI and the amount of community service has
-                    been added to your account.
-                  </p>
-                  <Link href="/dashboard">
-                    <button>Take me home</button>
-                  </Link>
-                </div>
-              </>
-            ) : (
-              <div className={style.center}>
-                <h1>Oh No!</h1>
-                <p>
-                  After careful review from our AI, it seems like it has not
-                  considered your session as valid. If you believe this was a
-                  mistake, please feel free to reach out to us at
-                  support@noteswap.org. We apologize for any inconvenience this
-                  may have caused you.
-                </p>
-                <Link href="mailto:support@noteswap.org?subject=Noteswap Tutoring Session Validation">
-                  <button>Contact Us</button>
-                </Link>
-                <Link href="/dashboard">
-                  <button style={{ marginLeft: "10px" }}>Take me home</button>
-                </Link>
-              </div>
-            ))}
+          {loading ? (
+            <>
+              <Image
+                className={style.center_circle}
+                width={220}
+                height={220}
+                src="/assets/icons/tutoring.png"
+                alt="Noteswap image"
+                priority
+              />
+              <p className={style.timer}>
+                We are verifying the tutoring session...
+              </p>
+            </>
+          ) : (
+            <>
+              {data?.isTutor == "true" &&
+                (verified ? (
+                  <>
+                    <div className={style.center}>
+                      <h1>Congratulations!</h1>
+                      <p>
+                        Thank you for tutoring on Noteswap! Your session has
+                        been validated by our AI and the amount of community
+                        service has been added to your account.
+                      </p>
+                      <Link href={`/profile/${userId}`}>
+                        <button>My Profile</button>
+                      </Link>
+                    </div>
+                  </>
+                ) : (
+                  <div className={style.center}>
+                    <h1>Oh No!</h1>
+                    <p>
+                      After careful review from our AI, it seems like it has not
+                      considered your session as valid. If you believe this was
+                      a mistake, please feel free to reach out to us at
+                      support@noteswap.org. We apologize for any inconvenience
+                      this may have caused you.
+                    </p>
+                    <Link href="mailto:support@noteswap.org?subject=Noteswap Tutoring Session Validation">
+                      <button>Appeal</button>
+                    </Link>
+                    <Link href={`/profile/${userId}`}>
+                      <button style={{ marginLeft: "10px" }}>My Profile</button>
+                    </Link>
+                  </div>
+                ))}
+            </>
+          )}
+
           {data?.isTutor == "false" && (
             <>
               {rated && (
                 <div className={style.center}>
                   <h1>Thank you for your feeback</h1>
                   <Link href="/dashboard">
-                    <button style={{ marginLeft: "10px" }}>Take me home</button>
+                    <button style={{ marginLeft: "10px" }}>My Profile</button>
                   </Link>
                 </div>
               )}
@@ -349,6 +441,16 @@ export default function Connect() {
           )}
         </>
       )}
+      <div style={{ display: "none" }}>
+        <FlexibleAudioPlayer
+          ref={verifiedAudio}
+          src="/assets/audio/Tutoring/verified.wav"
+        />
+        <FlexibleAudioPlayer
+          ref={notVerfiedAudio}
+          src="/assets/audio/Tutoring/not_verified.wav"
+        />
+      </div>
     </div>
   );
 }

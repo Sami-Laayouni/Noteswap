@@ -492,7 +492,23 @@ export default function Header() {
               )}
 
               {userData?.role == "association" && userData?.associations[0] && (
-                <Link href={`/business/edit`}>
+                <Link href={`/business/events`}>
+                  <li
+                    onClick={() => {
+                      document.getElementById("hamburger_menu").style.display =
+                        "none";
+                      document.getElementById(
+                        "hamburger_overlay"
+                      ).style.display = "none";
+                    }}
+                  >
+                    My events <div className={style.borderLine} />
+                  </li>
+                </Link>
+              )}
+
+              {userData?.role == "teacher" && (
+                <Link href={`/teacher/events`}>
                   <li
                     onClick={() => {
                       document.getElementById("hamburger_menu").style.display =

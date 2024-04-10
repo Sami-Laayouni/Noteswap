@@ -20,7 +20,7 @@ import { useTranslation } from "next-i18next";
  * @param {*} data
  * @return {*}
  */
-export default function NoteCard(data) {
+export default function NoteCard({ data, padding }) {
   const {
     imageModal,
     imageUrl,
@@ -71,24 +71,25 @@ export default function NoteCard(data) {
   }
   return (
     <div
-      id={`card${data?.data?._id}`}
+      id={`card${data?._id}`}
       className={style.card}
       style={{
-        height: data?.data?.type == "default" ? "200px" : "450px",
-        maxHeight: data?.data?.type == "default" ? "200px" : "450px",
+        height: data?.type == "default" ? "200px" : "450px",
+        maxHeight: data?.type == "default" ? "200px" : "450px",
+        marginLeft: padding ? "50px" : "0px",
       }}
       onClick={(event) => {
         if (
           event.target.id != "containerRef" &&
           event.target.id != "right" &&
-          event.target.id != `dropdown${data?.data?._id}` &&
-          event.target.id != `dropdownItem${data?.data?._id}` &&
-          event.target.id != `dropdownItem2${data?.data?._id}` &&
-          event.target.id != `dropdownItem3${data?.data?._id}` &&
+          event.target.id != `dropdown${data?._id}` &&
+          event.target.id != `dropdownItem${data?._id}` &&
+          event.target.id != `dropdownItem2${data?._id}` &&
+          event.target.id != `dropdownItem3${data?._id}` &&
           event.target.id != "right1" &&
           event.target.id != "left" &&
-          event.target.id != `more${data?.data?._id}` &&
-          event.target.id != `more2${data?.data?._id}` &&
+          event.target.id != `more${data?._id}` &&
+          event.target.id != `more2${data?._id}` &&
           event.target.id != "left1" &&
           event.target.tagName !== "IMG"
         ) {
@@ -105,14 +106,14 @@ export default function NoteCard(data) {
           increaseKeyValue(obj2, data.data.category);
           localStorage.setItem("click2", JSON.stringify(obj2));
 
-          router.push(`/note/${data?.data?._id}`);
+          router.push(`/note/${data?._id}`);
         }
       }}
     >
       <ProfilePicture
-        src={data?.data?.userInfo[0]?.profile_picture}
-        alt={data?.data?.userInfo[0]?.first_name}
-        id={data?.data?.userInfo[0]?._id}
+        src={data?.userInfo[0]?.profile_picture}
+        alt={data?.userInfo[0]?.first_name}
+        id={data?.userInfo[0]?._id}
       />
       <h2
         style={{
@@ -123,42 +124,38 @@ export default function NoteCard(data) {
           fontSize: "1.3rem",
         }}
       >
-        {data?.data?.userInfo[0]?.first_name}{" "}
-        {data?.data[0]?.userInfo?.last_name}
+        {data?.userInfo[0]?.first_name} {data[0]?.userInfo?.last_name}
       </h2>
-      <h1>{data?.data?.title}</h1>
-      <button id={`more${data?.data?._id}`} className={style.more}>
+      <h1>{data?.title}</h1>
+      <button id={`more${data?._id}`} className={style.more}>
         <FiMoreHorizontal
           size={25}
           color="black"
-          id={`more2${data?.data?._id}`}
+          id={`more2${data?._id}`}
           onClick={() => {
             if (
-              document.getElementById(`dropdown${data?.data?._id}`).style
-                .display == "none" ||
-              !document.getElementById(`dropdown${data?.data?._id}`).style
-                .display
+              document.getElementById(`dropdown${data?._id}`).style.display ==
+                "none" ||
+              !document.getElementById(`dropdown${data?._id}`).style.display
             ) {
-              document.getElementById(
-                `dropdown${data?.data?._id}`
-              ).style.display = "block";
+              document.getElementById(`dropdown${data?._id}`).style.display =
+                "block";
             } else {
-              document.getElementById(
-                `dropdown${data?.data?._id}`
-              ).style.display = "none";
+              document.getElementById(`dropdown${data?._id}`).style.display =
+                "none";
             }
           }}
         />
       </button>
 
-      <div id={`dropdown${data?.data?._id}`} className={style.dropdown}>
+      <div id={`dropdown${data?._id}`} className={style.dropdown}>
         <ol>
           <li
-            key={`dropdownItem${data?.data?._id}`}
-            id={`dropdownItem${data?.data?._id}`}
+            key={`dropdownItem${data?._id}`}
+            id={`dropdownItem${data?._id}`}
             onClick={() => {
               setOpenS(true);
-              setUrlS(`${process.env.NEXT_PUBLIC_URL}note/${data?.data?._id}`);
+              setUrlS(`${process.env.NEXT_PUBLIC_URL}note/${data?._id}`);
             }}
           >
             <FaShare style={{ marginRight: "10px" }} />
@@ -166,15 +163,15 @@ export default function NoteCard(data) {
           </li>
           {localStorage?.getItem("userInfo") &&
             JSON.parse(localStorage?.getItem("userInfo"))._id ==
-              data?.data?.userInfo[0]?._id && (
+              data?.userInfo[0]?._id && (
               <li
-                key={`dropdownItem2${data?.data?._id}`}
-                id={`dropdownItem2${data?.data?._id}`}
+                key={`dropdownItem2${data?._id}`}
+                id={`dropdownItem2${data?._id}`}
                 onClick={() => {
                   setOpenE(true);
-                  setValueE(data?.data?.notes);
-                  setTitleE(data?.data?.title);
-                  setIdE(data?.data?._id);
+                  setValueE(data?.notes);
+                  setTitleE(data?.title);
+                  setIdE(data?._id);
                 }}
               >
                 <MdModeEditOutline style={{ marginRight: "10px" }} />
@@ -183,7 +180,7 @@ export default function NoteCard(data) {
             )}
           {localStorage?.getItem("userInfo") &&
             JSON.parse(localStorage?.getItem("userInfo"))._id ==
-              data?.data?.userInfo[0]?._id && (
+              data?.userInfo[0]?._id && (
               <li
                 onClick={async () => {
                   const response = await fetch("/api/notes/delete_note", {
@@ -192,17 +189,16 @@ export default function NoteCard(data) {
                       "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                      id: data?.data?._id,
+                      id: data?._id,
                     }),
                   });
                   if (response.ok) {
-                    document.getElementById(
-                      `card${data?.data?._id}`
-                    ).style.display = "none";
+                    document.getElementById(`card${data?._id}`).style.display =
+                      "none";
                   }
                 }}
-                key={`dropdownItem3${data?.data?._id}`}
-                id={`dropdownItem3${data?.data?._id}`}
+                key={`dropdownItem3${data?._id}`}
+                id={`dropdownItem3${data?._id}`}
               >
                 <BsFillTrashFill style={{ marginRight: "10px" }} />
                 {t("delete_notes")}
@@ -218,9 +214,9 @@ export default function NoteCard(data) {
           height: "auto",
           maxHeight: "95px",
         }}
-        dangerouslySetInnerHTML={{ __html: data?.data?.notes }}
+        dangerouslySetInnerHTML={{ __html: data?.notes }}
       ></div>
-      {data?.data?.images.length > 0 && (
+      {data?.images.length > 0 && (
         <div
           className={style.imageScroll}
           ref={containerRef}
@@ -228,7 +224,7 @@ export default function NoteCard(data) {
           onMouseLeave={handleMouseLeave}
           id="containerRef"
         >
-          {data?.data?.images?.map(function (value, index) {
+          {data?.images?.map(function (value, index) {
             return (
               <>
                 <Image

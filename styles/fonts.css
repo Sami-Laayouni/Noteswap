@@ -9,17 +9,6 @@
     url("/assets/fonts/Lato/Lato-Regular.woff") format("woff"),
     url("/assets/fonts/Lato/Lato-Regular.ttf") format("ttf");
 }
-/* Allura */
-@font-face {
-  font-family: "Allura";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: local("Allura"),
-    url("/assets/fonts/Allura/Allura-Regular.woff2") format("woff2"),
-    url("/assets/fonts/Allura/Allura-Regular.woff") format("woff"),
-    url("/assets/fonts/Allura/Allura-Regular.ttf") format("ttf");
-}
 /* Manrope */
 @font-face {
   font-family: "Manrope";
