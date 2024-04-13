@@ -1,4 +1,5 @@
 import Tutor from "../../../models/Tutor";
+import mongoose from "mongoose";
 
 /**
  * Search tutors
@@ -11,91 +12,82 @@ import Tutor from "../../../models/Tutor";
  * @return {*}
  */
 export default async function handler(req, res) {
-  const query = [];
-  let options = {};
+  try {
+    const query = [];
+    let options = {};
 
-  const body = req.body;
-  const { subject, days_available, school } = body;
-  res.setHeader("Cache-Control", "public, max-age=120");
+    const body = req.body;
+    const { subject, days_available, school } = body;
+    const schoolId = new mongoose.Types.ObjectId(school);
 
-  query.push({
-    $match: {
-      paused: false,
-    },
-  });
+    res.setHeader("Cache-Control", "public, max-age=120");
 
-  if (school == "649d661a3a5a9f73e9e3fa62") {
+    query.push({
+      $match: {
+        paused: false,
+      },
+    });
+
+    console.log(school);
     options = {
       $match: {
-        $or: [
-          { school_id: { $regex: school } },
-          { school_id: { $exists: false } },
-        ],
+        school_id: schoolId,
       },
     };
     query.push(options);
-  } else {
-    options = {
-      $match: {
-        school_id: { $regex: school },
-      },
-    };
-    query.push(options);
-  }
 
-  if (subject) {
-    options = {
-      $match: {
-        subject: { $regex: subject, $options: "i" },
-      },
-    };
-    query.push(options);
-  }
-
-  if (days_available && days_available != "Any time") {
-    if (days_available == "Weekend") {
+    if (subject) {
       options = {
         $match: {
-          days_available: { $regex: "Saturday", $options: "i" },
-        },
-      };
-      query.push(options);
-    } else {
-      options = {
-        $match: {
-          days_available: { $regex: days_available, $options: "i" },
+          subject: { $regex: subject, $options: "i" },
         },
       };
       query.push(options);
     }
-  }
 
-  query.push({
-    $project: {
-      user_id: 1,
-      subject: 1,
-      days_available: 1,
-      time_available: 1,
-      email: 1,
-      desc: 1,
-      paused: 1,
-      reviews: 1,
-      since: 1,
-    },
-  });
+    if (days_available && days_available != "Any time") {
+      if (days_available == "Weekend") {
+        options = {
+          $match: {
+            days_available: { $regex: "Saturday", $options: "i" },
+          },
+        };
+        query.push(options);
+      } else {
+        options = {
+          $match: {
+            days_available: { $regex: days_available, $options: "i" },
+          },
+        };
+        query.push(options);
+      }
+    }
 
-  query.push({
-    $lookup: {
-      from: "users",
-      localField: "user_id",
-      foreignField: "_id",
-      as: "userInfo",
-    },
-  });
+    query.push({
+      $project: {
+        user_id: 1,
+        subject: 1,
+        days_available: 1,
+        time_available: 1,
+        email: 1,
+        desc: 1,
+        paused: 1,
+        reviews: 1,
+        since: 1,
+      },
+    });
 
-  query.push({ $limit: 30 });
+    query.push({
+      $lookup: {
+        from: "users",
+        localField: "user_id",
+        foreignField: "_id",
+        as: "userInfo",
+      },
+    });
 
-  try {
+    query.push({ $limit: 30 });
+
     const result = await Tutor.aggregate(query);
     if (result) {
       const final = {

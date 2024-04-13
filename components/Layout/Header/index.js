@@ -26,6 +26,7 @@ import { HiUserGroup } from "react-icons/hi";
 import AuthService from "../../../services/AuthService";
 import ModalContext from "../../../context/ModalContext";
 import { useTranslation } from "next-i18next";
+import OneSignal from "react-onesignal";
 
 /**
  * Header component
@@ -632,8 +633,9 @@ export default function Header() {
               </Link>
 
               <li
-                onClick={() => {
+                onClick={async () => {
                   document.getElementById("dropdown").style.display = "none";
+                  await OneSignal.logout();
                   AuthServices.logout();
                   router.push("/login");
                   document.getElementById("hamburger_menu").style.display =
@@ -816,8 +818,10 @@ export default function Header() {
           )}
 
           <li
-            onClick={() => {
+            onClick={async () => {
               document.getElementById("dropdown").style.display = "none";
+              await OneSignal.logout();
+
               AuthServices.logout();
               router.push("/login");
             }}

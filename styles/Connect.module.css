@@ -129,8 +129,27 @@
   color: var(--default-white-color);
   background-color: var(--accent-color);
 }
+.stay {
+  display: inline;
+  margin-left: 10px;
+}
+.middle {
+  display: block;
+  margin-top: 10px;
+  margin-right: 10px;
+}
 @media all and (max-width: 767px) {
   .center {
     width: 350px;
+  }
+  .stay {
+    display: block;
+    text-align: center;
+  }
+  .middle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
   }
 }

@@ -189,15 +189,14 @@ const Connect = () => {
                 }}
               >
                 <QRCodeComponent
-                  url={`${process.env.NEXT_PUBLIC_URL}connect/${data._id}?tutoringSessionId=${data._id}&isTheTutor=false&joinCode=${data.joinCode}`}
+                  url={`${process.env.NEXT_PUBLIC_URL}connect/${data.tutoringSessionId}?tutoringSessionId=${data.tutoringSessionId}&isTheTutor=false&joinCode=${data.joinCode}`}
                 />
               </div>
               <h1 className={style.title}>
                 To begin, have your student(s) scan the QR code above.
               </h1>
               <p style={{ textAlign: "center" }}>
-                Note: All data from this session is deleted after the tutoring
-                session
+                Students that have signed up for your tutoring session so far:
               </p>
               <div
                 style={{
@@ -210,14 +209,7 @@ const Connect = () => {
                 {students?.length > 0 &&
                   students?.map(function (value) {
                     return (
-                      <div
-                        style={{
-                          display: "block",
-                          marginTop: "10px",
-                          marginRight: "10px",
-                        }}
-                        key={value.userId}
-                      >
+                      <div key={value.userId} className={style.middle}>
                         {(value?.profile || value?.profilePic) && (
                           <Image
                             width={40}
@@ -232,7 +224,7 @@ const Connect = () => {
                           />
                         )}
 
-                        <p style={{ display: "inline", marginLeft: "10px" }}>
+                        <p className={style.stay}>
                           {value.firstName} {value.lastName}
                         </p>
                       </div>

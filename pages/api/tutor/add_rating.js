@@ -1,5 +1,4 @@
 import { connectDB } from "../../../utils/db";
-import TutorSession from "../../../models/TutorSession";
 import User from "../../../models/User";
 
 /**
@@ -16,10 +15,9 @@ export default async function handler(req, res) {
   try {
     await connectDB();
     const { rating, id } = req.body;
-    const tutor = await TutorSession.find({ _id: id });
-    const ids = tutor[0].id;
+
     await User.findOneAndUpdate(
-      { _id: ids },
+      { _id: id },
       {
         $push: {
           rating: rating,

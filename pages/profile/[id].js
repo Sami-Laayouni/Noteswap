@@ -10,7 +10,8 @@ import { SlNotebook } from "react-icons/sl";
 import { TbNotesOff } from "react-icons/tb";
 
 import { PiStudent } from "react-icons/pi";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import ModalContext from "../../context/ModalContext";
 import { useRouter } from "next/router";
 
 import NoteCard from "../../components/Cards/NoteCard";
@@ -22,6 +23,25 @@ const ImageNotesModal = dynamic(() =>
 const EditNotesModal = dynamic(() =>
   import("../../components/Modals/EditNotesModal")
 );
+const BookASession = dynamic(() =>
+  import("../../components/Modals/BookASession")
+);
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+
+export async function getStaticPaths() {
+  // Return an empty array if you don't know the IDs ahead of time
+  return {
+    paths: [],
+    fallback: "blocking", // Or 'true' if you prefer
+  };
+}
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
+}
 
 /**
  * Profile component to display user profile information
@@ -32,6 +52,10 @@ const EditNotesModal = dynamic(() =>
  * @return {*} - React component
  */
 export default function Profile() {
+  const { bookSession, bookSessionInfo } = useContext(ModalContext);
+  const [open, setOpen] = bookSession;
+  const [info, setInfo] = bookSessionInfo;
+
   // State variables for user ID, data, and notes
   const [usersId, setUsersId] = useState();
   const [data, setData] = useState(null);
@@ -95,6 +119,7 @@ export default function Profile() {
       {/* Modal components */}
       <ImageNotesModal />
       <EditNotesModal />
+      <BookASession />
       <div style={{ position: "relative", width: "100%", height: "100%" }}>
         {/* Banner image */}
         <div>
@@ -212,7 +237,17 @@ export default function Profile() {
               Contact
             </button>
           </Link>
-          <button className={style.button}>
+          <button
+            onClick={() => {
+              setOpen(true);
+              const newData = {
+                userInfo: [data],
+              };
+              setInfo({ data: newData });
+            }}
+            disabled={!data?.is_tutor}
+            className={style.button}
+          >
             {data?.is_tutor
               ? "Book a session"
               : `${data?.first_name} is not tutoring`}
