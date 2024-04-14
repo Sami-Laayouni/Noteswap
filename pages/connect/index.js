@@ -71,6 +71,11 @@ export default function Connect() {
         const SpeechRecognition =
           window.SpeechRecognition || window.webkitSpeechRecognition;
 
+        if (!SpeechRecognition) {
+          console.error("Speech recognition is not supported in this browser.");
+          return;
+        }
+
         const newRecognition = new SpeechRecognition();
         newRecognition.lang = "en-US";
         newRecognition.continuous = true;
@@ -93,6 +98,15 @@ export default function Connect() {
             setAllSpeech(speech);
             setNumberTimes(1);
           }
+        };
+
+        newRecognition.onnomatch = (event) => {
+          console.log("No speech was recognized.");
+        };
+
+        // Handle speech recognition errors
+        newRecognition.onerror = (event) => {
+          console.error(`Speech recognition error detected: ${event.error}`);
         };
 
         setRecognition(newRecognition);

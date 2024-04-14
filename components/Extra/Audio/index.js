@@ -6,7 +6,9 @@ const FlexibleAudioPlayer = forwardRef(({ src }, ref) => {
   useImperativeHandle(ref, () => ({
     playAudio: () => {
       if (audioRef.current) {
-        audioRef.current.play();
+        return audioRef.current.play().catch((error) => {
+          console.error("Error during audio playback:", error);
+        });
       }
     },
   }));
