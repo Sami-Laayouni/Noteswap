@@ -68,7 +68,10 @@ export default function Connect() {
       try {
         await navigator.mediaDevices.getUserMedia({ audio: true });
 
-        const newRecognition = new webkitSpeechRecognition();
+        const SpeechRecognition =
+          window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        const newRecognition = new SpeechRecognition();
         newRecognition.lang = "en-US";
         newRecognition.continuous = true;
 
@@ -549,6 +552,7 @@ export default function Connect() {
                     style={{
                       color: "black",
                       fontFamily: "var(--manrope-bold-font)",
+                      textAlign: "center",
                     }}
                   >
                     Rate how well the tutor did:

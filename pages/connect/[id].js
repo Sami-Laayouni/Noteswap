@@ -262,7 +262,8 @@ const Connect = () => {
                 You have joined the tutoring session!
               </h1>
               <p className={style.desc} id="joinedDesc">
-                We hope you enjoy your session.
+                We hope you enjoy your session. If you do not see yourself on
+                the tutor&apos;s screen try refreshing the page.
               </p>
             </div>
           </div>
