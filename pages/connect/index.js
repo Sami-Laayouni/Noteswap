@@ -104,7 +104,7 @@ export default function Connect() {
         newRecognition.onend = (event) => {
           setTimeout(() => {
             recognition.start();
-          }, 100); // Adjust delay to find a suitable interval
+          }, 2000); // Adjust delay to find a suitable interval
         };
 
         newRecognition.onnomatch = (event) => {

@@ -196,7 +196,8 @@ const Connect = () => {
                 To begin, have your student(s) scan the QR code above.
               </h1>
               <p style={{ textAlign: "center" }}>
-                Students that have signed up for your tutoring session so far:
+                Students that have signed up for your tutoring session so far
+                (Note: currently not supported on mobile):
               </p>
               <div
                 style={{
