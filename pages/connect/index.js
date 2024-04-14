@@ -79,6 +79,7 @@ export default function Connect() {
         const newRecognition = new SpeechRecognition();
         newRecognition.lang = "en-US";
         newRecognition.continuous = true;
+        newRecognition.interimResults = true;
 
         newRecognition.onresult = (event) => {
           const currentSpeech =
@@ -98,6 +99,12 @@ export default function Connect() {
             setAllSpeech(speech);
             setNumberTimes(1);
           }
+        };
+
+        newRecognition.onend = (event) => {
+          setTimeout(() => {
+            recognition.start();
+          }, 100); // Adjust delay to find a suitable interval
         };
 
         newRecognition.onnomatch = (event) => {
