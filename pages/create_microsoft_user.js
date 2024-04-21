@@ -82,10 +82,10 @@ function CreateMicrosoftUserPage() {
       };
 
       const { query } = router;
-      if (query[""]) {
+      if (query.profileInfo) {
         // Decode and parse the profile data directly from the URL query parameter
 
-        const parsedProfileData = JSON.parse(query[""]);
+        const parsedProfileData = JSON.parse(query.profileInfo);
         createUser(parsedProfileData);
         setRan(true);
       }

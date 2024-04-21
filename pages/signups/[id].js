@@ -1,10 +1,13 @@
 import style from "../../styles/Signups.module.css";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import ModalContext from "../../context/ModalContext";
 import Image from "next/image";
 import Link from "next/link";
 import LoadingCircle from "../../components/Extra/LoadingCircle";
+import Script from "next/script";
+import DownloadSegmented from "../../components/Modals/DownloadSegmented";
 
 /**
  * Get static paths
@@ -46,8 +49,60 @@ export async function getStaticProps({ locale }) {
 export default function SignUps() {
   const [data, setData] = useState([]);
   const [volunteersData, setVolunteersData] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredVolunteers, setFilteredVolunteers] = useState([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const { downloadSegmented, signedUpVolunteers } = useContext(ModalContext);
+  const [open, setOpen] = downloadSegmented;
+  const [dataS, setDatS] = signedUpVolunteers;
+  const [userProfile, setUserProfile] = useState(null);
+
+  async function downloadDataAsExcel(volunteersData) {
+    const modifiedData = volunteersData.map((volunteer) => {
+      const { first_name, last_name, points, tutor_hours, email } = volunteer;
+      const totalPoints =
+        Math.floor(points / 20) + Math.floor(tutor_hours / 60);
+      const fixed_first_name =
+        first_name.charAt(0).toUpperCase() + first_name.slice(1);
+      const fixed_last_name =
+        last_name.charAt(0).toUpperCase() + last_name.slice(1);
+      const formattedTotalPoints = `${totalPoints} minute${
+        totalPoints === 1 ? "" : "s"
+      }`;
+
+      // Include other volunteer properties as needed
+      return {
+        "First Name": fixed_first_name,
+        "Last Name": fixed_last_name,
+        Email: email,
+        "Total Community Service Earned": formattedTotalPoints,
+      };
+    });
+
+    // Convert the modified data to a worksheet
+    const worksheet = XLSX.utils.json_to_sheet(modifiedData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Volunteers");
+
+    // Generate a buffer to store the data
+    const buffer = XLSX.write(workbook, { bookType: "xlsx", type: "buffer" });
+
+    // Create a Blob from the buffer
+    const blob = new Blob([buffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+
+    // Create an anchor element and dispatch a click event to trigger the download
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = "Volunteer_Data.xlsx";
+    anchor.click();
+
+    // Cleanup: revoke the object URL after use
+    URL.revokeObjectURL(url);
+  }
 
   useEffect(() => {
     async function getUserData(userId) {
@@ -102,7 +157,15 @@ export default function SignUps() {
     if (id) {
       fetchData();
     }
-  }, [router]);
+    setFilteredVolunteers(
+      volunteersData.filter((volunteer) =>
+        volunteer.first_name.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    );
+    if (localStorage) {
+      setUserProfile(JSON.parse(localStorage.getItem("userInfo")));
+    }
+  }, [volunteersData, searchTerm, router]);
 
   async function giveCertificate(id) {
     const response = await fetch("/api/profile/add_community_minutes", {
@@ -187,9 +250,42 @@ export default function SignUps() {
     }
   }
 
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
   return (
     <>
+      <Script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" />
+      <DownloadSegmented />
       <h1 className={style.header}>Volunteers who signed up for your event</h1>
+
+      <input
+        className={style.sinput}
+        placeholder="Search for volunteers by first name"
+        value={searchTerm}
+        onChange={handleSearchChange}
+      />
+      <button
+        className={style.button}
+        onClick={() => {
+          downloadDataAsExcel(volunteersData);
+        }}
+      >
+        Download All
+      </button>
+      {userProfile?.role == "association" && (
+        <button
+          className={style.button}
+          onClick={() => {
+            setOpen(true);
+            setDatS(volunteersData);
+          }}
+        >
+          Download Segmented Data
+        </button>
+      )}
+
       <p
         className={style.refresh}
         onClick={() => {
@@ -207,7 +303,7 @@ export default function SignUps() {
         </div>
       )}
       <ul className={style.list}>
-        {volunteersData.map((volunteer, index) => (
+        {filteredVolunteers.map((volunteer, index) => (
           <li id={`volunteer_${volunteer._id}`} key={index}>
             <Link href={`/profile/${volunteer._id}`}>
               <Image

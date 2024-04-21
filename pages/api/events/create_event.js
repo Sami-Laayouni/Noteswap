@@ -28,12 +28,14 @@ export default async function becomeTutor(req, res) {
       max,
       id,
       location,
+      attendance,
       reqi,
       school_id,
       sponsored,
       sponsoredLocations,
       associationProfilePic,
       associationId,
+      additional,
     } = req.body;
     try {
       await connectDB();
@@ -54,6 +56,8 @@ export default async function becomeTutor(req, res) {
         req: reqi,
         school_id: school_id,
         sponsored: sponsored,
+        attendance: attendance,
+        additional: additional,
         sponsoredLocations: sponsoredLocations || null,
         associationProfilePic: associationProfilePic,
         associationId: associationId,

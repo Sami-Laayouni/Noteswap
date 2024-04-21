@@ -55,6 +55,10 @@ const associationSchema = new mongoose.Schema({
     type: Boolean,
     required: true,
   },
+  members: {
+    type: Array,
+    required: false,
+  },
 });
 
 let Association;

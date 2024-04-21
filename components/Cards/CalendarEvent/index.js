@@ -18,21 +18,21 @@ import { useTranslation } from "next-i18next";
  * @return {*}
  */
 export default function CalendarEvent({ data }) {
-  const startDate = parseISO(data.start.date); // Start date of the event
-  const endDate = parseISO(data.end.date); // End date of the event
+  const startDate = parseISO(data?.start?.date); // Start date of the event
+  const endDate = parseISO(data?.end?.date); // End date of the event
   const nextDayDate = addDays(startDate, 1); // The day after the event
   const { t } = useTranslation("common");
 
   // Return the JSX (a link that opens the event in their Google calendar)
   return (
-    <Link href={data.htmlLink} target="_blank">
-      <li key={data.id} className={style.container}>
-        <h1>{data.summary}</h1>
+    <Link href={data?.htmlLink} target="_blank">
+      <li key={data?.id} className={style.container}>
+        <h1>{data?.summary}</h1>
         <p>
-          {!data.start.dateTime
+          {!data?.start?.dateTime
             ? t("all_day")
-            : `${format(parseISO(data.start.date), "HH:mm")} - 
-          ${format(parseISO(data.end.date), "HH:mm")}`}
+            : `${format(parseISO(data?.start?.date), "HH:mm")} - 
+          ${format(parseISO(data?.end?.date), "HH:mm")}`}
           {" · "}
           {isSameDay(startDate, endDate)
             ? `${format(startDate, "MMMM dd, yyyy")}`
@@ -42,7 +42,9 @@ export default function CalendarEvent({ data }) {
           ${format(addDays(endDate, -1), "MMMM dd, yyyy")}`}
         </p>
 
-        <p>{data.description ? data.description : t("no_description_found")}</p>
+        <p>
+          {data?.description ? data?.description : t("no_description_found")}
+        </p>
       </li>
     </Link>
   );

@@ -1,16 +1,12 @@
 import style from "../../styles/Profile.module.css";
 import Link from "next/link";
-import {
-  MdModeEditOutline,
-  MdOutlineEmail,
-  MdOutlineSpeakerNotesOff,
-} from "react-icons/md";
+import { MdModeEditOutline, MdOutlineSpeakerNotesOff } from "react-icons/md";
 import { MdAlternateEmail } from "react-icons/md";
 
 import { AiOutlinePhone } from "react-icons/ai";
 import { CgWebsite } from "react-icons/cg";
 import { HiOutlineLocationMarker } from "react-icons/hi";
-import { PiStudent } from "react-icons/pi";
+import { CiStar } from "react-icons/ci";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -50,6 +46,7 @@ export default function Association() {
   const [usersId, setUsersId] = useState();
   const [data, setData] = useState(null);
   const [event, setEvents] = useState(null);
+  const [members, setMembers] = useState(null);
   const router = useRouter();
   const { t } = useTranslation("common");
 
@@ -63,7 +60,18 @@ export default function Association() {
         body: JSON.stringify({ information: id }),
       });
       const apiData = await response.json();
-      console.log(apiData);
+
+      const members = await fetch("/api/association/get_members", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ associationId: id }),
+      });
+      const memo = await members.json();
+      console.log(memo);
+      setMembers(memo.members);
+
       setData(apiData);
       const secondRequestOptions = await fetch("/api/association/get_events", {
         method: "POST",
@@ -196,36 +204,76 @@ export default function Association() {
       </section>
 
       <section className={style.contentContainer}>
-        <h2>Latest Events</h2>
-        {event?.length == 0 && (
-          <span>
-            <MdOutlineSpeakerNotesOff
-              size={70}
+        <div>
+          <h2>Latest Events</h2>
+          {event?.length == 0 && (
+            <span>
+              <MdOutlineSpeakerNotesOff
+                size={70}
+                style={{
+                  display: "block",
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                }}
+              />
+              <h3 style={{ textAlign: "center" }}>No events at the moment</h3>
+            </span>
+          )}
+          {event?.length > 0 && (
+            <section
               style={{
-                display: "block",
-                marginLeft: "auto",
-                marginRight: "auto",
+                maxWidth: "900px",
+                display: "grid",
+                gridTemplateColumns: "50% 50%",
+                padding: "20px",
+                gap: "30px",
+                overflowX: "hidden",
               }}
-            />
-            <h3>No events at the moment</h3>
-          </span>
-        )}
-        {event?.length > 0 && (
-          <section
-            style={{
-              maxWidth: "900px",
-              display: "grid",
-              gridTemplateColumns: "50% 50%",
-              padding: "20px",
-              gap: "30px",
-              overflowX: "hidden",
-            }}
-          >
-            {event?.map(function (value) {
-              return <EventCard key={value._id} data={value} />;
-            })}
-          </section>
-        )}
+            >
+              {event?.map(function (value) {
+                return <EventCard key={value._id} data={value} />;
+              })}
+            </section>
+          )}
+        </div>
+        <div className={style.verticalLine}></div>
+
+        <div
+          style={{
+            maxHeight: "100vh",
+            overflowY: "auto",
+            overflowX: "hidden",
+          }}
+        >
+          <h1 style={{ marginTop: "30px", marginLeft: "10px" }}>Members</h1>
+          {members?.map(function (value) {
+            return (
+              <Link key={value.userId} href={`/profile/${value.userId}`}>
+                <div className={style.exp}>
+                  <img src={value.profilePicture}></img>
+                  <div>
+                    <h1>{value.name}</h1>
+                    <span>
+                      <CiStar
+                        style={{ verticalAlign: "middle", marginRight: "5px" }}
+                      />
+                      {value.extra
+                        ? value.extra
+                        : value.role == "board_member"
+                        ? "Board Member"
+                        : "Member"}
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
+          {members?.length == 0 && (
+            <>
+              <p style={{ textAlign: "center" }}>No members yet</p>
+            </>
+          )}
+        </div>
       </section>
     </main>
   );

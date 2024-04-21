@@ -1,6 +1,7 @@
 /* Events Model */
 
 import mongoose from "mongoose";
+const Schema = mongoose.Schema;
 
 const eventSchema = new mongoose.Schema({
   title: {
@@ -78,6 +79,14 @@ const eventSchema = new mongoose.Schema({
   },
   associationProfilePic: {
     type: String,
+    required: false,
+  },
+  attendance: {
+    type: Schema.Types.Mixed, // This allows the field to accept any type of data
+    required: false,
+  },
+  additional: {
+    type: String, // This allows the field to accept any type of data
     required: false,
   },
 });

@@ -198,7 +198,7 @@ const Event = () => {
       <Head>
         <title>Noteswap | Events</title>
       </Head>
-      <CreateEvent business={false} />
+      <CreateEvent business={false} meeting={false} />
       <ExpandedEvent />
       <img
         className={style.background}

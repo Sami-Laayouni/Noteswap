@@ -110,3 +110,25 @@
   font-weight: bold;
   cursor: pointer;
 }
+.list {
+  list-style: none;
+  padding-left: 20px;
+  max-height: 30vh;
+  height: 100%;
+  overflow-y: auto;
+  padding-bottom: 20px;
+}
+.list li {
+  width: 98%;
+  height: fit-content;
+  position: relative;
+  padding-top: 15px;
+  margin-top: 20px;
+  padding-bottom: 15px;
+  padding-left: 20px;
+  font-family: var(--manrope-font);
+  border-radius: 8px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  background-color: var(--default-white-color);
+  cursor: pointer;
+}

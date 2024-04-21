@@ -22,6 +22,8 @@ export default function EventCard({ data }) {
   const { eventState, eventData } = useContext(ModalContext);
   const [open, setOpen] = eventState;
   const [datai, setData] = eventData;
+  const [isMember, setIsMember] = useState(null);
+
   const { t } = useTranslation("common");
 
   useEffect(() => {
@@ -32,6 +34,29 @@ export default function EventCard({ data }) {
       setId(JSON.parse(localStorage.getItem("userInfo"))._id);
     }
   }, [router]);
+
+  useEffect(() => {
+    // Check membership only if additional is 'allowAll'
+    const checkMembership = async () => {
+      if (data?.additional === "allowAll") {
+        const userData = JSON.parse(localStorage.getItem("userInfo"));
+        if (userData?.association_list) {
+          const userAssociations = userData?.association_list;
+          const memberOfAssociation = userAssociations.some(
+            (association) => association.id === data.associationId
+          );
+
+          if (memberOfAssociation) {
+            setIsMember(true);
+          } else {
+            setIsMember(false);
+          }
+        }
+      }
+    };
+
+    checkMembership();
+  }, [id, data?.additional]);
   return (
     <div className={style.container}>
       <Link
@@ -97,7 +122,25 @@ export default function EventCard({ data }) {
               className={style.button}
               id={`${data?._id}button`}
               onClick={async () => {
-                if (data?.volunteers?.includes(id)) {
+                // Retrieve the current user's ID
+                const userId = JSON.parse(localStorage.getItem("userInfo"))._id;
+
+                // Check if the 'additional' key is set to 'allowMeeting' and if the user is permitted in the 'attendance'
+                if (
+                  data?.additional === "allowMeeting" &&
+                  !data?.attendance[userId]
+                ) {
+                  // Prevent sign-up  the user; the button will already be disabled, no need to do anything here
+                  return;
+                }
+
+                // Check if the 'additional' key is set to 'allowAll' and check membership status
+                if (data?.additional === "allowAll" && isMember === false) {
+                  return;
+                }
+
+                // Process the signup or unsignup based on whether the user is already a volunteer
+                if (data?.volunteers?.includes(userId)) {
                   const response = await fetch("/api/events/unsignup_event", {
                     method: "POST",
                     headers: {
@@ -105,16 +148,16 @@ export default function EventCard({ data }) {
                     },
                     body: JSON.stringify({
                       id: data?._id,
-                      userId: JSON.parse(localStorage.getItem("userInfo"))._id,
+                      userId: userId,
                     }),
                   });
                   if (response.ok) {
                     document.getElementById(
                       `${data._id}button`
-                    ).innerHTML = ` ${t(
+                    ).innerHTML = `${t(
                       "signup"
                     )} <span className={style.icon}>→</span>`;
-                    const index = data?.volunteers?.indexOf(id);
+                    const index = data?.volunteers?.indexOf(userId);
                     if (index > -1) {
                       data?.volunteers?.splice(index, 1);
                     }
@@ -127,7 +170,7 @@ export default function EventCard({ data }) {
                     },
                     body: JSON.stringify({
                       id: data?._id,
-                      userId: JSON.parse(localStorage.getItem("userInfo"))._id,
+                      userId: userId,
                     }),
                   });
 
@@ -137,7 +180,7 @@ export default function EventCard({ data }) {
                   if (response.ok) {
                     setOpen(true);
                     setData(data);
-                    data?.volunteers?.push(id);
+                    data?.volunteers?.push(userId);
                     if (data?.link_to_event) {
                       router.push(data?.link_to_event);
                     }
@@ -146,16 +189,23 @@ export default function EventCard({ data }) {
               }}
               disabled={
                 !data?.volunteers?.includes(id) &&
-                data?.volunteers?.length == data?.max &&
-                data?.volunteers?.length > data?.max
+                (data?.volunteers?.length >= data?.max ||
+                  (data?.additional === "allowMeeting" &&
+                    !data?.attendance[id]) ||
+                  (data?.additional === "allowAll" && isMember === false))
               }
             >
               {data?.volunteers?.includes(id)
                 ? t("unsignup")
-                : data?.volunteers?.length >= data?.max
-                ? "Event is full"
+                : data?.volunteers?.length >= data?.max ||
+                  (data?.additional === "allowMeeting" &&
+                    !data?.attendance[id]) ||
+                  (data?.additional === "allowAll" && isMember === false)
+                ? "Cannot sign up for event"
                 : t("signup")}{" "}
-              {data?.volunteers?.length >= data?.max ? (
+              {data?.volunteers?.length >= data?.max ||
+              (data?.additional === "allowMeeting" && !data?.attendance[id]) ||
+              (data?.additional === "allowAll" && isMember === false) ? (
                 ""
               ) : (
                 <span className={style.icon}>→</span>

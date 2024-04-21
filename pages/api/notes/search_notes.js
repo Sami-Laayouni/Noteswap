@@ -163,6 +163,7 @@ export default async function handler(req, res) {
 
   try {
     const result = await Notes.aggregate(query);
+    await disconnectDB();
 
     if (result) {
       const final = {

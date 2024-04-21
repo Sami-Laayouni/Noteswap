@@ -196,8 +196,6 @@ const Signup = () => {
       <div
         className={style.background}
         style={{
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
           background: !schoolId
             ? "var(--accent-color)"
             : `url("${getSchoolBackgroundImage(schoolId)}")`,
@@ -213,7 +211,11 @@ const Signup = () => {
             alt="School Logo"
             width={150}
             height={150}
-            style={{ marginTop: "30px", marginLeft: "30px" }}
+            style={{
+              marginTop: "30px",
+              marginLeft: "30px",
+              boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+            }}
           ></Image>
         )}
         <div className={style.container}>

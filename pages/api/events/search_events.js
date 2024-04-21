@@ -68,6 +68,8 @@ export default async function handler(req, res) {
       associationId: 1,
       associationProfilePic: 1,
       location: 1,
+      attendance: 1,
+      additional: 1,
     },
   });
 

@@ -1,0 +1,37 @@
+.input {
+  outline: none;
+  box-shadow: none;
+  font-weight: 400;
+  font-family: var(--primary-font);
+  line-height: 20px;
+  border-radius: var(--third-party-login-card-radius);
+  font-size: 16px;
+  border: 1px solid var(--input-border-color);
+  padding-left: 15px;
+  height: 35px;
+  width: 50vw;
+  margin-top: 10px;
+  transition: border-color 0.3s ease-in-out;
+}
+.input:focus {
+  border-color: var(--accent-color);
+}
+.labelForInput {
+  font-family: var(--primary-font);
+  display: block;
+  margin-bottom: 7px;
+  margin-top: 20px;
+}
+.button {
+  padding: var(--button-default-padding);
+  border-radius: var(--button-default-border-radius);
+  border: none;
+  cursor: pointer;
+  background-color: var(--accent-color);
+  color: white;
+  display: inline-block;
+  margin-left: 20px;
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+}

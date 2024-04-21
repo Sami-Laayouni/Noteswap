@@ -36,6 +36,9 @@ export const ModalProvider = ({ children }) => {
   const [requestTutor, setRequestTutor] = useState(false);
   const [requestInfo, setRequestInfo] = useState(false);
   const [pwa, setPWA] = useState(true);
+  const [addMembers, setAddMembers] = useState(false);
+  const [downloadSegmented, setDownloadSegmented] = useState(false);
+  const [signedUpVolunteers, setSignedUpVolunteers] = useState(null);
 
   // Return the JSX
   return (
@@ -68,6 +71,9 @@ export const ModalProvider = ({ children }) => {
         requestTutor: [requestTutor, setRequestTutor],
         requestInfo: [requestInfo, setRequestInfo],
         pwa: [pwa, setPWA],
+        addMembers: [addMembers, setAddMembers],
+        downloadSegmented: [downloadSegmented, setDownloadSegmented],
+        signedUpVolunteers: [signedUpVolunteers, setSignedUpVolunteers],
       }}
     >
       {children}

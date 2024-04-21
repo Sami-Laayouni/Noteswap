@@ -16,6 +16,8 @@ import { useRouter } from "next/router";
 
 import NoteCard from "../../components/Cards/NoteCard";
 import EventCard from "../../components/Cards/EventCard";
+import { CiStar } from "react-icons/ci";
+
 import dynamic from "next/dynamic";
 const ImageNotesModal = dynamic(() =>
   import("../../components/Modals/ImageNotesModal")
@@ -61,6 +63,7 @@ export default function Profile() {
   const [data, setData] = useState(null);
   const [notes, setNotes] = useState(null);
   const [events, setEvents] = useState(null);
+  const [experience, setExperience] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -75,6 +78,17 @@ export default function Profile() {
       });
       const apiData = await response.json();
       setData(apiData);
+
+      const experience = await fetch("/api/profile/get_user_experiences", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId: id }),
+      });
+      const expo = await experience.json();
+      console.log(expo);
+      setExperience(expo.associations);
 
       if (apiData?.role != "teacher") {
         const secondRequestOptions = await fetch("/api/notes/get_user_notes", {
@@ -256,69 +270,116 @@ export default function Profile() {
       </div>
       <div className={style.line}></div>
       <section className={style.contentContainer}>
-        <h1>{data?.role != "teacher" ? "Latest Notes" : "Latest Events"}</h1>
-        {data?.role != "teacher" ? (
-          <>
-            {/* Display message if no notes are posted */}
-            {notes?.notes.length == 0 && (
-              <span>
-                <MdOutlineSpeakerNotesOff
-                  size={70}
-                  style={{
-                    display: "block",
-                    marginLeft: "auto",
-                    marginRight: "auto",
-                  }}
-                />
-                <h3 style={{ textAlign: "center" }}>No notes at the moment</h3>
-              </span>
-            )}
+        <div>
+          <h1>{data?.role != "teacher" ? "Latest Notes" : "Latest Events"}</h1>
+          {data?.role != "teacher" ? (
+            <>
+              {/* Display message if no notes are posted */}
+              {notes?.notes.length == 0 && (
+                <span>
+                  <MdOutlineSpeakerNotesOff
+                    size={70}
+                    style={{
+                      display: "block",
+                      marginLeft: "auto",
+                      marginRight: "auto",
+                    }}
+                  />
+                  <h3 style={{ textAlign: "center" }}>
+                    No notes at the moment
+                  </h3>
+                </span>
+              )}
 
-            {/* Display latest notes if available */}
-            {notes?.notes.length > 0 && (
-              <section style={{ marginTop: "20px" }}>
-                {notes?.notes.map(function (value, index) {
-                  // Attach user information to each note
-                  value["userInfo"] = notes?.user;
-                  return <NoteCard key={index} data={value} padding={false} />;
-                })}
-              </section>
-            )}
-          </>
-        ) : (
-          <>
-            {events?.events?.length == 0 && (
-              <span>
-                <TbNotesOff
-                  size={70}
-                  style={{
-                    display: "block",
-                    marginLeft: "auto",
-                    marginRight: "auto",
-                  }}
-                />
-                <h3 style={{ textAlign: "center" }}>No events to see</h3>
-              </span>
-            )}
+              {/* Display latest notes if available */}
+              {notes?.notes.length > 0 && (
+                <section style={{ marginTop: "20px" }}>
+                  {notes?.notes.map(function (value, index) {
+                    // Attach user information to each note
+                    value["userInfo"] = notes?.user;
+                    return (
+                      <NoteCard key={index} data={value} padding={false} />
+                    );
+                  })}
+                </section>
+              )}
+            </>
+          ) : (
+            <>
+              {events?.events?.length == 0 && (
+                <span>
+                  <TbNotesOff
+                    size={70}
+                    style={{
+                      display: "block",
+                      marginLeft: "auto",
+                      marginRight: "auto",
+                    }}
+                  />
+                  <h3 style={{ textAlign: "center" }}>No events to see</h3>
+                </span>
+              )}
 
-            {/* Display latest events if available */}
-            {events?.events?.length > 0 && (
-              <section
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "33% 33% 33%",
-                  gap: "30px",
-                }}
+              {/* Display latest events if available */}
+              {events?.events?.length > 0 && (
+                <section
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "33% 33% 33%",
+                    gap: "30px",
+                  }}
+                >
+                  {events?.events?.map(function (value, index) {
+                    // Attach user information to each note
+                    value["userInfo"] = [data];
+                    return <EventCard key={index} data={value} />;
+                  })}
+                </section>
+              )}
+            </>
+          )}
+        </div>
+        <div className={style.verticalLine}></div>
+        <div
+          style={{
+            maxHeight: "100vh",
+            overflowY: "auto",
+            overflowX: "hidden",
+          }}
+        >
+          <h1 style={{ marginTop: "30px", marginLeft: "10px" }}>Experiences</h1>
+          {experience?.map(function (value) {
+            return (
+              <Link
+                key={value.info._id}
+                href={`/association/${value.info._id}`}
               >
-                {events?.events?.map(function (value, index) {
-                  // Attach user information to each note
-                  value["userInfo"] = [data];
-                  return <EventCard key={index} data={value} />;
-                })}
-              </section>
-            )}
-          </>
-        )}
+                <div className={style.exp}>
+                  <img src={value.info.icon}></img>
+                  <div>
+                    <h1>{value.info.name}</h1>
+                    <h2>{value.info.desc.substring(0, 100)}</h2>
+                    <span>
+                      <CiStar
+                        style={{ verticalAlign: "middle", marginRight: "5px" }}
+                      />
+                      {value.extra
+                        ? value.extra
+                        : value.role == "board_member"
+                        ? "Board Member"
+                        : "Member"}
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
+          {experience?.length == 0 && (
+            <>
+              <p style={{ textAlign: "center" }}>No experiences yet</p>
+            </>
+          )}
+        </div>
       </section>
     </main>
   );

@@ -1,11 +1,11 @@
 import Head from "next/head";
 import style from "../styles/GetStarted.module.css";
-import Link from "next/link";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useContext, useEffect } from "react";
+import { useContext, useState, useEffect } from "react";
 import ModalContext from "../context/ModalContext";
 import dynamic from "next/dynamic";
 const CreateEvent = dynamic(() => import("../components/Modals/CreateEvent"));
+const AddMembers = dynamic(() => import("../components/Modals/AddMembers"));
 
 /**
  * Get static props
@@ -32,9 +32,12 @@ export async function getStaticProps({ locale }) {
  */
 export default function Shortcuts() {
   // Return the JSX
-  const { eventStatus, business } = useContext(ModalContext);
+  const { eventStatus, business, addMembers } = useContext(ModalContext);
   const [open, setOpen] = eventStatus;
   const [bOpen, setBOpen] = business;
+  const [add, setAdd] = addMembers;
+  const [meeting, setMeeting] = useState(false);
+
   useEffect(() => {
     if (localStorage.getItem("userInfo")) {
       if (!localStorage.getItem("associationInfo")) {
@@ -47,7 +50,8 @@ export default function Shortcuts() {
       <Head>
         <title>Shortcuts | NoteSwap</title> {/* Title of the page*/}
       </Head>
-      <CreateEvent business={true} />
+      <CreateEvent business={true} meeting={meeting} />
+      <AddMembers />
       <section
         style={{
           width: "100%",
@@ -69,7 +73,37 @@ export default function Shortcuts() {
             <div>
               <button
                 onClick={() => {
+                  setMeeting(false);
                   setOpen(true);
+                }}
+              >
+                Go
+              </button>
+            </div>
+          </li>
+        </ul>
+        <ul className={style.list}>
+          <li style={{ marginTop: "20px" }}>
+            <h2>Plan Event In A Meeting </h2>
+            <div>
+              <button
+                onClick={() => {
+                  setMeeting(true);
+                  setOpen(true);
+                }}
+              >
+                Go
+              </button>
+            </div>
+          </li>
+        </ul>
+        <ul className={style.list}>
+          <li style={{ marginTop: "20px" }}>
+            <h2>Add Members to Your Association</h2>
+            <div>
+              <button
+                onClick={() => {
+                  setAdd(true);
                 }}
               >
                 Go

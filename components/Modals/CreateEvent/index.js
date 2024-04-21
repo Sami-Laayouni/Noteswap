@@ -38,7 +38,7 @@ const CATEGORY = [
  * @export
  * @return {*}
  */
-export default function CreateEvent({ business }) {
+export default function CreateEvent({ business, meeting }) {
   const { eventStatus } = useContext(ModalContext);
   const [open, setOpen] = eventStatus;
   const [current, setCurrent] = useState(1);
@@ -60,6 +60,11 @@ export default function CreateEvent({ business }) {
   const [tlocation, setTLocation] = useState([]);
   const today = new Date().toISOString().split("T")[0];
   const [schools, setSchools] = useState("");
+  const [members, setMembers] = useState(null);
+
+  const [allowAllMembers, setAllowAllMembers] = useState(false);
+  const [allowMeetingMembers, setAllowMeetingMembers] = useState(false);
+
   let code;
   const [codes, setCodes] = useState(0);
   const { t } = useTranslation();
@@ -95,6 +100,29 @@ export default function CreateEvent({ business }) {
     fetchSchools();
   }, []);
 
+  const [presenceStatus, setPresenceStatus] = useState({});
+
+  // Function to toggle presence status
+  const togglePresence = (volunteerId) => {
+    console.log(volunteerId);
+    console.log(presenceStatus);
+    setPresenceStatus((prevStatus) => ({
+      ...prevStatus,
+      [volunteerId]: !prevStatus[volunteerId],
+    }));
+  };
+
+  useEffect(() => {
+    if (members) {
+      const initialStatus = members.reduce((status, volunteer) => {
+        console.log(volunteer);
+        status[volunteer.userId] = false; // Default to 'absent' (false)
+        return status;
+      }, {});
+      setPresenceStatus(initialStatus);
+    }
+  }, [members]);
+
   // If not opened don't render
   if (!open) {
     return null;
@@ -106,7 +134,13 @@ export default function CreateEvent({ business }) {
       onClose={() => {
         setOpen(false);
       }}
-      title={`${current == 1 ? t("create_new_event") : t("basic_information")}`}
+      title={`${
+        current == 1
+          ? t("create_new_event")
+          : current == 6
+          ? "Record Attendance"
+          : t("basic_information")
+      }`}
     >
       <section className={style.container}>
         <form
@@ -124,7 +158,24 @@ export default function CreateEvent({ business }) {
             }
 
             if (current == 3 && business) {
-              setCurrent(4);
+              if (meeting) {
+                setCurrent(6);
+                const members = await fetch("/api/association/get_members", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    associationId: JSON.parse(
+                      localStorage.getItem("associationInfo")
+                    )._id,
+                  }),
+                });
+                const memo = await members.json();
+                setMembers(memo.members);
+              } else {
+                setCurrent(4);
+              }
             } else if (current == 3 && !business) {
               code = generateCode(24);
               setCodes(code);
@@ -235,13 +286,13 @@ export default function CreateEvent({ business }) {
                   };
 
                   // Notify users at the same school
-                  /*await fetch(
+                  await fetch(
                     "https://onesignal.com/api/v1/notifications",
                     options
                   )
                     .then((response) => response.json())
                     .then((response) => console.log(response))
-                    .catch((err) => console.error(err));*/
+                    .catch((err) => console.error(err));
                 }
               } else {
                 console.log(await response.text());
@@ -276,6 +327,7 @@ export default function CreateEvent({ business }) {
                 const associationInfo = JSON.parse(
                   localStorage.getItem("associationInfo")
                 );
+
                 const response = await fetch("/api/events/create_event", {
                   method: "POST",
                   headers: {
@@ -298,6 +350,12 @@ export default function CreateEvent({ business }) {
                     reqi: req,
                     createdAt: Date.now(),
                     sponsored: true,
+                    attendance: presenceStatus,
+                    additional: allowAllMembers
+                      ? "allowAll"
+                      : allowMeetingMembers
+                      ? "allowMeeting"
+                      : null,
                     associationId: associationInfo._id,
                     associationProfilePic: associationInfo.icon,
                     sponsoredLocations: tlocation,
@@ -347,7 +405,6 @@ export default function CreateEvent({ business }) {
                       },
                     }),
                   };
-                  console.log(options);
 
                   await fetch(
                     "https://onesignal.com/api/v1/notifications",
@@ -390,9 +447,12 @@ export default function CreateEvent({ business }) {
               setLink("");
               setReq("");
               setLocation("");
+              setPresenceStatus({});
               setMax(50);
               setCommunityService(0);
               setOpen(false);
+            } else if (current == 6) {
+              setCurrent(4);
             }
           }}
         >
@@ -590,6 +650,48 @@ export default function CreateEvent({ business }) {
                   );
                 })}
               </div>
+              {business && (
+                <>
+                  <h2>Additional Restrictions</h2>
+                  <input
+                    style={{ display: "inline", cursor: "pointer" }}
+                    type="checkbox"
+                    checked={allowAllMembers}
+                    onChange={() => {
+                      setAllowAllMembers(!allowAllMembers);
+                      if (!allowAllMembers) {
+                        // If we're about to set allowAllMembers to true
+                        setAllowMeetingMembers(false); // Ensure allowMeetingMembers is set to false
+                      }
+                    }}
+                  />
+                  <p style={{ display: "inline" }}>
+                    Only allow members in this association to sign up.
+                  </p>
+                  <br></br>
+                  {meeting && (
+                    <>
+                      <input
+                        style={{ display: "inline", cursor: "pointer" }}
+                        type="checkbox"
+                        checked={allowMeetingMembers}
+                        onChange={() => {
+                          setAllowMeetingMembers(!allowMeetingMembers);
+                          if (!allowMeetingMembers) {
+                            // If we're about to set allowMeetingMembers to true
+                            setAllowAllMembers(false); // Ensure allowAllMembers is set to false
+                          }
+                        }}
+                      />
+
+                      <p style={{ display: "inline" }}>
+                        Only allow members that attended this meeting to sign
+                        up.
+                      </p>
+                    </>
+                  )}
+                </>
+              )}
               <div>
                 <p>
                   {t("a_total_of")}{" "}
@@ -608,31 +710,6 @@ export default function CreateEvent({ business }) {
                   </span>{" "}
                   {tlocation.length == 1 ? t("school") : t("schools")}{" "}
                   {t("will_be_notified")}
-                </p>
-                <p>
-                  <span style={{ color: "var(--accent-color)" }}>
-                    {t("cost")}:
-                  </span>{" "}
-                  {tlocation.reduce(
-                    (totalUsers, selectedId) =>
-                      totalUsers +
-                        schools.find((school) => school.id === selectedId)
-                          ?.users || 0,
-                    0
-                  ) / 10}{" "}
-                  MAD{" "}
-                </p>
-                <p>
-                  <span style={{ color: "var(--accent-color)" }}>
-                    {t("discount")}:
-                  </span>{" "}
-                  {t("tester_discount")}{" "}
-                </p>
-                <p>
-                  <span style={{ color: "var(--accent-color)" }}>
-                    {t("total")}:
-                  </span>{" "}
-                  0 MAD
                 </p>
               </div>
               <button className={style.button} type="submit">
@@ -672,6 +749,10 @@ export default function CreateEvent({ business }) {
                 <Link
                   href={`${process.env.NEXT_PUBLIC_URL}signups/${codes}`}
                   target="_blank"
+                  style={{
+                    textDecoration: "underline",
+                    color: "var(--accent-color)",
+                  }}
                 >
                   {process.env.NEXT_PUBLIC_URL}signups/{codes}
                 </Link>
@@ -681,13 +762,64 @@ export default function CreateEvent({ business }) {
               </button>
             </div>
           )}
+
+          {current == 6 && (
+            <>
+              <p>Mark the attendance of members of the association.</p>
+              <ul className={style.list}>
+                {members?.map(function (value) {
+                  return (
+                    <li
+                      key={value.userId}
+                      id={`volunteer_${value.userId}`}
+                      onClick={() => togglePresence(value.userId)}
+                    >
+                      <img
+                        src={value.profilePicture}
+                        alt="Profile Picture"
+                        width={45}
+                        height={45}
+                        style={{
+                          marginTop: "auto",
+                          marginBottom: "auto",
+                          display: "inline-block",
+                          verticalAlign: "middle",
+                          borderRadius: "50%",
+                        }}
+                      />
+                      <p
+                        style={{
+                          display: "inline",
+                          paddingLeft: "10px",
+                        }}
+                      >
+                        {" "}
+                        {value.name}
+                      </p>
+                      <span>
+                        {" "}
+                        ({presenceStatus[value.userId] ? "Present" : "Absent"})
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+              <button className={style.button} type="submit">
+                {t("next")}
+              </button>
+            </>
+          )}
         </form>
 
         {/* Back button */}
         {current != 1 && current != 4 && (
           <button
             onClick={() => {
-              setCurrent(current - 1);
+              if (current != 6) {
+                setCurrent(current - 1);
+              } else {
+                setCurrent(3);
+              }
             }}
             className={style.back}
           >
