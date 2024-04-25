@@ -6,7 +6,9 @@ import ModalContext from "../context/ModalContext";
 import dynamic from "next/dynamic";
 const CreateEvent = dynamic(() => import("../components/Modals/CreateEvent"));
 const AddMembers = dynamic(() => import("../components/Modals/AddMembers"));
-
+const BusinessModal = dynamic(() =>
+  import("../components/Modals/BusinessModal")
+);
 /**
  * Get static props
  * @date 8/13/2023 - 4:31:01 PM
@@ -52,6 +54,8 @@ export default function Shortcuts() {
       </Head>
       <CreateEvent business={true} meeting={meeting} />
       <AddMembers />
+      <BusinessModal />
+
       <section
         style={{
           width: "100%",
