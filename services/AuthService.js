@@ -242,6 +242,7 @@ class AuthService {
       // Clear the token from localStorage
       localStorage.removeItem("token");
       localStorage.removeItem("userInfo");
+      localStorage.removeItem("associationInfo");
 
       // Update the authentication status
       this.setLoggedIn(false);

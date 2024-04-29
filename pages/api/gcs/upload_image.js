@@ -41,7 +41,7 @@ export default async function handler(req, res) {
 
       // Compress the image using sharp
       const compressedImageBuffer = await sharp(imageFile[0].filepath)
-        .resize(600)
+        .resize(700)
         .png({ quality: 90 })
         .jpeg({ quality: 90 })
         .webp({ quality: 90 })

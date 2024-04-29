@@ -248,7 +248,11 @@ export default function Association() {
           <h1 style={{ marginTop: "30px", marginLeft: "10px" }}>Members</h1>
           {members?.map(function (value) {
             return (
-              <Link key={value.userId} href={`/profile/${value.userId}`}>
+              <Link
+                style={{ marginBottom: "20px" }}
+                key={value.userId}
+                href={`/profile/${value.userId}`}
+              >
                 <div className={style.exp}>
                   <img src={value.profilePicture}></img>
                   <div>

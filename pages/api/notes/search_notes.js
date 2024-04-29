@@ -163,7 +163,6 @@ export default async function handler(req, res) {
 
   try {
     const result = await Notes.aggregate(query);
-    await disconnectDB();
 
     if (result) {
       const final = {
@@ -174,6 +173,7 @@ export default async function handler(req, res) {
       res.status(200).send({});
     }
   } catch (error) {
+    console.log(error);
     res.status(500).send(error);
   }
 }
