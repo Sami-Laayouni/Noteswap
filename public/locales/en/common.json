@@ -14,7 +14,7 @@
   "continue_with": "Continue with",
   "log_in_to_noteswap": "Log in to Noteswap",
   "sign_up_to_noteswap": "Sign up to Noteswap",
-  "desc": " We are committed to transforming the world of education through innovative technology. We want to make learning accessible and enjoyable for everyone.",
+  "desc": "NoteSwap provides opportunities for students to grow and achieve their full potential.",
   "or": "or",
   "next": "Next",
   "back": "Back",
@@ -117,7 +117,6 @@
   "note_notebot": "Note: The Noteswap Bot does not reflect the methodologies or ideas of Noteswap.",
 
   "log_out": "Log out",
-  "detect_ai_text": "Detect AI Text",
   "certicates": "Certificates",
   "setting": "Settings",
   "analytics": "Analytics",

@@ -48,9 +48,19 @@ export default function Footer({ type }) {
             : "Noteswap"}
         </h1>
         <h2>
-          {t("send_support_email") == "send_support_email"
-            ? "If you have a general inquiry and would like to speak to our expert team, you can contact us via email at: support@noteswap.org"
-            : t("send_support_email")}
+          {type != "b" ? (
+            <>
+              {" "}
+              {t("send_support_email") == "send_support_email"
+                ? "If you have a general inquiry and would like to speak to our expert team, you can contact us via email at: support@noteswap.org"
+                : t("send_support_email")}
+            </>
+          ) : (
+            <>
+              Begin by registering your school with us. It is quick, easy, and
+              the first step toward enhancing your educational environment.
+            </>
+          )}
         </h2>
         <Link
           title="Signup to Noteswap"
@@ -87,18 +97,17 @@ export default function Footer({ type }) {
         </p>
         <div>
           <Link
-            title="Visit our Facebook"
-            href="https://www.facebook.com/profile.php?id=61550215144348"
+            title="Visit our Linkedin"
+            href="https://www.linkedin.com/company/noteswap/about/"
             target="_blank"
           >
             <Image
-              src="/assets/images/footer/Facebook.svg"
-              alt="Facebook"
+              src="/assets/images/footer/Linkedin.svg"
+              alt="Linkedin"
               width={33}
               height={33}
             />
           </Link>
-
           <Link
             title="Visit our Twitter/X"
             href="https://twitter.com/NoteSwap_Ifrane"
@@ -107,19 +116,6 @@ export default function Footer({ type }) {
             <Image
               src="/assets/images/footer/Twitter.svg"
               alt="Twitter"
-              width={33}
-              height={33}
-            />
-          </Link>
-
-          <Link
-            title="Visit our Linkedin"
-            href="https://www.linkedin.com/company/noteswap/about/"
-            target="_blank"
-          >
-            <Image
-              src="/assets/images/footer/Linkedin.svg"
-              alt="Linkedin"
               width={33}
               height={33}
             />

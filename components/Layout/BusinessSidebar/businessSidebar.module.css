@@ -1,0 +1,37 @@
+.nav {
+  list-style: none;
+  height: calc(100vh - var(--header-height));
+  background-color: var(--default-white);
+  width: 260px;
+  display: inline-block;
+  border-left: 5px solid var(--default-black);
+}
+.nav h1 {
+  font-family: var(--manrope-bold-font);
+  color: var(--accent-color);
+  margin-top: 40px;
+}
+.nav li {
+  margin-top: 30px;
+  cursor: pointer;
+  font-family: var(--manrope-font);
+  transition: all 0.5s ease;
+}
+.nav li:hover {
+  margin-left: 10px;
+  color: var(--accent-color);
+}
+.verticalAlign {
+  width: 2px;
+  position: absolute;
+
+  left: 20px;
+  height: 150px;
+
+  background-color: black;
+}
+@media all and (max-width: 808px) {
+  .nav {
+    display: none;
+  }
+}

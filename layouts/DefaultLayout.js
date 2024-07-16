@@ -17,7 +17,7 @@ const Transcript = dynamic(
 const LargenImage = dynamic(() => import("../components/Modals/LargenImage"), {
   ssr: false,
 });
-const ShareNotes = dynamic(() => import("../components/Modals/ShareNotes"), {
+const Share = dynamic(() => import("../components/Modals/Share"), {
   ssr: false,
 });
 const BusinessModal = dynamic(() =>
@@ -40,7 +40,7 @@ const DefaultLayout = ({ children }) => {
           <Header />
           <Transcript />
           <LargenImage />
-          <ShareNotes />
+          <Share type={"note"} />
           <BusinessModal />
           <main>{children}</main>
         </SocketProvider>

@@ -13,10 +13,10 @@ import { BsTwitter } from "react-icons/bs";
 import { FaRedditAlien, FaFacebookF } from "react-icons/fa";
 
 // Import styles
-import style from "./shareNotes.module.css";
+import style from "./share.module.css";
 
 // Export the component
-export default function Share() {
+export default function Share({ type }) {
   // Used to store whether the modal is opened or closed
   const { shareOpen, shareURL } = useContext(ModalContext);
   const [open, setOpen] = shareOpen;
@@ -34,7 +34,7 @@ export default function Share() {
       onClose={() => {
         setOpen(false);
       }}
-      title="Share notes"
+      title={`${type == "note" ? "Share notes" : "Share Event"}`}
       small="true"
     >
       {/* Input field to copy the url */}
@@ -79,7 +79,11 @@ export default function Share() {
         {/* Share on Twitter/X */}
         <li style={{ background: "#26a7de", cursor: "pointer" }}>
           <Link
-            href={`https://x.com/intent/tweet?text=Check out these notes on NoteSwap. ${url}`}
+            href={`https://x.com/intent/tweet?text=${
+              type == "note"
+                ? "Check out these notes on NoteSwap."
+                : "Check out this event on NoteSwap."
+            } ${url}`}
             target="_blank"
           >
             <BsTwitter color="white" size={30} />
@@ -88,7 +92,11 @@ export default function Share() {
         {/* Share on Reddit*/}
         <li style={{ background: "#FF4500", cursor: "pointer" }}>
           <Link
-            href={`https://www.reddit.com/submit?title=Check out these notes on Noteswap.&url=${url}`}
+            href={`https://www.reddit.com/submit?title==${
+              type == "note"
+                ? "Check out these notes on NoteSwap."
+                : "Check out this event on NoteSwap."
+            }&url=${url}`}
             target="_blank"
           >
             <FaRedditAlien color="white" size={30} />
@@ -97,7 +105,11 @@ export default function Share() {
         {/* Share on Facebook*/}
         <li style={{ background: "#1877F2", cursor: "pointer" }}>
           <Link
-            href={`https://www.facebook.com/?text=Check out these notes on NoteSwap. ${url}`}
+            href={`https://www.facebook.com/?text==${
+              type == "note"
+                ? "Check out these notes on NoteSwap."
+                : "Check out this event on NoteSwap."
+            } ${url}`}
             target="_blank"
           >
             <FaFacebookF color="white" size={30} />
@@ -106,7 +118,11 @@ export default function Share() {
         {/* Share by Email*/}
         <li style={{ background: "lightgreen", cursor: "pointer" }}>
           <Link
-            href={`mailto:?subject=Noteswap Notes&body=Check out these notes on NoteSwap. ${url}`}
+            href={`mailto:?subject=NoteSwap&body=${
+              type == "note"
+                ? "Check out these notes on NoteSwap."
+                : "Check out this event on NoteSwap."
+            } ${url}`}
             target="_blank"
           >
             <MdEmail color="white" size={30} />

@@ -18,7 +18,7 @@ export default async function handler(req, res) {
   try {
     const response = await Events.findByIdAndUpdate(
       id,
-      { $pull: { volunteers: userId } },
+      { $pull: { volunteers: { userId: userId } } },
       { new: true }
     );
     res.status(200).send(response);

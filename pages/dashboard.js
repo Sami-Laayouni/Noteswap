@@ -106,6 +106,7 @@ const Dashboard = () => {
           const sortedEvents = data.items.sort((a, b) => {
             return new Date(a.start.date) - new Date(b.start.date);
           });
+          console.log(sortedEvents);
           setCalendar(sortedEvents);
         } else {
           setCalendar([{}]);
@@ -140,59 +141,74 @@ const Dashboard = () => {
             : t("good_evening")}
           , <span>{userData?.first_name}</span>
         </h1>
-        {calendarId != "url" && (
+        {userData?.role != "volunteer" && (
           <>
-            <h2 className={style.subTitle}>{t("upcoming_school_events")} </h2>
-            {loading && <LoadingCircle />}
-            {calendar?.length == 0 && <h3>{t("no_coming_events")}</h3>}
-            <div
-              style={{ position: "relative" }}
-              onMouseEnter={() => {
-                document.getElementById("left").style.display = "block";
-                document.getElementById("right").style.display = "block";
-              }}
-              onMouseLeave={() => {
-                document.getElementById("left").style.display = "none";
-                document.getElementById("right").style.display = "none";
-              }}
-            >
-              <button
-                className={style.left}
-                onClick={handleScrollLeft}
-                id="left"
-              >
-                {"<"}
-              </button>
-              <ul
-                ref={containerRef}
-                className={style.list}
-                style={{
-                  paddingLeft: "20px",
-                  listStyle: "none",
-                  width: "100%",
-                  maxWidth: "100%",
-                  overflowX: "auto",
-                  WebkitOverflowScrolling: "touch",
-                  scrollbarWidth: "none",
-                  msOverflowStyle: "none",
-                  overflow: "-moz-scrollbars-none",
-                  whiteSpace: "nowrap",
-                  paddingBottom: "20px",
-                  paddingTop: "20px",
-                }}
-              >
-                {calendar?.map(function (value) {
-                  return <CalendarEvent key={value.id} data={value} />;
-                })}
-              </ul>
-              <button
-                className={style.right}
-                onClick={handleScrollRight}
-                id="right"
-              >
-                {">"}
-              </button>
-            </div>
+            {calendarId != "url" && (
+              <>
+                <h2 className={style.subTitle}>
+                  {t("upcoming_school_events")}{" "}
+                </h2>
+                {loading && <LoadingCircle />}
+                {calendar?.length == 0 && (
+                  <h3
+                    style={{
+                      textAlign: "center",
+                      fontFamily: "var(--manrope-font)",
+                    }}
+                  >
+                    {t("no_coming_events")}
+                  </h3>
+                )}
+                <div
+                  style={{ position: "relative" }}
+                  onMouseEnter={() => {
+                    document.getElementById("left").style.display = "block";
+                    document.getElementById("right").style.display = "block";
+                  }}
+                  onMouseLeave={() => {
+                    document.getElementById("left").style.display = "none";
+                    document.getElementById("right").style.display = "none";
+                  }}
+                >
+                  <button
+                    className={style.left}
+                    onClick={handleScrollLeft}
+                    id="left"
+                  >
+                    {"<"}
+                  </button>
+                  <ul
+                    ref={containerRef}
+                    className={style.list}
+                    style={{
+                      paddingLeft: "20px",
+                      listStyle: "none",
+                      width: "100%",
+                      maxWidth: "100%",
+                      overflowX: "auto",
+                      WebkitOverflowScrolling: "touch",
+                      scrollbarWidth: "none",
+                      msOverflowStyle: "none",
+                      overflow: "-moz-scrollbars-none",
+                      whiteSpace: "nowrap",
+                      paddingBottom: "20px",
+                      paddingTop: "20px",
+                    }}
+                  >
+                    {calendar?.map(function (value) {
+                      return <CalendarEvent key={value.id} data={value} />;
+                    })}
+                  </ul>
+                  <button
+                    className={style.right}
+                    onClick={handleScrollRight}
+                    id="right"
+                  >
+                    {">"}
+                  </button>
+                </div>
+              </>
+            )}
           </>
         )}
         {calendarId == "url" && (
@@ -215,7 +231,8 @@ const Dashboard = () => {
             </h1>
           </div>
         )}
-        <NoteSwapBot /> {/* The noteswap bot*/}
+        {/* The noteswap bot*/}
+        {userData?.role != "volunteer" && <NoteSwapBot />}{" "}
       </main>
     </>
   );

@@ -8,13 +8,9 @@ import EventCard from "../components/Cards/EventCard";
 import Head from "next/head";
 import dynamic from "next/dynamic";
 const CreateEvent = dynamic(() => import("../components/Modals/CreateEvent"));
-const ExpandedEvent = dynamic(() =>
-  import("../components/Modals/ExpandedEvent")
-);
 import OneSignal from "react-onesignal";
-import { requireAuthentication } from "../middleware/authenticate";
 import { useTranslation } from "next-i18next";
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaPlus } from "react-icons/fa";
 
 /**
  * Get Static props
@@ -48,6 +44,11 @@ const Event = () => {
   const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState("");
   const { t } = useTranslation("common");
+  const [location, setLocation] = useState("");
+  const [input, setInput] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [locationName, setLocationName] = useState("");
 
   useEffect(() => {
     addRoutePath("title", title);
@@ -77,6 +78,7 @@ const Event = () => {
 
   useEffect(() => {
     async function getUserData(title) {
+      console.log(location);
       const data = await fetch("/api/events/search_events", {
         method: "POST",
         headers: {
@@ -84,17 +86,24 @@ const Event = () => {
         },
         body: JSON.stringify({
           title: title,
-          school: JSON.parse(localStorage?.getItem("userInfo"))?.schoolId,
+          school:
+            JSON.parse(localStorage?.getItem("userInfo"))?.schoolId || null,
+          location: location,
+          locationName: locationName,
         }),
       });
+
       if (data.ok) {
         const result = await data.json();
         setEvents(result.tutors);
         setLoading(false);
+      } else {
+        setLoading(false);
+        setEvents([]);
       }
     }
     getUserData(title);
-  }, [title]);
+  }, [title, location]);
 
   useEffect(() => {
     if (localStorage && localStorage.getItem("userInfo")) {
@@ -193,40 +202,145 @@ const Event = () => {
     }
   }, [router]);
 
+  const showPosition = async (position) => {
+    setLocation([position.coords.latitude, position.coords.longitude]);
+    const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    setLocationName(
+      `${data.address.town ? `${data.address.town},` : ""} ${
+        data.address.country
+      }`
+    );
+    setInput(
+      `${data.address.town ? `${data.address.town},` : ""} ${
+        data.address.country
+      }`
+    );
+  };
+  // Handle suggestion click
+  const handleSuggestionClick = (suggestion) => {
+    setInput(suggestion.label);
+    setSuggestions([]);
+    setShowSuggestions(false);
+  };
+  // Handle input change
+  const handleChangeLocation = (e) => {
+    const value = e.target.value;
+    setInput(value);
+    if (value.length > 2) {
+      fetchLocations(value);
+      setShowSuggestions(true);
+    } else {
+      setShowSuggestions(false);
+    }
+  };
+
+  const fetchLocations = async (query) => {
+    if (!query) {
+      setSuggestions([]);
+      return;
+    }
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+      query
+    )}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    setSuggestions(
+      data.map((item) => ({
+        label: item.display_name,
+        lat: item.lat,
+        lon: item.lon,
+      }))
+    );
+  };
+
   return (
-    <div id="container">
+    <div style={{ background: "whitesmoke" }} id="container">
       <Head>
         <title>Noteswap | Events</title>
       </Head>
       <CreateEvent business={false} meeting={false} />
-      <ExpandedEvent />
-      <img
-        className={style.background}
-        alt="Background Image"
-        src="/assets/images/users/Background-Image.webp"
-      ></img>
-      <h1 className={style.mainTitle}>{t("events")}</h1>
 
-      <div style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
+      {/* Events */}
+      <section className={style.event_section}>
+        <h1 className={style.title}>Explore Events</h1>
+
         <section className={style.search}>
+          <button className={style.buttonSearch}>
+            <FaSearch color="#60606c" size={30} />
+          </button>
           <input
             value={title}
             onChange={(e) => {
               setTitle(e.target.value);
             }}
-            style={{ borderRadius: "10px", width: "100%" }}
+            style={{ borderRadius: "50px", width: "100%" }}
             placeholder={`Search for events by name`}
             autoFocus
           />
-          <button className={style.buttonSearch}>
-            <FaSearch size={30} />
-          </button>
         </section>
-      </div>
-
-      {/* Events */}
-      <section className={style.event_section}>
-        <h1 className={style.title}>Explore Opportunities</h1>
+        <div className={style.containers}>
+          <div>
+            <input
+              type="text"
+              className={style.input}
+              value={input}
+              onChange={handleChangeLocation}
+              placeholder="Enter location"
+              onBlur={() => setShowSuggestions(false)}
+              onFocus={() => input && setShowSuggestions(true)}
+            />
+            {suggestions.length > 0 && (
+              <ul
+                className={style.listFlow}
+                style={{
+                  listStyleType: "none",
+                  padding: 0,
+                }}
+              >
+                {suggestions.map((suggestion, index) => (
+                  <li
+                    key={index}
+                    onClick={() => {
+                      setInput(suggestion.label);
+                      setLocation([suggestion.lat, suggestion.lon]);
+                      setLocationName(suggestion.label);
+                      handleSuggestionClick(suggestion);
+                    }}
+                  >
+                    {suggestion.label}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          <button
+            onClick={async () => {
+              navigator.geolocation.getCurrentPosition(showPosition);
+            }}
+            type="button"
+            className={style.button}
+            style={{
+              borderRadius: "8px",
+            }}
+          >
+            Use Current Location
+          </button>
+          <button
+            onClick={() => {
+              setLocationName("Online");
+              setLocation("Online");
+              setInput("Online");
+            }}
+            className={style.button}
+            style={{
+              borderRadius: "8px",
+            }}
+          >
+            Online
+          </button>
+        </div>
 
         {events && events.length == 0 ? (
           <>
@@ -255,18 +369,22 @@ const Event = () => {
           </section>
         )}
       </section>
-      {data?.role != "student" && (
+      {data && data?.role != "student" && (
         <section
           onClick={() => {
             setOpen(true);
           }}
           className={style.createNewEvent}
-          style={{ borderRadius: "6px" }}
+          style={{ borderRadius: "50px" }}
         >
+          <FaPlus
+            size={20}
+            style={{ verticalAlign: "middle", marginRight: "10px" }}
+          />
           {t("create_new_event")}
         </section>
       )}
     </div>
   );
 };
-export default requireAuthentication(Event);
+export default Event;

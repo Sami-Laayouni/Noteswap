@@ -72,6 +72,18 @@ const schoolSchema = new mongoose.Schema({
     default: Date.now,
     required: true,
   },
+  school_website: {
+    type: String,
+    required: true,
+  },
+  approved: {
+    type: Boolean,
+    required: true,
+  },
+  schoolPlan: {
+    type: String,
+    required: true,
+  },
 });
 
 let School;

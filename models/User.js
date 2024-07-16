@@ -93,6 +93,10 @@ const userSchema = new mongoose.Schema({
     type: Array,
     required: false,
   },
+  tickets_list: {
+    type: Array,
+    required: false,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

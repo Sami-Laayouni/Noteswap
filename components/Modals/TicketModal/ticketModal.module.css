@@ -1,0 +1,11 @@
+.large {
+  width: 70vw;
+}
+.small {
+  width: 43vw;
+}
+@media all and (max-width: 830px) {
+  .small {
+    width: 80vw;
+  }
+}

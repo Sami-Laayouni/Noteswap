@@ -1,0 +1,111 @@
+.container {
+  padding-left: auto;
+  padding-right: auto;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  max-width: 75vw;
+  display: grid;
+  height: 100px;
+  grid-template-columns: 50% 50%;
+  height: 400px;
+}
+.button {
+  padding: 10px 35px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  margin-top: 15px;
+  background-color: transparent;
+  cursor: pointer;
+  font-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px; /* Adjust space between text and arrow */
+  transition: all 0.3s ease;
+  max-width: 280px;
+}
+.button:hover {
+  padding: 10px 45px;
+  background: var(--accent-color);
+  color: white;
+  border: 1px solid var(--accent-color);
+}
+
+.icon {
+  transition: transform 0.3s ease;
+}
+
+.button:hover .icon {
+  transform: translateX(5px); /* Move the arrow to the right on hover */
+}
+.basic {
+  margin-left: 20px;
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  text-decoration: underline;
+  margin-top: 20px;
+}
+.sideButton {
+  padding: 10px 35px;
+  border: 0px;
+  color: white;
+  border-radius: 20px;
+  margin-top: 15px;
+  background-color: var(--accent-color);
+  cursor: pointer;
+  font-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px; /* Adjust space between text and arrow */
+  transition: all 0.3s ease;
+  max-width: 280px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+.sideButton:hover {
+  padding: 10px 50px;
+}
+.image {
+  width: 100%;
+  object-fit: cover;
+  height: 600px;
+  margin-top: 50px;
+  border-radius: 20px;
+}
+.hidden {
+  display: block;
+}
+.hiddenI {
+  display: inline-block;
+}
+.hiddenO {
+  display: none;
+}
+.small {
+  width: 50vw;
+}
+
+@media all and (max-width: 808px) {
+  .container {
+    grid-template-columns: 100%;
+  }
+  .small {
+    width: 80vw;
+  }
+  .image {
+    height: 200px;
+  }
+  .hidden {
+    display: none;
+  }
+  .hiddenI {
+    display: none;
+  }
+  .hiddenO {
+    display: inline-block;
+  }
+}

@@ -1,0 +1,97 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-left: 250px;
+  padding-right: 250px;
+  margin-top: 100px;
+  height: 80vh;
+}
+.header {
+  font-family: var(--manrope-bold-font);
+  font-size: 3rem;
+  text-align: center;
+}
+.input {
+  width: 100%;
+  height: 45px;
+  border: 2px solid var(--default-black-color);
+  padding-left: 20px;
+  border: 1px solid gray;
+  border-radius: 10px;
+  background-color: white;
+  outline: none;
+  font-size: 1.1rem;
+}
+.input:focus {
+  border: 1px solid var(--accent-color);
+}
+.pricingInfo {
+  width: 100%;
+}
+
+.cardContainer {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.card {
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  padding: 20px;
+  margin: 10px;
+  width: 300px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.card h2 {
+  color: #333;
+}
+
+.card p {
+  color: #666;
+}
+.card p,
+.card li {
+  color: #666;
+}
+
+.recommended {
+  border: 2px solid var(--accent-color);
+  position: relative;
+}
+
+.recommendedLabel {
+  position: absolute;
+  top: -10px;
+  right: 10px;
+  background-color: var(--accent-color);
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 0.9em;
+  font-weight: bold;
+}
+.selectButton {
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.selectButton:hover {
+  background-color: darkgreen;
+}
+@media all and (max-width: 1100px) {
+  .body {
+    padding-left: 100px;
+    padding-right: 100px;
+  }
+}

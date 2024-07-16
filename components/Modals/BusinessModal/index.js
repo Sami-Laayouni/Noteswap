@@ -7,6 +7,7 @@ import style from "./BusinessModal.module.css";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
+import { IoIosSend } from "react-icons/io";
 
 const ASSOCIATION_CATEGORY = [
   "Community Service and Development",
@@ -37,7 +38,7 @@ export default function CreateAccount() {
   const [desc, setDesc] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [current, setCurrent] = useState(1);
+  const [current, setCurrent] = useState(5);
   const [web, setWeb] = useState("");
   const [category, setCategory] = useState("");
   const [country, setCountry] = useState("");
@@ -93,6 +94,9 @@ export default function CreateAccount() {
           onSubmit={async (e) => {
             e.preventDefault();
             if (current != 4) {
+              if (current == 5) {
+                setOpen(false);
+              }
               setCurrent(current + 1);
             } else {
               const response = await fetch(
@@ -120,12 +124,11 @@ export default function CreateAccount() {
               );
               if (response.ok) {
                 const data = await response.json();
-                console.log(data);
                 localStorage.setItem(
                   "associationInfo",
                   JSON.stringify(data.savedAssociation)
                 );
-                setOpen(false);
+                setCurrent(5);
                 router.push("/shortcuts");
               }
             }
@@ -340,6 +343,34 @@ export default function CreateAccount() {
               ></input>
             </>
           )}
+          {/* Waiting for Verification*/}
+          {current == 5 && (
+            <div
+              style={{
+                paddingLeft: "100px",
+                paddingRight: "100px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                flexDirection: "column",
+                height: "300px",
+              }}
+            >
+              <IoIosSend
+                style={{ marginTop: "30px" }}
+                color="#40b385"
+                size={200}
+              />
+              <h1 style={{ textAlign: "center", marginTop: "20px" }}>
+                Thank You! Your Request Has Been Submitted to the NoteSwap Team
+              </h1>
+              <p style={{ textAlign: "center", marginTop: "10px" }}>
+                You can begin posting events with basic features immediately. We
+                are reviewing your request and will grant you full access to all
+                features within 2 to 3 business days.
+              </p>
+            </div>
+          )}
           {current != 1 && (
             <button
               onClick={() => {
@@ -353,7 +384,7 @@ export default function CreateAccount() {
           )}
 
           <button className={style.button} type="submit">
-            {current == 4 ? t("finish") : t("next")}
+            {current == 4 || current == 5 ? t("finish") : t("next")}
           </button>
         </form>
       </section>

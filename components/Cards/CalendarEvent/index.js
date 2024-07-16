@@ -18,10 +18,11 @@ import { useTranslation } from "next-i18next";
  * @return {*}
  */
 export default function CalendarEvent({ data }) {
-  const startDate = parseISO(data?.start?.date); // Start date of the event
-  const endDate = parseISO(data?.end?.date); // End date of the event
+  const startDate = parseISO(data?.start?.dateTime); // Start date of the event
+  const endDate = parseISO(data?.end?.dateTime); // End date of the event
   const nextDayDate = addDays(startDate, 1); // The day after the event
   const { t } = useTranslation("common");
+  console.log(data);
 
   // Return the JSX (a link that opens the event in their Google calendar)
   return (
@@ -31,8 +32,8 @@ export default function CalendarEvent({ data }) {
         <p>
           {!data?.start?.dateTime
             ? t("all_day")
-            : `${format(parseISO(data?.start?.date), "HH:mm")} - 
-          ${format(parseISO(data?.end?.date), "HH:mm")}`}
+            : `${format(parseISO(data?.start?.dateTime), "HH:mm")} - 
+          ${format(parseISO(data?.end?.dateTime), "HH:mm")}`}
           {" · "}
           {isSameDay(startDate, endDate)
             ? `${format(startDate, "MMMM dd, yyyy")}`

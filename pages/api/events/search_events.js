@@ -15,15 +15,14 @@ export default async function handler(req, res) {
   let options = {};
 
   const body = req.body;
-  const { title, school } = body;
+  const { title, school, location, locationName } = body;
   res.setHeader("Cache-Control", "public, max-age=120");
 
-  if (school == "649d661a3a5a9f73e9e3fa62") {
+  if (school) {
     options = {
       $match: {
         $or: [
           { school_id: { $regex: school } },
-          { school_id: { $exists: false } },
           { sponsoredLocations: { $in: [school] } },
         ],
       },
@@ -32,13 +31,28 @@ export default async function handler(req, res) {
   } else {
     options = {
       $match: {
-        $or: [
-          { school_id: { $regex: school } },
-          { sponsoredLocations: { $in: [school] } },
-        ],
+        only_allow_school_see: false,
       },
     };
     query.push(options);
+  }
+  if (locationName === "Online") {
+    options = {
+      $match: {
+        eventMode: "online",
+      },
+    };
+    query.push(options);
+  } else if (location) {
+    options = {
+      $geoNear: {
+        near: { type: "Point", coordinates: [location[1], location[0]] },
+        distanceField: "distance",
+        maxDistance: 350000, // Change this value to adjust search radius in meters
+        spherical: true,
+      },
+    };
+    query.unshift(options); // Use unshift to make $geoNear the first stage in the pipeline
   }
   if (title) {
     options = {
@@ -48,30 +62,6 @@ export default async function handler(req, res) {
     };
     query.push(options);
   }
-
-  query.push({
-    $project: {
-      title: 1,
-      desc: 1,
-      community_service_offered: 1,
-      teahcer_id: 1,
-      date_of_events: 1,
-      certificate_link: 1,
-      createdAt: 1,
-      teacher_id: 1,
-      contact_email: 1,
-      link_to_event: 1,
-      max: 1,
-      category: 1,
-      volunteers: 1,
-      sponsored: 1,
-      associationId: 1,
-      associationProfilePic: 1,
-      location: 1,
-      attendance: 1,
-      additional: 1,
-    },
-  });
 
   query.push({
     $lookup: {
@@ -98,6 +88,7 @@ export default async function handler(req, res) {
       res.status(200).send({});
     }
   } catch (error) {
+    console.log(error);
     res.status(500).send(error);
   }
 }

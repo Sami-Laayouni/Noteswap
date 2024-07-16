@@ -12,13 +12,13 @@ import Events from "../../../models/Events";
  */
 export default async function handler(req, res) {
   const body = req.body;
-  const { id, userId } = body;
+  const { id, userId, phone } = body;
   res.setHeader("Cache-Control", "public, max-age=120");
-
+  ///A DDDD PHONE
   try {
     const response = await Events.findByIdAndUpdate(
       id,
-      { $push: { volunteers: userId } },
+      { $push: { volunteers: { userId: userId, phone: phone || null } } },
       { new: true }
     );
     res.status(200).send(response);

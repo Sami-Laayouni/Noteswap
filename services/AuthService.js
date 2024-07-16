@@ -243,6 +243,7 @@ class AuthService {
       localStorage.removeItem("token");
       localStorage.removeItem("userInfo");
       localStorage.removeItem("associationInfo");
+      localStorage.removeItem("schoolInfo");
 
       // Update the authentication status
       this.setLoggedIn(false);

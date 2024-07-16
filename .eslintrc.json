@@ -14,7 +14,7 @@
     "valid-jsdoc": "warn",
     "spaced-comment": "warn",
     "no-console": "warn",
-    "no-alert": "error",
+    "no-alert": "warn",
     "new-cap": "off",
     "camelcase": "off",
     "require-jsdoc": "warn",

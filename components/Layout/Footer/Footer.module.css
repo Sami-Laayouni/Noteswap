@@ -51,7 +51,7 @@
 }
 /* Media Queries */
 
-@media all and (max-width: 800px) {
+@media all and (max-width: 1200px) {
   .footer_top {
     padding-left: 0px;
     padding-right: 0px;

@@ -20,6 +20,8 @@
   left: 50%;
   position: absolute;
   transform: translate(-50%, -50%);
+  max-height: 100vh;
+  overflow-y: auto;
 }
 .close {
   position: absolute;

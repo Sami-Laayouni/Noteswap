@@ -83,6 +83,8 @@ const Signup = () => {
     localStorage.setItem("schoolId", null);
     try {
       if (type === "email") {
+        localStorage.removeItem("schoolEmail");
+
         // Sign up with email and password
 
         const response = await AuthServices.create_user(
@@ -98,7 +100,7 @@ const Signup = () => {
           if (selectedRole != "school") {
             router.push("/shortcuts"); // Redirect to the dashboard page
           } else {
-            router.push("/for_schools");
+            router.push("/business/pricing");
           }
         } else {
           // An error has occured
@@ -109,11 +111,14 @@ const Signup = () => {
         }
       } else if (type === "google") {
         // Sign up with Google
+        localStorage.removeItem("schoolEmail");
         const data = await AuthServices.get_google_continue_url("signup");
         localStorage.setItem("role", selectedRole);
         // Redirect user to google url
         window.location.href = data.url;
       } else if (type === "microsoft") {
+        localStorage.removeItem("schoolEmail");
+
         localStorage.setItem("role", selectedRole);
         window.location.href = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize
         ?client_id=${process.env.NEXT_PUBLIC_MICROSOFT_APP_ID}
@@ -143,8 +148,15 @@ const Signup = () => {
           <section className={style.left}>
             <h1>Enhance Your Business with NoteSwap</h1>
 
-            <p>Find the perfect volunteers for your association</p>
-
+            <p>1. Create Your NoteSwap account</p>
+            <p>2. Setup your school or association</p>
+            <p>3. Submit a request to our onboarding team</p>
+            <p>
+              4. We will verify your school or association (Note: we may need to
+              reach out to confirm your submission )
+            </p>
+            <p>5. Start benefiting from the platform!</p>
+            <br></br>
             <p style={{ paddingRight: "20px" }}>
               By creating a business account on Noteswap, you agree to our{" "}
               <Link href="/boring/terms-of-service">

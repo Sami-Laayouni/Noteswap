@@ -51,6 +51,7 @@ export default function SignUps() {
   const [volunteersData, setVolunteersData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredVolunteers, setFilteredVolunteers] = useState([]);
+  const [volunteer, setVolunteer] = useState(true);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const { downloadSegmented, signedUpVolunteers } = useContext(ModalContext);
@@ -105,7 +106,7 @@ export default function SignUps() {
   }
 
   useEffect(() => {
-    async function getUserData(userId) {
+    async function getUserData(userId, phone) {
       const response = await fetch("/api/profile/get_user_profile", {
         method: "POST",
         headers: {
@@ -118,13 +119,14 @@ export default function SignUps() {
 
       if (response.ok) {
         const data = await response.json();
+        data.phone = phone;
         return data;
       }
       return null;
     }
 
     async function fetchData() {
-      const response = await fetch("/api/events/get_events", {
+      const response = await fetch("/api/events/get_single_event", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -140,7 +142,7 @@ export default function SignUps() {
         if (eventData?.volunteers) {
           const volunteerDataPromises = eventData.volunteers.map(
             async (value) => {
-              return await getUserData(value);
+              return await getUserData(value.userId, value.phone);
             }
           );
 
@@ -258,177 +260,300 @@ export default function SignUps() {
     <>
       <Script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" />
       <DownloadSegmented />
-      <h1 className={style.header}>Volunteers who signed up for your event</h1>
 
-      <input
-        className={style.sinput}
-        placeholder="Search for volunteers by first name"
-        value={searchTerm}
-        onChange={handleSearchChange}
-      />
-      <button
-        className={style.button}
-        onClick={() => {
-          downloadDataAsExcel(volunteersData);
-        }}
-      >
-        Download All
-      </button>
-      {userProfile?.role == "association" && (
+      <div style={{ padding: "30px" }}>
         <button
-          className={style.button}
+          style={{
+            background: "var(--accent-color)",
+            padding: "10px 20px",
+            outline: "none",
+            border: "none",
+            color: "white",
+            cursor: "pointer",
+            borderRadius: "3px",
+          }}
           onClick={() => {
-            setOpen(true);
-            setDatS(volunteersData);
+            setVolunteer(true);
           }}
         >
-          Download Segmented Data
+          Volunteers
         </button>
-      )}
-
-      <p
-        className={style.refresh}
-        onClick={() => {
-          window.location.reload();
-        }}
-      >
-        Refresh the page to see changes
-      </p>
-
-      {loading && (
-        <div
-          style={{ width: "100%", display: "flex", justifyContent: "center" }}
+        <button
+          style={{
+            background: "var(--accent-color)",
+            padding: "10px 20px",
+            outline: "none",
+            border: "none",
+            color: "white",
+            cursor: "pointer",
+            borderRadius: "3px",
+            marginLeft: "20px",
+          }}
+          onClick={() => {
+            setVolunteer(false);
+          }}
         >
-          <LoadingCircle />
+          Purchased Tickets
+        </button>
+      </div>
+      {volunteer && (
+        <>
+          <h1 className={style.header}>
+            Volunteers who signed up for your event
+          </h1>
+
+          <input
+            className={style.sinput}
+            placeholder="Search for volunteers by first name"
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
+          <button
+            className={style.button}
+            onClick={() => {
+              downloadDataAsExcel(volunteersData);
+            }}
+          >
+            Download All
+          </button>
+          {userProfile?.role == "association" && (
+            <button
+              className={style.button}
+              onClick={() => {
+                setOpen(true);
+                setDatS(volunteersData);
+              }}
+            >
+              Download Segmented Data
+            </button>
+          )}
+
+          <p
+            className={style.refresh}
+            onClick={() => {
+              window.location.reload();
+            }}
+          >
+            Refresh the page to see changes
+          </p>
+
+          {loading && (
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <LoadingCircle />
+            </div>
+          )}
+          <ul className={style.list}>
+            {filteredVolunteers.map((volunteer, index) => (
+              <li id={`volunteer_${volunteer._id}`} key={index}>
+                <Link href={`/profile/${volunteer._id}`}>
+                  <Image
+                    src={volunteer.profile_picture}
+                    alt="Profile Picture"
+                    width={45}
+                    height={45}
+                    style={{
+                      marginTop: "auto",
+                      marginBottom: "auto",
+                      display: "inline-block",
+                      verticalAlign: "middle",
+                      borderRadius: "50%",
+                    }}
+                  />
+                </Link>
+
+                <p
+                  style={{
+                    display: "inline",
+                    paddingLeft: "10px",
+                  }}
+                >
+                  Name:{" "}
+                  <span
+                    style={{
+                      color: "var(--accent-color)",
+                      marginRight: "20px",
+                    }}
+                  >
+                    {volunteer.first_name} {volunteer.last_name}
+                  </span>{" "}
+                  Email:{" "}
+                  <span
+                    style={{
+                      color: "var(--accent-color)",
+                      marginRight: "20px",
+                    }}
+                  >
+                    {volunteer.email}
+                  </span>
+                  Phone Number:{" "}
+                  <span
+                    style={{
+                      color: "var(--accent-color)",
+                      marginRight: "20px",
+                    }}
+                  >
+                    {volunteer.phone ? volunteer?.phone : "N/A"}
+                  </span>
+                  {"  "}
+                  Total Community Service Earned:{" "}
+                  <span style={{ color: "var(--accent-color)" }}>
+                    {Math.round(volunteer.points / 20) +
+                      Math.round(volunteer.tutor_hours / 60)}{" "}
+                    minutes
+                  </span>
+                </p>
+                <br></br>
+                <form
+                  style={{ display: "inline-block" }}
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+                    const response = await fetch(
+                      "/api/profile/add_community_minutes",
+                      {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                          id: volunteer._id,
+                          points:
+                            document.getElementById(`input_${volunteer._id}`)
+                              .value * 20,
+                        }),
+                      }
+                    );
+                    if (response.ok) {
+                      document.getElementById(
+                        `award_custom__${volunteer._id}`
+                      ).innerText = "Success";
+                      document.getElementById(`input_${volunteer._id}`).value =
+                        "";
+                    }
+                  }}
+                >
+                  <input
+                    className={style.input}
+                    type="number"
+                    min={1}
+                    max={3600}
+                    id={`input_${volunteer._id}`}
+                    placeholder="Enter a custom amount (in mins)"
+                    required
+                  />
+                  <button
+                    className={style.button}
+                    style={{ right: "195px" }}
+                    type="submit"
+                    id={`award_custom__${volunteer._id}`}
+                  >
+                    Award custom amount
+                  </button>
+                </form>
+
+                <button
+                  onClick={() => giveCertificate(volunteer._id)}
+                  className={style.button}
+                  id={`give_certificate_${volunteer._id}`}
+                >
+                  {volunteer?.certificates?.includes(data.certificate_link)
+                    ? "Already received"
+                    : `Reward full amount (${data.community_service_offered} hours)`}
+                </button>
+                <button
+                  onClick={() =>
+                    notify(
+                      volunteer.email,
+                      volunteer.first_name,
+                      data.title,
+                      data.desc,
+                      data.date_of_events
+                    )
+                  }
+                  className={style.button}
+                  id={`notify_them_${volunteer.email}`}
+                >
+                  Notify them that they have been accepted for the event
+                </button>
+                <button
+                  onClick={() => removeUser(volunteer._id)}
+                  className={style.button}
+                  style={{ background: "red" }}
+                  id={`remove_them_${volunteer.email}`}
+                >
+                  Remove {volunteer.first_name} from event
+                </button>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+      {!volunteer && (
+        <div style={{ padding: "20px" }}>
+          {" "}
+          <h1 className={style.header}>Purchased Tickets</h1>
+          <p
+            className={style.refresh}
+            onClick={() => {
+              window.location.reload();
+            }}
+          >
+            Refresh the page to see changes
+          </p>
+          {data?.purchasedTickets ? (
+            <>
+              {data?.purchasedTickets?.map(function (value, index) {
+                return (
+                  <div
+                    key={index}
+                    style={{
+                      marginBottom: "20px",
+                      padding: "10px",
+                      border: "1px solid #ccc",
+                      borderRadius: "10px",
+                    }}
+                  >
+                    <h2>{value.ticketName}</h2>
+                    <p>
+                      Checked In:{" "}
+                      {value?.checkedIn?.checkedIn ? "True" : "False"}
+                    </p>
+                    <p>
+                      Checked In Date:{" "}
+                      {value.checkInDate?.checkInDate
+                        ? value.checkInDate?.checkInDate
+                        : "N/A"}
+                    </p>
+                    <p>Ticket Id: {value.uniqueId}</p>
+
+                    <p>
+                      Purchased By:{" "}
+                      <Link
+                        style={{ textDecoration: "underline" }}
+                        href={`/profile/${value.purchasedBy}`}
+                      >
+                        Click here to view user&apos;s profile
+                      </Link>{" "}
+                    </p>
+
+                    <p>
+                      Purchased on:{" "}
+                      {new Date(value.purchaseDate).toLocaleDateString()}
+                    </p>
+                  </div>
+                );
+              })}
+            </>
+          ) : (
+            <p>No purchased tickets yet</p>
+          )}
         </div>
       )}
-      <ul className={style.list}>
-        {filteredVolunteers.map((volunteer, index) => (
-          <li id={`volunteer_${volunteer._id}`} key={index}>
-            <Link href={`/profile/${volunteer._id}`}>
-              <Image
-                src={volunteer.profile_picture}
-                alt="Profile Picture"
-                width={45}
-                height={45}
-                style={{
-                  marginTop: "auto",
-                  marginBottom: "auto",
-                  display: "inline-block",
-                  verticalAlign: "middle",
-                  borderRadius: "50%",
-                }}
-              />
-            </Link>
-
-            <p
-              style={{
-                display: "inline",
-                paddingLeft: "10px",
-              }}
-            >
-              Name:{" "}
-              <span
-                style={{ color: "var(--accent-color)", marginRight: "20px" }}
-              >
-                {volunteer.first_name} {volunteer.last_name}
-              </span>{" "}
-              Email (used to contact):{" "}
-              <span
-                style={{ color: "var(--accent-color)", marginRight: "20px" }}
-              >
-                {volunteer.email}
-              </span>
-              {"  "}
-              Total Community Service Earned:{" "}
-              <span style={{ color: "var(--accent-color)" }}>
-                {Math.round(volunteer.points / 20) +
-                  Math.round(volunteer.tutor_hours / 60)}{" "}
-                minutes
-              </span>
-            </p>
-            <br></br>
-            <form
-              style={{ display: "inline-block" }}
-              onSubmit={async (e) => {
-                e.preventDefault();
-                const response = await fetch(
-                  "/api/profile/add_community_minutes",
-                  {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                      id: volunteer._id,
-                      points:
-                        document.getElementById(`input_${volunteer._id}`)
-                          .value * 20,
-                    }),
-                  }
-                );
-                if (response.ok) {
-                  document.getElementById(
-                    `award_custom__${volunteer._id}`
-                  ).innerText = "Success";
-                  document.getElementById(`input_${volunteer._id}`).value = "";
-                }
-              }}
-            >
-              <input
-                className={style.input}
-                type="number"
-                min={1}
-                max={3600}
-                id={`input_${volunteer._id}`}
-                placeholder="Enter a custom amount (in mins)"
-                required
-              />
-              <button
-                className={style.button}
-                style={{ right: "195px" }}
-                type="submit"
-                id={`award_custom__${volunteer._id}`}
-              >
-                Award custom amount
-              </button>
-            </form>
-
-            <button
-              onClick={() => giveCertificate(volunteer._id)}
-              className={style.button}
-              id={`give_certificate_${volunteer._id}`}
-            >
-              {volunteer?.certificates?.includes(data.certificate_link)
-                ? "Already received"
-                : `Reward full amount (${data.community_service_offered} hours)`}
-            </button>
-            <button
-              onClick={() =>
-                notify(
-                  volunteer.email,
-                  volunteer.first_name,
-                  data.title,
-                  data.desc,
-                  data.date_of_events
-                )
-              }
-              className={style.button}
-              id={`notify_them_${volunteer.email}`}
-            >
-              Notify them that they have been accepted for the event
-            </button>
-            <button
-              onClick={() => removeUser(volunteer._id)}
-              className={style.button}
-              style={{ background: "red" }}
-              id={`remove_them_${volunteer.email}`}
-            >
-              Remove {volunteer.first_name} from event
-            </button>
-          </li>
-        ))}
-      </ul>
     </>
   );
 }

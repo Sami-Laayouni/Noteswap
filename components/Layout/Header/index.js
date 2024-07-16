@@ -17,11 +17,11 @@ import {
   MdOutlineEmojiEvents,
 } from "react-icons/md";
 import { FiSettings, FiLogOut, FiAward } from "react-icons/fi";
-import { LuGlasses } from "react-icons/lu";
 import { CgProfile } from "react-icons/cg";
 import { IoMdTime } from "react-icons/io";
 import { RiCopperCoinLine } from "react-icons/ri";
 import { HiUserGroup } from "react-icons/hi";
+import { IoTicketOutline } from "react-icons/io5";
 
 import AuthService from "../../../services/AuthService";
 import ModalContext from "../../../context/ModalContext";
@@ -40,12 +40,15 @@ import OneSignal from "react-onesignal";
  */
 export default function Header() {
   const { isLoggedIn } = useContext(AuthContext);
-  const { certificateModal } = useContext(ModalContext);
+  const { certificateModal, addMembers } = useContext(ModalContext);
   const [loggedIn, setLoggedIn] = isLoggedIn;
   const [isCertificate, setCertificate] = certificateModal;
+  const [open, setOpen] = addMembers;
   const [userData, setUserData] = useState();
+  const [business, setBusiness] = useState(false);
   const router = useRouter();
   const AuthServices = new AuthService(setLoggedIn);
+
   const { t } = useTranslation("common");
 
   /*
@@ -63,6 +66,9 @@ export default function Header() {
   useEffect(() => {
     if (localStorage.getItem("token")) {
       setUserData(JSON.parse(localStorage.getItem("userInfo")));
+    }
+    if (router?.pathname.includes("business")) {
+      setBusiness(true);
     }
   }, [router, loggedIn]);
 
@@ -175,7 +181,7 @@ export default function Header() {
               priority
             ></Image>
           </Link>
-          {userData?.role == "association" && (
+          {business && (
             <h1 className={style.business}>
               {t("business") == "business" ? "Business" : t("business")}
             </h1>
@@ -210,13 +216,22 @@ export default function Header() {
                   </>
                 )}
               {userData?.role != "association" && (
-                <Link
-                  title="Visit events"
-                  className={style.header_nav_a}
-                  href="/event"
-                >
-                  {t("events") == "events" ? "Events" : t("events")}
-                </Link>
+                <>
+                  <Link
+                    title="Visit events"
+                    className={style.header_nav_a}
+                    href="/event"
+                  >
+                    {t("events") == "events" ? "Events" : t("events")}
+                  </Link>
+                  {/* <Link
+                    title="Discovery"
+                    className={style.header_nav_a}
+                    href="/discover"
+                  >
+                    Discovery
+                  </Link> */}
+                </>
               )}
               {/* User info (Profile pic + name)*/}
               {userData && (
@@ -283,11 +298,20 @@ export default function Header() {
             </>
           ) : (
             <>
-              {/* User is not logged in */}
-
+              {business && (
+                <Link className={style.header_nav_a} href="/business/pricing">
+                  Pricing
+                </Link>
+              )}
+              {!business && (
+                <Link className={style.header_nav_a} href="/event">
+                  Explore Events
+                </Link>
+              )}
               <Link className={style.header_nav_a} href="/login">
                 {t("login") == "login" ? "Login" : t("login")}
               </Link>
+
               <div style={{ display: "inline-block" }}>
                 <Link
                   className={style.header_nav_button}
@@ -388,6 +412,22 @@ export default function Header() {
                   <div className={style.borderLine} />
                 </li>
               </Link>
+              {business && (
+                <Link href="/business/pricing">
+                  <li
+                    onClick={() => {
+                      document.getElementById("hamburger_menu").style.display =
+                        "none";
+                      document.getElementById(
+                        "hamburger_overlay"
+                      ).style.display = "none";
+                    }}
+                  >
+                    Pricing
+                    <div className={style.borderLine} />
+                  </li>
+                </Link>
+              )}
               <Link
                 href={
                   router.pathname.includes("business")
@@ -404,13 +444,29 @@ export default function Header() {
                   }}
                 >
                   {router.pathname.includes("business")
-                    ? "Create your business account"
+                    ? "Get Started"
                     : t("signup") == "signup"
                     ? "Signup"
                     : t("signup")}
                   <div className={style.borderLine} />
                 </li>
               </Link>
+              {!business && (
+                <Link href="/business">
+                  <li
+                    onClick={() => {
+                      document.getElementById("hamburger_menu").style.display =
+                        "none";
+                      document.getElementById(
+                        "hamburger_overlay"
+                      ).style.display = "none";
+                    }}
+                  >
+                    For Schools
+                    <div className={style.borderLine} />
+                  </li>
+                </Link>
+              )}
             </>
           ) : (
             <>
@@ -431,25 +487,6 @@ export default function Header() {
                       <div className={style.borderLine} />
                     </li>
                   </Link>
-
-                  {userData?.role != "teacher" &&
-                    userData?.schoolId == "649d661a3a5a9f73e9e3fa62" && (
-                      <Link href="/tutor">
-                        <li
-                          onClick={() => {
-                            document.getElementById(
-                              "hamburger_menu"
-                            ).style.display = "none";
-                            document.getElementById(
-                              "hamburger_overlay"
-                            ).style.display = "none";
-                          }}
-                        >
-                          {t("tutor") == "tutor" ? "Tutor" : t("tutor")}
-                          <div className={style.borderLine} />
-                        </li>
-                      </Link>
-                    )}
                 </>
               )}
 
@@ -488,22 +525,6 @@ export default function Header() {
                     {" "}
                     {t("my_association")}
                     <div className={style.borderLine} />
-                  </li>
-                </Link>
-              )}
-
-              {userData?.role == "association" && userData?.associations[0] && (
-                <Link href={`/business/events`}>
-                  <li
-                    onClick={() => {
-                      document.getElementById("hamburger_menu").style.display =
-                        "none";
-                      document.getElementById(
-                        "hamburger_overlay"
-                      ).style.display = "none";
-                    }}
-                  >
-                    My events <div className={style.borderLine} />
                   </li>
                 </Link>
               )}
@@ -563,6 +584,82 @@ export default function Header() {
                 </Link>
               )}
 
+              {userData?.role != "association" && (
+                <Link href="/tickets">
+                  <li
+                    onClick={() => {
+                      document.getElementById("hamburger_menu").style.display =
+                        "none";
+                      document.getElementById(
+                        "hamburger_overlay"
+                      ).style.display = "none";
+                    }}
+                  >
+                    My Tickets{" "}
+                    <span
+                      style={{
+                        background: "var(--accent-color)",
+                        padding: "4px",
+                        color: "white",
+                        borderRadius: "2px",
+                      }}
+                    >
+                      NoteSwap Events
+                    </span>
+                    <div className={style.borderLine} />
+                  </li>
+                </Link>
+              )}
+
+              {userData?.role == "association" && (
+                <Link href="/shortcuts">
+                  <li
+                    onClick={() => {
+                      document.getElementById("hamburger_menu").style.display =
+                        "none";
+                      document.getElementById(
+                        "hamburger_overlay"
+                      ).style.display = "none";
+                    }}
+                  >
+                    My Events
+                    <div className={style.borderLine} />
+                  </li>
+                </Link>
+              )}
+
+              {userData?.role == "association" && (
+                <li
+                  onClick={() => {
+                    setOpen(true);
+                    document.getElementById("hamburger_menu").style.display =
+                      "none";
+                    document.getElementById("hamburger_overlay").style.display =
+                      "none";
+                  }}
+                >
+                  Add Members
+                  <div className={style.borderLine} />
+                </li>
+              )}
+
+              {userData?.role == "association" && (
+                <Link href="/business/finance">
+                  <li
+                    onClick={() => {
+                      document.getElementById("hamburger_menu").style.display =
+                        "none";
+                      document.getElementById(
+                        "hamburger_overlay"
+                      ).style.display = "none";
+                    }}
+                  >
+                    Finance
+                    <div className={style.borderLine} />
+                  </li>
+                </Link>
+              )}
+
               {userData?.role == "student" && (
                 <>
                   <li
@@ -596,26 +693,6 @@ export default function Header() {
                     </li>
                   </Link>
                 </>
-              )}
-
-              {(userData?.role === "teacher" ||
-                userData?.role === "school") && (
-                <Link href="/detect_ai">
-                  <li
-                    onClick={() => {
-                      document.getElementById("hamburger_menu").style.display =
-                        "none";
-                      document.getElementById(
-                        "hamburger_overlay"
-                      ).style.display = "none";
-                    }}
-                  >
-                    {t("detect_ai_text") == "detect_ai_text"
-                      ? "Detect AI Text"
-                      : t("detect_ai_text")}
-                    <div className={style.borderLine} />
-                  </li>
-                </Link>
               )}
 
               <Link href="/settings/account">
@@ -704,17 +781,7 @@ export default function Header() {
               </Link>
             </li>
           )}
-          {userData?.role == "association" && userData?.associations[0] && (
-            <li>
-              <Link href={`/business/events`}>
-                <MdOutlineEmojiEvents
-                  size={21}
-                  style={{ verticalAlign: "middle" }}
-                />
-                <span>My events</span>
-              </Link>
-            </li>
-          )}
+
           {userData?.role == "teacher" && (
             <li>
               <Link href={`/teacher/events`}>
@@ -735,6 +802,27 @@ export default function Header() {
                 />
                 <span>
                   {t("reward_cs") == "reward_cs" ? "Reward CS" : t("reward_cs")}
+                </span>
+              </Link>
+            </li>
+          )}
+          {userData?.role !== "association" && (
+            <li>
+              <Link href="/tickets">
+                <IoTicketOutline
+                  size={21}
+                  style={{ verticalAlign: "middle" }}
+                />
+                <span>My Tickets</span>
+                <span
+                  style={{
+                    background: "var(--accent-color)",
+                    padding: "4px",
+                    color: "white",
+                    borderRadius: "2px",
+                  }}
+                >
+                  Events
                 </span>
               </Link>
             </li>
@@ -775,19 +863,6 @@ export default function Header() {
                   {t("edit_association") == "edit_association"
                     ? "Edit Association"
                     : t("edit_association")}
-                </span>
-              </Link>
-            </li>
-          )}
-
-          {(userData?.role === "teacher" || userData?.role === "school") && (
-            <li>
-              <Link href="/detect_ai">
-                <LuGlasses size={21} style={{ verticalAlign: "middle" }} />
-                <span>
-                  {t("detect_ai_text") == "detect_ai_text"
-                    ? "Detect AI Text"
-                    : t("detect_ai_text")}
                 </span>
               </Link>
             </li>

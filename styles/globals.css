@@ -22,7 +22,7 @@ a {
   --button-accent-color: #40b385;
   --button-hover-color: darkgreen;
   --button-default-padding: 12px 32px;
-  --button-default-border-radius: 4px;
+  --button-default-border-radius: 50px;
 
   --default-white-color: white;
   --default-black-color: black;
@@ -46,7 +46,7 @@ a {
   --third-party-login-card-radius: 4px;
 
   --header-height: 70px;
-  --header-item-margin: 0 16px;
+  --header-item-margin: 0 25px;
 
   --mobile-phone-portrait: 480px;
   --mobile-phone-landscape: 767px;

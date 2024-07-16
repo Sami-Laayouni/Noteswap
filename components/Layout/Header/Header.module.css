@@ -108,8 +108,7 @@
 }
 .userInfo {
   user-select: none;
-  background-color: var(--accent-color);
-  color: var(--default-white-color);
+  color: var(--default-black-color);
   padding-left: 10px;
   padding-right: 10px;
   border-radius: 8px;

@@ -17,6 +17,7 @@
   font-size: 16px;
   border: 1px solid rgba(234, 240, 238, 255);
   padding-left: 15px;
+  padding-right: 15px;
   height: 46px;
   width: 100%;
   background-color: rgba(234, 240, 238, 255);
@@ -95,7 +96,7 @@
   font-family: var(--manrope-bold-font);
 }
 .checkboxContainer {
-  height: 200px;
+  height: 150px;
   overflow-y: auto;
   padding: 20px;
   border-radius: 5px;
@@ -129,6 +130,28 @@
   font-family: var(--manrope-font);
   border-radius: 8px;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  background-color: var(--default-white-color);
+  cursor: pointer;
+}
+.listFlow {
+  list-style: none;
+  padding-left: 20px;
+  max-height: 30vh;
+  height: 100%;
+  overflow-y: auto;
+  padding-bottom: 20px;
+  z-index: 999999999999;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+.listFlow li {
+  width: 98%;
+  height: fit-content;
+  position: relative;
+  z-index: 999999999999;
+
+  padding-bottom: 15px;
+  padding-left: 20px;
+  font-family: var(--manrope-font);
   background-color: var(--default-white-color);
   cursor: pointer;
 }

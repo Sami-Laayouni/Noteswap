@@ -8,6 +8,7 @@ import ModalContext from "../../../context/ModalContext";
 import { useContext, useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { useTranslation } from "next-i18next";
+import { IoOpenOutline } from "react-icons/io5";
 
 const CATEGORY = [
   "Community Service and Development",
@@ -43,27 +44,63 @@ export default function CreateEvent({ business, meeting }) {
   const [open, setOpen] = eventStatus;
   const [current, setCurrent] = useState(1);
   const [title, setTitle] = useState("");
+  const [eventType, setEventType] = useState("");
   const [desc, setDesc] = useState("");
   const [communityService, setCommunityService] = useState(0);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [link, setLink] = useState("");
   const [message, setMessage] = useState("");
-  const [clicked, setClicked] = useState(false);
+  const [banner, setBanner] = useState(
+    "https://api.dicebear.com/8.x/shapes/svg?seed=Shado"
+  );
   const [max, setMax] = useState(50);
   const sectionRef = useRef(null);
   const [name, setName] = useState("");
-  const [url, setUrl] = useState("");
-  const [location, setLocation] = useState("");
   const [req, setReq] = useState("");
   const [category, setCategory] = useState("");
   const [tlocation, setTLocation] = useState([]);
   const today = new Date().toISOString().split("T")[0];
   const [schools, setSchools] = useState("");
   const [members, setMembers] = useState(null);
+  const [attendees, setAttendees] = useState(0);
+
+  const [eventMode, setEventMode] = useState("physical"); // 'online' or 'physical'
+  const [location, setLocation] = useState("");
+  const [input, setInput] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [reqPhone, setReqPhone] = useState(true);
 
   const [allowAllMembers, setAllowAllMembers] = useState(false);
   const [allowMeetingMembers, setAllowMeetingMembers] = useState(false);
+  const [allowVolunteer, setAllowVolunteer] = useState(false);
+
+  const currencies = [
+    { code: "MAD", name: "Moroccan Dirham" },
+    { code: "USD", name: "US Dollar" },
+    { code: "EUR", name: "Euro" },
+    { code: "GBP", name: "British Pound" },
+    { code: "JPY", name: "Japanese Yen" },
+    { code: "CAD", name: "Canadian Dollar" },
+    { code: "AUD", name: "Australian Dollar" },
+    { code: "CHF", name: "Swiss Franc" },
+    { code: "CNY", name: "Chinese Yuan" },
+    { code: "SEK", name: "Swedish Krona" },
+    { code: "NZD", name: "New Zealand Dollar" },
+    // Add other currencies as needed
+  ];
+
+  const [tickets, setTickets] = useState([]);
+  const [ticketName, setTicketName] = useState("");
+  const [ticketPrice, setTicketPrice] = useState("");
+  const [ticketAmount, setTicketAmount] = useState("");
+
+  const [currency, setCurrency] = useState(currencies[0].code); // Default currency
+  const [locationName, setLocationName] = useState("");
+
+  const [allowSchoolSee, setAllowSchoolSee] = useState(false);
+  const [allowSchoolVolunteer, setAllowSchoolVolunteer] = useState(false);
 
   let code;
   const [codes, setCodes] = useState(0);
@@ -95,17 +132,77 @@ export default function CreateEvent({ business, meeting }) {
     setSchools(data);
   }
 
+  const handleChange = (event) => {
+    setEventType(event.target.value);
+  };
+
   // Fetch all the schools
   useEffect(() => {
     fetchSchools();
   }, []);
 
+  const fetchLocations = async (query) => {
+    if (!query) {
+      setSuggestions([]);
+      return;
+    }
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+      query
+    )}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    setSuggestions(
+      data.map((item) => ({
+        label: item.display_name,
+        lat: item.lat,
+        lon: item.lon,
+      }))
+    );
+  };
+
+  // Handle input change
+  const handleChangeLocation = (e) => {
+    const value = e.target.value;
+    setInput(value);
+    if (value.length > 2) {
+      fetchLocations(value);
+      setShowSuggestions(true);
+    } else {
+      setShowSuggestions(false);
+    }
+  };
+
+  const uploadImage = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const img = new Image();
+      img.src = URL.createObjectURL(file);
+
+      img.onload = async function () {
+        const formData = new FormData();
+        formData.append("image", file);
+        const response = await fetch("/api/gcs/upload_image", {
+          method: "POST",
+          body: formData,
+        });
+
+        const { url } = await response.json();
+
+        setBanner(url);
+      };
+    }
+  };
+
+  // Handle suggestion click
+  const handleSuggestionClick = (suggestion) => {
+    setInput(suggestion.label);
+    setSuggestions([]);
+    setShowSuggestions(false);
+  };
   const [presenceStatus, setPresenceStatus] = useState({});
 
   // Function to toggle presence status
   const togglePresence = (volunteerId) => {
-    console.log(volunteerId);
-    console.log(presenceStatus);
     setPresenceStatus((prevStatus) => ({
       ...prevStatus,
       [volunteerId]: !prevStatus[volunteerId],
@@ -115,13 +212,33 @@ export default function CreateEvent({ business, meeting }) {
   useEffect(() => {
     if (members) {
       const initialStatus = members.reduce((status, volunteer) => {
-        console.log(volunteer);
         status[volunteer.userId] = false; // Default to 'absent' (false)
         return status;
       }, {});
       setPresenceStatus(initialStatus);
     }
   }, [members]);
+
+  const removeTicket = (id) => {
+    setTickets(tickets.filter((ticket) => ticket.id !== id));
+  };
+
+  const showPosition = async (position) => {
+    setLocation([position.coords.latitude, position.coords.longitude]);
+    const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    setLocationName(
+      `${data.address.town ? `${data.address.town},` : ""} ${
+        data.address.country
+      }`
+    );
+    setInput(
+      `${data.address.town ? `${data.address.town},` : ""} ${
+        data.address.country
+      }`
+    );
+  };
 
   // If not opened don't render
   if (!open) {
@@ -139,6 +256,10 @@ export default function CreateEvent({ business, meeting }) {
           ? t("create_new_event")
           : current == 6
           ? "Record Attendance"
+          : current == 7
+          ? "Select type of event"
+          : current == 8
+          ? "Create Tickets"
           : t("basic_information")
       }`}
     >
@@ -150,6 +271,32 @@ export default function CreateEvent({ business, meeting }) {
 
             // Increase current stage in the pipeline
             if (current != 4) {
+              if (current == 1 && business) {
+                setCurrent(7);
+                return;
+              }
+              if (current == 7 && business) {
+                setCurrent(2);
+                return;
+              }
+
+              if (current == 2 && eventType == "ticketed") {
+                setCurrent(8);
+                return;
+              }
+              if (current == 3 && eventType == "hybrid") {
+                setCurrent(8);
+                return;
+              }
+              if (current == 8) {
+                if (tickets.length > 0) {
+                  setCurrent(9);
+                  return;
+                } else {
+                  setMessage("Must have at least one ticket");
+                  return;
+                }
+              }
               setCurrent(current + 1);
             } else {
               if (tlocation.length > 0) {
@@ -174,8 +321,14 @@ export default function CreateEvent({ business, meeting }) {
                 const memo = await members.json();
                 setMembers(memo.members);
               } else {
-                setCurrent(4);
+                if (eventType != "volunteer") {
+                  setCurrent(8);
+                } else {
+                  setCurrent(9);
+                }
               }
+            } else if (current == 9) {
+              setCurrent(4);
             } else if (current == 3 && !business) {
               code = generateCode(24);
               setCodes(code);
@@ -207,6 +360,15 @@ export default function CreateEvent({ business, meeting }) {
                   associationId: null,
                   school_id: JSON.parse(localStorage.getItem("userInfo"))
                     .schoolId,
+                  // New ones
+                  typeOfEvent: eventType,
+                  onlyAllowSchoolVolunteers: allowSchoolVolunteer,
+                  tickets: tickets,
+                  eventMode: eventMode,
+                  attendees: attendees,
+                  askForPhone: reqPhone,
+                  locationName: locationName,
+                  eventImage: "",
                 }),
               });
 
@@ -356,11 +518,22 @@ export default function CreateEvent({ business, meeting }) {
                       : allowMeetingMembers
                       ? "allowMeeting"
                       : null,
-                    associationId: associationInfo._id,
+                    associationId: associationInfo?._id || "",
                     associationProfilePic: associationInfo.icon,
                     sponsoredLocations: tlocation,
                     school_id: JSON.parse(localStorage.getItem("userInfo"))
                       .schoolId,
+                    // New ones
+                    typeOfEvent: eventType,
+                    onlyAllowSchoolVolunteers: allowVolunteer,
+                    tickets: tickets,
+                    eventMode: eventMode,
+                    attendees: attendees,
+                    askForPhone: reqPhone,
+                    locationName: locationName,
+                    eventImage: banner,
+
+                    onlyAllowSchoolSee: allowSchoolSee,
                   }),
                 });
                 // Add sponsored locations filter
@@ -451,8 +624,9 @@ export default function CreateEvent({ business, meeting }) {
               setMax(50);
               setCommunityService(0);
               setOpen(false);
+              setTickets([]);
             } else if (current == 6) {
-              setCurrent(4);
+              setCurrent(9);
             }
           }}
         >
@@ -480,10 +654,10 @@ export default function CreateEvent({ business, meeting }) {
               <textarea
                 className={style.input}
                 style={{ height: "250px", paddingTop: "10px", resize: "none" }}
-                placeholder={t("enter_detailed_event")}
+                placeholder="Enter a detailed description of your event"
                 value={desc}
                 type="text"
-                minLength={300}
+                minLength={100}
                 maxLength={10000}
                 onChange={(e) => {
                   setDesc(e.target.value);
@@ -498,32 +672,6 @@ export default function CreateEvent({ business, meeting }) {
           )}
           {current == 2 && (
             <>
-              <label className={style.labelForInput}>{t("cs_offered")}</label>
-              <input
-                className={style.input}
-                min={0}
-                max={250}
-                type="number"
-                value={communityService}
-                onChange={(e) => {
-                  setCommunityService(e.target.value);
-                }}
-                required
-              />
-              <label className={style.labelForInput}>
-                {t("number_volunteer")}{" "}
-              </label>
-              <input
-                className={style.input}
-                min={0}
-                max={10000}
-                type="number"
-                value={max}
-                onChange={(e) => {
-                  setMax(e.target.value);
-                }}
-                required
-              />
               <label className={style.labelForInput}>
                 {t("category_event")}{" "}
               </label>
@@ -547,13 +695,13 @@ export default function CreateEvent({ business, meeting }) {
               </select>
 
               <label className={style.labelForInput}>
-                {t("date_of_event")}
+                Date and Time of the Event
               </label>
               <span>{t("from")}: </span>
               <input
                 style={{ marginLeft: "10px" }}
                 className={style.date}
-                type="date"
+                type="datetime-local"
                 min={today}
                 value={startDate}
                 onChange={(e) => {
@@ -565,7 +713,7 @@ export default function CreateEvent({ business, meeting }) {
               <input
                 style={{ marginLeft: "10px" }}
                 className={style.date}
-                type="date"
+                type="datetime-local"
                 min={today}
                 value={endDate}
                 onChange={(e) => {
@@ -574,58 +722,259 @@ export default function CreateEvent({ business, meeting }) {
                 required
               />
 
+              <label className={style.labelForInput}>Type of Event</label>
+              <select
+                className={style.input}
+                value={eventMode}
+                onChange={(e) => setEventMode(e.target.value)}
+              >
+                <option value="physical">Physical</option>
+                <option value="online">Online</option>
+              </select>
+
+              {eventMode === "physical" && (
+                <>
+                  <div id="venueOfEvent">
+                    <label className={style.labelForInput}>
+                      Venue of Event
+                    </label>
+                    <input
+                      type="text"
+                      className={style.input}
+                      value={input}
+                      onChange={handleChangeLocation}
+                      placeholder="Enter location"
+                      onBlur={() => setShowSuggestions(false)}
+                      onFocus={() => input && setShowSuggestions(true)}
+                      style={{ width: "80%" }}
+                    />
+
+                    <button
+                      onClick={async () => {
+                        navigator.geolocation.getCurrentPosition(showPosition);
+                      }}
+                      type="button"
+                      className={style.button}
+                      style={{
+                        position: "relative",
+                        top: "0px",
+                        left: "0px",
+                        borderRadius: "8px",
+                      }}
+                    >
+                      Use Current Location
+                    </button>
+                  </div>
+
+                  <p
+                    style={{
+                      textDecoration: "underline",
+                      fontFamily: "var(--manrope-font)",
+                      color: "var(--accent-color)",
+                      cursor: "pointer",
+                    }}
+                    id="wantMorePrecise"
+                    onClick={() => {
+                      document.getElementById("wantMorePrecise").style.display =
+                        "none";
+                      document.getElementById("morePrecise").style.display =
+                        "block";
+                      document.getElementById("venueOfEvent").style.display =
+                        "none";
+                    }}
+                  >
+                    Want more precise location?
+                  </p>
+
+                  <div style={{ display: "none" }} id="morePrecise">
+                    <label className={style.labelForInput}>
+                      Venue of Event
+                    </label>
+
+                    <div
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "33% 33% 33%",
+                        gap: "10px",
+                        marginTop: "10px",
+                      }}
+                    >
+                      <input
+                        type="text"
+                        className={style.input}
+                        value={locationName}
+                        onChange={(e) => {
+                          setLocationName(e.target.value);
+                        }}
+                        placeholder="Enter venue name"
+                      />{" "}
+                      <input
+                        value={location[0]}
+                        onChange={(e) => {
+                          setLocation([e.target.value, location[1]]);
+                        }}
+                        type="number"
+                        className={style.input}
+                        placeholder="Enter latitude of location"
+                      />
+                      <input
+                        value={location[1]}
+                        onChange={(e) => {
+                          setLocation([location[0], e.target.value]);
+                        }}
+                        type="number"
+                        className={style.input}
+                        placeholder="Enter longitude of location"
+                      />
+                    </div>
+                    <br></br>
+                    <p
+                      style={{
+                        textDecoration: "underline",
+                        fontFamily: "var(--manrope-font)",
+                        color: "var(--accent-color)",
+                        cursor: "pointer",
+                        display: "inline",
+                      }}
+                      onClick={() => {
+                        document.getElementById(
+                          "wantMorePrecise"
+                        ).style.display = "block";
+                        document.getElementById("morePrecise").style.display =
+                          "none";
+                        document.getElementById("venueOfEvent").style.display =
+                          "block";
+                      }}
+                    >
+                      Go back to least precise location?
+                    </p>
+                    <Link
+                      style={{ display: "inline", marginLeft: "10px" }}
+                      href={
+                        "https://support.google.com/maps/answer/18539?hl=en&co=GENIE.Platform%3DDesktop#:~:text=of%20a%20place-,On%20your%20computer%2C%20open%20Google%20Maps.,decimal%20format%20at%20the%20top."
+                      }
+                      target="_blank"
+                    >
+                      Use Google Maps to Find Coordinates <IoOpenOutline />
+                    </Link>
+                  </div>
+
+                  {suggestions.length > 0 && (
+                    <ul
+                      className={style.listFlow}
+                      style={{
+                        listStyleType: "none",
+                        padding: 0,
+                      }}
+                    >
+                      {suggestions.map((suggestion, index) => (
+                        <li
+                          key={index}
+                          onClick={() => {
+                            setInput(suggestion.label);
+                            setLocation([suggestion.lat, suggestion.lon]);
+                            setLocationName(suggestion.label);
+                            handleSuggestionClick(suggestion);
+                          }}
+                        >
+                          {suggestion.label}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </>
+              )}
+
+              {eventMode === "online" && (
+                <>
+                  <label className={style.labelForInput}>
+                    Online Event Link
+                  </label>
+                  <input
+                    placeholder="Enter the URL for the online event"
+                    className={style.input}
+                    type="url"
+                    onChange={(e) => setLocationName(e.target.value)}
+                    required
+                  />
+                </>
+              )}
+
               <button className={style.button} type="submit">
                 {t("next")}
               </button>
             </>
           )}
+
+          {/* Basic information */}
           {current == 3 && (
             <>
               {" "}
-              <label className={style.labelForInput}>
-                {t("location_of_event")}{" "}
-              </label>
-              <input
-                placeholder={t("enter_location_of_event")}
-                className={style.input}
-                value={location}
-                minLength={3}
-                maxLength={1000}
-                type="text"
-                onChange={(e) => {
-                  setLocation(e.target.value);
-                }}
-                required
-                autoFocus
-              />
               <label className={style.labelForInput}>{t("req_to_join")} </label>
               <textarea
                 className={style.input}
-                style={{ height: "250px", paddingTop: "10px", resize: "none" }}
+                style={{
+                  height: "200px",
+                  paddingTop: "10px",
+                  resize: "none",
+                }}
                 placeholder={t("enter_req_to_join")}
                 value={req}
                 type="text"
-                minLength={300}
+                minLength={10}
                 maxLength={10000}
                 onChange={(e) => {
                   setReq(e.target.value);
                 }}
-                required
               />
+              <label className={style.labelForInput}>Registration Form</label>
+              <input
+                className={style.input}
+                placeholder="Form For Volunteers to Fill Out"
+                value={link}
+                onChange={(e) => {
+                  setLink(e.target.value);
+                }}
+                type="url"
+              />
+              <div
+                className={style.checkboxContainer}
+                style={{ marginLeft: "0px", paddingLeft: "0px" }}
+              >
+                <input
+                  type="checkbox"
+                  id="phoneNumberCheck"
+                  value={reqPhone}
+                  name="phoneNumberCheck"
+                  onChange={(e) => {
+                    setReqPhone(e.target.value);
+                  }}
+                  className={style.checkboxInput}
+                />
+                <label htmlFor="phoneNumberCheck">
+                  Ask For Phone Number When Signing up (Recommended)
+                </label>
+              </div>
               <button className={style.button} type="submit">
                 {business ? t("next") : t("finish")}
               </button>
             </>
           )}
+
+          {/* Targeting the ad */}
           {current === 4 && (
             <>
               <label className={style.labelForInput}>
-                {t("select_location")}{" "}
+                Target Specific Schools Near You
               </label>
               <div className={style.checkboxContainer}>
                 {schools.map(function (value) {
                   return (
-                    <label key={value.name} className={style.checkboxLabel}>
+                    <label
+                      style={{ marginTop: "5px" }}
+                      key={value.name}
+                      className={style.checkboxLabel}
+                    >
                       <input
                         type="checkbox"
                         value={value.id}
@@ -666,7 +1015,32 @@ export default function CreateEvent({ business, meeting }) {
                     }}
                   />
                   <p style={{ display: "inline" }}>
-                    Only allow members in this association to sign up.
+                    Only allow members in this association to volunteer.
+                  </p>
+
+                  <br></br>
+                  <input
+                    style={{ display: "inline", cursor: "pointer" }}
+                    type="checkbox"
+                    checked={allowVolunteer}
+                    onChange={() => {
+                      setAllowVolunteer(!allowVolunteer);
+                    }}
+                  />
+                  <p style={{ display: "inline" }}>
+                    Only allow members from these schools to volunteer.
+                  </p>
+                  <br></br>
+                  <input
+                    style={{ display: "inline", cursor: "pointer" }}
+                    type="checkbox"
+                    checked={allowSchoolSee}
+                    onChange={() => {
+                      setAllowSchoolSee(!allowSchoolSee);
+                    }}
+                  />
+                  <p style={{ display: "inline" }}>
+                    Only allow members from these schools to see this event.
                   </p>
                   <br></br>
                   {meeting && (
@@ -718,6 +1092,7 @@ export default function CreateEvent({ business, meeting }) {
             </>
           )}
 
+          {/* Marketing (share to others) */}
           {current == 5 && (
             <div
               style={{
@@ -763,6 +1138,7 @@ export default function CreateEvent({ business, meeting }) {
             </div>
           )}
 
+          {/* Mark Attendance of Members (Business Only)*/}
           {current == 6 && (
             <>
               <p>Mark the attendance of members of the association.</p>
@@ -809,6 +1185,258 @@ export default function CreateEvent({ business, meeting }) {
               </button>
             </>
           )}
+
+          {/* Type of Event (Ie: Hybrid, Volunteering, Tickets) (Business Only)*/}
+          {current == 7 && (
+            <>
+              <select
+                className={style.input}
+                value={eventType}
+                onChange={handleChange}
+              >
+                <option value="" disabled>
+                  Select an Event Type
+                </option>
+                <option value="hybrid">Hybrid Event</option>
+                <option value="ticketed">Ticketed Event</option>
+                <option value="volunteer">Volunteer Sign-Up Event</option>
+              </select>
+              <div>
+                {eventType === "hybrid" && (
+                  <p style={{ fontFamily: "var(--manrope-font)" }}>
+                    This event combines aspects of both ticketed entries and
+                    volunteer opportunities. Ideal for large-scale events such
+                    as festivals or charity events, where you can engage
+                    attendees as participants or volunteers.
+                  </p>
+                )}
+                {eventType === "ticketed" && (
+                  <p style={{ fontFamily: "var(--manrope-font)" }}>
+                    Focuses on events where attendees purchase tickets to
+                    participate. Suitable for concerts, seminars, and exclusive
+                    gatherings. Note: Volunteers cannot signup to this event.
+                  </p>
+                )}
+                {eventType === "volunteer" && (
+                  <p style={{ fontFamily: "var(--manrope-font)" }}>
+                    Aims at gathering volunteers for community services, event
+                    staffing, or long-term volunteering roles.
+                  </p>
+                )}
+              </div>
+              {eventType && eventType != "ticketed" && (
+                <>
+                  {" "}
+                  <label className={style.labelForInput}>
+                    {t("cs_offered")}
+                  </label>
+                  <input
+                    className={style.input}
+                    min={0}
+                    max={2500}
+                    type="number"
+                    value={communityService}
+                    onChange={(e) => {
+                      setCommunityService(e.target.value);
+                    }}
+                    required
+                  />
+                  <label className={style.labelForInput}>
+                    {t("number_volunteer")}{" "}
+                  </label>
+                  <input
+                    className={style.input}
+                    min={0}
+                    max={10000}
+                    type="number"
+                    value={max}
+                    onChange={(e) => {
+                      setMax(e.target.value);
+                    }}
+                    required
+                  />
+                </>
+              )}
+
+              {eventType && eventType != "volunteer" && (
+                <>
+                  <label className={style.labelForInput}>
+                    Maximum Number Of Attendees That Can Sign Up
+                  </label>
+                  <input
+                    className={style.input}
+                    min={0}
+                    type="number"
+                    value={attendees}
+                    onChange={(e) => {
+                      setAttendees(e.target.value);
+                    }}
+                    required
+                  />
+                </>
+              )}
+
+              <button
+                className={style.button}
+                disabled={!eventType}
+                type="submit"
+              >
+                {t("next")}
+              </button>
+            </>
+          )}
+
+          {/* Tickets (Business Only)*/}
+          {current == 8 && (
+            <>
+              <div>
+                <form>
+                  <input
+                    type="text"
+                    placeholder="Ticket Name"
+                    value={ticketName}
+                    onChange={(e) => setTicketName(e.target.value)}
+                    required
+                    className={style.input}
+                  />
+                  <input
+                    type="number"
+                    placeholder="Ticket Price (leave blank for free)"
+                    value={ticketPrice}
+                    onChange={(e) => setTicketPrice(e.target.value)}
+                    className={style.input}
+                    style={{ marginTop: "20px" }}
+                    min={0}
+                    max={1000000}
+                  />
+                  <input
+                    type="number"
+                    placeholder="Maximum amount of tickets"
+                    value={ticketAmount}
+                    onChange={(e) => setTicketAmount(e.target.value)}
+                    className={style.input}
+                    style={{ marginTop: "20px" }}
+                    min={0}
+                    max={1000000}
+                  />
+                  <select
+                    value={currency}
+                    onChange={(e) => setCurrency(e.target.value)}
+                    disabled={!ticketPrice} // Disable currency selection if price is not set
+                    className={style.input}
+                    style={{ marginTop: "20px" }}
+                  >
+                    {currencies.map((curr) => (
+                      <option
+                        key={curr.code}
+                        value={curr.code}
+                      >{`${curr.code} - ${curr.name}`}</option>
+                    ))}
+                  </select>
+                  <button
+                    className={style.button}
+                    style={{
+                      position: "relative",
+                      left: "0px",
+                      top: "0px",
+                      marginTop: "20px",
+                    }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      const newTicket = {
+                        id: tickets.length + 1,
+                        name: ticketName,
+                        price: ticketPrice || "Free", // If no price is entered, it defaults to 'Free'
+                        currency: ticketPrice ? currency : "", // Currency only applies if price is set
+                        max: ticketAmount,
+                      };
+                      setTickets([...tickets, newTicket]);
+                      setTicketName("");
+                      setTicketPrice("");
+                      setCurrency(currencies[0].code); // Reset to default currency after adding
+                    }}
+                  >
+                    Add Ticket
+                  </button>
+                </form>
+
+                <ul
+                  style={{
+                    listStyle: "none",
+                    paddingLeft: "0px",
+                    fontFamily: "var(--manrope-font)",
+                    display: "grid",
+                    gridTemplateColumns: "33% 33% 33%",
+                  }}
+                >
+                  {tickets.map((ticket) => (
+                    <li key={ticket.id}>
+                      {ticket.name} - {ticket.price}{" "}
+                      {ticket.price && `${currency}`}
+                      <button
+                        style={{
+                          position: "relative",
+                          left: "0px",
+                          top: "0px",
+                          marginLeft: "10px",
+                          marginTop: "15px",
+                        }}
+                        className={style.button}
+                        onClick={() => removeTicket(ticket.id)}
+                      >
+                        Remove
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <button className={style.button} type="submit">
+                {t("next")}
+              </button>
+            </>
+          )}
+
+          {/* Upload Event Image*/}
+          {current == 9 && (
+            <>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "55vh",
+                  flexDirection: "column",
+                }}
+              >
+                <h1>Upload your event&apos;s banner</h1>
+                <img
+                  alt="Profile"
+                  src={banner}
+                  width={600}
+                  height={300}
+                  style={{
+                    borderRadius: "20px",
+                    cursor: "pointer",
+                    objectFit: "cover",
+                  }}
+                  onClick={() => {
+                    document.getElementById("imageUploadInput").click();
+                  }}
+                ></img>
+              </div>
+              <input
+                type="file"
+                accept="image/jpeg, image/png, image/gif, image/webp"
+                capture="user"
+                id="imageUploadInput"
+                style={{ display: "none" }}
+                onChange={uploadImage}
+              ></input>
+              <button className={style.button} type="submit">
+                {t("next")}
+              </button>
+            </>
+          )}
         </form>
 
         {/* Back button */}
@@ -816,6 +1444,25 @@ export default function CreateEvent({ business, meeting }) {
           <button
             onClick={() => {
               if (current != 6) {
+                if (current == 7) {
+                  setCurrent(1);
+                  return;
+                }
+                if (current == 2 && business) {
+                  setCurrent(7);
+                  return;
+                }
+
+                if (current == 8 && eventType == "ticketed") {
+                  setCurrent(2);
+                  return;
+                }
+
+                if (current == 8 && eventType == "hybrid") {
+                  setCurrent(3);
+                  return;
+                }
+
                 setCurrent(current - 1);
               } else {
                 setCurrent(3);

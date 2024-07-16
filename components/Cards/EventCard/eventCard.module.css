@@ -1,28 +1,28 @@
 .container {
-  height: 500px;
-  width: 300px;
+  height: 580px;
+  width: 350px;
   display: grid;
   grid-template-rows: 40% 60%;
   margin-bottom: 20px;
-  border-radius: 10px;
+  border-radius: 20px;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   cursor: pointer;
   transition: transform 0.3s ease-in-out;
 }
 .container:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 .container img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
 }
 
 .moreInfo {
   width: 100%;
-  max-width: 300px;
+  max-width: 380px;
   height: 100%;
   padding: 10px;
   word-break: normal;
@@ -30,6 +30,7 @@
 .lightText {
   color: gray;
   vertical-align: middle;
+  font-family: var(--manrope-font);
 }
 .button {
   padding: 10px 35px;
@@ -66,4 +67,21 @@
 }
 .learnMore:hover {
   text-decoration: underline;
+}
+.sideButton {
+  padding: 3px 6px;
+  border: 0px;
+  color: white;
+  border-radius: 5px;
+  margin-top: 15px;
+  background-color: var(--accent-color);
+  cursor: pointer;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px; /* Adjust space between text and arrow */
+  transition: all 0.3s ease;
+  max-width: 280px;
+  margin-right: 5px;
 }

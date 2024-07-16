@@ -50,7 +50,13 @@ export default function Home() {
         ) {
           router.push("/shortcuts");
         } else {
-          router.push("/dashboard");
+          if (
+            JSON.parse(localStorage.getItem("userInfo"))?.role == "volunteer"
+          ) {
+            router.push("/event");
+          } else {
+            router.push("/dashboard");
+          }
         }
       }
     }
@@ -79,13 +85,9 @@ export default function Home() {
           ></img>
         </section>
       </section>
-      {/* ========== Here Students Can Section ========= */}
+      {/* ========== For Schools ========= */}
       <section className={style.here_students_can}>
-        <h2>
-          {t("here_students_can")
-            ? t("here_students_can")
-            : "Here Students Can"}
-        </h2>
+        <h2>For Schools & Students</h2>
         <ul>
           <li>
             <Image
@@ -129,6 +131,120 @@ export default function Home() {
             <p>{t("students_can_earn")}</p>
           </li>
         </ul>
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: "40px",
+          }}
+        >
+          <Link href={"/signup"}>
+            <button
+              style={{
+                padding: "15px 30px",
+                cursor: "pointer",
+                borderRadius: "50px",
+                outline: "none",
+                border: "none",
+                fontFamily: "var(--manrope-font)",
+                background: "white",
+              }}
+            >
+              Sign Up As A Student Or Teacher
+            </button>
+          </Link>
+        </div>
+      </section>
+      {/* ========== For Associations ========= */}
+      <section
+        className={style.here_students_can}
+        style={{ background: "white", color: "rgb(23, 23, 69)" }}
+      >
+        <h2 style={{ color: "rgb(23, 23, 69)" }}>
+          For Associations & Event Organizers
+        </h2>
+        <ul style={{ color: "rgb(23, 23, 69)" }}>
+          <li style={{ color: "rgb(23, 23, 69)" }}>
+            <Image
+              width={76}
+              height={80}
+              src="/assets/images/support.png"
+              alt="Share Notes"
+            />
+            <h3 style={{ color: "rgb(23, 23, 69)" }}>Find Volunteers</h3>
+            <p style={{ color: "rgb(23, 23, 69)" }}>
+              Connect with dedicated volunteers ready to support your
+              initiatives and events.
+            </p>
+          </li>
+          <li>
+            <Image
+              width={76}
+              height={80}
+              src="/assets/images/audience.png"
+              alt="Share Notes"
+            />
+            <h3 style={{ color: "rgb(23, 23, 69)" }}>Reach Large Audiences</h3>
+            <p style={{ color: "rgb(23, 23, 69)" }}>
+              Expand your impact by reaching a large audience in locations near
+              your event.
+            </p>
+          </li>
+          <li>
+            <Image
+              width={76}
+              height={80}
+              src="/assets/images/ticket.png"
+              alt="Share Notes"
+            />
+            <h3 style={{ color: "rgb(23, 23, 69)" }}>Sell Tickets</h3>
+            <p style={{ color: "rgb(23, 23, 69)" }}>
+              Easily manage and sell tickets for your school events and
+              gatherings.
+            </p>
+          </li>
+
+          <li>
+            <Image
+              width={76}
+              height={80}
+              src="/assets/images/free.png"
+              alt="Share Notes"
+            />
+            <h3 style={{ color: "rgb(23, 23, 69)" }}>Free</h3>
+            <p style={{ color: "rgb(23, 23, 69)" }}>
+              Enjoy free access to a variety of activities and resources
+              designed to make learning fun.
+            </p>
+          </li>
+        </ul>
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Link href={"/business/signup"}>
+            <button
+              style={{
+                padding: "15px 30px",
+                cursor: "pointer",
+                borderRadius: "50px",
+                outline: "none",
+                border: "none",
+                fontFamily: "var(--manrope-font)",
+                background: "var(--accent-color)",
+                color: "white",
+              }}
+            >
+              Sign Up As An Association or Event Organizer
+            </button>
+          </Link>
+        </div>
       </section>
       {/* ========== Number of Users Section ========= */}
       <section className={style.user}>

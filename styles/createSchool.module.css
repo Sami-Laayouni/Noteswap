@@ -98,3 +98,7 @@
 .custom_input input {
   display: none;
 }
+.logo {
+  border-radius: 10px;
+  max-width: 400px;
+}

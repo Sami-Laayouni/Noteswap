@@ -2,6 +2,14 @@ import { connectDB } from "../../../utils/db";
 import Events from "../../../models/Events";
 import mongoose from "mongoose";
 
+function parseDate(dateStr) {
+  const parts = dateStr.split(/[-T:]/);
+  console.log(parts);
+  return new Date(
+    Date.UTC(parts[0], parts[1] - 1, parts[2], parts[3], parts[4], parts[5])
+  );
+}
+
 /**
  * Create a new event
  * @date 8/13/2023 - 4:36:45 PM
@@ -36,8 +44,25 @@ export default async function becomeTutor(req, res) {
       associationProfilePic,
       associationId,
       additional,
+      typeOfEvent,
+      onlyAllowSchoolVolunteers,
+      tickets,
+      eventMode,
+      attendees,
+      askForPhone,
+      locationName,
+      eventImage,
+      onlyAllowSchoolSee,
     } = req.body;
     try {
+      let local = null;
+
+      if (location) {
+        local = {
+          type: "Point",
+          coordinates: [location[1], location[0]], // Storing as [longitude, latitude]
+        };
+      }
       await connectDB();
       const newEvent = new Events({
         _id: new ObjectId(id),
@@ -51,8 +76,8 @@ export default async function becomeTutor(req, res) {
         createdAt: Date.now(),
         category: category,
         max: max,
-        expiration_date: new Date(date_of_events.split("to")[1]),
-        location: location,
+        expiration_date: new Date(`${date_of_events.split("to")[1].trim()}:00`),
+        location: local,
         req: reqi,
         school_id: school_id,
         sponsored: sponsored,
@@ -61,6 +86,16 @@ export default async function becomeTutor(req, res) {
         sponsoredLocations: sponsoredLocations || null,
         associationProfilePic: associationProfilePic,
         associationId: associationId,
+        only_allow_school_volunteers: onlyAllowSchoolVolunteers,
+        type_of_event: typeOfEvent,
+        tickets: tickets,
+        eventMode: eventMode,
+        attendees: attendees,
+        askForPhone: askForPhone,
+        locationName: locationName,
+        ticketsSold: [],
+        eventImage: eventImage || "",
+        only_allow_school_see: onlyAllowSchoolSee,
       });
       const savedEvent = await newEvent.save();
 

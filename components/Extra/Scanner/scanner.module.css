@@ -1,0 +1,10 @@
+.box {
+  width: 50vw;
+  padding: 20px;
+}
+@media all and (max-width: 808px) {
+  .box {
+    width: 89vw;
+    padding: 7px;
+  }
+}

@@ -20,7 +20,7 @@ function CreateMicrosoftUserPage() {
 
         // Email domain validation if schoolEmail is set
         const schoolofEmail = localStorage.getItem("schoolEmail");
-        if (schoolofEmail) {
+        if (schoolofEmail && role != "volunteer") {
           const urlOfEmail = JSON.parse(schoolofEmail);
           if (urlOfEmail.length > 0) {
             const emailIsValid = urlOfEmail.some((domain) =>
@@ -52,7 +52,7 @@ function CreateMicrosoftUserPage() {
               data.profilePicture,
               data.uid,
               role,
-              school
+              school || "none"
             );
             if (response.token) {
               setLoggedIn(true);
@@ -60,7 +60,7 @@ function CreateMicrosoftUserPage() {
               localStorage.setItem("token", response.token);
               router.push(
                 role === "school"
-                  ? "/for_schools"
+                  ? "/business/pricing"
                   : role === "association"
                   ? "/shortcuts"
                   : "/dashboard"

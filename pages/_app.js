@@ -35,7 +35,7 @@ function NoteSwap({ Component, pageProps }) {
     <>
       <Head>
         <meta charSet="UTF-8" />
-        <title>Noteswap</title>
+        <title>NoteSwap</title>
         <meta
           name="description"
           content="Online educational platform for earning community service hours using AI to validate. A place where opportunities are born. Discover a new way to earn your community service hours."
@@ -44,6 +44,8 @@ function NoteSwap({ Component, pageProps }) {
           name="keywords"
           content="community service, education, AI, online"
         />
+        <script async src="https://pay.google.com/gp/p/js/pay.js"></script>
+
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="robots" content="index, follow" />
         <meta name="language" content="en" />

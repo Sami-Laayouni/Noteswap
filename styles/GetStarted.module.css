@@ -28,3 +28,37 @@
   cursor: pointer;
   margin-right: 15px;
 }
+.button {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  padding: 15px 30px;
+  border-radius: 30px;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background-color: var(--accent-color);
+  color: white;
+  font-family: var(--manrope-font);
+  font-size: 1rem;
+}
+.subContainer {
+  display: grid;
+  grid-template-columns: 33% 33% 33%;
+  gap: 50px;
+}
+.box {
+  display: grid;
+  grid-template-columns: 20% 80%;
+  background-color: whitesmoke;
+}
+@media all and (max-width: 808px) {
+  .subContainer {
+    display: grid;
+    grid-template-columns: 100%;
+    gap: 50px;
+  }
+  .box {
+    grid-template-columns: 100%;
+  }
+}

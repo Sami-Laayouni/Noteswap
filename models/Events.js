@@ -46,16 +46,20 @@ const eventSchema = new mongoose.Schema({
     required: true,
   },
   expiration_date: {
-    type: Date,
+    type: String,
     required: true,
   },
   location: {
+    type: { type: String, default: "Point", required: false },
+    coordinates: { type: [Number], required: false }, // [longitude, latitude]
+  },
+  locationName: {
     type: String,
-    required: true,
+    required: false,
   },
   req: {
     type: String,
-    required: true,
+    required: false,
   },
   volunteers: {
     type: Array,
@@ -89,7 +93,50 @@ const eventSchema = new mongoose.Schema({
     type: String, // This allows the field to accept any type of data
     required: false,
   },
+  // ===============================
+  only_allow_school_volunteers: {
+    type: Boolean,
+    required: false,
+  },
+  only_allow_school_see: {
+    type: Boolean,
+    required: false,
+  },
+  only_allow_associations_see: {
+    type: Boolean,
+    required: false,
+  },
+  type_of_event: {
+    type: String,
+    required: true,
+  },
+  tickets: {
+    type: Array,
+    required: false,
+  },
+  eventMode: {
+    type: String,
+    required: true,
+  },
+  attendees: {
+    type: Number,
+    require: false,
+  },
+  askForPhone: {
+    type: Boolean,
+    required: false,
+  },
+  purchasedTickets: {
+    type: Array,
+    required: false,
+  },
+  eventImage: {
+    type: String,
+    required: false,
+  },
 });
+
+eventSchema.index({ location: "2dsphere" });
 
 let Events;
 try {

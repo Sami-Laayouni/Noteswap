@@ -2,7 +2,7 @@ import Head from "next/head";
 import style from "../styles/createSchool.module.css";
 import { requireAuthentication } from "../middleware/authenticate";
 import Footer from "../components/Layout/Footer";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SchoolService from "../services/SchoolService";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
@@ -37,6 +37,7 @@ const ForSchools = () => {
   const [schoolInfo, setSchoolInfo] = useState();
   const [schoolLogo, setSchoolLogo] = useState("");
   const [schoolCover, setSchoolCover] = useState("");
+  const [schoolPlan, setSchoolPlan] = useState(null);
   const school = new SchoolService();
 
   const { t } = useTranslation("common");
@@ -138,17 +139,22 @@ const ForSchools = () => {
 
   const handleDrop = (event) => {
     event.preventDefault();
+    document.getElementById("draganddroplogo").innerText = "Uploading...";
     const file = event.dataTransfer.files[0];
     handleImage(file, event.nativeEvent.srcElement.id);
   };
 
   const handleDrop2 = (event) => {
+    document.getElementById("draganddropcover").innerText = "Uploading...";
+
     event.preventDefault();
     const file = event.dataTransfer.files[0];
     handleImage(file, "cover");
   };
 
   const handleDragOver2 = (event) => {
+    document.getElementById("draganddropcover").innerText = "Uploading...";
+
     event.preventDefault();
   };
 
@@ -159,6 +165,8 @@ const ForSchools = () => {
   /* Handle the drag over of an image */
 
   const handleDragOver = (event) => {
+    document.getElementById("draganddroplogo").innerText = "Uploading...";
+
     event.preventDefault();
   };
 
@@ -169,6 +177,8 @@ const ForSchools = () => {
   };
 
   const handleFileInputChange = (event) => {
+    document.getElementById("draganddroplogo").innerText = "Uploading...";
+
     const file = event.target.files[0];
     console.log(event.nativeEvent.srcElement.id);
     handleImage(file, event.nativeEvent.srcElement.id);
@@ -189,8 +199,6 @@ const ForSchools = () => {
 
         const { url } = await response.json();
         const string = type;
-
-        console.log(url, string);
 
         if (string?.includes("logo")) {
           setSchoolLogo(url);
@@ -268,6 +276,14 @@ const ForSchools = () => {
     }
   };
 
+  useEffect(() => {
+    if (localStorage) {
+      if (localStorage.getItem("schoolPlan")) {
+        setSchoolPlan(localStorage.getItem("schoolPlan"));
+      }
+    }
+  }, []);
+
   // Return the JSX
   return (
     <>
@@ -282,7 +298,8 @@ const ForSchools = () => {
               encType="multipart/form-data"
               onSubmit={async (e) => {
                 e.preventDefault();
-                document.getElementById("createSchool").innerText = "Creating";
+                document.getElementById("createSchool").innerText =
+                  "Submitting";
                 const data = getFormValues();
                 const existingObject = JSON.parse(data);
                 if (file) {
@@ -315,10 +332,12 @@ const ForSchools = () => {
                     existingObject.School_phone_number,
                     existingObject.School_Supported_Emails.split(","),
                     existingObject.School_Community_Service || 40,
+                    existingObject.School_Website,
                     2400,
                     600,
                     schoolLogo,
                     schoolCover,
+                    schoolPlan,
                     generateNoteSwapCode(6),
                     filterNonEmptyCourses(courses)
                   );
@@ -360,12 +379,12 @@ const ForSchools = () => {
                     className={style.input}
                     required
                   />
-                  <p className={style.labelForInput}>{t("city_school")} * </p>
+                  <p className={style.labelForInput}>School Address * </p>
                   <input
                     id="School_address"
                     style={{ marginBottom: "30px" }}
                     className={style.input}
-                    placeholder="Ifrane"
+                    placeholder="Enter your school's address"
                     required
                   />
                   <div className={style.line}></div>
@@ -401,6 +420,13 @@ const ForSchools = () => {
                   ></input>{" "}
                   <div className={style.line}></div>
                   <h2 className={style.subtext}>{t("more_info")}</h2>
+                  <p className={style.labelForInput}>School Website</p>
+                  <input
+                    id="School_Website"
+                    className={style.input}
+                    placeholder="Your School's website"
+                    required
+                  />
                   <p className={style.labelForInput}>{t("email_more_info")} </p>
                   <input
                     id="School_Supported_Emails"
@@ -540,7 +566,7 @@ const ForSchools = () => {
                     fontFamily: "var(--manrope-font)",
                   }}
                 >
-                  <p>{t("drag_and_drop_school_logo")}</p>
+                  <p id="draganddroplogo">{t("drag_and_drop_school_logo")}</p>
 
                   <input
                     type="file"
@@ -550,6 +576,13 @@ const ForSchools = () => {
                     accept="image/jpeg, image/png, image/gif, image/webp"
                     onChange={handleFileInputChange}
                   />
+                  {schoolLogo && (
+                    <img
+                      className={style.logo}
+                      src={schoolLogo}
+                      alt="School cover"
+                    ></img>
+                  )}
                 </div>
               </section>
               <section
@@ -564,7 +597,7 @@ const ForSchools = () => {
                 <h1 className={style.subtext} style={{ paddingTop: "20px" }}>
                   {t("upload_school_cover_picture")}
                 </h1>
-                <p>{t("supported_file_types")}</p>
+                <p id="draganddropcover">{t("supported_file_types")}</p>
 
                 <div
                   onDrop={handleDrop2}
@@ -590,54 +623,77 @@ const ForSchools = () => {
                     accept="image/jpeg, image/png, image/gif, image/webp"
                     onChange={handleFileInputChange}
                   />
+                  {schoolCover && (
+                    <img
+                      className={style.logo}
+                      src={schoolCover}
+                      alt="School cover"
+                    ></img>
+                  )}
                 </div>
               </section>
-              <section
-                className={style.handbook}
-                style={{
-                  color: "white",
-                  textAlign: "center",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  flexDirection: "column",
-                }}
-              >
-                <section className={style.container}>
-                  <h1 className={style.subtext} style={{ paddingTop: "20px" }}>
-                    {t("use_noteswap_bot")}
-                  </h1>
-                  <p>{t("supported_file_type")}</p>
-                  <p>{t("max_size")}</p>
-                  <div
-                    onDrop={handleDropFile}
-                    onDragOver={handleDragOver}
-                    onClick={() => {
-                      document.getElementById("handbookj").click();
-                    }}
-                    id="handbook"
-                    style={{
-                      border: "2px dashed white",
-                      padding: "30px",
-                      width: "100%",
-                      textAlign: "center",
-                      cursor: "pointer",
-                      fontFamily: "var(--manrope-font)",
-                    }}
-                  >
-                    <p>{t("drag_and_drop_handbook")} </p>
-                    <input
-                      type="file"
-                      id="handbookj"
-                      style={{ display: "none" }}
-                      accept=".doc,.docx"
-                      onChange={handleFileChange}
-                    />
-                  </div>
+              {/* NoteSwap Bot*/}
+              {schoolPlan != "Basic" && (
+                <section
+                  className={style.handbook}
+                  style={{
+                    color: "white",
+                    textAlign: "center",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    flexDirection: "column",
+                  }}
+                >
+                  <section className={style.container}>
+                    <h1
+                      className={style.subtext}
+                      style={{ paddingTop: "20px" }}
+                    >
+                      {t("use_noteswap_bot")}
+                    </h1>
+                    <p>{t("supported_file_type")}</p>
+                    <p>{t("max_size")}</p>
+                    <div
+                      onDrop={handleDropFile}
+                      onDragOver={handleDragOver}
+                      onClick={() => {
+                        document.getElementById("handbookj").click();
+                      }}
+                      id="handbook"
+                      style={{
+                        border: "2px dashed white",
+                        padding: "30px",
+                        width: "100%",
+                        textAlign: "center",
+                        cursor: "pointer",
+                        fontFamily: "var(--manrope-font)",
+                      }}
+                    >
+                      <p>{t("drag_and_drop_handbook")} </p>
+                      <input
+                        type="file"
+                        id="handbookj"
+                        style={{ display: "none" }}
+                        accept=".doc,.docx"
+                        onChange={handleFileChange}
+                      />
+                    </div>
+                  </section>
                 </section>
-              </section>
+              )}
               <p>{uploadError}</p>
 
+              <p
+                style={{
+                  marginLeft: "50px",
+                  marginTop: "20px",
+                  fontFamily: "var(--manrope-font)",
+                }}
+              >
+                We use some of this information in order to validate your
+                school.
+              </p>
               <button
                 id="createSchool"
                 className={style.create}
@@ -646,7 +702,7 @@ const ForSchools = () => {
                   document.getElementById("hiddenButton").click();
                 }}
               >
-                {t("create_school")}
+                Submit for approval
               </button>
             </form>
           )}
@@ -661,7 +717,29 @@ const ForSchools = () => {
                 lineHeight: "300%",
               }}
             >
-              <h1 className={style.title}>{t("success")}</h1>
+              <h1 className={style.title}>
+                Successfully submitted school for Approval!
+              </h1>
+              <p>
+                We will approval your school (usually takes around a day) and
+                send you an email to let you know when the platform is ready for
+                you.{" "}
+              </p>
+
+              <p>
+                In the meanwhile you can download these promotional materials to
+                hang up around your school:
+              </p>
+              <a href="/noteswap.zip" download>
+                <button
+                  style={{ margin: "0px" }}
+                  className={style.create}
+                  type="button"
+                >
+                  Download
+                </button>
+              </a>
+
               <br></br>
               <b>
                 <h1 style={{ display: "inline" }}>{t("teacher_code")} </h1>

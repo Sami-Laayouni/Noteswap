@@ -12,7 +12,6 @@ import Footer from "../components/Layout/Footer";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import dynamic from "next/dynamic";
-const Warning = dynamic(() => import("../components/Modals/Warning"));
 
 // Used for translation reasons
 export async function getStaticProps({ locale }) {
@@ -22,6 +21,29 @@ export async function getStaticProps({ locale }) {
     },
   };
 }
+
+const locations = [
+  "Ifrane",
+  "Rabat",
+  "Casablanca",
+  "Marrakech",
+  "Fez",
+  "Tangier",
+  "Agadir",
+  "Meknes",
+  "Oujda",
+  "Kenitra",
+  "Tetouan",
+  "Safi",
+  "Mohammedia",
+  "Khouribga",
+  "El Jadida",
+  "Beni Mellal",
+  "Nador",
+  "Settat",
+  "Larache",
+  "Ksar El Kebir",
+];
 
 /**
  * Signup Page
@@ -41,10 +63,11 @@ const Signup = () => {
   const [first, setFirst] = useState("");
   const [last, setLast] = useState("");
   const [method, setMethod] = useState("email");
+  const [location, setLocation] = useState("Rabat");
   const [selectedRole, setSelectedRole] = useState("volunteer");
   const [schoolId, setSchoolId] = useState("");
   const [schools, setSchools] = useState(null);
-  const [teacherCode, setTeacherCode] = useState(null);
+  const [teacherCode, setTeacherCode] = useState("- - - - - ");
 
   const { isLoggedIn } = useContext(AuthContext);
   const { errorSignup } = useContext(AuthContext);
@@ -204,7 +227,6 @@ const Signup = () => {
         <Head>
           <title>Signup | Noteswap</title> {/* Title of the page */}
         </Head>
-        <Warning />
         {schoolId && (
           <Image
             src={getSchoolLogoImage(schoolId)}
@@ -257,7 +279,8 @@ const Signup = () => {
                 }
               }}
             >
-              {!schoolId || (selectedRole === "teacher" && !teacherCode) ? (
+              {(!schoolId && !location) ||
+              (selectedRole === "teacher" && !teacherCode) ? (
                 <>
                   <p className={style.labelCenter}>{t("i_am_joining_as")}</p>
                   <ul className={style.roles}>
@@ -266,6 +289,7 @@ const Signup = () => {
                       onClick={() => {
                         setTeacherCode("- - - - - - ");
                         setSelectedRole("student");
+                        setLocation("");
                       }}
                       style={{
                         background:
@@ -280,7 +304,9 @@ const Signup = () => {
                     <li
                       id="teacher"
                       onClick={() => {
+                        setTeacherCode(null);
                         setSelectedRole("teacher");
+                        setLocation("");
                       }}
                       style={{
                         background:
@@ -292,52 +318,86 @@ const Signup = () => {
                     >
                       {t("teacher")}
                     </li>
-                    <li
-                      id="volunteer"
-                      onClick={() =>
-                        setError("Currently not supported for early access")
-                      }
-                    >
-                      {t("volunteer")}
-                    </li>
                   </ul>
-                  {selectedRole != "volunteer" && (
-                    <>
-                      <p className={style.labelCenter}>
-                        {t("i_attend_this_school")}
-                      </p>
-                      <div>
-                        <select
-                          style={{
-                            textAlign: "center",
-                            width: "110%",
-                            border: "1px solid black",
-                            outline: "none",
-                            borderRadius: "3px",
-                            height: "33px",
-                          }}
-                          onChange={(e) => {
-                            setSchoolId(e.target.value);
-                            localStorage.setItem("schoolId", e.target.value);
-                          }}
-                          value={schoolId}
-                          name="schools"
-                          id="schools"
-                        >
-                          <option value="" disabled>
-                            {t("select_school")}
-                          </option>
-                          {schools?.map(function (value) {
-                            return (
-                              <option key={value.id} value={value.id}>
-                                {value.name}
-                              </option>
-                            );
-                          })}
-                        </select>
-                      </div>
-                    </>
-                  )}
+                  {selectedRole != "none" &&
+                    (selectedRole != "volunteer" ? (
+                      <>
+                        <p className={style.labelCenter}>
+                          {t("i_attend_this_school")}
+                        </p>
+                        <div>
+                          <select
+                            style={{
+                              textAlign: "center",
+                              width: "110%",
+                              border: "1px solid black",
+                              outline: "none",
+                              borderRadius: "3px",
+                              height: "33px",
+                            }}
+                            onChange={(e) => {
+                              setSchoolId(e.target.value);
+                              localStorage.setItem("schoolId", e.target.value);
+                            }}
+                            value={schoolId}
+                            name="schools"
+                            id="schools"
+                          >
+                            <option value="" disabled>
+                              {t("select_school")}
+                            </option>
+                            {schools?.map(function (value) {
+                              return (
+                                <option key={value.id} value={value.id}>
+                                  {value.name}
+                                </option>
+                              );
+                            })}
+                          </select>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        {!location && (
+                          <>
+                            <p className={style.labelCenter}>I come from</p>
+                            <div>
+                              <select
+                                style={{
+                                  textAlign: "center",
+                                  width: "110%",
+                                  border: "1px solid black",
+                                  outline: "none",
+                                  borderRadius: "3px",
+                                  height: "33px",
+                                }}
+                                onChange={(e) => {
+                                  setLocation(e.target.value);
+                                  localStorage.setItem(
+                                    "location",
+                                    e.target.value
+                                  );
+                                }}
+                                value={location}
+                                name="schools"
+                                id="schools"
+                              >
+                                <option value="" disabled>
+                                  Select your location
+                                </option>
+                                {locations?.map(function (value) {
+                                  return (
+                                    <option key={value} value={value}>
+                                      {value}
+                                    </option>
+                                  );
+                                })}
+                              </select>
+                            </div>
+                          </>
+                        )}
+                      </>
+                    ))}
                   {schoolId && selectedRole == "teacher" && (
                     <>
                       <p className={style.labelCenter}>Enter Teacher Code</p>
@@ -372,9 +432,8 @@ const Signup = () => {
               ) : (
                 <></>
               )}
-
               {selectedRole &&
-                schoolId &&
+                (schoolId || location) &&
                 teacherCode &&
                 (state == 0 ? (
                   <>
@@ -387,7 +446,7 @@ const Signup = () => {
                     <input
                       id="emailSignup"
                       type="email"
-                      placeholder="Enter your school email"
+                      placeholder="Enter your  email"
                       value={email}
                       aria-required="true"
                       aria-invalid="true"
@@ -404,6 +463,13 @@ const Signup = () => {
                           setEmail(e.target.value);
                           setError("");
                           const schoolId = localStorage.getItem("schoolId");
+                          if (!schoolId) {
+                            document.getElementById(
+                              "nextButton"
+                            ).disabled = false;
+                            return;
+                          }
+
                           const urlOfEmail = getSchoolReq(schoolId); // Assuming this returns an array of strings like ['@ifranschool.org', '@asi.aui.ma', '@aui.ma']
                           console.log(urlOfEmail);
                           if (urlOfEmail.length > 0) {
@@ -542,13 +608,12 @@ const Signup = () => {
                     </button>
                   </>
                 ))}
-
               <div className={style.accountContainer}>
                 <Link href="/login" className={style.createNewAccount}>
                   {t("already_have_account")}
                 </Link>
               </div>
-              {selectedRole == "volunteer" && (
+              {selectedRole == "none" && (
                 <div
                   className={style.accountContainer}
                   style={{ marginTop: "30vh", marginLeft: "1vw" }}
@@ -565,7 +630,27 @@ const Signup = () => {
                   </Link>
                 </div>
               )}
-              {selectedRole && (
+              {selectedRole == "volunteer" ? (
+                <p
+                  style={{
+                    textAlign: "center",
+                    textDecoration: "underline",
+                    color: "var(--accent-color)",
+                    marginTop: "40px",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    setSelectedRole("none");
+                    setLocation(null);
+                    setTeacherCode(null);
+                  }}
+                >
+                  Registering from a school?
+                </p>
+              ) : (
+                <></>
+              )}
+              {selectedRole != "volunteer" && selectedRole != "none" && (
                 <p
                   style={{ cursor: "pointer" }}
                   onClick={() => {
@@ -573,11 +658,13 @@ const Signup = () => {
                       setState(0);
                       setTeacherCode("");
                       setError("");
+                      setLocation("");
                     } else {
-                      setSelectedRole("volunteer");
+                      setSelectedRole("none");
                       setSchoolId("");
                       setTeacherCode("");
                       setError("");
+                      setLocation("");
                     }
                   }}
                 >

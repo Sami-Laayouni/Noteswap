@@ -15,10 +15,12 @@ class SchoolService {
     school_phone_number,
     school_supported_emails,
     school_community_service,
+    school_website,
     cs_notes,
     cs_image_notes,
     schoolLogo,
     schoolCover,
+    schoolPlan,
     school_teacher_code,
     courses
   ) {
@@ -37,12 +39,14 @@ class SchoolService {
           school_phone_number: school_phone_number, // School phone number
           urlOfEmail: school_supported_emails,
           school_community_service: school_community_service,
+          school_website: school_website,
           schoolLogo: schoolLogo,
           schoolCover: schoolCover,
           dailyLimit: cs_notes,
           dailyLimitImage: cs_image_notes,
           school_teacher_code: school_teacher_code, // School teacher code
           courses: courses,
+          schoolPlan: schoolPlan,
         }),
       });
       const data = await response.json();

@@ -21,12 +21,10 @@ export const ModalProvider = ({ children }) => {
   const [bookSession, setBookSession] = useState(false); // Stores whether the book a tutor modal is closed or opened
   const [bookSessionInfo, setBookSessionInfo] = useState(); // Stores the information of the tutor when booking a session
   const [eventStatus, setEventStatus] = useState(false); // Create event
-  const [eventData, setEventData] = useState("");
   const [shareOpen, setShareOpen] = useState(false); // Stores whether the share modal is closed or opened
   const [shareURL, setShareURL] = useState(""); // Stores the url of the page that wants to be shared
   const [citeOpen, setCiteOpen] = useState(false); // Stores whether the cite Modal is closed or opened
   const [citeInfo, setCiteInfo] = useState(""); // Stores teh information that is used to create citations
-  const [warning, setWarning] = useState(true); // Signup popup
   const [edit, setEdit] = useState(false); // Stores whether the edit Note Modal is closed or opened
   const [editValue, setEditValue] = useState(""); // Stores the HTML of the notes that are being edited
   const [editTitle, setEditTitle] = useState(""); // Stores the edited title of the notes tht are being edited
@@ -39,6 +37,10 @@ export const ModalProvider = ({ children }) => {
   const [addMembers, setAddMembers] = useState(false);
   const [downloadSegmented, setDownloadSegmented] = useState(false);
   const [signedUpVolunteers, setSignedUpVolunteers] = useState(null);
+
+  const [ticketModal, setTicketModal] = useState(false);
+  const [applyAsVolunteer, setApplyAsVolunteer] = useState(false);
+  const [eventData, setEventData] = useState("");
 
   // Return the JSX
   return (
@@ -61,7 +63,6 @@ export const ModalProvider = ({ children }) => {
         shareURL: [shareURL, setShareURL],
         citeOpen: [citeOpen, setCiteOpen],
         citeInfo: [citeInfo, setCiteInfo],
-        warning: [warning, setWarning],
         edit: [edit, setEdit],
         editValue: [editValue, setEditValue],
         editTitle: [editTitle, setEditTitle],
@@ -74,6 +75,8 @@ export const ModalProvider = ({ children }) => {
         addMembers: [addMembers, setAddMembers],
         downloadSegmented: [downloadSegmented, setDownloadSegmented],
         signedUpVolunteers: [signedUpVolunteers, setSignedUpVolunteers],
+        ticketModal: [ticketModal, setTicketModal],
+        applyAsVolunteer: [applyAsVolunteer, setApplyAsVolunteer],
       }}
     >
       {children}

@@ -20,7 +20,7 @@ function CreateGoogleUserPage() {
 
         // Email domain validation if schoolEmail is set
         const schoolofEmail = localStorage.getItem("schoolEmail");
-        if (schoolofEmail) {
+        if (schoolofEmail && role != "volunteer") {
           const urlOfEmail = JSON.parse(schoolofEmail);
           if (urlOfEmail.length > 0) {
             emailValidationPassed = urlOfEmail.some((domain) =>
@@ -49,14 +49,14 @@ function CreateGoogleUserPage() {
               data.profile,
               data.sub,
               role,
-              school
+              school || "none"
             );
             if (response.token) {
               localStorage.setItem("userInfo", JSON.stringify(response.user));
               localStorage.setItem("token", response.token);
               router.push(
                 role === "school"
-                  ? "/for_schools"
+                  ? "/business/pricing"
                   : role === "association"
                   ? "/shortcuts"
                   : "/dashboard"

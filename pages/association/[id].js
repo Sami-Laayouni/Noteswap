@@ -141,7 +141,15 @@ export default function Association() {
 
             {/* Bio and community service information */}
 
-            <h2>{data?.desc ? data?.desc : "No Description available"}</h2>
+            <h2
+              style={{
+                textOverflow: "clip",
+                wordBreak: "break-word",
+                maxWidth: "100%",
+              }}
+            >
+              {data?.desc ? data?.desc : "No Description available"}
+            </h2>
 
             <span
               style={{
@@ -172,6 +180,7 @@ export default function Association() {
               />{" "}
               <p style={{ display: "inline" }}>{data?.contact_phone}</p>
             </span>
+            <br></br>
 
             <span
               style={{
@@ -182,7 +191,7 @@ export default function Association() {
             >
               <HiOutlineLocationMarker
                 color="black"
-                style={{ verticalAlign: "middle", marginLeft: "10px" }}
+                style={{ verticalAlign: "middle" }}
               />{" "}
               <p style={{ display: "inline" }}>{data?.country}</p>
             </span>
@@ -197,7 +206,9 @@ export default function Association() {
                 color="black"
                 style={{ verticalAlign: "middle", marginLeft: "10px" }}
               />{" "}
-              <p style={{ display: "inline" }}>{data?.website}</p>
+              <p style={{ display: "inline", marginLeft: "10px" }}>
+                {data?.website}
+              </p>
             </span>
           </div>
         </div>
