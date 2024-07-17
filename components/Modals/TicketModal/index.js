@@ -311,6 +311,9 @@ export default function TicketModal() {
                       const response = await paypalCaptureOrder(data.orderID);
                       if (response) return true;
                     }}
+                    onError={(e) => {
+                      console.log(e);
+                    }}
                   />
                 </PayPalScriptProvider>
               </div>
