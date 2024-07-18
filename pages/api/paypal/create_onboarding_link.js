@@ -6,6 +6,7 @@ function generateTrackingId() {
 }
 export default async function handler(req, res) {
   const accessToken = await getAccessToken();
+  console.log(generateTrackingId());
 
   const response = await fetch(
     "https://api-m.sandbox.paypal.com/v2/customer/partner-referrals",
@@ -44,5 +45,6 @@ export default async function handler(req, res) {
     }
   );
   const referral = await response.json();
+  console.log(referral);
   res.status(200).json(referral);
 }

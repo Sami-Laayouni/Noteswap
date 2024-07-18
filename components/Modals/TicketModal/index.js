@@ -288,6 +288,7 @@ export default function TicketModal() {
                 don&apos;t worry—we handle this transaction for you, and the fee
                 is already included.{" "}
               </p>
+              <b>Amount Due: </b>
               <div>
                 <PayPalScriptProvider
                   options={{

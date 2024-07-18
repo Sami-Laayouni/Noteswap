@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import QrScanner from "../../../components/Extra/Scanner";
 import style from "../../../styles/Business.module.css";
+import { requireEventOrganizer } from "../../../middleware/checkin";
 
 function Checkin() {
   const router = useRouter();
@@ -24,4 +25,4 @@ function Checkin() {
   );
 }
 
-export default Checkin;
+export default requireEventOrganizer(Checkin);
