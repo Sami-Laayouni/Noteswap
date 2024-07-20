@@ -93,6 +93,13 @@ const Event = () => {
         }),
       });
 
+      console.log({
+        title: title,
+        school: JSON.parse(localStorage?.getItem("userInfo"))?.schoolId || null,
+        location: location,
+        locationName: locationName,
+      });
+
       if (data.ok) {
         const result = await data.json();
         setEvents(result.tutors);
@@ -369,7 +376,7 @@ const Event = () => {
           </section>
         )}
       </section>
-      {data && data?.role != "student" && (
+      {data && data?.role == "teacher" && (
         <section
           onClick={() => {
             setOpen(true);

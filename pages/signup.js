@@ -631,22 +631,37 @@ const Signup = () => {
                 </div>
               )}
               {selectedRole == "volunteer" ? (
-                <p
-                  style={{
-                    textAlign: "center",
-                    textDecoration: "underline",
-                    color: "var(--accent-color)",
-                    marginTop: "40px",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => {
-                    setSelectedRole("none");
-                    setLocation(null);
-                    setTeacherCode(null);
-                  }}
-                >
-                  Registering from a school?
-                </p>
+                <>
+                  <p
+                    style={{
+                      textAlign: "center",
+                      textDecoration: "underline",
+                      color: "var(--accent-color)",
+                      marginTop: "30px",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      setSelectedRole("none");
+                      setLocation(null);
+                      setTeacherCode(null);
+                    }}
+                  >
+                    Registering from a school?
+                  </p>
+                  <Link href={"/business/signup"}>
+                    <p
+                      style={{
+                        textAlign: "center",
+                        textDecoration: "underline",
+                        color: "var(--accent-color)",
+                        marginTop: "5px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Registering as an event organizer?
+                    </p>
+                  </Link>
+                </>
               ) : (
                 <></>
               )}
