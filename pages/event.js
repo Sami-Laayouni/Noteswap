@@ -87,7 +87,7 @@ const Event = () => {
         body: JSON.stringify({
           title: title,
           school:
-            JSON.parse(localStorage?.getItem("userInfo"))?.schoolId || null,
+            JSON.parse(localStorage?.getItem("userInfo"))?.schoolId || "null",
           location: location || null,
           locationName: locationName || null,
         }),
