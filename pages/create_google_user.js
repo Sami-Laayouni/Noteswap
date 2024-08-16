@@ -2,6 +2,26 @@ import { useEffect, useState, useContext } from "react";
 import AuthService from "../services/AuthService";
 import AuthContext from "../context/AuthContext";
 import { useRouter } from "next/router";
+import LoadingCircle from "../components/Extra/LoadingCircle";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+
+/**
+ * Get static props
+ * @date 8/13/2023 - 4:56:06 PM
+ *
+ * @export
+ * @async
+ * @param {{ locale: any; }} { locale }
+ * @return {unknown}
+ */
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
+}
 
 function CreateGoogleUserPage() {
   const router = useRouter();
@@ -10,6 +30,8 @@ function CreateGoogleUserPage() {
   const AuthServices = new AuthService(setLoggedIn);
   const [ran, setRan] = useState(false);
   const [error, setError] = errorSignup;
+
+  const { t } = useTranslation("common");
 
   useEffect(() => {
     if (!ran) {
@@ -30,9 +52,7 @@ function CreateGoogleUserPage() {
             if (!emailValidationPassed) {
               localStorage.setItem(
                 "errorSignup",
-                `To sign up to this school, your email must contain one of the following: ${urlOfEmail.join(
-                  ", "
-                )}`
+                `${"to_signup"} ${urlOfEmail.join(", ")}`
               );
               router.push("/signup");
             }
@@ -108,7 +128,10 @@ function CreateGoogleUserPage() {
         justifyContent: "center",
         color: "white",
       }}
-    ></div>
+    >
+      <LoadingCircle />
+      <p style={{ paddingLeft: "40px" }}>{t("creating_account")}</p>
+    </div>
   );
 }
 

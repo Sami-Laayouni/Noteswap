@@ -400,7 +400,7 @@ export default function Connect() {
             width={220}
             height={220}
             src="/assets/icons/tutoring.png"
-            alt="Noteswap image"
+            alt="NoteSwap image"
             priority
           />
           {data?.isTutor == "true" && !takeSelfie && (
@@ -509,7 +509,7 @@ export default function Connect() {
                   width={220}
                   height={220}
                   src="/assets/icons/tutoring.png"
-                  alt="Noteswap image"
+                  alt="NoteSwap image"
                   priority
                 />
                 <p className={style.timer}>
@@ -527,7 +527,7 @@ export default function Connect() {
                     <div className={style.center}>
                       <h1>Congratulations!</h1>
                       <p>
-                        Thank you for tutoring on Noteswap! Your session has
+                        Thank you for tutoring on NoteSwap! Your session has
                         been validated by our AI and the amount of community
                         service has been added to your account.
                       </p>
@@ -546,7 +546,7 @@ export default function Connect() {
                       support@noteswap.org. We apologize for any inconvenience
                       this may have caused you.
                     </p>
-                    <Link href="mailto:support@noteswap.org?subject=Noteswap Tutoring Session Validation">
+                    <Link href="mailto:support@noteswap.org?subject=NoteSwap Tutoring Session Validation">
                       <button>Appeal</button>
                     </Link>
                     <Link href={`/profile/${userId}`}>

@@ -37,22 +37,22 @@ export default async function becomeTutor(req, res) {
         },
       });
       const mailOptions = {
-        from: "The Noteswap Bot <support@noteswap.org>", // sender address
+        from: "The NoteSwap Bot <support@noteswap.org>", // sender address
         to: email, // list of receivers
-        subject: "Congratulations! You've Been Accepted as a Noteswap Tutor", // Subject line
+        subject: "Congratulations! You've Been Accepted as a NoteSwap Tutor", // Subject line
         text: `
       
       Dear ${name}, 
         
-      We are thrilled to inform you that your application to become a tutor on Noteswap has been accepted! 
+      We are thrilled to inform you that your application to become a tutor on NoteSwap has been accepted! 
   
-      As a Noteswap tutor, you will have the opportunity to make a meaningful impact on the academic success of your peers and contribute to our mission of enhancing the learning experience for students worldwide.
+      As a NoteSwap tutor, you will have the opportunity to make a meaningful impact on the academic success of your peers and contribute to our mission of enhancing the learning experience for students worldwide.
 
       If you have any questions or need further assistance, please do not hesitate to reach out to our support team at support@noteswap.org
   
       Best regards, 
   
-      The Noteswap team
+      The NoteSwap team
       `,
 
         html: ReactDOMServer.renderToString(
@@ -85,11 +85,11 @@ export default async function becomeTutor(req, res) {
               <b>Dear {name},</b>
               <p>
                 We are thrilled to inform you that your application to become a
-                tutor on Noteswap has been accepted!
+                tutor on NoteSwap has been accepted!
               </p>{" "}
               <p>
                 {" "}
-                As a Noteswap tutor, you will have the opportunity to make a
+                As a NoteSwap tutor, you will have the opportunity to make a
                 meaningful impact on the academic success of your peers and
                 contribute to our mission of enhancing the learning experience
                 for students worldwide.
@@ -101,7 +101,7 @@ export default async function becomeTutor(req, res) {
                 support@noteswap.org
               </p>
               <p>Best regards,</p>
-              <p>The Noteswap team</p>
+              <p>The NoteSwap team</p>
             </main>
             <footer
               style={{

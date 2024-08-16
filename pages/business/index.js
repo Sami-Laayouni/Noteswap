@@ -66,7 +66,7 @@ export default function Business() {
             service, create transcripts, and connect students, associations, and
             schools.
           </p>
-          <Link title="Signup to Noteswap" href="/business/signup">
+          <Link title="Signup to NoteSwap" href="/business/signup">
             <button style={{ fontSize: "1rem", fontWeight: "bold" }}>
               {t("get_started") ? t("get_started") : "Get Started"}
             </button>
@@ -177,7 +177,7 @@ export default function Business() {
             <AiOutlineStar size={75} color="var(--accent-color)" alt="More" />
             <h3>More</h3>
             <p>
-              Noteswap is continuously evolving providing new and creative
+              NoteSwap is continuously evolving providing new and creative
               methods to enhance student&apos;s learning.
             </p>
           </li>

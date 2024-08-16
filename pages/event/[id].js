@@ -334,7 +334,9 @@ export default function Event() {
               {data?.community_service_offered} hours offered
             </div>
           )}
-          <div className={style.hiddenI}>{data?.category}</div>
+          <div className={style.hiddenI} style={{ marginLeft: "20px" }}>
+            {data?.category}
+          </div>
           <button
             onClick={() => {
               if (localStorage.getItem("userInfo")) {

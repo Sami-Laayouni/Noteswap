@@ -288,7 +288,7 @@ const ForSchools = () => {
   return (
     <>
       <Head>
-        <title>Noteswap | Create School</title> {/* The title of the page*/}
+        <title>NoteSwap | Create School</title> {/* The title of the page*/}
       </Head>
       <div className={style.background}>
         <section className={style.section}>
@@ -379,7 +379,9 @@ const ForSchools = () => {
                     className={style.input}
                     required
                   />
-                  <p className={style.labelForInput}>School Address * </p>
+                  <p className={style.labelForInput}>
+                    {t("school_address")} *{" "}
+                  </p>
                   <input
                     id="School_address"
                     style={{ marginBottom: "30px" }}
@@ -420,7 +422,7 @@ const ForSchools = () => {
                   ></input>{" "}
                   <div className={style.line}></div>
                   <h2 className={style.subtext}>{t("more_info")}</h2>
-                  <p className={style.labelForInput}>School Website</p>
+                  <p className={style.labelForInput}>{t("school_website")}</p>
                   <input
                     id="School_Website"
                     className={style.input}
@@ -691,8 +693,7 @@ const ForSchools = () => {
                   fontFamily: "var(--manrope-font)",
                 }}
               >
-                We use some of this information in order to validate your
-                school.
+                {t("we_use_this_info")}
               </p>
               <button
                 id="createSchool"
@@ -702,7 +703,7 @@ const ForSchools = () => {
                   document.getElementById("hiddenButton").click();
                 }}
               >
-                Submit for approval
+                {t("submit_for_approval")}
               </button>
             </form>
           )}
@@ -717,26 +718,17 @@ const ForSchools = () => {
                 lineHeight: "300%",
               }}
             >
-              <h1 className={style.title}>
-                Successfully submitted school for Approval!
-              </h1>
-              <p>
-                We will approval your school (usually takes around a day) and
-                send you an email to let you know when the platform is ready for
-                you.{" "}
-              </p>
+              <h1 className={style.title}>{t("successfuly_submitted")}</h1>
+              <p>{t("we_use_this_info_for")} </p>
 
-              <p>
-                In the meanwhile you can download these promotional materials to
-                hang up around your school:
-              </p>
+              <p>{t("in_the_meanwhile")}</p>
               <a href="/noteswap.zip" download>
                 <button
                   style={{ margin: "0px" }}
                   className={style.create}
                   type="button"
                 >
-                  Download
+                  {t("download")}
                 </button>
               </a>
 

@@ -54,7 +54,7 @@ export default function PageNotFound() {
             textAlign: "center",
           }}
         >
-          <h1 className={style.title}>It looks like an error has occurred</h1>
+          <h1 className={style.title}>{t("an_error_occurred")}</h1>
           <Link href="/dashboard">
             <button className={style.button}>{t("take_me_back")}</button>
           </Link>

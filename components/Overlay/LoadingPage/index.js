@@ -21,7 +21,7 @@ const LoadingPage = () => {
       <div className={style.container}>
         <div className={style.textContainer}>
           <LoadingCircle />
-          <h1 style={{ marginLeft: "10px" }}>Noteswap</h1>
+          <h1 style={{ marginLeft: "10px" }}>NoteSwap</h1>
         </div>
         <p className={style.padding}>
           {t("loading_message") != "loading_message"

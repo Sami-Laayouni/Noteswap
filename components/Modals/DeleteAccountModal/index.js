@@ -35,7 +35,7 @@ export default function DeleteAccount() {
   // Return the JSX
   return (
     <Modal
-      title={"Delete your Noteswap account"}
+      title={"Delete your NoteSwap account"}
       isOpen={open}
       onClose={() => setOpen(false)}
     >

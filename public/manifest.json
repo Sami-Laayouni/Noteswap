@@ -1,6 +1,6 @@
 {
-  "name": "Noteswap",
-  "short_name": "Noteswap",
+  "name": "NoteSwap",
+  "short_name": "NoteSwap",
   "theme_color": "#40b385",
   "background_color": "#40b385",
   "display": "standalone",

@@ -11,7 +11,6 @@ import Image from "next/image";
 import Footer from "../components/Layout/Footer";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import dynamic from "next/dynamic";
 
 // Used for translation reasons
 export async function getStaticProps({ locale }) {
@@ -225,7 +224,7 @@ const Signup = () => {
         }}
       >
         <Head>
-          <title>Signup | Noteswap</title> {/* Title of the page */}
+          <title>Signup | NoteSwap</title> {/* Title of the page */}
         </Head>
         {schoolId && (
           <Image
@@ -360,7 +359,9 @@ const Signup = () => {
                       <>
                         {!location && (
                           <>
-                            <p className={style.labelCenter}>I come from</p>
+                            <p className={style.labelCenter}>
+                              {t("i_come_from")}
+                            </p>
                             <div>
                               <select
                                 style={{
@@ -383,7 +384,7 @@ const Signup = () => {
                                 id="schools"
                               >
                                 <option value="" disabled>
-                                  Select your location
+                                  {t("select_your_location")}
                                 </option>
                                 {locations?.map(function (value) {
                                   return (
@@ -400,18 +401,20 @@ const Signup = () => {
                     ))}
                   {schoolId && selectedRole == "teacher" && (
                     <>
-                      <p className={style.labelCenter}>Enter Teacher Code</p>
+                      <p className={style.labelCenter}>
+                        {t("enter_teacher_code")}
+                      </p>
 
                       <input
                         id="teacherCode"
-                        placeholder="Enter the teacher code given to you"
+                        placeholder={t("enter_teacher_code_placeholder")}
                         onChange={(e) => {
                           if (e.target.value.length == 6) {
                             const correct = verifySchoolCode(e.target.value);
                             if (correct) {
                               setTeacherCode(e.target.value);
                             } else {
-                              setError("Incorrect teacher code");
+                              setError(t("incorrect_teacher_code"));
                             }
                           } else {
                             setError("");
@@ -446,7 +449,7 @@ const Signup = () => {
                     <input
                       id="emailSignup"
                       type="email"
-                      placeholder="Enter your  email"
+                      placeholder={t("enter_your_email")}
                       value={email}
                       aria-required="true"
                       aria-invalid="true"
@@ -458,7 +461,7 @@ const Signup = () => {
                           !e.target.value.includes(".")
                         ) {
                           setEmail(e.target.value);
-                          setError("You must use a valid email");
+                          setError(t("use_valid_email"));
                         } else {
                           setEmail(e.target.value);
                           setError("");
@@ -471,7 +474,6 @@ const Signup = () => {
                           }
 
                           const urlOfEmail = getSchoolReq(schoolId); // Assuming this returns an array of strings like ['@ifranschool.org', '@asi.aui.ma', '@aui.ma']
-                          console.log(urlOfEmail);
                           if (urlOfEmail.length > 0) {
                             // Check if the email ends with any of the domains in urlOfEmail array
                             const emailIsValid = urlOfEmail.some((domain) =>
@@ -483,9 +485,7 @@ const Signup = () => {
                                 "nextButton"
                               ).disabled = true;
                               setError(
-                                `To sign up to this school, your email must contain one of the following: ${urlOfEmail.join(
-                                  ", "
-                                )}`
+                                `${t("to_signup")} ${urlOfEmail.join(", ")}`
                               );
                             } else {
                               document.getElementById(
@@ -646,7 +646,7 @@ const Signup = () => {
                       setTeacherCode(null);
                     }}
                   >
-                    Registering from a school?
+                    {t("registering_from_school")}{" "}
                   </p>
                   <Link href={"/business/signup"}>
                     <p
@@ -658,7 +658,7 @@ const Signup = () => {
                         cursor: "pointer",
                       }}
                     >
-                      Registering as an event organizer?
+                      {t("registering_from_event")}
                     </p>
                   </Link>
                 </>

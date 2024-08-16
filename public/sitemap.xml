@@ -1368,4 +1368,12 @@
 			0.4
 		</priority>
 	</url>
+	<url>
+		<loc>
+			https://noteswap.org/shortcuts
+		</loc>
+		<priority>
+			0.4
+		</priority>
+	</url>
 </urlset>

@@ -75,6 +75,8 @@
   color: var(--default-black-color);
   margin: var(--header-item-margin);
   line-height: 45.33px; /*Line height set to height of button to vertically align it*/
+  font-size: 1rem;
+  font-family: var(--manrope-font);
 }
 .header_nav_a::after {
   content: "";

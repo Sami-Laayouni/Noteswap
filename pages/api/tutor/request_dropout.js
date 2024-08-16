@@ -28,9 +28,9 @@ export default async function handler(req, res) {
 
     // Define the email options
     const mailOptions = {
-      from: "The Noteswap Bot <support@noteswap.org>", // sender address
+      from: "The NoteSwap Bot <support@noteswap.org>", // sender address
       to: tutor_email, // list of receivers
-      subject: "Noteswap Tutoring", // Subject line
+      subject: "NoteSwap Tutoring", // Subject line
       text: `
     
     Hello ${tutor_name}, 
@@ -39,7 +39,7 @@ export default async function handler(req, res) {
       
     Best regards,
 
-    The Noteswap team
+    The NoteSwap team
     `,
 
       html: ReactDOMServer.renderToString(
@@ -76,7 +76,7 @@ export default async function handler(req, res) {
               supervisor).
             </p>{" "}
             <p>Best regards,</p>
-            <p>The Noteswap team</p>
+            <p>The NoteSwap team</p>
           </main>
           <footer
             style={{

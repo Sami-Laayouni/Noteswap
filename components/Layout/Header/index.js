@@ -160,7 +160,7 @@ export default function Header() {
     <>
       {/* Header componenet */}
       <header className={style.header_main_container}>
-        {/* Noteswap logo (redirects to /dashboard) */}
+        {/* NoteSwap logo (redirects to /dashboard) */}
         <div className={style.header_logo}>
           <Link
             href={
@@ -175,7 +175,7 @@ export default function Header() {
           >
             <Image
               src="/assets/icons/Logo_light.svg"
-              alt="Noteswap Logo light"
+              alt="NoteSwap Logo light"
               width={146}
               height={51}
               priority

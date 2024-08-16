@@ -17,14 +17,14 @@ export default async function becomeTutor(req, res) {
         },
       });
       const mailOptions = {
-        from: "The Noteswap Bot <support@noteswap.org>", // sender address
+        from: "The NoteSwap Bot <support@noteswap.org>", // sender address
         to: email, // list of receivers
-        subject: "Congratulations! You've Been Accepted as a Noteswap Tutor", // Subject line
+        subject: "Congratulations! You've Been Accepted as a NoteSwap Tutor", // Subject line
         text: `
       
       Dear ${name}, 
         
-      Thank you for your interest in becoming a tutor on Noteswap.
+      Thank you for your interest in becoming a tutor on NoteSwap.
   
       Unfortunately, you have not been accepted into our program. This could be for several reasons, including the possibility that you are attempting to teach a course that you have not taken or excelled in.
 
@@ -32,7 +32,7 @@ export default async function becomeTutor(req, res) {
   
       Best regards, 
   
-      The Noteswap team
+      The NoteSwap team
       `,
 
         html: ReactDOMServer.renderToString(
@@ -64,7 +64,7 @@ export default async function becomeTutor(req, res) {
             >
               <b>Dear {name},</b>
               <p>
-                Thank you for your interest in becoming a tutor on Noteswap.
+                Thank you for your interest in becoming a tutor on NoteSwap.
               </p>{" "}
               <p>
                 {" "}
@@ -80,7 +80,7 @@ export default async function becomeTutor(req, res) {
                 support@noteswap.org
               </p>
               <p>Best regards,</p>
-              <p>The Noteswap team</p>
+              <p>The NoteSwap team</p>
             </main>
             <footer
               style={{

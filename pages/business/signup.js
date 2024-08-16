@@ -142,7 +142,7 @@ const Signup = () => {
     <>
       <div className={style.background}>
         <Head>
-          <title>Signup | Noteswap</title> {/* Title of the page */}
+          <title>Signup | NoteSwap</title> {/* Title of the page */}
         </Head>
         <div className={style.container}>
           <section className={style.left}>
@@ -158,7 +158,7 @@ const Signup = () => {
             <p>5. Start benefiting from the platform!</p>
             <br></br>
             <p style={{ paddingRight: "20px" }}>
-              By creating a business account on Noteswap, you agree to our{" "}
+              By creating a business account on NoteSwap, you agree to our{" "}
               <Link href="/boring/terms-of-service">
                 <span style={{ textDecoration: "underline" }}>
                   Terms of Service

@@ -140,8 +140,8 @@ export default function Note() {
       <Head>
         <title>
           {note?.note[0]?.title
-            ? `${note?.note[0]?.title} | Noteswap`
-            : "Noteswap"}
+            ? `${note?.note[0]?.title} | NoteSwap`
+            : "NoteSwap"}
         </title>
         <link
           rel="canonical"
@@ -199,7 +199,7 @@ export default function Note() {
                   date: formatDate(note?.note[0]?.date),
                   title: note?.note[0]?.title,
                   url: window.location.href,
-                  platform: "Noteswap",
+                  platform: "NoteSwap",
                 });
               }}
             >

@@ -169,7 +169,7 @@ export default function Note() {
   return (
     <div>
       <Head>
-        <title>Noteswap | Notes</title>
+        <title>NoteSwap | Notes</title>
       </Head>
       <Notes />
       <ImageNotesModal />

@@ -29,27 +29,27 @@ export default async function handler(req, res) {
 
     // Define the email options
     const mailOptions = {
-      from: "The Noteswap Bot <support@noteswap.org>", // sender address
+      from: "The NoteSwap Bot <support@noteswap.org>", // sender address
       to: email, // list of receivers
-      subject: "Noteswap Password", // Subject line
+      subject: "NoteSwap Password", // Subject line
       text: `
     
     Hello,  
       
-    Click the link below to change your password on Noteswap.
+    Click the link below to change your password on NoteSwap.
 
     ${process.env.NEXT_PUBLIC_URL}reset/${id}
 
     Best regards, 
 
-    The Noteswap team
+    The NoteSwap team
     `,
 
       html: ReactDOMServer.renderToString(
         <div>
           <p style={{ display: "block" }}>Hello,</p>
           <p style={{ display: "block" }}>
-            Click the link below to change your password on Noteswap.
+            Click the link below to change your password on NoteSwap.
           </p>
 
           <a
@@ -60,7 +60,7 @@ export default async function handler(req, res) {
           </a>
 
           <p style={{ display: "block" }}> Best regards,</p>
-          <p style={{ display: "block" }}> The Noteswap team</p>
+          <p style={{ display: "block" }}> The NoteSwap team</p>
         </div>
       ), // html body
     };

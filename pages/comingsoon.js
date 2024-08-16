@@ -53,7 +53,7 @@ export default function PageNotFound() {
             textAlign: "center",
           }}
         >
-          <h1 className={style.title}>Feature Under Development</h1>
+          <h1 className={style.title}>{t("feature_under_development")}</h1>
         </div>
       </section>
     </>

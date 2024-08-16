@@ -245,12 +245,12 @@ export default function TicketModal() {
                   <button
                     style={{
                       display: "block",
-                      padding: "10px",
+                      padding: "12px",
                       margin: "10px 0",
                       backgroundColor: "var(--accent-color)",
                       color: "white",
                       border: "none",
-                      borderRadius: "5px",
+                      borderRadius: "20px",
                       cursor: "pointer",
                     }}
                     type="button"
@@ -288,7 +288,6 @@ export default function TicketModal() {
                 don&apos;t worry—we handle this transaction for you, and the fee
                 is already included.{" "}
               </p>
-              <b>Amount Due: </b>
               <div>
                 <PayPalScriptProvider
                   options={{

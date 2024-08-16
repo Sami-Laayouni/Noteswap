@@ -2,7 +2,26 @@ import React, { useEffect, useState, useContext } from "react";
 import { useRouter } from "next/router";
 import AuthService from "../services/AuthService";
 import AuthContext from "../context/AuthContext";
+import LoadingCircle from "../components/Extra/LoadingCircle";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
+/**
+ * Get static props
+ * @date 8/13/2023 - 4:56:06 PM
+ *
+ * @export
+ * @async
+ * @param {{ locale: any; }} { locale }
+ * @return {unknown}
+ */
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
+}
 function CreateMicrosoftUserPage() {
   const router = useRouter();
   const { isLoggedIn, errorSignup } = useContext(AuthContext);
@@ -10,6 +29,8 @@ function CreateMicrosoftUserPage() {
   const [ran, setRan] = useState(false);
   const [error, setError] = errorSignup; // Assuming errorSignup is an array; adjust if needed
   const AuthServices = new AuthService(setLoggedIn);
+
+  const { t } = useTranslation("common");
 
   useEffect(() => {
     if (!ran) {
@@ -30,9 +51,7 @@ function CreateMicrosoftUserPage() {
             if (!emailIsValid) {
               localStorage.setItem(
                 "errorSignup",
-                `To sign up to this school, your email must contain one of the following: ${urlOfEmail.join(
-                  ", "
-                )}`
+                `${"to_signup"} ${urlOfEmail.join(", ")}`
               );
               proceedWithCreation = false; // Do not prevent user creation; just flag that validation failed
 
@@ -106,7 +125,10 @@ function CreateMicrosoftUserPage() {
         justifyContent: "center",
         color: "white",
       }}
-    ></div>
+    >
+      <LoadingCircle />
+      <p style={{ paddingLeft: "40px" }}>{t("creating_account")}</p>
+    </div>
   );
 }
 

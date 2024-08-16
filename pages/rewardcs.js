@@ -9,6 +9,7 @@ import LoadingCircle from "../components/Extra/LoadingCircle";
 import { useRouter } from "next/router";
 import { requireAuthenticationTeacher } from "../middleware/teacher";
 import Script from "next/script";
+import { t } from "i18next";
 
 /**
  * Get static props
@@ -57,7 +58,7 @@ const RewardCommunityService = () => {
       setData(students.students);
       setLoading(false);
     } else {
-      setError("An error has occurred!");
+      setError(t("error"));
       setLoading(false);
     }
   }
@@ -68,21 +69,21 @@ const RewardCommunityService = () => {
   function formatMessagesWithMinutes(points, tutor_hours, messagesArray) {
     let formattedMessages = "";
     if (points != 0) {
-      formattedMessages += `${Math.floor(points / 20)} minute${
+      formattedMessages += `${Math.floor(points / 20)} ${t("minute")}${
         Math.floor(points / 20) == 1 ? "" : "s"
-      } typing and sharing notes\n\t`;
+      } ${t("typing_and_sharing")}\n\t`;
     }
     if (tutor_hours != 0) {
-      formattedMessages += `${Math.floor(tutor_hours / 60)} minute${
+      formattedMessages += `${Math.floor(tutor_hours / 60)} ${t("minute")}${
         Math.floor(tutor_hours / 60) == 1 ? "" : "s"
-      } tutoring other students\n\t`;
+      } ${t("tutoring_other")}\n\t`;
     }
     if (messagesArray) {
       messagesArray.forEach((obj) => {
         if (obj.message && obj.minutes !== undefined) {
-          formattedMessages += `${obj.minutes} minute${
+          formattedMessages += `${obj.minutes} ${t("minute")}${
             obj.minutes == 1 ? "" : "s"
-          } for ${obj.message}\n\t`;
+          } ${t("for")} ${obj.message}\n\t`;
         }
       });
     }
@@ -99,7 +100,7 @@ const RewardCommunityService = () => {
         last_name.charAt(0).toUpperCase() + last_name.slice(1);
       const totalPoints = `${
         Math.floor(item?.points / 20) + Math.floor(item?.tutor_hours / 60)
-      } minute${
+      } ${t("minute")}${
         Math.floor(item?.points / 20) + Math.floor(item?.tutor_hours / 60) == 1
           ? ""
           : "s"
@@ -116,10 +117,10 @@ const RewardCommunityService = () => {
       return { fixed_first_name, fixed_last_name, totalPoints, full_breakdown };
     });
     const headers = [
-      "Student First Name",
-      "Student Last Name",
-      "Total Community Service Earned",
-      "Breakdown of Community Service Earned",
+      t("student_first_name"),
+      t("student_last_name"),
+      t("total_cs_earned"),
+      t("breakdown_cs"),
     ]; // Add titles for columns
 
     const workbook = XLSX.utils.book_new();
@@ -127,11 +128,11 @@ const RewardCommunityService = () => {
       headers,
       ...modifiedData.map(Object.values),
     ]);
-    workbook.SheetNames.push("Noteswap_CS");
-    workbook.Sheets["Noteswap_CS"] = worksheet;
+    workbook.SheetNames.push("_CS");
+    workbook.Sheets["_CS"] = worksheet;
 
     // (C3) "FORCE DOWNLOAD" XLSX FILE
-    XLSX.writeFile(workbook, "Noteswap_CS.xlsx");
+    XLSX.writeFile(workbook, "_CS.xlsx");
   }
 
   async function downloadDataAsCSV() {
@@ -158,10 +159,10 @@ const RewardCommunityService = () => {
     });
 
     const headers = [
-      "Student First Name",
-      "Student Last Name",
-      "Total Community Service Earned",
-      "Breakdown of Community Service Earned",
+      t("student_first_name"),
+      t("student_last_name"),
+      t("total_cs_earned"),
+      t("breakdown_cs"),
     ]; // Add titles for columns, including Points
     const values = modifiedData.map((item) => [...Object.values(item)]); // Include Student First Name, Last Name, and Points in each row
 
@@ -177,7 +178,7 @@ const RewardCommunityService = () => {
       // Browsers that support HTML5 download attribute
       const url = URL.createObjectURL(blob);
       link.setAttribute("href", url);
-      link.setAttribute("download", "Noteswap_CS.csv");
+      link.setAttribute("download", "_CS.csv");
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -191,19 +192,18 @@ const RewardCommunityService = () => {
   return (
     <>
       <Head>
-        <title>Reward Community Service | NoteSwap</title>{" "}
-        {/* Title of the page*/}
+        <title>{t("reward_cs_full")} | NoteSwap</title> {/* Title of the page*/}
       </Head>
       <Script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" />
 
       <section className={style.container}>
-        <h1>Students List</h1>
+        <h1>{t("students_list")}</h1>
         {loading && <LoadingCircle />}
         {error}
         {!loading && !error && (
           <>
             <div className={style.grid}>
-              <p>Download All Students Community Service as</p>
+              <p>{t("download_cs_as")}</p>
               <div className={style.button}>
                 <button
                   onClick={() => {
@@ -246,9 +246,9 @@ const RewardCommunityService = () => {
             <table className={style.styledTable} border="1">
               <thead style={{ fontFamily: "var(--bold-manrope-font)" }}>
                 <tr>
-                  <th>Student&apos;s Name</th>
-                  <th>Total Community Service Earned</th>
-                  <th>Reward Community Service (in minutes)</th>
+                  <th>{t("students_name")}</th>
+                  <th>{t("total_cs_earned")}</th>
+                  <th>{t("reward_cs_in_min")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -283,11 +283,11 @@ const RewardCommunityService = () => {
                             value.breakdown &&
                             value?.points - totalMinutes * 20 != 0 && (
                               <li>
-                                Sharing notes on NoteSwap (
+                                {t("sharing_noteswap")} (
                                 {Math.round(
                                   (value?.points - totalMinutes * 20) / 20
                                 )}{" "}
-                                minute
+                                {t("minute")}
                                 {Math.round(
                                   (value?.points - totalMinutes * 20) / 20
                                 ) == 1
@@ -298,15 +298,15 @@ const RewardCommunityService = () => {
                             )}
                           {value?.points != 0 && !value.breakdown && (
                             <li>
-                              Sharing notes on NoteSwap (
-                              {Math.round(value?.points / 20)} minute
+                              {t("sharing_noteswap")} (
+                              {Math.round(value?.points / 20)} {t("minute")}
                               {Math.round(value?.points / 20) == 1 ? "" : "s"})
                             </li>
                           )}
                           {value?.tutor_hours != 0 && (
                             <li>
-                              Tutoring students (
-                              {Math.floor(value.tutor_hours / 60)} minute
+                              {t("tutoring_noteswap")} (
+                              {Math.floor(value.tutor_hours / 60)} {t("minute")}
                               {Math.floor(value.tutor_hours / 60) == 1
                                 ? ""
                                 : "s"}
@@ -317,7 +317,7 @@ const RewardCommunityService = () => {
                           {value?.breakdown?.map(function (value, index) {
                             return (
                               <li key={index}>
-                                {value.message} ({value.minutes} minute
+                                {value.message} ({value.minutes} {t("minute")}
                                 {value.minutes == 1 ? "" : "s"})
                               </li>
                             );
@@ -331,7 +331,7 @@ const RewardCommunityService = () => {
                             ? Math.floor(value?.points / 20) +
                               Math.floor(value?.tutor_hours / 60)
                             : "0"}{" "}
-                          minute
+                          {t("minute")}
                           {Math.floor(value?.points / 20) +
                             Math.floor(value?.tutor_hours / 60) ==
                           1
@@ -433,7 +433,7 @@ const RewardCommunityService = () => {
                               verticalAlign: "middle",
                             }}
                             id={`input1_${value._id}`}
-                            placeholder={`Enter task name`}
+                            placeholder={t("enter_task_name")}
                             onChange={(e) => {
                               setTask(e.target.value);
                             }}
@@ -460,7 +460,7 @@ const RewardCommunityService = () => {
                               verticalAlign: "middle",
                             }}
                             id={`input_${value._id}`}
-                            placeholder={`Enter amount to reward (in mins)`}
+                            placeholder={t("enter_amount_in_min")}
                             type="number"
                             min={1}
                             max={10000}
@@ -481,7 +481,7 @@ const RewardCommunityService = () => {
                               cursor: "pointer",
                             }}
                           >
-                            Reward
+                            {t("reward")}
                           </button>
                         </form>
                       </td>
@@ -492,7 +492,7 @@ const RewardCommunityService = () => {
             </table>
           </>
         )}
-        {!loading && data?.length == 0 && <p>No students found</p>}
+        {!loading && data?.length == 0 && <p>{t("no_students_found")}</p>}
       </section>
     </>
   );

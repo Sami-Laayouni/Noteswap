@@ -1,4 +1,4 @@
-import style from "../styles/Events.module.css";
+import style from "../styles/Events2.module.css";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
@@ -11,6 +11,7 @@ const CreateEvent = dynamic(() => import("../components/Modals/CreateEvent"));
 import OneSignal from "react-onesignal";
 import { useTranslation } from "next-i18next";
 import { FaSearch, FaPlus } from "react-icons/fa";
+import Footer from "../components/Layout/Footer";
 
 /**
  * Get Static props
@@ -78,7 +79,6 @@ const Event = () => {
 
   useEffect(() => {
     async function getUserData(title) {
-      console.log(location);
       const data = await fetch("/api/events/search_events", {
         method: "POST",
         headers: {
@@ -263,16 +263,14 @@ const Event = () => {
   };
 
   return (
-    <div style={{ background: "whitesmoke" }} id="container">
+    <div id="container">
       <Head>
-        <title>Noteswap | Events</title>
+        <title>NoteSwap | Events</title>
       </Head>
       <CreateEvent business={false} meeting={false} />
 
       {/* Events */}
-      <section className={style.event_section}>
-        <h1 className={style.title}>Explore Events</h1>
-
+      <main className={style.padding}>
         <section className={style.search}>
           <button className={style.buttonSearch}>
             <FaSearch color="#60606c" size={30} />
@@ -283,56 +281,54 @@ const Event = () => {
               setTitle(e.target.value);
             }}
             style={{ borderRadius: "50px", width: "100%" }}
-            placeholder={`Search for events by name`}
+            placeholder={"Find your next big event!"}
             autoFocus
           />
         </section>
+        <section className={style.banner}></section>
+
         <div className={style.containers}>
-          <div>
-            <input
-              type="text"
-              className={style.input}
-              value={input}
-              onChange={handleChangeLocation}
-              placeholder="Enter location"
-              onBlur={() => setShowSuggestions(false)}
-              onFocus={() => input && setShowSuggestions(true)}
-            />
-            {suggestions.length > 0 && (
-              <ul
-                className={style.listFlow}
-                style={{
-                  listStyleType: "none",
-                  padding: 0,
-                }}
-              >
-                {suggestions.map((suggestion, index) => (
-                  <li
-                    key={index}
-                    onClick={() => {
-                      setInput(suggestion.label);
-                      setLocation([suggestion.lat, suggestion.lon]);
-                      setLocationName(suggestion.label);
-                      handleSuggestionClick(suggestion);
-                    }}
-                  >
-                    {suggestion.label}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+          <b className={style.bold}>Browsing Events in</b>
+          <input
+            type="text"
+            className={style.input}
+            value={input}
+            onChange={handleChangeLocation}
+            placeholder="Enter location"
+            onBlur={() => setShowSuggestions(false)}
+            onFocus={() => input && setShowSuggestions(true)}
+          />
+          {suggestions.length > 0 && (
+            <ul
+              className={style.listFlow}
+              style={{
+                listStyleType: "none",
+                padding: 0,
+              }}
+            >
+              {suggestions.map((suggestion, index) => (
+                <li
+                  key={index}
+                  onClick={() => {
+                    setInput(suggestion.label);
+                    setLocation([suggestion.lat, suggestion.lon]);
+                    setLocationName(suggestion.label);
+                    handleSuggestionClick(suggestion);
+                  }}
+                >
+                  {suggestion.label}
+                </li>
+              ))}
+            </ul>
+          )}
           <button
             onClick={async () => {
               navigator.geolocation.getCurrentPosition(showPosition);
             }}
             type="button"
             className={style.button}
-            style={{
-              borderRadius: "8px",
-            }}
           >
-            Use Current Location
+            Current Location
           </button>
           <button
             onClick={() => {
@@ -341,11 +337,8 @@ const Event = () => {
               setInput("Online");
             }}
             className={style.button}
-            style={{
-              borderRadius: "8px",
-            }}
           >
-            Online
+            {t("online")}
           </button>
         </div>
 
@@ -357,7 +350,7 @@ const Event = () => {
           </>
         ) : (
           <>
-            <p style={{ textAlign: "center", paddingTop: "20px" }}>
+            <p style={{ paddingTop: "10px" }}>
               {events?.length} {t("result")}
               {events?.length == 1 ? "" : "s"} {t("found")}
             </p>
@@ -375,7 +368,8 @@ const Event = () => {
             <h2>{t("looking")}</h2>
           </section>
         )}
-      </section>
+      </main>
+
       {data && data?.role == "teacher" && (
         <section
           onClick={() => {
@@ -391,6 +385,7 @@ const Event = () => {
           {t("create_new_event")}
         </section>
       )}
+      <Footer />
     </div>
   );
 };

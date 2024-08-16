@@ -152,7 +152,7 @@ export default function Tutor() {
   return (
     <div>
       <Head>
-        <title>Noteswap | Tutor</title>
+        <title>NoteSwap | Tutor</title>
       </Head>
       <BecomeTutor />
       <BookASession />
@@ -162,7 +162,7 @@ export default function Tutor() {
         alt="Background image"
         style={{ objectPosition: "bottom" }}
       ></img>
-      <h1 className={style.title}>NoteSwap Tutors</h1>
+      <h1 className={style.title}>{t("noteswap_tutors")}</h1>
       <section className={style.search}>
         <section className={style.container}>
           <span>{t("i_want_to_learn")}</span>
@@ -370,7 +370,7 @@ export default function Tutor() {
             startTutoringSession();
           }}
         >
-          Start A Tutoring Session
+          {t("start_a_tutoring_session")}
         </button>
       )}
       {dataFromLocalStorage && !dataFromLocalStorage.is_tutor && (
@@ -380,7 +380,7 @@ export default function Tutor() {
             setOpen(true);
           }}
         >
-          Start A Tutoring Session
+          {t("start_a_tutoring_session")}
         </button>
       )}
     </div>

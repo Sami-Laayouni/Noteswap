@@ -134,7 +134,14 @@ export default function Profile() {
       <ImageNotesModal />
       <EditNotesModal />
       <BookASession />
-      <div style={{ position: "relative", width: "100%", height: "100%" }}>
+      <div
+        style={{
+          position: "relative",
+          width: "100%",
+          height: "100%",
+          fontFamily: "var(--manrope-font)",
+        }}
+      >
         {/* Banner image */}
         <div>
           <img
@@ -212,7 +219,13 @@ export default function Profile() {
                   color="black"
                   style={{ verticalAlign: "middle", marginLeft: "10px" }}
                 />
-                <p style={{ display: "inline", marginLeft: "5px" }}>
+                <p
+                  style={{
+                    display: "inline",
+                    marginLeft: "5px",
+                    fontFamily: "var(--manrope-font)",
+                  }}
+                >
                   Completed{" "}
                   {data?.points || data?.tutor_hours
                     ? Math.round(

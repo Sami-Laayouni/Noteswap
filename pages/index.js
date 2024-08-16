@@ -71,7 +71,7 @@ export default function Home() {
           <h1>NoteSwap</h1>
           <h2>{t("slogan")}</h2>
           <h3>{t("desc")}</h3>
-          <Link title="Signup to Noteswap" href="/signup">
+          <Link title="Signup to NoteSwap" href="/signup">
             <button style={{ fontSize: "1rem", fontWeight: "bold" }}>
               {t("get_started") ? t("get_started") : "Get Started"}
             </button>
@@ -87,7 +87,7 @@ export default function Home() {
       </section>
       {/* ========== For Schools ========= */}
       <section className={style.here_students_can}>
-        <h2>For Schools & Students</h2>
+        <h2>{t("for_schools_and_students")}</h2>
         <ul>
           <li>
             <Image
@@ -152,7 +152,7 @@ export default function Home() {
                 background: "white",
               }}
             >
-              Sign Up As A Student Or Teacher
+              {t("signup_student")}
             </button>
           </Link>
         </div>
@@ -162,9 +162,7 @@ export default function Home() {
         className={style.here_students_can}
         style={{ background: "white", color: "rgb(23, 23, 69)" }}
       >
-        <h2 style={{ color: "rgb(23, 23, 69)" }}>
-          For Associations & Event Organizers
-        </h2>
+        <h2 style={{ color: "rgb(23, 23, 69)" }}>{t("for_association")}</h2>
         <ul style={{ color: "rgb(23, 23, 69)" }}>
           <li style={{ color: "rgb(23, 23, 69)" }}>
             <Image
@@ -173,10 +171,9 @@ export default function Home() {
               src="/assets/images/support.png"
               alt="Share Notes"
             />
-            <h3 style={{ color: "rgb(23, 23, 69)" }}>Find Volunteers</h3>
+            <h3 style={{ color: "rgb(23, 23, 69)" }}>{t("find_volunteers")}</h3>
             <p style={{ color: "rgb(23, 23, 69)" }}>
-              Connect with dedicated volunteers ready to support your
-              initiatives and events.
+              {t("connect_with_volunteers")}
             </p>
           </li>
           <li>
@@ -186,11 +183,10 @@ export default function Home() {
               src="/assets/images/audience.png"
               alt="Share Notes"
             />
-            <h3 style={{ color: "rgb(23, 23, 69)" }}>Reach Large Audiences</h3>
-            <p style={{ color: "rgb(23, 23, 69)" }}>
-              Expand your impact by reaching a large audience in locations near
-              your event.
-            </p>
+            <h3 style={{ color: "rgb(23, 23, 69)" }}>
+              {t("reach_large_target")}
+            </h3>
+            <p style={{ color: "rgb(23, 23, 69)" }}>{t("expand_target")}</p>
           </li>
           <li>
             <Image
@@ -199,10 +195,9 @@ export default function Home() {
               src="/assets/images/ticket.png"
               alt="Share Notes"
             />
-            <h3 style={{ color: "rgb(23, 23, 69)" }}>Sell Tickets</h3>
+            <h3 style={{ color: "rgb(23, 23, 69)" }}>{t("sell_tickets")}</h3>
             <p style={{ color: "rgb(23, 23, 69)" }}>
-              Easily manage and sell tickets for your school events and
-              gatherings.
+              {t("easily_sell_tickets")}
             </p>
           </li>
 
@@ -213,11 +208,8 @@ export default function Home() {
               src="/assets/images/free.png"
               alt="Share Notes"
             />
-            <h3 style={{ color: "rgb(23, 23, 69)" }}>Free</h3>
-            <p style={{ color: "rgb(23, 23, 69)" }}>
-              Enjoy free access to a variety of activities and resources
-              designed to make learning fun.
-            </p>
+            <h3 style={{ color: "rgb(23, 23, 69)" }}>{t("free")}</h3>
+            <p style={{ color: "rgb(23, 23, 69)" }}>{t("is_free")}</p>
           </li>
         </ul>
         <div
@@ -241,7 +233,7 @@ export default function Home() {
                 color: "white",
               }}
             >
-              Sign Up As An Association or Event Organizer
+              {t("signup_as_event")}
             </button>
           </Link>
         </div>

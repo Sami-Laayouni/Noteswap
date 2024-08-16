@@ -4,6 +4,7 @@ import EventCard from "../../components/Cards/EventCard";
 import { requireAuthenticationTeacher } from "../../middleware/teacher";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { TbNotesOff } from "react-icons/tb";
+import { useTranslation } from "next-i18next";
 
 /**
  * Get static props
@@ -22,6 +23,8 @@ export async function getStaticProps({ locale }) {
   };
 }
 function Events() {
+  const { t } = useTranslation("common");
+
   const [data, setData] = useState(null);
   const [userProfile, setUserProfile] = useState(null);
   useEffect(() => {
@@ -44,7 +47,7 @@ function Events() {
   }, []);
   return (
     <section className={style.container}>
-      <h1>My Events</h1>
+      <h1>{t("my_events")}</h1>
       <main>
         {data?.events?.length == 0 && (
           <span>
@@ -56,7 +59,7 @@ function Events() {
                 marginRight: "auto",
               }}
             />
-            <h3 style={{ textAlign: "center" }}>No events to see</h3>
+            <h3 style={{ textAlign: "center" }}>{t("no_events")}</h3>
           </span>
         )}
 

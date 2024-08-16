@@ -125,7 +125,7 @@ export default function EventCard({ data }) {
                 position: "absolute",
                 top: "0",
                 right: "0",
-                background: "rgba(0, 0, 0, 0.6)",
+                background: "rgba(0, 0, 0, 0.7)",
                 color: "white",
                 padding: "6px",
                 borderTopRightRadius: "10px",
@@ -147,13 +147,15 @@ export default function EventCard({ data }) {
           <div
             style={{
               padding: "5px",
-              background: "var(--accent-color)",
+              background: "rgb(211, 244, 211)",
               color: "white",
               fontFamily: "var(--manrope-font)",
-              borderRadius: "5px",
+              borderRadius: "8px",
               width: "fit-content",
               display: "inline-block",
               marginRight: "10px",
+              color: "var(--accent-color)",
+              border: "1px solid var(--accent-color) ",
             }}
           >
             <IoTicketOutline
@@ -167,10 +169,11 @@ export default function EventCard({ data }) {
           <div
             style={{
               padding: "5px",
-              background: "rgb(23, 23, 69)",
-              color: "white",
+              background: "rgb(158, 158, 224)",
+              color: "rgb(23, 23, 69)",
+              border: "1px solid rgb(23, 23, 69)",
               fontFamily: "var(--manrope-font)",
-              borderRadius: "5px",
+              borderRadius: "8px",
               width: "fit-content",
               display: "inline-block",
             }}
@@ -183,11 +186,23 @@ export default function EventCard({ data }) {
         )}
 
         {/* Name & Details*/}
-        <div style={{ height: "160px" }}>
-          <h1 style={{ wordBreak: "break-word" }}>
+        <div style={{ height: "110px" }}>
+          <h1
+            style={{
+              wordBreak: "break-word",
+              fontSize: "1.4rem",
+              fontFamily: "var(--manrope-font)",
+            }}
+          >
             {data?.title.slice(0, 30)} {data?.title?.length > 30 ? "..." : ""}
           </h1>
-          <p style={{ wordBreak: "break-word" }}>
+          <p
+            style={{
+              wordBreak: "break-word",
+              fontFamily: "var(--manrope-font)",
+              fontSize: "0.9rem",
+            }}
+          >
             {data?.desc.slice(0, 120)}
             {data?.desc?.length > 120 ? "..." : ""}
           </p>

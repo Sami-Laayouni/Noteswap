@@ -3,6 +3,25 @@
 import Head from "next/head";
 import style from "../styles/404.module.css";
 import Link from "next/link";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
+
+/**
+ * Get static props
+ * @date 8/13/2023 - 4:31:01 PM
+ *
+ * @export
+ * @async
+ * @param {{ locale: any; }} { locale }
+ * @return {unknown}
+ */
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
+}
 
 /**
  * Error Page
@@ -13,6 +32,7 @@ import Link from "next/link";
  */
 export default function PageNotFound() {
   // Return the JSX
+  const { t } = useTranslation("common");
 
   return (
     <>
@@ -35,9 +55,9 @@ export default function PageNotFound() {
             textAlign: "center",
           }}
         >
-          <h1 className={style.title}>It looks like an error has occurred</h1>
+          <h1 className={style.title}>{t("an_error_occurred")}</h1>
           <Link href="/dashboard">
-            <button className={style.button}>Take me back</button>
+            <button className={style.button}>{t("take_me_back")}</button>
           </Link>
         </div>
       </section>

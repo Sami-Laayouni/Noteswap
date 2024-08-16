@@ -1,4 +1,4 @@
-/* Noteswap bot used to ask questions on the handbook and 
+/* NoteSwap bot used to ask questions on the handbook and 
 privacy policy */
 
 import style from "./noteSwapBot.module.css";
@@ -27,7 +27,7 @@ const messages = [
 ];
 
 /**
- * Noteswap Bot
+ * NoteSwap Bot
  * @date 8/13/2023 - 5:12:42 PM
  *
  * @export
@@ -101,7 +101,7 @@ export default function NoteSwapBot() {
         });
         document.getElementById(
           "box"
-        ).innerHTML += `<li style="color: #40b385">Noteswap Bot: ${aiResponse}</li>`;
+        ).innerHTML += `<li style="color: #40b385">NoteSwap Bot: ${aiResponse}</li>`;
       } else {
         messages.push({
           role: "user",
@@ -168,7 +168,7 @@ export default function NoteSwapBot() {
         });
         document.getElementById(
           "box"
-        ).innerHTML += `<li style="color: #40b385">Noteswap Bot: ${aiResponse}</li>`;
+        ).innerHTML += `<li style="color: #40b385">NoteSwap Bot: ${aiResponse}</li>`;
       } else {
         document.getElementById(
           "box"

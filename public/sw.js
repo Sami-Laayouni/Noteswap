@@ -69,12 +69,12 @@ if (!self.define) {
   };
 }
 define([
-  "../../../../../Lahcen Laayouni/Desktop/Noteswap/client/node_modules/workbox-routing/registerRoute.mjs",
-  "../../../../../Lahcen Laayouni/Desktop/Noteswap/client/node_modules/workbox-strategies/NetworkFirst.mjs",
-  "../../../../../Lahcen Laayouni/Desktop/Noteswap/client/node_modules/workbox-strategies/NetworkOnly.mjs",
-  "../../../../../Lahcen Laayouni/Desktop/Noteswap/client/node_modules/workbox-core/clientsClaim.mjs",
-  "../../../../../Lahcen Laayouni/Desktop/Noteswap/client/node_modules/workbox-precaching/precacheAndRoute.mjs",
-  "../../../../../Lahcen Laayouni/Desktop/Noteswap/client/node_modules/workbox-precaching/cleanupOutdatedCaches.mjs",
+  "../../../../../Lahcen Laayouni/Desktop/NoteSwap/client/node_modules/workbox-routing/registerRoute.mjs",
+  "../../../../../Lahcen Laayouni/Desktop/NoteSwap/client/node_modules/workbox-strategies/NetworkFirst.mjs",
+  "../../../../../Lahcen Laayouni/Desktop/NoteSwap/client/node_modules/workbox-strategies/NetworkOnly.mjs",
+  "../../../../../Lahcen Laayouni/Desktop/NoteSwap/client/node_modules/workbox-core/clientsClaim.mjs",
+  "../../../../../Lahcen Laayouni/Desktop/NoteSwap/client/node_modules/workbox-precaching/precacheAndRoute.mjs",
+  "../../../../../Lahcen Laayouni/Desktop/NoteSwap/client/node_modules/workbox-precaching/cleanupOutdatedCaches.mjs",
 ], function (
   registerRoute_mjs,
   NetworkFirst_mjs,

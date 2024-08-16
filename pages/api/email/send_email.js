@@ -48,14 +48,14 @@ export default async function handler(req, res) {
 
     // Define the email options
     const mailOptions = {
-      from: "The Noteswap Bot <support@noteswap.org>", // sender address
+      from: "The NoteSwap Bot <support@noteswap.org>", // sender address
       to: email, // list of receivers
-      subject: "Noteswap Tutoring", // Subject line
+      subject: "NoteSwap Tutoring", // Subject line
       text: `
     
     Hello ${receiverName}, 
       
-    Thank you for your interest in becoming a tutor on Noteswap. We have received a request from a student who is looking to be tutored by you.  
+    Thank you for your interest in becoming a tutor on NoteSwap. We have received a request from a student who is looking to be tutored by you.  
 
     Student’s Name: ${name}
     Student’s Email: ${senderEmail}
@@ -104,7 +104,7 @@ export default async function handler(req, res) {
           >
             <b>Hello {receiverName},</b>
             <p>
-              Thank you for your interest in becoming a tutor on Noteswap. We
+              Thank you for your interest in becoming a tutor on NoteSwap. We
               have received a request from a student who is looking to be
               tutored by you.
             </p>{" "}
@@ -145,7 +145,7 @@ export default async function handler(req, res) {
               journey.
             </p>
             <p>Best regards,</p>
-            <p>The Noteswap team</p>
+            <p>The NoteSwap team</p>
           </main>
           <footer
             style={{

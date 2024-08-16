@@ -126,7 +126,7 @@ const Dashboard = () => {
   return (
     <>
       <Head>
-        <title>Dashboard | Noteswap</title> {/* Title page */}
+        <title>Dashboard | NoteSwap</title> {/* Title page */}
       </Head>
       <BusinessModal />
       {installPWA && <InstallPWa />}

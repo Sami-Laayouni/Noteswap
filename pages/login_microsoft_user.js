@@ -3,6 +3,26 @@ import { useRouter } from "next/router";
 import AuthService from "../services/AuthService";
 import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
+import LoadingCircle from "../components/Extra/LoadingCircle";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+
+/**
+ * Get static props
+ * @date 8/13/2023 - 4:56:06 PM
+ *
+ * @export
+ * @async
+ * @param {{ locale: any; }} { locale }
+ * @return {unknown}
+ */
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
+}
 /**
  * Login Microsoft User Page
  * @date 6/23/2023 - 9:37:13 PM
@@ -17,6 +37,7 @@ function LoginMicrosoftUserPage() {
   const { errorLogin } = useContext(AuthContext);
 
   const [error, setError] = errorLogin;
+  const { t } = useTranslation("common");
 
   useEffect(() => {
     /**
@@ -84,7 +105,8 @@ function LoginMicrosoftUserPage() {
         color: "white",
       }}
     >
-      Logging in...
+      <LoadingCircle />
+      <p style={{ paddingLeft: "40px" }}>{t("logging_in")}</p>
     </div>
   );
 }

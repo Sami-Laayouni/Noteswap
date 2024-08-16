@@ -94,7 +94,7 @@ export default function TermsOfService() {
               <h2>2.2 Accurate Information</h2>
               <p>
                 You agree to provide accurate and current information when
-                registering and using the Service. Noteswap reserves the right
+                registering and using the Service. NoteSwap reserves the right
                 to suspend or terminate your account if any information provided
                 is found to be false, misleading, or inaccurate.
               </p>
@@ -109,7 +109,7 @@ export default function TermsOfService() {
               <h2>2.4 User Content</h2>
               <p>
                 You may contribute content to the Service, including notes, and
-                documents. By submitting such content, you grant Noteswap a
+                documents. By submitting such content, you grant NoteSwap a
                 worldwide, non-exclusive, royalty-free, transferable, and
                 sublicensable license to use, reproduce, distribute, prepare
                 derivative works of, display, and perform the content in

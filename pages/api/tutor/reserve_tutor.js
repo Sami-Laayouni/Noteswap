@@ -107,19 +107,19 @@ export default async function handler(req, res) {
     .join("&")}`;
 
   const firstMail = {
-    from: "The Noteswap Bot <support@noteswap.org>", // sender address
+    from: "The NoteSwap Bot <support@noteswap.org>", // sender address
     to: email, // list of receivers
-    subject: "Noteswap Tutoring", // Subject line
+    subject: "NoteSwap Tutoring", // Subject line
     text: `Dear ${emailUser[0].first_name} ${emailUser[0].last_name},
     
     This is to confirm that your recent tutoring session has been confirmed for ${date} from ${time}, with
     ${senderEmailUser[0].first_name} ${senderEmailUser[0].last_name}.
 
-    Noteswap supports in person and online tutoring sessions with AI validation. However, in accordance with your school's policies, tutoring sessions must take place at the ASI Building after school to be deemed valid.
+    NoteSwap supports in person and online tutoring sessions with AI validation. However, in accordance with your school's policies, tutoring sessions must take place at the ASI Building after school to be deemed valid.
     
     Best regards, 
 
-    The Noteswap team`,
+    The NoteSwap team`,
     html: ReactDOMServer.renderToString(
       <ReserveEmail
         emailUser={emailUser[0]}
@@ -149,19 +149,19 @@ export default async function handler(req, res) {
     )
     .join("&")}`;
   const secondMail = {
-    from: "The Noteswap Bot <support@noteswap.org>", // sender address
+    from: "The NoteSwap Bot <support@noteswap.org>", // sender address
     to: senderEmail, // list of receivers
-    subject: "Noteswap Tutoring", // Subject line
+    subject: "NoteSwap Tutoring", // Subject line
     text: `Dear ${senderEmailUser[0].first_name} ${senderEmailUser[0].last_name},
     
     This is to confirm that your recent tutoring session has been confirmed for ${date} from ${time}, with
     ${emailUser[0].first_name} ${emailUser[0].last_name}.
 
-    Noteswap supports in person and online tutoring sessions with AI validation. However, in accordance with your school's policies, tutoring sessions must take place at the ASI Building after school to be deemed valid.
+    NoteSwap supports in person and online tutoring sessions with AI validation. However, in accordance with your school's policies, tutoring sessions must take place at the ASI Building after school to be deemed valid.
     
     Best regards, 
     
-    The Noteswap team`,
+    The NoteSwap team`,
     html: ReactDOMServer.renderToString(
       <ReserveEmail
         emailUser={emailUser[0]}

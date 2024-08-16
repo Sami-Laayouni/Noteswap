@@ -3,6 +3,25 @@ import { useEffect, useState } from "react";
 import QRCode from "qrcode.react";
 import { requireAuthentication } from "../middleware/authenticate";
 import Link from "next/link";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
+
+/**
+ * Get static props
+ * @date 8/13/2023 - 4:31:01 PM
+ *
+ * @export
+ * @async
+ * @param {{ locale: any; }} { locale }
+ * @return {unknown}
+ */
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
+}
 
 function encodeData(data, secretKey) {
   const base64Data = Buffer.from(data).toString("base64");
@@ -16,6 +35,8 @@ function encodeData(data, secretKey) {
 }
 
 function TicketsPage() {
+  const { t } = useTranslation("common");
+
   const [tickets, setTickets] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -80,16 +101,13 @@ function TicketsPage() {
   }, []);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>{t("loading.")}</div>;
   }
 
   return (
     <div style={{ padding: "20px", fontFamily: "var(--manrope-font)" }}>
-      <h1>Your Tickets</h1>
-      <i style={{ marginBottom: "30px" }}>
-        To check in to the event, have the event organizer scan the QR code on
-        your ticket.
-      </i>
+      <h1>{t("your_tickets")}</h1>
+      <i style={{ marginBottom: "30px" }}>{t("check_in_ticket")}</i>
       <br></br>
       <br></br>
 
@@ -105,17 +123,24 @@ function TicketsPage() {
             }}
           >
             <h2>{ticket.ticketName}</h2>
-            <p>Checked In: {ticket?.checkedIn?.checkedIn ? "True" : "False"}</p>
             <p>
-              Checked In Date:{" "}
+              {t("checked_in")}{" "}
+              {ticket?.checkedIn?.checkedIn ? "True" : "False"}
+            </p>
+            <p>
+              {t("checked_in_date")}{" "}
               {ticket.checkInDate?.checkInDate
                 ? ticket.checkInDate?.checkInDate
                 : "N/A"}
             </p>
-            <p>Ticket Id: {ticket.uniqueId}</p>
-            <p>Event Name: {ticket.eventName}</p>
             <p>
-              Event Date:{" "}
+              {t("ticket_id")} {ticket.uniqueId}
+            </p>
+            <p>
+              {t("event_name")} {ticket.eventName}
+            </p>
+            <p>
+              {t("event_date")}:{" "}
               {
                 formatReadableDate(ticket?.date_of_event?.split("to")[0].trim())
                   ?.date
@@ -126,11 +151,16 @@ function TicketsPage() {
                   ?.dateTime
               }
             </p>
-            <p>Event Location: {ticket.locationName} </p>
-            <p>Contact Email: {ticket.purchasedEmail}</p>
+            <p>
+              {t("event_location")} {ticket.locationName}{" "}
+            </p>
+            <p>
+              {t("contact_email:")} {ticket.purchasedEmail}
+            </p>
 
             <p>
-              Purchased on: {new Date(ticket.purchaseDate).toLocaleDateString()}
+              {t("purchased_on")}{" "}
+              {new Date(ticket.purchaseDate).toLocaleDateString()}
             </p>
             <QRCode
               id={`qrcode-${ticket.uniqueId}`}
@@ -160,14 +190,14 @@ function TicketsPage() {
                     cursor: "pointer",
                   }}
                 >
-                  View Event Details
+                  {t("view_event_details")}
                 </button>
               </Link>
             </span>
           </div>
         ))
       ) : (
-        <p>No tickets found.</p>
+        <p>{t("no_tickets_found")}</p>
       )}
     </div>
   );

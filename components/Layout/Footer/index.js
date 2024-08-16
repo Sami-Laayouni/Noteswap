@@ -45,7 +45,7 @@ export default function Footer({ type }) {
             ? t("ready_get_started") == "ready_get_started"
               ? "Ready to get started?"
               : t("ready_get_started")
-            : "Noteswap"}
+            : "NoteSwap"}
         </h1>
         <h2>
           {type != "b" ? (
@@ -63,7 +63,7 @@ export default function Footer({ type }) {
           )}
         </h2>
         <Link
-          title="Signup to Noteswap"
+          title="Signup to NoteSwap"
           href={`${
             !loggedIn
               ? type == "b"

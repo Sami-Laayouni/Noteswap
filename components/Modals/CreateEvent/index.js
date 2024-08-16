@@ -461,153 +461,150 @@ export default function CreateEvent({ business, meeting }) {
               }
               setCurrent(5);
             } else if (current == 4) {
-              if (tlocation.length > 0) {
-                code = generateCode(24);
-                setCodes(code);
-                function createFiltersForSchoolIds(schoolIds) {
-                  // Initialize an empty array for the filters
-                  const filters = [];
+              code = generateCode(24);
+              setCodes(code);
+              function createFiltersForSchoolIds(schoolIds) {
+                // Initialize an empty array for the filters
+                const filters = [];
 
-                  // Iterate through each schoolId in the array
-                  schoolIds.forEach((schoolId, index) => {
-                    // Add a condition for the current schoolId
-                    filters.push({
-                      field: "tag",
-                      key: "schoolId",
-                      relation: "=",
-                      value: schoolId.toString(),
-                    });
-
-                    // If this is not the last item, add an OR operator
-                    if (index < schoolIds.length - 1) {
-                      filters.push({ operator: "OR" });
-                    }
+                // Iterate through each schoolId in the array
+                schoolIds.forEach((schoolId, index) => {
+                  // Add a condition for the current schoolId
+                  filters.push({
+                    field: "tag",
+                    key: "schoolId",
+                    relation: "=",
+                    value: schoolId.toString(),
                   });
 
-                  return filters;
-                }
+                  // If this is not the last item, add an OR operator
+                  if (index < schoolIds.length - 1) {
+                    filters.push({ operator: "OR" });
+                  }
+                });
+
+                return filters;
+              }
+              const associationInfo = JSON.parse(
+                localStorage.getItem("associationInfo")
+              );
+
+              const response = await fetch("/api/events/create_event", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  id: code,
+                  title: title,
+                  desc: desc,
+                  category: category,
+                  community_service_offered: communityService,
+                  teacher_id: JSON.parse(localStorage.getItem("userInfo"))._id,
+                  date_of_events: `${startDate} to ${endDate}`,
+                  contact_email: JSON.parse(localStorage.getItem("userInfo"))
+                    .email,
+                  link_to_event: link ? link : "",
+                  max: max,
+                  location: location,
+                  reqi: req,
+                  createdAt: Date.now(),
+                  sponsored: true,
+                  attendance: presenceStatus,
+                  additional: allowAllMembers
+                    ? "allowAll"
+                    : allowMeetingMembers
+                    ? "allowMeeting"
+                    : null,
+                  associationId: associationInfo?._id || "",
+                  associationProfilePic: associationInfo.icon,
+                  sponsoredLocations: tlocation,
+                  school_id: JSON.parse(localStorage.getItem("userInfo"))
+                    .schoolId,
+                  // New ones
+                  typeOfEvent: eventType,
+                  onlyAllowSchoolVolunteers: allowVolunteer,
+                  tickets: tickets,
+                  eventMode: eventMode,
+                  attendees: attendees,
+                  askForPhone: reqPhone,
+                  locationName: locationName,
+                  eventImage: banner,
+
+                  onlyAllowSchoolSee: allowSchoolSee,
+                }),
+              });
+              // Add sponsored locations filter
+              if (response.ok) {
+                const Tit = title;
+                const userProfile = JSON.parse(
+                  localStorage.getItem("userInfo")
+                ).profile_picture;
                 const associationInfo = JSON.parse(
                   localStorage.getItem("associationInfo")
                 );
 
-                const response = await fetch("/api/events/create_event", {
+                const options = {
+                  method: "POST",
+                  headers: {
+                    Authorization: `Basic ${process.env.NEXT_PUBLIC_ONESIGNAL_REST}`,
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    included_segments: ["All"],
+                    filters: createFiltersForSchoolIds(tlocation),
+                    app_id: "3b28d10b-3b88-426f-8025-507667803b2a",
+                    headings: {
+                      en: "New opportunity available!",
+                      es: "¡Nueva oportunidad disponible!",
+                      fr: "Nouvelle opportunité disponible !",
+                      de: "Neue Möglichkeit verfügbar!",
+                      it: "Nuova opportunità disponibile!",
+                      pt: "Nova oportunidade disponível!",
+                      nl: "Nieuwe mogelijkheid beschikbaar!",
+                      ru: "Доступна новая возможность!",
+                      zh: "新的机会现已开放!",
+                      ja: "新しい機会が利用可能です!",
+                      ar: "فرصة جديدة متاحة!",
+                      hi: "नया अवसर उपलब्ध है!",
+                      ko: "새로운 기회가 있습니다!",
+                    },
+                    url: "https://www.noteswap.org/event",
+                    chrome_web_icon: associationInfo?.icon,
+                    contents: {
+                      en: `${associationInfo.name} posted a new event '${title}' offering ${communityService} hours.`,
+                    },
+                  }),
+                };
+
+                await fetch(
+                  "https://onesignal.com/api/v1/notifications",
+                  options
+                )
+                  .then((response) => response.json())
+                  .then((response) => console.log(response))
+                  .catch((err) => console.error(err));
+
+                await fetch("/api/email/send_event_email", {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",
                   },
                   body: JSON.stringify({
-                    id: code,
-                    title: title,
-                    desc: desc,
-                    category: category,
-                    community_service_offered: communityService,
-                    teacher_id: JSON.parse(localStorage.getItem("userInfo"))
-                      ._id,
-                    date_of_events: `${startDate} to ${endDate}`,
-                    contact_email: JSON.parse(localStorage.getItem("userInfo"))
-                      .email,
-                    link_to_event: link ? link : "",
-                    max: max,
-                    location: location,
-                    reqi: req,
-                    createdAt: Date.now(),
-                    sponsored: true,
-                    attendance: presenceStatus,
-                    additional: allowAllMembers
-                      ? "allowAll"
-                      : allowMeetingMembers
-                      ? "allowMeeting"
-                      : null,
-                    associationId: associationInfo?._id || "",
-                    associationProfilePic: associationInfo.icon,
-                    sponsoredLocations: tlocation,
-                    school_id: JSON.parse(localStorage.getItem("userInfo"))
-                      .schoolId,
-                    // New ones
-                    typeOfEvent: eventType,
-                    onlyAllowSchoolVolunteers: allowVolunteer,
-                    tickets: tickets,
-                    eventMode: eventMode,
-                    attendees: attendees,
-                    askForPhone: reqPhone,
-                    locationName: locationName,
-                    eventImage: banner,
-
-                    onlyAllowSchoolSee: allowSchoolSee,
+                    name: `${
+                      JSON.parse(localStorage.getItem("userInfo")).first_name
+                    } ${
+                      JSON.parse(localStorage.getItem("userInfo")).last_name
+                    }`,
+                    email: JSON.parse(localStorage.getItem("userInfo")).email,
+                    event: Tit,
+                    url: `${process.env.NEXT_PUBLIC_URL}signups/${code}`,
                   }),
                 });
-                // Add sponsored locations filter
-                if (response.ok) {
-                  const Tit = title;
-                  const userProfile = JSON.parse(
-                    localStorage.getItem("userInfo")
-                  ).profile_picture;
-                  const associationInfo = JSON.parse(
-                    localStorage.getItem("associationInfo")
-                  );
-
-                  const options = {
-                    method: "POST",
-                    headers: {
-                      Authorization: `Basic ${process.env.NEXT_PUBLIC_ONESIGNAL_REST}`,
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                      included_segments: ["All"],
-                      filters: createFiltersForSchoolIds(tlocation),
-                      app_id: "3b28d10b-3b88-426f-8025-507667803b2a",
-                      headings: {
-                        en: "New opportunity available!",
-                        es: "¡Nueva oportunidad disponible!",
-                        fr: "Nouvelle opportunité disponible !",
-                        de: "Neue Möglichkeit verfügbar!",
-                        it: "Nuova opportunità disponibile!",
-                        pt: "Nova oportunidade disponível!",
-                        nl: "Nieuwe mogelijkheid beschikbaar!",
-                        ru: "Доступна новая возможность!",
-                        zh: "新的机会现已开放!",
-                        ja: "新しい機会が利用可能です!",
-                        ar: "فرصة جديدة متاحة!",
-                        hi: "नया अवसर उपलब्ध है!",
-                        ko: "새로운 기회가 있습니다!",
-                      },
-                      url: "https://www.noteswap.org/event",
-                      chrome_web_icon: associationInfo?.icon,
-                      contents: {
-                        en: `${associationInfo.name} posted a new event '${title}' offering ${communityService} hours.`,
-                      },
-                    }),
-                  };
-
-                  await fetch(
-                    "https://onesignal.com/api/v1/notifications",
-                    options
-                  )
-                    .then((response) => response.json())
-                    .then((response) => console.log(response))
-                    .catch((err) => console.error(err));
-
-                  await fetch("/api/email/send_event_email", {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                      name: `${
-                        JSON.parse(localStorage.getItem("userInfo")).first_name
-                      } ${
-                        JSON.parse(localStorage.getItem("userInfo")).last_name
-                      }`,
-                      email: JSON.parse(localStorage.getItem("userInfo")).email,
-                      event: Tit,
-                      url: `${process.env.NEXT_PUBLIC_URL}signups/${code}`,
-                    }),
-                  });
-                } else {
-                  console.log(await response.text());
-                }
-                setCurrent(5);
+              } else {
+                console.log(await response.text());
               }
+              setCurrent(5);
             } else if (current == 5) {
               setCategory("");
               setCurrent(1);

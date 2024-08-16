@@ -1,5 +1,26 @@
 import Link from "next/link";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
+
+/**
+ * Get static props
+ * @date 8/13/2023 - 4:31:01 PM
+ *
+ * @export
+ * @async
+ * @param {{ locale: any; }} { locale }
+ * @return {unknown}
+ */
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
+}
 export default function TutoringValidated() {
+  const { t } = useTranslation("common");
+
   return (
     <div
       style={{
@@ -17,7 +38,7 @@ export default function TutoringValidated() {
       <h1
         style={{ fontFamily: "var(--manrope-bold-font)", lineHeight: "100%" }}
       >
-        Your tutoring session has been confirmed!
+        {t("tutoring_confirmed")}
       </h1>
       <p
         style={{
@@ -26,10 +47,7 @@ export default function TutoringValidated() {
           paddingRight: "23.4375vw",
         }}
       >
-        Note: Noteswap supports in person and online tutoring sessions with AI
-        validation. However, in accordance with your school&apos;s policies,
-        tutoring sessions must take place at the ASI Building after school to be
-        deemed valid.
+        {t("tutoring_note")}
       </p>
       <Link href="/dashboard">
         <button
@@ -43,7 +61,7 @@ export default function TutoringValidated() {
             borderRadius: "4px",
           }}
         >
-          Take me home!
+          {t("take_me_back")}
         </button>
       </Link>
     </div>

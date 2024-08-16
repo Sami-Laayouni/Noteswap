@@ -425,7 +425,7 @@ export default function NotesModal() {
           </p>
           <img
             src="/assets/images/rubric.png"
-            alt="Noteswap Rubric"
+            alt="NoteSwap Rubric"
             className={style.image}
           ></img>
         </div>

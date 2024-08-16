@@ -1,4 +1,4 @@
-/* i18 configuartion (used for allowing different languages on Noteswap) */
+/* i18 configuartion (used for allowing different languages on NoteSwap) */
 
 /** @type {import('next-i18next').UserConfig} */
 module.exports = {

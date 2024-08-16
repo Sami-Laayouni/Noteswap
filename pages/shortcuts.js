@@ -15,6 +15,8 @@ import { TbNotesOff } from "react-icons/tb";
 import { useTranslation } from "next-i18next";
 import BusinessSidebar from "../components/Layout/BusinessSidebar";
 
+import { requireVerifiedOrganizer } from "../middleware/checkverified";
+
 /**
  * Get static props
  * @date 8/13/2023 - 4:31:01 PM
@@ -38,7 +40,7 @@ export async function getStaticProps({ locale }) {
  * @export
  * @return {JSX.Element} the rendered page
  */
-export default function Shortcuts() {
+function Shortcuts() {
   // Return the JSX
   const { eventStatus, business, addMembers } = useContext(ModalContext);
   const [open, setOpen] = eventStatus;
@@ -78,7 +80,7 @@ export default function Shortcuts() {
   return (
     <>
       <Head>
-        <title>Dashboard | NoteSwap</title> {/* Title of the page*/}
+        <title>{t("dashboard")} | NoteSwap</title> {/* Title of the page*/}
       </Head>
       <CreateEvent business={true} meeting={meeting} />
       <AddMembers />
@@ -98,7 +100,7 @@ export default function Shortcuts() {
           }}
         >
           <main>
-            <h1 style={{ fontSize: "2rem" }}>Latest Events</h1>
+            <h1 style={{ fontSize: "2rem" }}>{t("latest_events")}</h1>
 
             {/*
         <ul className={style.list}>
@@ -127,7 +129,7 @@ export default function Shortcuts() {
                     marginRight: "auto",
                   }}
                 />
-                <h3 style={{ textAlign: "center" }}>No events to see</h3>
+                <h3 style={{ textAlign: "center" }}>{t("no_events")}</h3>
               </span>
             )}
             {/* Display latest events if available */}
@@ -160,3 +162,4 @@ export default function Shortcuts() {
   );
 }
 // End of the  Page
+export default requireVerifiedOrganizer(Shortcuts);

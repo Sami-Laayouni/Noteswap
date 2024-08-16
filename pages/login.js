@@ -136,7 +136,7 @@ const Login = () => {
     <>
       <div className={style.background}>
         <Head>
-          <title>{t("login")} | Noteswap</title> {/* Title of the page */}
+          <title>{t("login")} | NoteSwap</title> {/* Title of the page */}
         </Head>
         <div className={style.container}>
           <section className={style.left}>

@@ -37,7 +37,7 @@ export default function Unauthorized() {
   return (
     <>
       <Head>
-        <title>{t("unauthorized")} | NoteSwap</title> {/* Title of the page*/}
+        <title>{t("unverified")} | NoteSwap</title> {/* Title of the page*/}
       </Head>
       <section
         style={{
@@ -56,6 +56,7 @@ export default function Unauthorized() {
           }}
         >
           <h1 className={style.title}>{t("unauthorized_access")}</h1>
+          <h2>{t("unverified_access")}</h2>
           <Link href="/dashboard">
             <button className={style.button}>{t("take_me_back")}</button>
           </Link>

@@ -3,7 +3,7 @@ import { connectDB } from "../../../utils/db";
 import Tutor from "../../../models/Tutor";
 
 /**
- * Pause or unpause tutoring on Noteswap
+ * Pause or unpause tutoring on NoteSwap
  * @date 8/13/2023 - 4:45:17 PM
  *
  * @export

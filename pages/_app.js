@@ -38,11 +38,11 @@ function NoteSwap({ Component, pageProps }) {
         <title>NoteSwap</title>
         <meta
           name="description"
-          content="Online educational platform for earning community service hours using AI to validate. A place where opportunities are born. Discover a new way to earn your community service hours."
+          content="Everyone deserves a world full  with opportunities. Volunteer at events. Purchase tickets. Share your notes. Tutor students. Together, we can make a difference. "
         />
         <meta
           name="keywords"
-          content="community service, education, AI, online"
+          content="tickets, events, notes, tutor, community service, education, AI, online"
         />
         <script async src="https://pay.google.com/gp/p/js/pay.js"></script>
 
@@ -51,26 +51,26 @@ function NoteSwap({ Component, pageProps }) {
         <meta name="language" content="en" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="theme-color" content="#40b385" />
-        <meta property="og:title" content="Noteswap" />
+        <meta property="og:title" content="NoteSwap" />
         <meta
           property="og:description"
-          content="Online educational platform for earning community service hours using AI to validate. A place where opportunities are born. Discover a new way to earn your community service hours."
+          content="Everyone deserves a world full  with opportunities. Volunteer at events. Purchase tickets. Share your notes. Tutor students. Together, we can make a difference."
         />
         <meta
           property="og:image"
           content="https://storage.googleapis.com/noteswap-images/circle.png"
         />
         <meta property="og:url" content="https://noteswap.org" />
-        <meta name="twitter:title" content="Noteswap" />
+        <meta name="twitter:title" content="NoteSwap" />
         <meta
           name="twitter:description"
-          content="Online educational platform for earning community service hours using AI to validate. A place where opportunities are born. Discover a new way to earn your community service hours."
+          content="Everyone deserves a world full  with opportunities. Volunteer at events. Purchase tickets. Share your notes. Tutor students. Together, we can make a difference."
         />
         <meta
           name="twitter:image"
           content="https://storage.googleapis.com/noteswap-images/circle.png"
         />
-        <meta name="twitter:card" content="Noteswap Icon" />
+        <meta name="twitter:card" content="NoteSwap Icon" />
         <link rel="manifest" href="/manifest.json" />
         <link
           rel="icon"
@@ -94,6 +94,6 @@ function NoteSwap({ Component, pageProps }) {
     </>
   );
 }
-// Export the Noteswap app
+// Export the NoteSwap app
 export default appWithTranslation(NoteSwap);
 //End of the app directory
