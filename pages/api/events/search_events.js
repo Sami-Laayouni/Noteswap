@@ -17,7 +17,6 @@ export default async function handler(req, res) {
   const body = req.body;
   const { title, school, location, locationName } = body;
   res.setHeader("Cache-Control", "public, max-age=120");
-
   if (school != "none") {
     options = {
       $match: {

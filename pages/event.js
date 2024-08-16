@@ -88,8 +88,8 @@ const Event = () => {
           title: title,
           school:
             JSON.parse(localStorage?.getItem("userInfo"))?.schoolId || null,
-          location: location,
-          locationName: locationName,
+          location: location || null,
+          locationName: locationName || null,
         }),
       });
 
