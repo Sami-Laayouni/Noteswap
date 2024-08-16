@@ -38,7 +38,7 @@ export default function CreateAccount() {
   const [desc, setDesc] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [current, setCurrent] = useState(5);
+  const [current, setCurrent] = useState(1);
   const [web, setWeb] = useState("");
   const [category, setCategory] = useState("");
   const [country, setCountry] = useState("");

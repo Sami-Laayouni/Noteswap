@@ -17,7 +17,7 @@ export default async function handler(req, res) {
   const body = req.body;
   const { title, school, location, locationName } = body;
   res.setHeader("Cache-Control", "public, max-age=120");
-  if (school) {
+  if (school != "null") {
     options = {
       $match: {
         $or: [
@@ -76,9 +76,12 @@ export default async function handler(req, res) {
   });
   query.push({ $limit: 15 });
 
+  console.log(query);
+
   try {
     const result = await Events.aggregate(query);
     if (result) {
+      console.log(result);
       const final = {
         tutors: result,
       };

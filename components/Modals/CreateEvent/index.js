@@ -530,7 +530,7 @@ export default function CreateEvent({ business, meeting }) {
                 const associationInfo = JSON.parse(
                   localStorage.getItem("associationInfo")
                 );
-                if (tlocation) {
+                if (tlocation.location > 0) {
                   const options = {
                     method: "POST",
                     headers: {
