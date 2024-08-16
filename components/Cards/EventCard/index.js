@@ -24,8 +24,7 @@ function formatTicketPrices(tickets) {
     .sort((a, b) => a - b);
 
   // Check for the presence of free tickets
-  const hasFree = prices.includes(0);
-
+  const hasFree = prices.includes(0) || prices.includes(NaN);
   // Format the output string based on the prices
   if (prices.length === 0) {
     return "Free";

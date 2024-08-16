@@ -76,20 +76,7 @@ export default function CreateEvent({ business, meeting }) {
   const [allowMeetingMembers, setAllowMeetingMembers] = useState(false);
   const [allowVolunteer, setAllowVolunteer] = useState(false);
 
-  const currencies = [
-    { code: "MAD", name: "Moroccan Dirham" },
-    { code: "USD", name: "US Dollar" },
-    { code: "EUR", name: "Euro" },
-    { code: "GBP", name: "British Pound" },
-    { code: "JPY", name: "Japanese Yen" },
-    { code: "CAD", name: "Canadian Dollar" },
-    { code: "AUD", name: "Australian Dollar" },
-    { code: "CHF", name: "Swiss Franc" },
-    { code: "CNY", name: "Chinese Yuan" },
-    { code: "SEK", name: "Swedish Krona" },
-    { code: "NZD", name: "New Zealand Dollar" },
-    // Add other currencies as needed
-  ];
+  const currencies = [{ code: "MAD", name: "Moroccan Dirham" }];
 
   const [tickets, setTickets] = useState([]);
   const [ticketName, setTicketName] = useState("");
@@ -543,47 +530,48 @@ export default function CreateEvent({ business, meeting }) {
                 const associationInfo = JSON.parse(
                   localStorage.getItem("associationInfo")
                 );
-
-                const options = {
-                  method: "POST",
-                  headers: {
-                    Authorization: `Basic ${process.env.NEXT_PUBLIC_ONESIGNAL_REST}`,
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({
-                    included_segments: ["All"],
-                    filters: createFiltersForSchoolIds(tlocation),
-                    app_id: "3b28d10b-3b88-426f-8025-507667803b2a",
-                    headings: {
-                      en: "New opportunity available!",
-                      es: "¡Nueva oportunidad disponible!",
-                      fr: "Nouvelle opportunité disponible !",
-                      de: "Neue Möglichkeit verfügbar!",
-                      it: "Nuova opportunità disponibile!",
-                      pt: "Nova oportunidade disponível!",
-                      nl: "Nieuwe mogelijkheid beschikbaar!",
-                      ru: "Доступна новая возможность!",
-                      zh: "新的机会现已开放!",
-                      ja: "新しい機会が利用可能です!",
-                      ar: "فرصة جديدة متاحة!",
-                      hi: "नया अवसर उपलब्ध है!",
-                      ko: "새로운 기회가 있습니다!",
+                if (tlocation) {
+                  const options = {
+                    method: "POST",
+                    headers: {
+                      Authorization: `Basic ${process.env.NEXT_PUBLIC_ONESIGNAL_REST}`,
+                      "Content-Type": "application/json",
                     },
-                    url: "https://www.noteswap.org/event",
-                    chrome_web_icon: associationInfo?.icon,
-                    contents: {
-                      en: `${associationInfo.name} posted a new event '${title}' offering ${communityService} hours.`,
-                    },
-                  }),
-                };
+                    body: JSON.stringify({
+                      included_segments: ["All"],
+                      filters: createFiltersForSchoolIds(tlocation),
+                      app_id: "3b28d10b-3b88-426f-8025-507667803b2a",
+                      headings: {
+                        en: "New opportunity available!",
+                        es: "¡Nueva oportunidad disponible!",
+                        fr: "Nouvelle opportunité disponible !",
+                        de: "Neue Möglichkeit verfügbar!",
+                        it: "Nuova opportunità disponibile!",
+                        pt: "Nova oportunidade disponível!",
+                        nl: "Nieuwe mogelijkheid beschikbaar!",
+                        ru: "Доступна новая возможность!",
+                        zh: "新的机会现已开放!",
+                        ja: "新しい機会が利用可能です!",
+                        ar: "فرصة جديدة متاحة!",
+                        hi: "नया अवसर उपलब्ध है!",
+                        ko: "새로운 기회가 있습니다!",
+                      },
+                      url: "https://www.noteswap.org/event",
+                      chrome_web_icon: associationInfo?.icon,
+                      contents: {
+                        en: `${associationInfo.name} posted a new event '${title}' offering ${communityService} hours.`,
+                      },
+                    }),
+                  };
 
-                await fetch(
-                  "https://onesignal.com/api/v1/notifications",
-                  options
-                )
-                  .then((response) => response.json())
-                  .then((response) => console.log(response))
-                  .catch((err) => console.error(err));
+                  await fetch(
+                    "https://onesignal.com/api/v1/notifications",
+                    options
+                  )
+                    .then((response) => response.json())
+                    .then((response) => console.log(response))
+                    .catch((err) => console.error(err));
+                }
 
                 await fetch("/api/email/send_event_email", {
                   method: "POST",
