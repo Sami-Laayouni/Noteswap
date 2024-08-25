@@ -15,12 +15,11 @@ import Share from "../../components/Modals/Share";
 function formatTicketPrices(tickets) {
   // Extract prices from the ticket array
   const prices = tickets
-    ?.map((ticket) => parseFloat(ticket?.price))
+    ?.map((ticket) => parseFloat(ticket.price))
     ?.sort((a, b) => a - b);
 
   // Check for the presence of free tickets
-  const hasFree = prices?.includes(0);
-
+  const hasFree = prices?.includes(0) || prices?.includes(NaN);
   // Format the output string based on the prices
   if (prices) {
     if (prices?.length === 0) {
@@ -399,7 +398,7 @@ export default function Event() {
             />{" "}
             {
               formatReadableDate(data?.date_of_events?.split("to")[0]?.trim())
-                ?.date
+                ?.dateTime
             }{" "}
             -{" "}
             {

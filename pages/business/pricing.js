@@ -8,8 +8,8 @@ const pricingConfig = [
     range: [5, 250],
     rates: {
       Basic: 0,
-      Standard: 1,
-      Premium: 2,
+      Standard: 10,
+      Premium: 20,
     },
     features: {
       Basic: [
@@ -37,9 +37,9 @@ const pricingConfig = [
   {
     range: [251, 500],
     rates: {
-      Basic: 0.5,
-      Standard: 0.8,
-      Premium: 1.8,
+      Basic: 5,
+      Standard: 8,
+      Premium: 18,
     },
     features: {
       Basic: [
@@ -67,9 +67,9 @@ const pricingConfig = [
   {
     range: [501, 1000],
     rates: {
-      Basic: 0.6,
-      Standard: 1,
-      Premium: 1.2,
+      Basic: 6,
+      Standard: 10,
+      Premium: 12,
     },
     features: {
       Basic: [
@@ -97,9 +97,9 @@ const pricingConfig = [
   {
     range: [1001, 5000],
     rates: {
-      Basic: 0.5,
-      Standard: 0.8,
-      Premium: 1.1,
+      Basic: 50,
+      Standard: 80,
+      Premium: 11,
     },
     features: {
       Basic: [
@@ -171,7 +171,7 @@ function Pricing() {
                 ))}
               </ul>
               {rate ? (
-                <p>Price: ${rate * maxStudents}/month</p>
+                <p>Price: {rate * maxStudents} MAD/month</p>
               ) : (
                 <p>Price: Free</p>
               )}

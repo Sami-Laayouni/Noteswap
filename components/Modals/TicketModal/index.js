@@ -71,7 +71,7 @@ export default function TicketModal() {
       (acc, ticket) => {
         const count = counts[ticket.id] || 0;
         return {
-          cost: acc.cost + count * ticket.price,
+          cost: acc.cost + count * ticket.price || 0,
           count: acc.count + count,
         };
       },
@@ -167,10 +167,61 @@ export default function TicketModal() {
     }
   };
 
+  const freeTicket = async (orderID) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await fetch("/api/tickets/free_tickets", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          orderID,
+          user_id: JSON.parse(localStorage.getItem("userInfo"))._id, // should be dynamically set
+          order_price: totalPrice, // updated to use the totalPrice state
+          purchasedBy: JSON.parse(localStorage.getItem("userInfo"))._id,
+          eventId: data?._id,
+          eventName: data?.title,
+          purchasedEmail: data?.contact_email,
+          date_of_event: data?.date_of_events,
+          location: data?.location,
+          locationName: data?.locationName,
+          totalCosts: totalPrice,
+          tickets: data?.tickets
+            .map((ticket) => ({
+              id: ticket.id,
+              name: ticket.name,
+              quantity: ticketCounts[ticket.id] || 0,
+            }))
+            .filter((ticket) => ticket.quantity > 0),
+        }),
+      });
+      const info = await response.json();
+      if (info.success) {
+        setMessage("Payment successful!");
+        router.push("/tickets");
+        setOpen(false);
+      } else {
+        setMessage("Payment failed: " + info.message);
+      }
+    } catch (error) {
+      setMessage("Error processing payment: " + error.message);
+    }
+  };
+
   if (!data || !data.tickets || !ticketCounts) return null;
 
   if (!open) {
     return null;
+  }
+
+  function generateRandomId(length = 8) {
+    return Math.random().toString(36).substr(2, length);
+  }
+  async function continueTicket() {
+    await freeTicket(generateRandomId());
   }
 
   return (
@@ -231,41 +282,47 @@ export default function TicketModal() {
                 )}
               </div>
             ))}
-            {ticketsPrice != 0 && (
+            {purchasedTicketsCount != 0 && (
               <>
-                <div style={{ marginTop: "20px" }}>
-                  <p>Tickets Cost: {ticketsPrice.toFixed(2)} MAD</p>
-                  <p>
-                    Transaction Fee: {(ticketsPrice * 0.065 + 3).toFixed(2)} MAD
-                  </p>
-                  <p>
-                    Service Fee: {(purchasedTicketsCount * 10).toFixed(2)} MAD
-                  </p>
-                  Total: {totalPrice.toFixed(2)} MAD
-                  <button
-                    style={{
-                      display: "block",
-                      padding: "12px",
-                      margin: "10px 0",
-                      backgroundColor: "var(--accent-color)",
-                      color: "white",
-                      border: "none",
-                      borderRadius: "20px",
-                      cursor: "pointer",
-                    }}
-                    type="button"
-                    onClick={() => {
-                      handlePurchase();
-                    }}
-                    disabled={totalPrice <= 0}
-                  >
-                    Continue to Purchase
-                  </button>
-                  <div style={{ marginTop: "20px" }}>
-                    <strong>Refund Policy:</strong> You can be refunded until
-                    the start of the concert.
+                {ticketsPrice != 0 && (
+                  <div>
+                    <div style={{ marginTop: "20px" }}>
+                      <p>Tickets Cost: {ticketsPrice.toFixed(2)} MAD</p>
+                      <p>
+                        Transaction Fee: {(ticketsPrice * 0.065 + 3).toFixed(2)}{" "}
+                        MAD
+                      </p>
+                      <p>
+                        Service Fee: {(purchasedTicketsCount * 10).toFixed(2)}{" "}
+                        MAD
+                      </p>
+                      Total: {totalPrice.toFixed(2)} MAD
+                    </div>
                   </div>
-                </div>
+                )}
+                <button
+                  style={{
+                    display: "block",
+                    padding: "12px",
+                    margin: "10px 0",
+                    backgroundColor: "var(--accent-color)",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "20px",
+                    cursor: "pointer",
+                  }}
+                  type="button"
+                  onClick={() => {
+                    if (ticketsPrice == 0) {
+                      continueTicket();
+                    } else {
+                      handlePurchase();
+                    }
+                  }}
+                  disabled={totalPrice <= 0}
+                >
+                  {ticketsPrice != 0 ? "Continue to Purchase" : "Continue"}
+                </button>
               </>
             )}
           </>
