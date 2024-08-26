@@ -17,7 +17,7 @@ export default async function handler(req, res) {
   const body = req.body;
   const { title, school, location, locationName } = body;
   res.setHeader("Cache-Control", "public, max-age=120");
-  if (school != "null") {
+  if (school != "null" && school != "none") {
     options = {
       $match: {
         $or: [
@@ -70,6 +70,8 @@ export default async function handler(req, res) {
       as: "userInfo",
     },
   });
+
+  console.log(query);
 
   query.push({
     $sort: { createdAt: -1 },
