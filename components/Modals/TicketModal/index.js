@@ -20,6 +20,8 @@ export default function TicketModal() {
   const [purchasedTickets, setPurchasedTickets] = useState({});
   const [maxReached, setMaxReached] = useState({});
   const [message, setMessage] = useState("");
+  const [paypalFee, setPaypalFee] = useState(0);
+  const [serviceFee, setServiceFee] = useState(0);
   const router = useRouter();
 
   useEffect(() => {
@@ -78,12 +80,17 @@ export default function TicketModal() {
       { cost: 0, count: 0 }
     );
     setPurchasedTicketsCount(newTotalPrice.count);
-    const paypalFee = newTotalPrice.cost * 0.065 + 3; // PayPal fee calculation
-    const commissionFee = newTotalPrice.count * 10; // Commission fee calculation
-    const finalPrice = newTotalPrice.cost + paypalFee + commissionFee;
-    console.log(finalPrice, newTotalPrice.cost, paypalFee, commissionFee);
+
+    const commissionFee =
+      newTotalPrice.count * 10 + (2 / 100) * newTotalPrice.cost;
+    const amount = (100 / 94) * (newTotalPrice.cost + commissionFee + 3);
+
+    const finalPrice = amount;
+
     setTicketsPrice(newTotalPrice.cost);
     setTotalPrice(finalPrice);
+    setPaypalFee(((6 / 100) * finalPrice + 3).toFixed(2));
+    setServiceFee(commissionFee);
   };
 
   const handlePurchase = async () => {
@@ -288,14 +295,8 @@ export default function TicketModal() {
                   <div>
                     <div style={{ marginTop: "20px" }}>
                       <p>Tickets Cost: {ticketsPrice.toFixed(2)} MAD</p>
-                      <p>
-                        Transaction Fee: {(ticketsPrice * 0.065 + 3).toFixed(2)}{" "}
-                        MAD
-                      </p>
-                      <p>
-                        Service Fee: {(purchasedTicketsCount * 10).toFixed(2)}{" "}
-                        MAD
-                      </p>
+                      <p>Transaction Fee: {paypalFee} MAD</p>
+                      <p>Service Fee: {serviceFee.toFixed(2)} MAD</p>
                       Total: {totalPrice.toFixed(2)} MAD
                     </div>
                   </div>
