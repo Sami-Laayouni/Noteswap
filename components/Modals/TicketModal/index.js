@@ -352,7 +352,6 @@ export default function TicketModal() {
                     "client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
                     currency: "USD",
                     intent: "capture",
-                    country: "MA",
                   }}
                 >
                   <PayPalButtons
