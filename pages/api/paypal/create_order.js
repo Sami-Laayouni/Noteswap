@@ -65,6 +65,7 @@ const handler = async (req, res) => {
     });
 
     const response = await PaypalClient.execute(request);
+    console.log(response);
     if (response.statusCode !== 201) {
       console.log("PayPal Response: ", response);
       return res.status(500).json({

@@ -42,6 +42,7 @@ const handler = async (req, res) => {
   const request = new paypal.orders.OrdersCaptureRequest(orderID);
   request.requestBody({});
   const response = await PaypalClient.execute(request);
+  console.log(response);
   if (!response) {
     return res
       .status(500)
