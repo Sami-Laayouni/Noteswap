@@ -34,7 +34,11 @@ export async function getAccessToken() {
       ).toString("base64")}`,
       "Content-Type": "application/x-www-form-urlencoded",
     },
-    body: "grant_type=client_credentials",
+    body: new URLSearchParams({
+      grant_type: "client_credentials",
+      response_type: "id_token",
+      intent: "sdk_init",
+    }),
   });
 
   const data = await response.json();

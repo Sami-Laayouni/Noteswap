@@ -31,6 +31,7 @@ const handler = async (req, res) => {
       .status(400)
       .json({ success: false, message: "Missing required fields" });
   }
+  console.log(orderID);
 
   // Convert the total costs from MAD to USD
 

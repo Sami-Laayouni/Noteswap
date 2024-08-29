@@ -62,6 +62,9 @@ const handler = async (req, res) => {
           },
         },
       ],
+      application_context: {
+        shipping_preference: "NO_SHIPPING", // Disable shipping address
+      },
     });
 
     const response = await PaypalClient.execute(request);
