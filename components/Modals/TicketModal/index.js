@@ -2,11 +2,41 @@ import { useContext, useState, useEffect } from "react";
 import ModalContext from "../../../context/ModalContext";
 import Modal from "../../Template/Modal";
 import { useRouter } from "next/router";
-import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import {
+  PayPalScriptProvider,
+  PayPalCardFieldsProvider,
+  PayPalNameField,
+  PayPalNumberField,
+  PayPalExpiryField,
+  PayPalCVVField,
+  usePayPalCardFields,
+  PayPalButtons,
+} from "@paypal/react-paypal-js";
 import style from "./ticketModal.module.css";
 function Message({ content }) {
   return <p>{content}</p>;
 }
+
+const SubmitPayment = () => {
+  const { cardFields } = usePayPalCardFields();
+
+  function submitHandler() {
+    if (typeof cardFields.submit !== "function") return; // validate that `submit()` exists before using it
+
+    cardFields
+      .submit()
+      .then(() => {
+        // submit successful
+        console.log("Card payment successful!");
+      })
+      .catch((error) => {
+        // submission error
+        console.error("Card payment error:", error);
+      });
+  }
+
+  return <button onClick={submitHandler}>Pay with Card</button>;
+};
 
 export default function TicketModal() {
   const { ticketModal, eventData } = useContext(ModalContext);
@@ -224,6 +254,26 @@ export default function TicketModal() {
     return null;
   }
 
+  // Function to create an order
+  async function createOrder() {
+    const order_id = await paypalCreateOrder();
+    console.log(order_id);
+    return order_id + "";
+  }
+
+  // Function to handle approval of the payment
+  async function onApprove(data) {
+    const response = await paypalCaptureOrder(data.orderID);
+    console.log(response);
+    console.log(data.orderID);
+    if (response) return true;
+  }
+
+  // Function to handle errors during the payment process
+  function onError(e) {
+    console.error("Payment error:", e);
+  }
+
   function generateRandomId(length = 8) {
     return Math.random().toString(36).substr(2, length);
   }
@@ -349,31 +399,42 @@ export default function TicketModal() {
               <div>
                 <PayPalScriptProvider
                   options={{
-                    "client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
+                    clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
                     currency: "USD",
                     intent: "capture",
-                    components: "buttons",
+                    components: "buttons,card-fields",
                   }}
                 >
-                  <PayPalButtons
-                    style={{
-                      color: "gold",
-                      shape: "pill",
-                      label: "pay",
-                      height: 50,
-                    }}
-                    createOrder={async (data, actions) => {
-                      const order_id = await paypalCreateOrder();
-                      return order_id + "";
-                    }}
-                    onApprove={async (data, actions) => {
-                      const response = await paypalCaptureOrder(data.orderID);
-                      if (response) return true;
-                    }}
-                    onError={(e) => {
-                      console.log(e);
-                    }}
-                  />
+                  <div>
+                    {/* PayPal Buttons for direct payment */}
+                    <PayPalButtons
+                      style={{
+                        color: "gold",
+                        shape: "pill",
+                        label: "pay",
+                        height: 50,
+                      }}
+                      createOrder={createOrder}
+                      onApprove={onApprove}
+                      onError={onError}
+                    />
+
+                    {/* PayPal Card Fields for card payment */}
+                    <PayPalCardFieldsProvider
+                      createOrder={createOrder}
+                      onApprove={onApprove}
+                      onError={onError}
+                    >
+                      <div>
+                        <h3>Pay with Card</h3>
+                        <PayPalNameField />
+                        <PayPalNumberField />
+                        <PayPalExpiryField />
+                        <PayPalCVVField />
+                        <SubmitPayment />
+                      </div>
+                    </PayPalCardFieldsProvider>
+                  </div>
                 </PayPalScriptProvider>
               </div>
               <Message content={message} />

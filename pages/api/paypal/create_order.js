@@ -63,7 +63,10 @@ const handler = async (req, res) => {
         },
       ],
       application_context: {
+        landing_page: "BILLING",
         shipping_preference: "NO_SHIPPING", // Disable shipping address
+        user_action: "PAY_NOW", // Make the "Pay Now" button prominent
+        brand_name: "NoteSwap", // Display your brand name
       },
     });
 

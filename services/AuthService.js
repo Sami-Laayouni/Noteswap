@@ -51,6 +51,7 @@ class AuthService {
       console.error("No subject id given to login with Google!");
       return;
     }
+
     try {
       // Login with Google
       const response = await fetch(`${this.API_URL}/login_with_google`, {
