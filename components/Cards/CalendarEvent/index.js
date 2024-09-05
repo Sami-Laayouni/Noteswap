@@ -18,11 +18,10 @@ import { useTranslation } from "next-i18next";
  * @return {*}
  */
 export default function CalendarEvent({ data }) {
-  const startDate = parseISO(data?.start?.dateTime); // Start date of the event
-  const endDate = parseISO(data?.end?.dateTime); // End date of the event
+  const startDate = parseISO(data?.start?.date); // Start date of the event
+  const endDate = parseISO(data?.end?.date); // End date of the event
   const nextDayDate = addDays(startDate, 1); // The day after the event
   const { t } = useTranslation("common");
-  console.log(data);
 
   // Return the JSX (a link that opens the event in their Google calendar)
   return (
