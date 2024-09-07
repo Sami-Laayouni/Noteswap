@@ -1,9 +1,9 @@
-import client from "../../../utils/paypal";
-import paypal from "@paypal/checkout-server-sdk";
 import Events from "../../../models/Events";
 
 import { authenticate } from "../../../utils/authenticate";
 import { fetchAndCacheExchangeRate } from "../../../utils/exchangeRates";
+
+import { getAccessToken } from "../../../utils/paypal";
 
 const convertMadToUsd = async (madAmount) => {
   const exchangeRate = await fetchAndCacheExchangeRate();
@@ -49,10 +49,17 @@ const handler = async (req, res) => {
         .json({ success: false, message: "Event not found" });
     }
 
-    const PaypalClient = client();
-    const request = new paypal.orders.OrdersCreateRequest();
-    request.headers["prefer"] = "return=representation";
-    request.requestBody({
+    const access_token = await getAccessToken();
+    const base =
+      process.env.PUBLIC_URL == "http://localhost:3000/"
+        ? "https://api-m.sandbox.paypal.com"
+        : "https://api-m.paypal.com";
+
+    const url = `${base}/v2/checkout/orders`;
+
+    console.log(process.env.PUBLIC_URL);
+
+    const payload = {
       intent: "CAPTURE",
       purchase_units: [
         {
@@ -68,19 +75,33 @@ const handler = async (req, res) => {
         user_action: "PAY_NOW", // Make the "Pay Now" button prominent
         brand_name: "NoteSwap", // Display your brand name
       },
-    });
+    };
 
-    const response = await PaypalClient.execute(request);
-    console.log(response);
-    if (response.statusCode !== 201) {
-      console.log("PayPal Response: ", response);
+    const response = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${access_token}`,
+        // Uncomment one of these to force an error for negative testing (in sandbox mode only). Documentation:
+        // https://developer.paypal.com/tools/sandbox/negative-testing/request-headers/
+        // "PayPal-Mock-Response": '{"mock_application_codes": "MISSING_REQUIRED_PARAMETER"}'
+        // "PayPal-Mock-Response": '{"mock_application_codes": "PERMISSION_DENIED"}'
+        // "PayPal-Mock-Response": '{"mock_application_codes": "INTERNAL_SERVER_ERROR"}'
+      },
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+    const data = await response.json();
+
+    if (data.status !== "CREATED") {
       return res.status(500).json({
         success: false,
         message: "Error occurred while creating PayPal order",
       });
     }
 
-    const orderData = response.result;
+    const orderData = data.id;
+
+    console.log(orderData.id);
 
     res.status(200).json({ success: true, data: { order: orderData } }); // Ensure you return the correct order data
   } catch (err) {

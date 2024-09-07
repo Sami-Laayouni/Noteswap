@@ -152,7 +152,7 @@ export default function TicketModal() {
       });
       const info = await response.json();
       console.log(info);
-      return info.data.order.id; // Adjust according to the actual API response
+      return info.data.order; // Adjust according to the actual API response
     } catch (err) {
       alert(err);
       console.error("Error creating PayPal order:", err);
@@ -264,9 +264,8 @@ export default function TicketModal() {
   // Function to handle approval of the payment
   async function onApprove(data) {
     const response = await paypalCaptureOrder(data.orderID);
-    console.log(response);
-    console.log(data.orderID);
-    if (response) return true;
+
+    if (data) return true;
   }
 
   // Function to handle errors during the payment process

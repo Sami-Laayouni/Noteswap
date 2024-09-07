@@ -668,24 +668,12 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@paypal/checkout-server-sdk@^1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@paypal/checkout-server-sdk/-/checkout-server-sdk-1.0.3.tgz#1de69f5c1af8d74ec0e9e26be9ed225d98a1e453"
-  integrity sha512-UEdq8akEdMz0Vs4qoQFU2gMp8PpyE/HKyMwiZuK4vIWUKl8jfd1fWKjQN5cDFm9NkFUIp5U7h++rdMOVj9WMNA==
-  dependencies:
-    "@paypal/paypalhttp" "^1.0.1"
-
 "@paypal/paypal-js@^8.1.0":
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/@paypal/paypal-js/-/paypal-js-8.1.0.tgz#4e7d10e0a0b4164985029cfdac748e5694d117e9"
   integrity sha512-f64bom5xYwmxyeKPJUFS/XpM0tXojQEgjRIADPqe1R9WmK+PFqL4SEkT85cGU0ZXLVx4EGbjwREHhqEOR+OstA==
   dependencies:
     promise-polyfill "^8.3.0"
-
-"@paypal/paypalhttp@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@paypal/paypalhttp/-/paypalhttp-1.0.1.tgz#406e337bf86cec7ea58c42eb167eb9b57ed88110"
-  integrity sha512-DC7AHxTT7drF6dUi3YaFdPVuT15sIkpD5H2eHmdtFgxM4UanS1o1ZDfMhR9mpxd8o+X6pz2r+EZVRRq+n1cssQ==
 
 "@paypal/react-paypal-js@^8.5.0":
   version "8.5.0"

@@ -1,7 +1,6 @@
-import client from "../../../utils/paypal";
-import paypal from "@paypal/checkout-server-sdk";
 import Events from "../../../models/Events";
 import User from "../../../models/User";
+import { getAccessToken } from "../../../utils/paypal";
 
 import { authenticate } from "../../../utils/authenticate";
 
@@ -36,13 +35,32 @@ const handler = async (req, res) => {
   // Convert the total costs from MAD to USD
 
   const event = await Events.findById(eventId);
+  const access_token = await getAccessToken();
+  const base =
+    process.env.PUBLIC_URL == "http://localhost:3000/"
+      ? "https://api-m.sandbox.paypal.com"
+      : "https://api-m.paypal.com";
+
+  const url = `${base}/v2/checkout/orders/${orderID}/capture`;
+
+  console.log(process.env.PUBLIC_URL);
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token}`,
+      // Uncomment one of these to force an error for negative testing (in sandbox mode only). Documentation:
+      // https://developer.paypal.com/tools/sandbox/negative-testing/request-headers/
+      // "PayPal-Mock-Response": '{"mock_application_codes": "INSTRUMENT_DECLINED"}'
+      // "PayPal-Mock-Response": '{"mock_application_codes": "TRANSACTION_REFUSED"}'
+      // "PayPal-Mock-Response": '{"mock_application_codes": "INTERNAL_SERVER_ERROR"}'
+    },
+  });
+
   if (!event) {
     return res.status(404).json({ success: false, message: "Event not found" });
   }
-  const PaypalClient = client();
-  const request = new paypal.orders.OrdersCaptureRequest(orderID);
-  request.requestBody({});
-  const response = await PaypalClient.execute(request);
   console.log(response);
   if (!response) {
     return res
