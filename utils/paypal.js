@@ -22,7 +22,7 @@ export async function getAccessToken() {
   const clientSecret = process.env.PAYPAL_CLIENT_SECRET;
 
   const link =
-    process.PUBLIC_URL == "http://localhost:3000/"
+    process.env.PUBLIC_URL == "http://localhost:3000/"
       ? "https://api-m.sandbox.paypal.com/v1/oauth2/token"
       : "https://api-m.paypal.com/v1/oauth2/token";
 
