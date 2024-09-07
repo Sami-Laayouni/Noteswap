@@ -43,6 +43,7 @@ export default async function createUserWithGoogle(req, res) {
         tutor_hours: 0,
         schoolId: schoolId,
         notes: [],
+        hidden: false,
       });
       const savedUser = await newUser.save();
 

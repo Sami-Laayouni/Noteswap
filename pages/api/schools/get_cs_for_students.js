@@ -9,6 +9,7 @@ export default async function handler(req, res) {
       $match: {
         role: "student",
         schoolId: id,
+        hidden: false,
       },
     },
     {

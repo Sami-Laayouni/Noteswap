@@ -102,6 +102,11 @@ const userSchema = new mongoose.Schema({
     default: Date.now,
     required: true,
   },
+  hidden: {
+    type: Boolean,
+    default: false,
+    required: false,
+  },
 });
 
 let User;
