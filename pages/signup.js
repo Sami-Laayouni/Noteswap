@@ -11,6 +11,7 @@ import Image from "next/image";
 import Footer from "../components/Layout/Footer";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import Warning from "../components/Modals/Warning";
 
 // Used for translation reasons
 export async function getStaticProps({ locale }) {
@@ -226,6 +227,7 @@ const Signup = () => {
         <Head>
           <title>Signup | NoteSwap</title> {/* Title of the page */}
         </Head>
+        <Warning />
         {schoolId && (
           <Image
             src={getSchoolLogoImage(schoolId)}

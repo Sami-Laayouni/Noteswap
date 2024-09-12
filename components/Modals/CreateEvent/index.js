@@ -258,11 +258,11 @@ export default function CreateEvent({ business, meeting }) {
 
             // Increase current stage in the pipeline
             if (current != 4) {
-              if (current == 1 && business) {
+              if (current == 1) {
                 setCurrent(7);
                 return;
               }
-              if (current == 7 && business) {
+              if (current == 7) {
                 setCurrent(2);
                 return;
               }
@@ -275,6 +275,7 @@ export default function CreateEvent({ business, meeting }) {
                 setCurrent(8);
                 return;
               }
+
               if (current == 8) {
                 if (tickets.length > 0) {
                   setCurrent(9);
@@ -317,6 +318,7 @@ export default function CreateEvent({ business, meeting }) {
             } else if (current == 9) {
               setCurrent(4);
             } else if (current == 3 && !business) {
+              setCurrent(11);
               code = generateCode(24);
               setCodes(code);
 
@@ -348,7 +350,7 @@ export default function CreateEvent({ business, meeting }) {
                   school_id: JSON.parse(localStorage.getItem("userInfo"))
                     .schoolId,
                   // New ones
-                  typeOfEvent: eventType,
+                  typeOfEvent: "volunteer",
                   onlyAllowSchoolVolunteers: allowSchoolVolunteer,
                   tickets: tickets,
                   eventMode: eventMode,
@@ -642,7 +644,7 @@ export default function CreateEvent({ business, meeting }) {
                 placeholder="Enter a detailed description of your event"
                 value={desc}
                 type="text"
-                minLength={100}
+                minLength={20}
                 maxLength={10000}
                 onChange={(e) => {
                   setDesc(e.target.value);
@@ -1422,6 +1424,8 @@ export default function CreateEvent({ business, meeting }) {
               </button>
             </>
           )}
+
+          {current == 11 && <h1>Creating an Event....</h1>}
         </form>
 
         {/* Back button */}

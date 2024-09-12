@@ -264,7 +264,6 @@ export default function TicketModal() {
   // Function to handle approval of the payment
   async function onApprove(data) {
     const response = await paypalCaptureOrder(data.orderID);
-
     if (data) return true;
   }
 

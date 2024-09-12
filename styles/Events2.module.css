@@ -153,6 +153,15 @@
   background-color: var(--default-white-color);
   cursor: pointer;
 }
+.createNewEvent {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  background-color: var(--accent-color);
+  padding: 15px 30px;
+  color: white;
+  cursor: pointer;
+}
 @media all and (max-width: 808px) {
   .padding {
     padding-left: 25px;
