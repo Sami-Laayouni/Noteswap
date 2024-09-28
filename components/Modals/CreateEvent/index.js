@@ -506,7 +506,7 @@ export default function CreateEvent({ business, meeting }) {
                     ? "allowMeeting"
                     : null,
                   associationId: associationInfo?._id || "",
-                  associationProfilePic: associationInfo.icon,
+                  associationProfilePic: associationInfo?.icon || "",
                   sponsoredLocations: tlocation,
                   school_id: JSON.parse(localStorage.getItem("userInfo"))
                     .schoolId,

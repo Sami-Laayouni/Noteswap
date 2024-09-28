@@ -22,6 +22,7 @@
     "@paypal/react-paypal-js": "^8.5.0",
     "@yudiel/react-qr-scanner": "^2.0.4",
     "bcryptjs": "^2.4.3",
+    "crypto": "^1.0.1",
     "date-fns": "^2.30.0",
     "docxtemplater": "^3.42.1",
     "eslint-config-google": "^0.14.0",
@@ -49,9 +50,11 @@
     "react-leaflet": "^4.2.1",
     "react-onesignal": "^3.0.1",
     "react-quill": "^2.0.0",
+    "react-square-web-payments-sdk": "^3.2.1",
     "react-swipeable": "^7.0.1",
     "sharp": "^0.32.4",
-    "socket.io-client": "^4.7.1"
+    "socket.io-client": "^4.7.1",
+    "square": "^38.1.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.5",

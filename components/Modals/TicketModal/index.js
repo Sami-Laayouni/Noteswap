@@ -12,31 +12,12 @@ import {
   usePayPalCardFields,
   PayPalButtons,
 } from "@paypal/react-paypal-js";
+import { CreditCard, PaymentForm } from "react-square-web-payments-sdk";
+import { submitPayment } from "../../../actions/actions";
 import style from "./ticketModal.module.css";
 function Message({ content }) {
   return <p>{content}</p>;
 }
-
-const SubmitPayment = () => {
-  const { cardFields } = usePayPalCardFields();
-
-  function submitHandler() {
-    if (typeof cardFields.submit !== "function") return; // validate that `submit()` exists before using it
-
-    cardFields
-      .submit()
-      .then(() => {
-        // submit successful
-        console.log("Card payment successful!");
-      })
-      .catch((error) => {
-        // submission error
-        console.error("Card payment error:", error);
-      });
-  }
-
-  return <button onClick={submitHandler}>Pay with Card</button>;
-};
 
 export default function TicketModal() {
   const { ticketModal, eventData } = useContext(ModalContext);
@@ -389,11 +370,64 @@ export default function TicketModal() {
           >
             <div style={{ paddingTop: "40px" }}>
               <p style={{ fontFamily: "var(--manrope-font)" }}>
-                Due to security reasons, we use PayPal&apos;s secure payment
-                methods; therefore, all payments are completed in USD. However,
-                don&apos;t worry—we handle this transaction for you, and the fee
-                is already included.{" "}
+                Due to security reasons, we use Square&apos;s secure payment
+                methods.
               </p>
+              <PaymentForm
+                applicationId={process.env.NEXT_PUBLIC_SQUARE_APPLICATION_ID}
+                locationId={process.env.NEXT_PUBLIC_SQUARE_LOCATION_ID}
+                cardTokenizeResponseReceived={async (tokenStuff) => {
+                  try {
+                    console.log(tokenStuff);
+                    const token = localStorage.getItem("token");
+
+                    const response = await fetch("/api/payment/submitPayment", {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                      },
+                      body: JSON.stringify({
+                        sourceId: tokenStuff.token,
+                        orderID: generateRandomId(),
+                        purchasedBy: JSON.parse(
+                          localStorage.getItem("userInfo")
+                        )._id, // should be dynamically set
+                        eventId: data?._id,
+                        eventName: data?.title,
+                        purchasedEmail: data?.contact_email,
+                        date_of_event: data?.date_of_events,
+                        location: data?.location,
+                        locationName: data?.locationName,
+                        amount: totalPrice,
+                        tickets: data?.tickets
+                          .map((ticket) => ({
+                            id: ticket.id,
+                            name: ticket.name,
+                            quantity: ticketCounts[ticket.id] || 0,
+                          }))
+                          .filter((ticket) => ticket.quantity > 0),
+                      }),
+                    });
+                    const info = await response.json();
+                    if (info.success) {
+                      setMessage("Payment successful!");
+                      router.push("/tickets");
+                      setOpen(false);
+                    } else {
+                      setMessage("Payment failed: " + info.message);
+                    }
+                  } catch (error) {
+                    setMessage("Error processing payment: " + error.message);
+                  }
+
+                  const result = await submitPayment(token.token);
+                  console.log(result);
+                }}
+              >
+                <CreditCard />
+              </PaymentForm>
+              {/*
               <div>
                 <PayPalScriptProvider
                   options={{
@@ -404,7 +438,6 @@ export default function TicketModal() {
                   }}
                 >
                   <div>
-                    {/* PayPal Buttons for direct payment */}
                     <PayPalButtons
                       style={{
                         color: "gold",
@@ -417,7 +450,6 @@ export default function TicketModal() {
                       onError={onError}
                     />
 
-                    {/* PayPal Card Fields for card payment */}
                     <PayPalCardFieldsProvider
                       createOrder={createOrder}
                       onApprove={onApprove}
@@ -435,6 +467,7 @@ export default function TicketModal() {
                   </div>
                 </PayPalScriptProvider>
               </div>
+              */}
               <Message content={message} />
             </div>
             <p
