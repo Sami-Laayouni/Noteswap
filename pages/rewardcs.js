@@ -9,7 +9,7 @@ import LoadingCircle from "../components/Extra/LoadingCircle";
 import { useRouter } from "next/router";
 import { requireAuthenticationTeacher } from "../middleware/teacher";
 import Script from "next/script";
-import { t } from "i18next";
+import { useTranslation } from "next-i18next";
 
 /**
  * Get static props
@@ -65,6 +65,8 @@ const RewardCommunityService = () => {
   useEffect(() => {
     fetchStudents();
   }, []);
+
+  const { t } = useTranslation("common");
 
   function formatMessagesWithMinutes(points, tutor_hours, messagesArray) {
     let formattedMessages = "";
