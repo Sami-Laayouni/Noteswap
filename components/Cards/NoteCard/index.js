@@ -100,10 +100,11 @@ export default function NoteCard({ data, padding }) {
             localStorage.setItem("click2", JSON.stringify({}));
           }
           const obj = JSON.parse(localStorage.getItem("click"));
-          increaseKeyValue(obj, data.data.userInfo[0]._id);
+          console.log(data);
+          increaseKeyValue(obj, data?.userInfo[0]._id);
           localStorage.setItem("click", JSON.stringify(obj));
           const obj2 = JSON.parse(localStorage.getItem("click2"));
-          increaseKeyValue(obj2, data.data.category);
+          increaseKeyValue(obj2, data?.category);
           localStorage.setItem("click2", JSON.stringify(obj2));
 
           router.push(`/note/${data?._id}`);
