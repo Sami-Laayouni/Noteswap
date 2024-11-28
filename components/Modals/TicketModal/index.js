@@ -373,6 +373,7 @@ export default function TicketModal() {
                 Due to security reasons, we use Square&apos;s secure payment
                 methods.
               </p>
+              {/*
               <PaymentForm
                 applicationId={process.env.NEXT_PUBLIC_SQUARE_APPLICATION_ID}
                 locationId={process.env.NEXT_PUBLIC_SQUARE_LOCATION_ID}
@@ -427,7 +428,7 @@ export default function TicketModal() {
               >
                 <CreditCard />
               </PaymentForm>
-              {/*
+              */}
               <div>
                 <PayPalScriptProvider
                   options={{
@@ -449,25 +450,10 @@ export default function TicketModal() {
                       onApprove={onApprove}
                       onError={onError}
                     />
-
-                    <PayPalCardFieldsProvider
-                      createOrder={createOrder}
-                      onApprove={onApprove}
-                      onError={onError}
-                    >
-                      <div>
-                        <h3>Pay with Card</h3>
-                        <PayPalNameField />
-                        <PayPalNumberField />
-                        <PayPalExpiryField />
-                        <PayPalCVVField />
-                        <SubmitPayment />
-                      </div>
-                    </PayPalCardFieldsProvider>
                   </div>
                 </PayPalScriptProvider>
               </div>
-              */}
+
               <Message content={message} />
             </div>
             <p

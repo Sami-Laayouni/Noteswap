@@ -336,6 +336,7 @@ export default function Event() {
           <div className={style.hiddenI} style={{ marginLeft: "20px" }}>
             {data?.category}
           </div>
+          <br></br>
           <button
             onClick={() => {
               if (localStorage.getItem("userInfo")) {
