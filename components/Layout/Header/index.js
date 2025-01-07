@@ -38,6 +38,35 @@ import OneSignal from "react-onesignal";
  * @author Sami Laayouni
  * @license MIT
  */
+/**
+ * Header component that displays the navigation bar and user information.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered header component.
+ *
+ * @description
+ * This component renders the header of the application, including the NoteSwap logo, navigation links,
+ * user profile information, and a hamburger menu for mobile devices. It also handles user authentication
+ * and fetching user data from local storage and APIs.
+ *
+ * @example
+ * <Header />
+ *
+ * @function
+ * @name Header
+ *
+ * @returns {JSX.Element} The rendered header component.
+ *
+ * @remarks
+ * - Uses `useContext` to access `AuthContext` and `ModalContext`.
+ * - Uses `useState` to manage local state for user data and business mode.
+ * - Uses `useEffect` to handle side effects such as checking authentication status, fetching user data,
+ *   and handling click events outside the dropdown menu.
+ * - Uses `useRouter` to access the router object for navigation.
+ * - Uses `useTranslation` for internationalization support.
+ * - Handles user login/logout and displays different navigation options based on user roles.
+ * - Supports both desktop and mobile views with a responsive design.
+ */
 export default function Header() {
   const { isLoggedIn } = useContext(AuthContext);
   const { certificateModal, addMembers } = useContext(ModalContext);

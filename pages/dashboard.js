@@ -42,6 +42,48 @@ export async function getStaticProps({ locale }) {
  * @author Sami Laayouni
  * @license MIT
  */
+/**
+ * Dashboard component that displays user-specific information and school events.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered Dashboard component.
+ *
+ * @example
+ * return <Dashboard />;
+ *
+ * @description
+ * The Dashboard component fetches and displays user data, school data, and calendar events.
+ * It also provides functionality to scroll through the list of events.
+ *
+ * @function
+ * @name Dashboard
+ *
+ * @property {Object} userData - The user data fetched from local storage.
+ * @property {Function} setUserData - Function to set the user data state.
+ * @property {Object} data - The school data fetched from the API.
+ * @property {Function} setData - Function to set the school data state.
+ * @property {Array} calendar - The list of calendar events fetched from the API.
+ * @property {Function} setCalendar - Function to set the calendar events state.
+ * @property {string|null} calendarId - The ID of the calendar to fetch events from.
+ * @property {Function} setCalendarId - Function to set the calendar ID state.
+ * @property {boolean} loading - Indicates whether the data is still being loaded.
+ * @property {Function} setLoading - Function to set the loading state.
+ * @property {Object} containerRef - Reference to the <ul> container for scrolling.
+ * @property {Function} handleScrollLeft - Function to scroll the <ul> container to the left.
+ * @property {Function} handleScrollRight - Function to scroll the <ul> container to the right.
+ *
+ * @requires useTranslation from 'react-i18next'
+ * @requires useRouter from 'next/router'
+ * @requires useState from 'react'
+ * @requires useEffect from 'react'
+ * @requires useRef from 'react'
+ * @requires Head from 'next/head'
+ * @requires BusinessModal from '../components/BusinessModal'
+ * @requires InstallPWa from '../components/InstallPWa'
+ * @requires LoadingCircle from '../components/LoadingCircle'
+ * @requires CalendarEvent from '../components/CalendarEvent'
+ * @requires NoteSwapBot from '../components/NoteSwapBot'
+ */
 const Dashboard = () => {
   const [userData, setUserData] = useState();
   const [data, setData] = useState();

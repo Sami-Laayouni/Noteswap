@@ -7,6 +7,14 @@ let isConnected = false;
  * Establishes a connection to the MongoDB database.
  * @returns {Promise<void>} - Promise that resolves once the connection is established.
  */
+/**
+ * Connects to the MongoDB database.
+ * If already connected, it returns the existing connection.
+ *
+ * @async
+ * @function connectDB
+ * @throws Will throw an error if the connection to MongoDB fails.
+ */
 export const connectDB = async () => {
   if (isConnected) {
     // If already connected, return the existing connection

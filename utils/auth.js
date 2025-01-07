@@ -2,6 +2,11 @@
 
 import jwt from "jsonwebtoken";
 
+/**
+ * Checks if the user is authenticated by verifying the JWT token stored in localStorage.
+ *
+ * @returns {boolean} - Returns true if the user is authenticated, false otherwise.
+ */
 export const isAuthenticated = () => {
   const verifyToken = (token) => {
     try {

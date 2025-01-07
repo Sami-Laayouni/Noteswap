@@ -36,6 +36,43 @@ export async function getStaticProps({ locale }) {
  * @export
  * @return {*}
  */
+/**
+ * Event component that handles the display and search functionality for events.
+ *
+ * @component
+ *
+ * @returns {JSX.Element} The rendered component.
+ *
+ * @example
+ * return (
+ *   <Event />
+ * )
+ *
+ * @description
+ * This component allows users to search for events based on title and location.
+ * It also integrates with OneSignal for push notifications and uses the user's
+ * geolocation to find events near them. The component maintains various states
+ * for handling user input, suggestions, and loading states.
+ *
+ * @function
+ * @name Event
+ *
+ * @requires useRouter
+ * @requires useContext
+ * @requires useState
+ * @requires useEffect
+ * @requires useTranslation
+ * @requires ModalContext
+ * @requires OneSignal
+ * @requires FaSearch
+ * @requires FaPlus
+ * @requires CreateEvent
+ * @requires EventCard
+ * @requires LoadingCircle
+ * @requires Footer
+ *
+ * @returns {JSX.Element} The rendered component.
+ */
 const Event = () => {
   const router = useRouter();
   const { eventStatus } = useContext(ModalContext);

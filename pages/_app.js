@@ -29,6 +29,14 @@ import { appWithTranslation } from "next-i18next";
  * @author Sami Laayouni
  * @license MIT
  */
+/**
+ * NoteSwap component that wraps every page with common headers and a default layout.
+ *
+ * @param {Object} props - The properties object.
+ * @param {React.ComponentType} props.Component - The component to be rendered.
+ * @param {Object} props.pageProps - The properties to be passed to the component.
+ * @returns {JSX.Element} The JSX element containing headers and the page component wrapped in a default layout.
+ */
 function NoteSwap({ Component, pageProps }) {
   // Headers in every single page
   const headers = (

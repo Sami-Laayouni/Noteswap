@@ -30,6 +30,13 @@ export async function getStaticProps({ locale }) {
  * @author Sami Laayouni
  * @license MIT
  */
+/**
+ * Home component that renders the main page of the NoteSwap application.
+ * It includes sections for hero, schools, associations, number of users, and FAQ.
+ * It also handles user authentication and redirection based on user roles.
+ *
+ * @returns {JSX.Element} The JSX code for the Home component.
+ */
 export default function Home() {
   const { t } = useTranslation("common");
   const [loggedIn, setLoggedIn] = useState(false);
