@@ -33,6 +33,10 @@ function CreateMicrosoftUserPage() {
   const { t } = useTranslation("common");
 
   useEffect(() => {
+    localStorage.setItem("ran", false);
+  }, []);
+
+  useEffect(() => {
     if (!ran) {
       const createUser = async (data) => {
         const role = localStorage.getItem("role");
@@ -73,10 +77,15 @@ function CreateMicrosoftUserPage() {
               role,
               school || "none"
             );
-            if (response.token) {
+            if (
+              response.token &&
+              JSON.parse(localStorage.getItem("ran")) === false
+            ) {
               setLoggedIn(true);
               localStorage.setItem("userInfo", JSON.stringify(response.user));
               localStorage.setItem("token", response.token);
+              localStorage.setItem("ran", true);
+
               router.push(
                 role === "school"
                   ? "/business/pricing"

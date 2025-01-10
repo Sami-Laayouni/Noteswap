@@ -38,6 +38,7 @@ export const ModalProvider = ({ children }) => {
   const [downloadSegmented, setDownloadSegmented] = useState(false);
   const [signedUpVolunteers, setSignedUpVolunteers] = useState(null);
   const [warning, setWarning] = useState(true);
+  const [isFromSchool, setIsFromSchool] = useState(false);
 
   const [ticketModal, setTicketModal] = useState(false);
   const [applyAsVolunteer, setApplyAsVolunteer] = useState(false);
@@ -79,6 +80,7 @@ export const ModalProvider = ({ children }) => {
         ticketModal: [ticketModal, setTicketModal],
         applyAsVolunteer: [applyAsVolunteer, setApplyAsVolunteer],
         warning: [warning, setWarning],
+        isFromSchool: [isFromSchool, setIsFromSchool],
       }}
     >
       {children}

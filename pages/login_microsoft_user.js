@@ -40,6 +40,10 @@ function LoginMicrosoftUserPage() {
   const { t } = useTranslation("common");
 
   useEffect(() => {
+    localStorage.setItem("ran", false);
+  }, []);
+
+  useEffect(() => {
     /**
      * Login User
      * @date 6/23/2023 - 9:37:13 PM
@@ -53,8 +57,22 @@ function LoginMicrosoftUserPage() {
           // Store the token in local storage
           localStorage.setItem("userInfo", JSON.stringify(response.user));
           localStorage.setItem("token", response.token);
+          if (response?.school) {
+            localStorage.setItem("schoolInfo", JSON.stringify(response.school));
+          }
+          setLoggedIn(true);
+
           // Redirect to the dashboard page after successful login
-          router.push("/dashboard");
+          if (
+            router.pathname !== "/dashboard" &&
+            localStorage.getItem("userInfo") &&
+            JSON.parse(localStorage.getItem("ran")) === false
+          ) {
+            console.log("Redirecting to /dashboard");
+            localStorage.setItem("ran", true);
+
+            router.push("/dashboard");
+          }
         } else {
           localStorage.setItem("errorLogin", response.error);
 

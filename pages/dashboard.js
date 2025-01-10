@@ -85,9 +85,9 @@ export async function getStaticProps({ locale }) {
  * @requires NoteSwapBot from '../components/NoteSwapBot'
  */
 const Dashboard = () => {
-  const [userData, setUserData] = useState();
-  const [data, setData] = useState();
-  const [calendar, setCalendar] = useState();
+  const [userData, setUserData] = useState(null);
+  const [data, setData] = useState(null);
+  const [calendar, setCalendar] = useState(null);
   const [calendarId, setCalendarId] = useState(null);
   const [loading, setLoading] = useState(true);
   const containerRef = useRef(null); // Create a ref for the <ul> container
@@ -126,17 +126,29 @@ const Dashboard = () => {
       localStorage.getItem("userInfo") &&
       localStorage.getItem("schoolInfo")
     ) {
-      getSchoolData(JSON.parse(localStorage.getItem("userInfo")).schoolId);
-      setCalendarId(
-        JSON.parse(localStorage.getItem("schoolInfo")).upcoming_events_url
-      );
-      console.log(
-        JSON.parse(localStorage.getItem("schoolInfo")).upcoming_events_url
-      );
+      // Fetch school data if user and school info are in local storage
+      if (
+        (localStorage.getItem("schoolInfo") &&
+          localStorage.getItem("userInfo") &&
+          JSON.parse(localStorage.getItem("userInfo")).role == "student") ||
+        JSON.parse(localStorage.getItem("userInfo").role == "teacher")
+      ) {
+        getSchoolData(JSON.parse(localStorage.getItem("userInfo")).schoolId);
+        localStorage.setItem(
+          "schoolId",
+          JSON.parse(localStorage.getItem("userInfo")).schoolId
+        );
+
+        setCalendarId(
+          JSON.parse(localStorage.getItem("schoolInfo")).upcoming_events_url
+        );
+      } else {
+        setLoading(false);
+      }
     }
   }, []);
   useEffect(() => {
-    if (localStorage && localStorage.getItem("schoolId")) {
+    if (localStorage && localStorage.getItem("schoolId") && calendar == null) {
       async function getCalendar(id) {
         const currentTime = new Date().toISOString();
         const API_KEY = process.env.NEXT_PUBLIC_CALENDAR_KEY;
@@ -148,6 +160,7 @@ const Dashboard = () => {
           const sortedEvents = data.items.sort((a, b) => {
             return new Date(a.start.date) - new Date(b.start.date);
           });
+          console.log(data);
           console.log(sortedEvents);
           setCalendar(sortedEvents);
         } else {
@@ -159,7 +172,7 @@ const Dashboard = () => {
         getCalendar(data.upcoming_events_url);
       }
     }
-  }, [data]);
+  }, [data, loading, router]);
   useEffect(() => {
     if (localStorage.getItem("token")) {
       setUserData(JSON.parse(localStorage.getItem("userInfo")));

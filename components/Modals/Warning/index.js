@@ -5,14 +5,14 @@ import ModalContext from "../../../context/ModalContext";
 
 // Import from react
 import { useContext, useState } from "react";
-import { useRouter } from "next/router";
 
 // Export the component
 export default function Warning() {
   // Used to store whether the modal is opened or closed
-  const { warning } = useContext(ModalContext);
+  const { warning, isFromSchool } = useContext(ModalContext);
   const [open, setOpen] = warning;
   const [school, setSchool] = useState(false);
+  const [is, setIs] = isFromSchool;
   // Used to store the link of the notes that the user wants to share
 
   if (!open) {
@@ -34,7 +34,7 @@ export default function Warning() {
           marginTop: "50px",
         }}
       >
-        <h1>Registering From A School?</h1>
+        <h1>Are You A Student at A School?</h1>
         <button
           style={{
             padding: "var(--button-default-padding)",
@@ -47,7 +47,8 @@ export default function Warning() {
             marginLeft: "20px",
           }}
           onClick={() => {
-            setSchool(true);
+            setIs(true);
+            setOpen(false);
           }}
         >
           Yes

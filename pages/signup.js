@@ -7,6 +7,7 @@ import style from "../styles/Auth.module.css";
 import Head from "next/head";
 import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
+import ModalContext from "../context/ModalContext";
 import Image from "next/image";
 import Footer from "../components/Layout/Footer";
 import { useTranslation } from "next-i18next";
@@ -73,7 +74,9 @@ const Signup = () => {
   const { errorSignup } = useContext(AuthContext);
   const [loggedIn, setLoggedIn] = isLoggedIn;
   const [error, setError] = errorSignup;
+  const { isFromSchool } = useContext(ModalContext);
   const AuthServices = new AuthService(setLoggedIn);
+  const [isFromSchoolState, setIsFromSchoolState] = isFromSchool;
   const { t } = useTranslation("common");
 
   /**
@@ -118,6 +121,14 @@ const Signup = () => {
       getSingleSchool();
     }
   }, []);
+
+  useEffect(() => {
+    if (isFromSchoolState) {
+      setSelectedRole("none");
+      setLocation(null);
+      setTeacherCode(null);
+    }
+  }, [isFromSchoolState]);
 
   /**
    * Handles the signup action when the user clicks the signup button.
@@ -643,6 +654,7 @@ const Signup = () => {
                       cursor: "pointer",
                     }}
                     onClick={() => {
+                      setIsFromSchoolState(true);
                       setSelectedRole("none");
                       setLocation(null);
                       setTeacherCode(null);

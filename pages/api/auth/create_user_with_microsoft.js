@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import { connectDB } from "../../../utils/db";
 import User from "../../../models/User";
+import School from "../../../models/School";
 
 const jwtSecret = process.env.NEXT_PUBLIC_JWT_SECRET;
 
@@ -16,6 +17,8 @@ const jwtSecret = process.env.NEXT_PUBLIC_JWT_SECRET;
 export default async function createUserWithGoogle(req, res) {
   if (req.method === "POST") {
     const { id, first, last, profilePicture, email, role, schoolId } = req.body;
+
+    let schoolFinal = null;
 
     try {
       await connectDB();
@@ -46,13 +49,21 @@ export default async function createUserWithGoogle(req, res) {
       });
       const savedUser = await newUser.save();
 
+      if (schoolId) {
+        const school = await School.findOne({ _id: schoolId });
+        console.log(school);
+        schoolFinal = school;
+      }
+
       // Generate JWT token
       const token = jwt.sign({ userId: savedUser._id }, jwtSecret, {
         expiresIn: "31d",
       });
 
       // Return the token
-      res.status(200).json({ token: token, user: savedUser });
+      res
+        .status(200)
+        .json({ token: token, user: savedUser, school: schoolFinal });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

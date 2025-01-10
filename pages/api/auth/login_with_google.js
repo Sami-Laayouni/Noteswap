@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import { connectDB } from "../../../utils/db";
 import User from "../../../models/User";
+import School from "../../../models/School";
 const jwtSecret = process.env.NEXT_PUBLIC_JWT_SECRET;
 
 /**
@@ -15,6 +16,8 @@ const jwtSecret = process.env.NEXT_PUBLIC_JWT_SECRET;
 export default async function loginUserWithGoogle(req, res) {
   if (req.method === "POST") {
     const { sub } = req.body;
+
+    let schoolFinal = null;
 
     try {
       // Connect to MongoDB or use an existing connection
@@ -31,10 +34,16 @@ export default async function loginUserWithGoogle(req, res) {
           .json({ error: "Account with that Google account does not exist" });
       }
 
+      if (user?.schoolId) {
+        const school = await School.findOne({ _id: user.schoolId });
+        console.log(school);
+        schoolFinal = school;
+      }
+
       const token = jwt.sign({ userId: user._id }, jwtSecret, {
         expiresIn: "31d",
       });
-      res.status(200).json({ token: token, user: user });
+      res.status(200).json({ token: token, user: user, school: schoolFinal });
     } catch (error) {
       console.log(error);
       res.status(500).json({ error: "User authentication error" });

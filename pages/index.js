@@ -5,7 +5,6 @@ import style from "../styles/Home.module.css";
 // Import from Next
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/router";
 
 import Footer from "../components/Layout/Footer";
 import { useTranslation } from "next-i18next";
@@ -40,7 +39,6 @@ export async function getStaticProps({ locale }) {
 export default function Home() {
   const { t } = useTranslation("common");
   const [loggedIn, setLoggedIn] = useState(false);
-  const router = useRouter();
 
   // Check if user is authenticated
   useEffect(() => {
@@ -49,25 +47,6 @@ export default function Home() {
   }, [setLoggedIn]);
 
   // If user is authenticated redirect them
-  useEffect(() => {
-    if (loggedIn) {
-      if (localStorage && localStorage.getItem("userInfo")) {
-        if (
-          JSON.parse(localStorage.getItem("userInfo"))?.role == "association"
-        ) {
-          router.push("/shortcuts");
-        } else {
-          if (
-            JSON.parse(localStorage.getItem("userInfo"))?.role == "volunteer"
-          ) {
-            router.push("/event");
-          } else {
-            router.push("/dashboard");
-          }
-        }
-      }
-    }
-  }, [router, loggedIn]);
 
   // Return the JSX
   return (

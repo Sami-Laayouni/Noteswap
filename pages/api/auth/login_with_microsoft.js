@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import { connectDB } from "../../../utils/db";
 import User from "../../../models/User";
+import School from "../../../models/School";
 const jwtSecret = process.env.NEXT_PUBLIC_JWT_SECRET;
 
 /**
@@ -29,6 +30,12 @@ export default async function loginUserWithMicrosoft(req, res) {
         res.status(401).json({
           error: "Account with that Microsoft account does not exist",
         });
+      }
+
+      if (user?.schoolId) {
+        const school = await School.findOne({ _id: user.schoolId });
+        console.log(school);
+        schoolFinal = school;
       }
 
       const token = jwt.sign({ google_id: user._id }, jwtSecret, {
