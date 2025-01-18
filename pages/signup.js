@@ -154,7 +154,11 @@ const Signup = () => {
         if (response.token) {
           localStorage.setItem("userInfo", JSON.stringify(response.user));
           localStorage.setItem("token", response.token); // Store the token in local storage
-          router.push("/dashboard"); // Redirect to the dashboard page
+          if (JSON.parse(localStorage.getItem("userInfo")).role === "teacher") {
+            router.push("/rewardcs");
+          } else {
+            router.push("/dashboard");
+          }
         } else {
           // An error has occured
           setError(response.error);

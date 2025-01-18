@@ -36,7 +36,7 @@ export async function getStaticProps({ locale }) {
  */
 const RewardCommunityService = () => {
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState({});
+  const [data, setData] = useState(null);
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [task, setTask] = useState("");
@@ -62,9 +62,12 @@ const RewardCommunityService = () => {
       setLoading(false);
     }
   }
+
   useEffect(() => {
-    fetchStudents();
-  }, []);
+    if (!data) {
+      fetchStudents();
+    }
+  }, [data]);
 
   const { t } = useTranslation("common");
 
@@ -430,7 +433,7 @@ const RewardCommunityService = () => {
                               border: "1px solid var(--input-border-color)",
                               paddingLeft: "15px",
                               height: "32px",
-                              width: "28%",
+                              width: "100%",
                               transition: "border-color 0.3s ease-in-out",
                               verticalAlign: "middle",
                             }}
@@ -454,12 +457,11 @@ const RewardCommunityService = () => {
                                 "var(--third-party-login-card-radius)",
                               fontSize: "16px",
                               border: "1px solid var(--input-border-color)",
-                              paddingLeft: "15px",
                               height: "32px",
-                              width: "40%",
-                              marginLeft: "10px",
+                              width: "100%",
                               transition: "border-color 0.3s ease-in-out",
                               verticalAlign: "middle",
+                              marginTop: "10px",
                             }}
                             id={`input_${value._id}`}
                             placeholder={t("enter_amount_in_min")}
@@ -479,7 +481,7 @@ const RewardCommunityService = () => {
                               borderRadius: "3px",
                               border: "none",
                               color: "white",
-                              marginLeft: "10px",
+                              marginTop: "10px",
                               cursor: "pointer",
                             }}
                           >

@@ -96,7 +96,12 @@ const Login = () => {
           localStorage.setItem("userInfo", JSON.stringify(response.user));
           localStorage.setItem("token", response.token);
           // Redirect to the dashboard page after successful login
-          router.push("/dashboard");
+
+          if (JSON.parse(localStorage.getItem("userInfo")).role === "teacher") {
+            router.push("/rewardcs");
+          } else {
+            router.push("/dashboard");
+          }
         } else {
           setError(response);
         }

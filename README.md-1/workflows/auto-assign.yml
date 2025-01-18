@@ -1,0 +1,15 @@
+name: Auto Assign Issues
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  assign:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assign issue
+        uses: actions-ecosystem/action-issue-assign@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          assignees: 'user1,user2'  # Replace with GitHub usernames or teams

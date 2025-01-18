@@ -91,6 +91,8 @@ function CreateMicrosoftUserPage() {
                   ? "/business/pricing"
                   : role === "association"
                   ? "/shortcuts"
+                  : role === "teacher"
+                  ? "/rewardcs"
                   : "/dashboard"
               );
             } else {

@@ -69,7 +69,13 @@ function LoginGoogleUserPage() {
             console.log("Redirecting to /dashboard");
             localStorage.setItem("ran", true);
 
-            router.push("/dashboard");
+            if (
+              JSON.parse(localStorage.getItem("userInfo")).role === "teacher"
+            ) {
+              router.push("/rewardcs");
+            } else {
+              router.push("/dashboard");
+            }
           }
         } else {
           // An error has occured

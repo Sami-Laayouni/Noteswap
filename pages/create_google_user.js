@@ -88,6 +88,8 @@ function CreateGoogleUserPage() {
                   ? "/business/pricing"
                   : role === "association"
                   ? "/shortcuts"
+                  : role === "teacher"
+                  ? "/rewardcs"
                   : "/dashboard"
               );
               setRan(true);

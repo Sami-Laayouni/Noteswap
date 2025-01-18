@@ -34,7 +34,7 @@ export default function Warning() {
           marginTop: "50px",
         }}
       >
-        <h1>Are You A Student at A School?</h1>
+        <h1>Are You A Student/Teacher at A School?</h1>
         <button
           style={{
             padding: "var(--button-default-padding)",
