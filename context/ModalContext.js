@@ -38,7 +38,7 @@ export const ModalProvider = ({ children }) => {
   const [downloadSegmented, setDownloadSegmented] = useState(false);
   const [signedUpVolunteers, setSignedUpVolunteers] = useState(null);
   const [warning, setWarning] = useState(true);
-  const [isFromSchool, setIsFromSchool] = useState(false);
+  const [isFromSchool, setIsFromSchool] = useState(true);
 
   const [ticketModal, setTicketModal] = useState(false);
   const [applyAsVolunteer, setApplyAsVolunteer] = useState(false);
