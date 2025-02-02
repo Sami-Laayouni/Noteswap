@@ -514,7 +514,7 @@ const RewardCommunityService = () => {
               </div>
               <div className={styles.rightControls}>
                 <label htmlFor="sort" className={styles.sortLabel}>
-                  {t("sort_by")}:
+                  Sort by:
                 </label>
                 <select
                   id="sort"
@@ -568,8 +568,8 @@ const RewardCommunityService = () => {
                           className={styles.cardToggleButton}
                         >
                           {mobileCardOpen[student._id]
-                            ? t("hide_details")
-                            : t("show_details")}
+                            ? "Hide details"
+                            : "Show details"}
                         </button>
                       </div>
                       {mobileCardOpen[student._id] && (
