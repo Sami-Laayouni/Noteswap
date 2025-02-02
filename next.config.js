@@ -47,6 +47,7 @@ const nextConfig = {
       "api.dicebear.com",
       "lh3.googleusercontent.com",
       "storage.googleapis.com",
+      "source.unsplash.com",
     ],
   },
   i18n,
