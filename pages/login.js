@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useRouter } from "next/router";
@@ -11,6 +12,8 @@ import Image from "next/image";
 import Footer from "../components/Layout/Footer";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import Header from "../components/New/Header";
+import { signIn } from "next-auth/react";
 
 /**
  * Get static props
@@ -90,26 +93,46 @@ const Login = () => {
     try {
       if (type === "email") {
         // Login with email and password
-        const response = await AuthServices.login(email, password);
-        if (response.token) {
-          // Store the token in local storage
-          localStorage.setItem("userInfo", JSON.stringify(response.user));
-          localStorage.setItem("token", response.token);
-          // Redirect to the dashboard page after successful login
+        try {
+          const res = await signIn("credentials", {
+            email,
+            password,
+            redirect: false,
+          });
 
-          if (JSON.parse(localStorage.getItem("userInfo")).role === "teacher") {
-            router.push("/rewardcs");
-          } else {
-            router.push("/dashboard");
+          if (res.error) {
+            console.log(res.error);
+            return;
           }
-        } else {
-          setError(response);
+
+          router.replace("dashboard");
+        } catch (error) {
+          setError(error.message);
         }
       } else if (type === "google") {
-        // Login with Google
-        const data = await AuthServices.get_google_continue_url("login"); // Get login with Google link
+        try {
+          // Login with Google
+          const res = await signIn("google", {
+            redirect: false,
+            callbackUrl: "/dashboard", // Add callbackUrl here
+          });
+
+          if (res?.error) {
+            console.error("Google login error:", res.error);
+            setError(res.error);
+            return;
+          }
+
+          if (res?.ok) {
+            // If login is successful, manually push to dashboard
+            router.push("/dashboard");
+          }
+        } catch (error) {
+          alert(error.message);
+          setError(error.message);
+        }
+
         // Redirect to the page
-        window.location.href = data.url;
       } else if (type === "microsoft") {
         window.location.href = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize
         ?client_id=${process.env.NEXT_PUBLIC_MICROSOFT_APP_ID}
@@ -139,14 +162,14 @@ const Login = () => {
   // Return the JSX
   return (
     <>
+      <Header />
+
       <div className={style.background}>
         <Head>
           <title>{t("login")} | NoteSwap</title> {/* Title of the page */}
         </Head>
         <div className={style.container}>
-          <section className={style.left}>
-            <h1>{t("log_in_to_noteswap")}</h1>
-          </section>
+          <section className={style.left}></section>
           <section className={style.right}>
             <form
               className={style.form}
@@ -216,7 +239,7 @@ const Login = () => {
                 />
                 {t("continue_with")} Google
               </button>
-              <button
+              {/*<button
                 type="button"
                 className={style.thirdpartyloginBtn}
                 onClick={() => handleLogin("microsoft")}
@@ -228,7 +251,7 @@ const Login = () => {
                   height={24}
                 />
                 {t("continue_with")} Microsoft
-              </button>
+              </button>*/}
 
               <div className={style.accountContainer}>
                 <Link href="/signup" className={style.createNewAccount}>

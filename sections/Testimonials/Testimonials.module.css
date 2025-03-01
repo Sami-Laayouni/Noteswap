@@ -1,0 +1,164 @@
+/* Section container */
+.testimonialsSection {
+  background-color: white;
+  padding: 2rem 0;
+}
+
+/* Standard container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Description box (centered content) */
+.descriptionBox {
+  max-width: 540px;
+  margin: 0 auto;
+}
+
+/* Centering container */
+.centered {
+  display: flex;
+  justify-content: center;
+}
+
+/* Tag styling */
+.tag {
+  font-size: 0.875rem;
+  display: inline-flex;
+  border: 1px solid rgba(34, 34, 34, 0.1);
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.5rem;
+  letter-spacing: -0.025em;
+}
+
+/* Title styling with gradient text */
+.title {
+  text-align: center;
+  margin-top: 1.25rem;
+  font-weight: bold;
+  letter-spacing: -0.05em;
+  font-size: 3.2rem; /* adjust as needed */
+  font-family: "DMSans-Bold";
+  background-image: linear-gradient(to bottom, black, #000000);
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* Description text */
+.description {
+  text-align: center;
+  margin-top: 1.25rem;
+  font-size: 1.3rem; /* adjust as needed */
+  line-height: 1.5;
+  color: #010d3e;
+}
+
+/* Columns container for testimonials */
+.columnsContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 2.5rem;
+  gap: 1.5rem;
+  max-height: 738px;
+  overflow: hidden;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(0, 0, 0, 0.25),
+    rgba(0, 0, 0, 0.75),
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(0, 0, 0, 0.25),
+    rgba(0, 0, 0, 0.75),
+    transparent
+  );
+}
+
+/* Responsive visibility */
+.showOnMd {
+  display: none;
+}
+@media (min-width: 768px) {
+  .showOnMd {
+    display: block;
+  }
+}
+
+.showOnLg {
+  display: none;
+}
+@media (min-width: 1024px) {
+  .showOnLg {
+    display: block;
+  }
+}
+
+/* Testimonials column container */
+.testimonialsColumn {
+  /* You can add width or other styles as needed */
+}
+
+/* Animated testimonials list */
+.testimonialsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+/* Testimonial card */
+.card {
+  padding: 2.5rem;
+  border: 1px solid rgba(34, 34, 34, 0.1);
+  border-radius: 1.5rem;
+  box-shadow: 0 7px 14px #eaeaea;
+  max-width: 20rem;
+  width: 100%;
+}
+/* Testimonial text */
+.testimonialText {
+  font-size: 1rem;
+  color: #333;
+}
+
+/* Metadata container (avatar and user info) */
+.testimonialMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+/* Avatar image styling */
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Container for name and username */
+.testimonialInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Testimonial name */
+.testimonialName {
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+}
+
+/* Testimonial username */
+.testimonialUsername {
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+  color: #666;
+}

@@ -1,9 +1,6 @@
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 import { connectDB } from "../../../utils/db";
 import User from "../../../models/User";
-
-const jwtSecret = process.env.NEXT_PUBLIC_JWT_SECRET;
 
 /**
  * Handle user registration and create a new user with the provided data.
@@ -21,7 +18,7 @@ export default async function createUser(req, res) {
       await connectDB();
 
       // Check if user with the same email already exists
-      const existingUser = await User.findOne({ email: email });
+      const existingUser = await User.findOne({ email: email }).select("_id");
       if (existingUser) {
         res
           .status(400)
@@ -49,12 +46,8 @@ export default async function createUser(req, res) {
       });
       const savedUser = await newUser.save();
 
-      // Generate JWT token
-      const token = jwt.sign({ userId: savedUser._id }, jwtSecret, {
-        expiresIn: "31d",
-      });
       // Return the token
-      res.status(200).json({ token: token, user: savedUser });
+      res.status(200).json({ user: savedUser });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

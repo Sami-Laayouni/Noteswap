@@ -1,44 +1,13 @@
-/* The main app directory for NEXTJS*/
-
-// Import styles
+/* pages/_app.js */
 import "../styles/globals.css";
 import "../styles/fonts.css";
 import "../styles/quill.css";
-
-// Import Head
 import Head from "next/head";
-// Import the default layout
 import DefaultLayout from "../layouts/DefaultLayout";
-// Import translations
 import { appWithTranslation } from "next-i18next";
+import { SessionProvider } from "next-auth/react"; // Add SessionProvider
 
-/**
- * Custom App component for Next.js.
- *
- * @param {Object} props - The props for the App component.
- * @param {React.ComponentType} props.Component - The page component to render.
- * @param {Object} props.pageProps - The initial props for the page component.
- * @return {JSX.Element} The rendered app.
- *
- * @throws {TypeError} If `Component` is not a valid React component.
- * @example
- * // Example usage of NoteSwap component
- * <MyApp Component={Home} pageProps={{ initialData: data }} />
- *
- * @date 6/4/2023 - 3:01:24 PM
- * @author Sami Laayouni
- * @license MIT
- */
-/**
- * NoteSwap component that wraps every page with common headers and a default layout.
- *
- * @param {Object} props - The properties object.
- * @param {React.ComponentType} props.Component - The component to be rendered.
- * @param {Object} props.pageProps - The properties to be passed to the component.
- * @returns {JSX.Element} The JSX element containing headers and the page component wrapped in a default layout.
- */
-function NoteSwap({ Component, pageProps }) {
-  // Headers in every single page
+function NoteSwap({ Component, pageProps: { session, ...pageProps } }) {
   const headers = (
     <>
       <Head>
@@ -46,14 +15,12 @@ function NoteSwap({ Component, pageProps }) {
         <title>NoteSwap</title>
         <meta
           name="description"
-          content="Everyone deserves a world full  with opportunities. Volunteer at events. Purchase tickets. Share your notes. Tutor students. Together, we can make a difference. "
+          content="Effortless Student Portfolios. We manage all your extracurriculars while providing you with valuable AI-driven smart data."
         />
         <meta
           name="keywords"
-          content="tickets, events, notes, tutor, community service, education, AI, online"
+          content="extracurriculars, student, portfolios, school, insights, education, technology, AI, opportunities, noteswap"
         />
-        <script async src="https://pay.google.com/gp/p/js/pay.js"></script>
-
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="robots" content="index, follow" />
         <meta name="language" content="en" />
@@ -62,7 +29,7 @@ function NoteSwap({ Component, pageProps }) {
         <meta property="og:title" content="NoteSwap" />
         <meta
           property="og:description"
-          content="Everyone deserves a world full  with opportunities. Volunteer at events. Purchase tickets. Share your notes. Tutor students. Together, we can make a difference."
+          content="Effortless Student Portfolios. We manage all your extracurriculars while providing you with valuable AI-driven smart data."
         />
         <meta
           property="og:image"
@@ -72,10 +39,10 @@ function NoteSwap({ Component, pageProps }) {
         <meta name="twitter:title" content="NoteSwap" />
         <meta
           name="twitter:description"
-          content="Everyone deserves a world full  with opportunities. Volunteer at events. Purchase tickets. Share your notes. Tutor students. Together, we can make a difference."
+          content="Effortless Student Portfolios. We manage all your extracurriculars while providing you with valuable AI-driven smart data."
         />
         <meta
-          name="twitter:image"
+          نام="twitter:image"
           content="https://storage.googleapis.com/noteswap-images/circle.png"
         />
         <meta name="twitter:card" content="NoteSwap Icon" />
@@ -85,23 +52,21 @@ function NoteSwap({ Component, pageProps }) {
           type="image/x-icon"
           href="/assets/icons/favicons/main.ico"
         />
-        <link
-          rel="apple-touch-icon"
-          href="/assets/icons/icons/circle.png"
-        ></link>
+        <link rel="apple-touch-icon" href="/assets/icons/icons/circle.png" />
       </Head>
     </>
   );
-  // Return the JSX element
+
   return (
     <>
-      {headers} {/* Headers */}
-      <DefaultLayout>
-        <Component {...pageProps} />
-      </DefaultLayout>
+      {headers}
+      <SessionProvider session={session}>
+        <DefaultLayout>
+          <Component {...pageProps} />
+        </DefaultLayout>
+      </SessionProvider>
     </>
   );
 }
-// Export the NoteSwap app
+
 export default appWithTranslation(NoteSwap);
-//End of the app directory

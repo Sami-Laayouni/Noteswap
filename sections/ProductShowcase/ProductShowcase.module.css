@@ -1,0 +1,96 @@
+/* Section styling: background gradient, padding, and overflow */
+.productShowcase {
+  background: linear-gradient(to bottom, #ffffff, #d2fff0);
+  padding-top: 2rem; /* pt-8 */
+  padding-bottom: 6rem; /* pb-24 (24 * 0.25rem = 6rem) */
+  overflow-x: clip;
+}
+
+/* Container styling */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* Section description box (adjust spacing as needed) */
+.sectionDescriptionBox {
+  text-align: center;
+  /* Optionally add spacing/margin if desired */
+}
+
+/* Center content within the description box */
+.centerFlex {
+  display: flex;
+  justify-content: center;
+}
+
+/* Tag styling */
+.tag {
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+
+  border: 1px solid rgba(34, 34, 34, 0.1);
+  padding: 0.25rem 0.75rem;
+}
+
+/* Section title styling */
+.sectionTitle {
+  margin-top: 1.55rem; /* mt-5 */
+  font-size: 3.2rem; /* adjust as needed */
+  font-weight: bold;
+  margin-left: 250px;
+  margin-right: 250px;
+  font-family: "DMSans-Bold";
+}
+
+/* Section description styling */
+.sectionDescription {
+  margin-top: 1.1rem; /* mt-5 */
+  font-size: 1.3rem; /* adjust as needed */
+  line-height: 1.5;
+  margin-left: 300px;
+  margin-right: 300px;
+}
+
+/* Relative container for positioning images */
+.relativeContainer {
+  position: relative;
+}
+
+/* Product image: top margin */
+.productImage {
+  margin-top: 2.5rem; /* mt-10 (10 * 0.25rem = 2.5rem) */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Pyramid image: hidden on small screens, absolute on md+ */
+.pyramidImage {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .pyramidImage {
+    display: block;
+    position: absolute;
+    top: -8rem; /* -top-32 (32 * 0.25rem = 8rem) */
+    right: -9rem; /* -right-36 (36 * 0.25rem = 9rem) */
+  }
+}
+
+/* Tube image: hidden on small screens, absolute on md+ */
+.tubeImage {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .tubeImage {
+    display: block;
+    position: absolute;
+    bottom: 6rem; /* bottom-24 (24 * 0.25rem = 6rem) */
+    left: -9rem; /* -left-36 (36 * 0.25rem = 9rem) */
+  }
+}

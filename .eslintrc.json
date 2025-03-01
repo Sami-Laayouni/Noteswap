@@ -11,8 +11,8 @@
     "quotes": ["warn", "double"],
     "no-var": "error",
     "no-unused-vars": "warn",
-    "valid-jsdoc": "warn",
-    "spaced-comment": "warn",
+    "valid-jsdoc": "off",
+    "spaced-comment": "off",
     "no-console": "warn",
     "no-alert": "warn",
     "new-cap": "off",
@@ -21,7 +21,7 @@
     "object-curly-spacing": "off",
     "react-hooks/exhaustive-deps": "off",
     "@next/next/no-img-element": "off",
-    "indent": ["warn", 2],
+    "indent": ["off", 2],
     "eol-last": ["error", "always"]
   },
   "globals": {

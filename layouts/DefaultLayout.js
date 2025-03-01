@@ -1,13 +1,12 @@
-/* The default layout used in the page */
-
-// Import the Auth Provider
+/* layouts/DefaultLayout.js */
 import { AuthProvider } from "../context/AuthContext";
-// Import the Modal Provider
 import { ModalProvider } from "../context/ModalContext";
-// Import the Socket Provider
 import { SocketProvider } from "../context/SocketContext";
-// Import dynamic loading from NEXTJS
+import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
+import styles from "./DefaultLayout.module.css"; // Add CSS module for layout
+
+// Dynamic imports for modals and Header
 const Transcript = dynamic(
   () => import("../components/Modals/TranscriptModal"),
   {
@@ -20,29 +19,35 @@ const LargenImage = dynamic(() => import("../components/Modals/LargenImage"), {
 const Share = dynamic(() => import("../components/Modals/Share"), {
   ssr: false,
 });
-const BusinessModal = dynamic(() =>
-  import("../components/Modals/BusinessModal")
+const BusinessModal = dynamic(
+  () => import("../components/Modals/BusinessModal"),
+  {
+    ssr: false,
+  }
 );
+const Header = dynamic(() => import("../components/Layout/Header"), {
+  ssr: false,
+});
 
-const Header = dynamic(() => import("../components/Layout/Header"));
-/**
- * Default layout
- * @date 6/17/2023 - 4:26:44 PM
- *
- * @param {{ children: any; }} { children }
- * @returns {JSX.Element} The rendered layout of the page
- */
 const DefaultLayout = ({ children }) => {
+  const { status } = useSession();
+
   return (
     <AuthProvider>
       <ModalProvider>
         <SocketProvider>
-          <Header />
           <Transcript />
           <LargenImage />
           <Share type={"note"} />
           <BusinessModal />
-          <main>{children}</main>
+          <div className={styles.layoutContainer}>
+            {status === "authenticated" && (
+              <div style={{ marginRight: "80px" }}>
+                <Header />
+              </div>
+            )}
+            <main className={styles.mainContent}>{children}</main>
+          </div>
         </SocketProvider>
       </ModalProvider>
     </AuthProvider>
@@ -50,4 +55,3 @@ const DefaultLayout = ({ children }) => {
 };
 
 export default DefaultLayout;
-// End of the default layout

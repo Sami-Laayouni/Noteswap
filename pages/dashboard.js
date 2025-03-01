@@ -1,5 +1,4 @@
 /* The main dashboard page */
-import { requireAuthentication } from "../middleware/authenticate";
 import Head from "next/head";
 import style from "../styles/Dashboard.module.css";
 import NoteSwapBot from "../components/Overlay/NoteSwapBot";
@@ -185,7 +184,7 @@ const Dashboard = () => {
       </Head>
       <BusinessModal />
       {installPWA && <InstallPWa />}
-      <main className={style.background}>
+      <main className={style.background} style={{ overflowX: "hidden" }}>
         <h1 className={style.title}>
           {new Date().getHours() >= 0 && new Date().getHours() < 12
             ? new Date().getHours() >= 0 && new Date().getHours() < 5
@@ -293,4 +292,4 @@ const Dashboard = () => {
   );
 };
 
-export default requireAuthentication(Dashboard);
+export default Dashboard;

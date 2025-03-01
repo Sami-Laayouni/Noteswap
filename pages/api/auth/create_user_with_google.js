@@ -1,9 +1,6 @@
-import jwt from "jsonwebtoken";
 import { connectDB } from "../../../utils/db";
 import User from "../../../models/User";
 import School from "../../../models/School";
-
-const jwtSecret = process.env.NEXT_PUBLIC_JWT_SECRET;
 
 /**
  * Handle user registration and create a new user with the provided Google data.
@@ -56,15 +53,8 @@ export default async function createUserWithGoogle(req, res) {
         schoolFinal = school;
       }
 
-      // Generate JWT token
-      const token = jwt.sign({ userId: savedUser._id }, jwtSecret, {
-        expiresIn: "31d",
-      });
-
       // Return the token
-      res
-        .status(200)
-        .json({ token: token, user: savedUser, school: schoolFinal });
+      res.status(200).json({ user: savedUser, school: schoolFinal });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

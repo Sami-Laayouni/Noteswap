@@ -1,8 +1,7 @@
 // AuthService.js
 
 class AuthService {
-  constructor(setLoggedIn) {
-    this.setLoggedIn = setLoggedIn;
+  constructor() {
     this.API_URL = "/api/auth";
     this.role = "";
   }
@@ -31,10 +30,6 @@ class AuthService {
       // Check if the response was ok
       if (response.ok) {
         const data = await response.json();
-        if (data.token) {
-          // Log in the user
-          this.setLoggedIn(true);
-        }
         return data;
       } else {
         // Incorrect username or password
@@ -63,9 +58,6 @@ class AuthService {
       });
 
       const data = await response.json();
-      if (data) {
-        this.setLoggedIn(true);
-      }
       return data;
     } catch (error) {
       console.error("Login with Google failed", error);
@@ -89,7 +81,6 @@ class AuthService {
       });
       if (response.ok) {
         const data = await response.json();
-        this.setLoggedIn(true);
         return data;
       }
     } catch (error) {
@@ -130,7 +121,6 @@ class AuthService {
       });
 
       const data = await response.json();
-      this.setLoggedIn(true);
       return data;
     } catch (error) {
       console.error("Create user failed", error);
@@ -173,8 +163,6 @@ class AuthService {
       );
 
       const data = await response.json();
-      this.setLoggedIn(true);
-
       return data;
     } catch (error) {
       console.error("Create user failed", error);
@@ -202,7 +190,6 @@ class AuthService {
       });
 
       const data = await response.json();
-      this.setLoggedIn(true);
       return data;
     } catch (error) {
       console.error("Create user failed", error);
@@ -245,9 +232,6 @@ class AuthService {
       localStorage.removeItem("userInfo");
       localStorage.removeItem("associationInfo");
       localStorage.removeItem("schoolInfo");
-
-      // Update the authentication status
-      this.setLoggedIn(false);
     } catch (error) {
       console.error("Logout failed", error);
       throw error;

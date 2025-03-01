@@ -13,6 +13,7 @@ a {
 
 * {
   box-sizing: border-box;
+  font-family: "DMSans", "Noto Sans", "Helvetica", "sans-serif";
 }
 :root {
   --accent-color: #40b385; /* Provided primary color */

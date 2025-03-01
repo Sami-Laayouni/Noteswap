@@ -24,6 +24,7 @@
   border: none;
   padding: 10px 30px;
   cursor: pointer;
+  border-radius: 1rem;
   color: var(--default-white-color);
   font-family: var(--manrope-font);
   line-height: 150%;
@@ -33,7 +34,7 @@
 .borderLine {
   width: 100%;
   height: 1.5px;
-  background-color: var(--accent-color);
+  background-color: grey;
   margin-top: 30px;
 }
 .footer_bottom {

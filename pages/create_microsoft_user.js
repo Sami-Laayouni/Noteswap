@@ -24,8 +24,7 @@ export async function getStaticProps({ locale }) {
 }
 function CreateMicrosoftUserPage() {
   const router = useRouter();
-  const { isLoggedIn, errorSignup } = useContext(AuthContext);
-  const [loggedIn, setLoggedIn] = isLoggedIn; // This destructuring assumes isLoggedIn is an array; adjust if it's not the case
+  const { errorSignup } = useContext(AuthContext);
   const [ran, setRan] = useState(false);
   const [error, setError] = errorSignup; // Assuming errorSignup is an array; adjust if needed
   const AuthServices = new AuthService(setLoggedIn);
@@ -77,24 +76,8 @@ function CreateMicrosoftUserPage() {
               role,
               school || "none"
             );
-            if (
-              response.token &&
-              JSON.parse(localStorage.getItem("ran")) === false
-            ) {
-              setLoggedIn(true);
-              localStorage.setItem("userInfo", JSON.stringify(response.user));
-              localStorage.setItem("token", response.token);
-              localStorage.setItem("ran", true);
-
-              router.push(
-                role === "school"
-                  ? "/business/pricing"
-                  : role === "association"
-                  ? "/shortcuts"
-                  : role === "teacher"
-                  ? "/rewardcs"
-                  : "/dashboard"
-              );
+            if (response) {
+              router.push("/login");
             } else {
               localStorage.setItem("errorSignup", response.error);
               setError(response.error);

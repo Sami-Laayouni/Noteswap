@@ -337,19 +337,21 @@ export default function Event() {
             {data?.category}
           </div>
           <br></br>
-          <button
-            onClick={() => {
-              if (localStorage.getItem("userInfo")) {
-                setOpenTicket(true);
-                setEventDetails(data);
-              } else {
-                router.push("/signup");
-              }
-            }}
-            className={style.button}
-          >
-            Buy Tickets <span className={style.icon}>→</span>
-          </button>
+          {data?.type_of_event != "volunteer" && (
+            <button
+              onClick={() => {
+                if (localStorage.getItem("userInfo")) {
+                  setOpenTicket(true);
+                  setEventDetails(data);
+                } else {
+                  router.push("/signup");
+                }
+              }}
+              className={style.button}
+            >
+              Buy Tickets <span className={style.icon}>→</span>
+            </button>
+          )}
           {data?.only_allow_school_volunteers && !goesToSchool ? (
             <></>
           ) : (

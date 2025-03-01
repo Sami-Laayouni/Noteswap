@@ -2,7 +2,6 @@ import style from "../../styles/Settings.module.css";
 import { useEffect, useState, useContext } from "react";
 import ModalContext from "../../context/ModalContext";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { requireAuthentication } from "../../middleware/authenticate";
 import { useTranslation } from "next-i18next";
 import dynamic from "next/dynamic";
 const SettingSidebar = dynamic(() =>
@@ -175,4 +174,4 @@ const Setting = () => {
     </div>
   );
 };
-export default requireAuthentication(Setting);
+export default Setting;

@@ -1,5 +1,4 @@
 import { useRouter } from "next/router";
-import { requireAuthentication } from "../../middleware/authenticate";
 import { useEffect, useState } from "react";
 import style from "../../styles/Connect.module.css";
 import { useSocket } from "../../context/SocketContext";
@@ -273,4 +272,4 @@ const Connect = () => {
     </>
   );
 };
-export default requireAuthentication(Connect);
+export default Connect;

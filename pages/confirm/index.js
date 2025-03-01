@@ -1,4 +1,3 @@
-import { requireAuthentication } from "../../middleware/authenticate";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 
@@ -52,4 +51,4 @@ const Confirm = () => {
   );
 };
 
-export default requireAuthentication(Confirm);
+export default Confirm;

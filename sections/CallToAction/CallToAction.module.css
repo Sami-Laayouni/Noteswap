@@ -1,0 +1,80 @@
+.callToActionSection {
+  background: linear-gradient(to bottom, white, #d2fff0);
+  padding-top: 6rem; /* py-24 */
+  padding-bottom: 6rem;
+  overflow-x: clip;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.descriptionBox {
+  max-width: 540px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.sectionTitle {
+  text-align: center;
+  font-size: 3.2rem; /* equivalent to text-3xl */
+  font-weight: bold;
+  font-family: "DMSans-Bold";
+  letter-spacing: -0.05em;
+  background-image: linear-gradient(to bottom, black, #000);
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+@media (min-width: 768px) {
+  .sectionTitle {
+    font-size: 54px;
+    line-height: 60px;
+  }
+}
+
+.sectionDescription {
+  text-align: center;
+  font-size: 1.3rem; /* adjust as needed */
+  line-height: 30px;
+  color: #010d3e;
+  margin-top: 1.25rem; /* mt-5 */
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 0.5rem; /* gap-2 */
+  margin-top: 2.5rem; /* mt-10 */
+  justify-content: center;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: -0.025em;
+  border: none;
+  cursor: pointer;
+}
+
+.btnPrimary {
+  background-color: #222423;
+  color: white;
+}
+
+.btnText {
+  background: transparent;
+  color: black;
+}
+
+.arrowIcon {
+  height: 1.25rem; /* h-5 */
+  width: 1.25rem; /* w-5 */
+}

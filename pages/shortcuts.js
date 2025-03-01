@@ -90,7 +90,7 @@ function Shortcuts() {
         <section
           style={{
             width: "100%",
-            minHeight: "calc(100vh - var(--header-height))",
+            minHeight: "calc(100vh )",
             height: "100%",
             background: "whitesmoke",
             paddingLeft: "75px",

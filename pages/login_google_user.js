@@ -72,7 +72,7 @@ function LoginGoogleUserPage() {
             if (
               JSON.parse(localStorage.getItem("userInfo")).role === "teacher"
             ) {
-              router.push("/rewardcs");
+              router.push("/analytics");
             } else {
               router.push("/dashboard");
             }

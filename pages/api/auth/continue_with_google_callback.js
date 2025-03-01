@@ -1,8 +1,8 @@
 import { google } from "googleapis";
 
-const CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 
-const CLIENT_SECRET = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET;
+const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 
 const REDIRECT_URI = process.env.NEXT_PUBLIC_REDIRECT_URI;
 

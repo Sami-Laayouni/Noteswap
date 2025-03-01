@@ -1,7 +1,6 @@
 import style from "../../styles/MyEvents.module.css";
 import { useEffect, useState } from "react";
 import EventCard from "../../components/Cards/EventCard";
-import { requireAuthenticationTeacher } from "../../middleware/teacher";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { TbNotesOff } from "react-icons/tb";
 import { useTranslation } from "next-i18next";
@@ -78,4 +77,4 @@ function Events() {
   );
 }
 
-export default requireAuthenticationTeacher(Events);
+export default Events;

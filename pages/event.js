@@ -11,7 +11,6 @@ const CreateEvent = dynamic(() => import("../components/Modals/CreateEvent"));
 import OneSignal from "react-onesignal";
 import { useTranslation } from "next-i18next";
 import { FaSearch, FaPlus } from "react-icons/fa";
-import Footer from "../components/Layout/Footer";
 
 /**
  * Get Static props
@@ -422,7 +421,6 @@ const Event = () => {
           {t("create_new_event")}
         </section>
       )}
-      <Footer />
     </div>
   );
 };

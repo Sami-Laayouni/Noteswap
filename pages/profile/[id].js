@@ -129,7 +129,7 @@ export default function Profile() {
   }, [router.query.id]);
 
   return (
-    <main>
+    <main style={{ overflowY: "hidden" }}>
       {/* Modal components */}
       <ImageNotesModal />
       <EditNotesModal />

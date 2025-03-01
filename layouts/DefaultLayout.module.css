@@ -1,0 +1,12 @@
+/* layouts/DefaultLayout.module.css */
+.layoutContainer {
+  display: flex;
+  flex-direction: row; /* Side-by-side layout */
+  min-height: 100vh; /* Full viewport height */
+  overflow-x: hidden;
+}
+
+.mainContent {
+  flex: 1; /* Take remaining space */
+  overflow-x: hidden;
+}

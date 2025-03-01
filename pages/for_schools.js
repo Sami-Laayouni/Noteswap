@@ -1,6 +1,5 @@
 import Head from "next/head";
 import style from "../styles/createSchool.module.css";
-import { requireAuthentication } from "../middleware/authenticate";
 import Footer from "../components/Layout/Footer";
 import React, { useState, useEffect } from "react";
 import SchoolService from "../services/SchoolService";
@@ -748,4 +747,4 @@ const ForSchools = () => {
   );
 };
 // Export default function inforcing that the user must be logged in
-export default requireAuthentication(ForSchools);
+export default ForSchools;

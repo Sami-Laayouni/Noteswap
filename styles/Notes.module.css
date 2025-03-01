@@ -55,7 +55,7 @@
 /* ======== Search =========*/
 .searchContainer {
   padding-top: 10px;
-  height: calc(97vh - var(--header-height));
+  height: calc(97vh);
   width: 25vw;
   border-right: 2px solid var(--accent-color);
   padding-left: 40px;
@@ -154,12 +154,12 @@
   display: inline-block;
   overflow: hidden;
   width: 100%;
-  height: calc(90vh - var(--header-height));
+  height: calc(90vh);
 }
 
 .note {
   width: 88%;
-  height: calc(70vh - var(--header-height));
+  height: calc(70vh);
   overflow-y: auto;
   padding-bottom: 50px;
   overflow-x: hidden;
@@ -203,7 +203,7 @@
   text-align: center;
   font-style: italic;
   width: 100%;
-  height: calc(80vh - var(--header-height));
+  height: calc(80vh);
 }
 .results {
   font-family: var(--manrope-font);

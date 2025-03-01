@@ -293,6 +293,40 @@
   flex-direction: column;
   gap: 0.5rem;
 }
+.compactDashboard {
+  padding: 10px;
+}
+.compactSummary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.compactCard {
+  flex: 1 1 22%;
+  padding: 5px;
+  font-size: 0.9rem;
+}
+.compactChartsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 5px;
+}
+.compactChart {
+  padding: 5px;
+}
+.compactInsights {
+  margin: 5px 0;
+  font-size: 0.9rem;
+}
+.compactStudentInsights {
+  display: flex;
+  gap: 5px;
+}
+.compactInsightCard {
+  flex: 1;
+  padding: 5px;
+  font-size: 0.9rem;
+}
 
 /* Responsive Adjustments */
 @media (min-width: 768px) {
@@ -305,4 +339,464 @@
   .tableWrapper {
     display: none;
   }
+}
+/* Container & General Layout */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #f7f9fc;
+  color: #333;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.title {
+  font-size: 3rem;
+  margin: 0;
+  color: #2c3e50;
+  letter-spacing: 1px;
+}
+
+/* Loading & Error */
+.loadingWrapper,
+.errorWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+.error {
+  color: red;
+  font-size: 1.2rem;
+}
+
+/* Dashboard Layout */
+.beautifulDashboard {
+  background: #fff;
+  padding: 30px;
+  margin-bottom: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dashboardTitle {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #34495e;
+}
+
+/* Summary Cards */
+.summaryCards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.summaryCard {
+  flex: 1 1 220px;
+  background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+  color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.summaryCard:hover {
+  transform: scale(1.05);
+}
+
+.summaryCard h3 {
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+}
+
+.summaryCard p {
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+/* Smart AI Insights */
+.smartInsights {
+  background: #fff;
+  padding: 20px;
+  border-left: 5px solid #66a6ff;
+  border-radius: 5px;
+  margin-bottom: 30px;
+}
+
+.smartInsights h3 {
+  margin-top: 0;
+  color: #2c3e50;
+}
+
+.smartInsights ul {
+  list-style: disc inside;
+  padding-left: 20px;
+}
+
+.smartInsights li {
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+}
+
+/* Charts Grid */
+.chartsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.chartContainer {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease;
+}
+
+.chartContainer:hover {
+  transform: translateY(-5px);
+}
+
+.chartContainer h3 {
+  text-align: center;
+  margin-bottom: 15px;
+  color: #34495e;
+}
+
+/* Leaderboard Section */
+.leaderboardSection {
+  background: #fff;
+  padding: 20px;
+  margin-bottom: 40px;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+.leaderboardSection h3 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+
+.leaderboardTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.leaderboardTable th,
+.leaderboardTable td {
+  padding: 12px 15px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+}
+
+.leaderboardTable th {
+  background: #f0f0f0;
+  font-weight: 600;
+  color: #555;
+}
+
+/* Insights Section (At-Risk & Top Performers) */
+.insightsSection {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+
+.insightCard {
+  flex: 1 1 300px;
+  background: #fff;
+  padding: 20px;
+  border-left: 5px solid #66a6ff;
+  border-radius: 5px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+.insightCard h3 {
+  margin-top: 0;
+  color: #2c3e50;
+}
+
+.insightCard ul {
+  list-style: circle inside;
+  padding-left: 20px;
+}
+
+.insightCard li {
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+}
+
+/* Controls, Downloads & Sorting */
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.leftControls,
+.rightControls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.downloadText {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #34495e;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 10px;
+}
+
+.downloadButton {
+  background: #66a6ff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.downloadButton:hover {
+  background: #4a90e2;
+}
+
+.sortLabel {
+  font-size: 1rem;
+  color: #555;
+}
+
+.sortSelect {
+  padding: 8px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+/* Student List - Table Layout */
+.tableWrapper {
+  overflow-x: auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+.styledTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.styledTable th,
+.styledTable td {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+
+.styledTable th {
+  background: #f8f8f8;
+  color: #555;
+  font-size: 1.1rem;
+}
+
+/* Student List - Card Layout for Mobile */
+.cardContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #66a6ff;
+  padding: 15px 20px;
+  color: #fff;
+}
+
+.cardTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.studentName {
+  font-size: 1.3rem;
+}
+
+.totalMinutes {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.cardToggleButton {
+  background: rgba(255, 255, 255, 0.3);
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.cardToggleButton:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.cardContent {
+  padding: 20px;
+}
+
+/* Reward Form */
+.rewardForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.inputTask,
+.inputMinutes {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  transition: border 0.3s ease;
+}
+
+.inputTask:focus,
+.inputMinutes:focus {
+  border-color: #66a6ff;
+  outline: none;
+}
+
+.rewardButton {
+  background: #66a6ff;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.rewardButton:hover {
+  background: #4a90e2;
+}
+
+.rewardStatus {
+  font-size: 1.1rem;
+  color: #27ae60;
+  margin-top: 10px;
+}
+
+/* Breakdown List (Beautiful) */
+.beautifulBreakdownList {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+}
+
+.beautifulBreakdownItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f1f1f1;
+  padding: 8px 12px;
+  border-radius: 5px;
+  margin-bottom: 8px;
+  transition: background 0.3s ease;
+}
+
+.beautifulBreakdownItem:hover {
+  background: #e1e1e1;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 5px;
+}
+
+.editButton,
+.removeButton {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 5px 10px;
+  border-radius: 3px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.editButton:hover {
+  background: #f0f0f0;
+}
+
+.removeButton:hover {
+  background: #ffecec;
+  border-color: #ffb3b3;
+}
+
+/* Inline Editing Inputs */
+.editInput {
+  padding: 5px;
+  font-size: 0.9rem;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  width: 80px;
+  margin-right: 5px;
+}
+.saveButton,
+.cancelButton {
+  background: #66a6ff;
+  border: none;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.3s ease;
+}
+
+.saveButton:hover {
+  background: #4a90e2;
+}
+
+.cancelButton {
+  background: #ff4d4d;
+}
+
+.cancelButton:hover {
+  background: #e04444;
 }

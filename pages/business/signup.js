@@ -12,6 +12,7 @@ import Image from "next/image";
 import Footer from "../../components/Layout/Footer";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import Header from "../../components/New/Header";
 
 export async function getStaticProps({ locale }) {
   return {
@@ -140,38 +141,13 @@ const Signup = () => {
   // Return the JSX
   return (
     <>
+      <Header />
       <div className={style.background}>
         <Head>
           <title>Signup | NoteSwap</title> {/* Title of the page */}
         </Head>
         <div className={style.container}>
-          <section className={style.left}>
-            <h1>Enhance Your Business with NoteSwap</h1>
-
-            <p>1. Create Your NoteSwap account</p>
-            <p>2. Setup your school or association</p>
-            <p>3. Submit a request to our onboarding team</p>
-            <p>
-              4. We will verify your school or association (Note: we may need to
-              reach out to confirm your submission )
-            </p>
-            <p>5. Start benefiting from the platform!</p>
-            <br></br>
-            <p style={{ paddingRight: "20px" }}>
-              By creating a business account on NoteSwap, you agree to our{" "}
-              <Link href="/boring/terms-of-service">
-                <span style={{ textDecoration: "underline" }}>
-                  Terms of Service
-                </span>
-              </Link>{" "}
-              and <span></span>
-              <Link href="/boring/privacy-policy">
-                <span style={{ textDecoration: "underline" }}>
-                  Privacy Policy
-                </span>
-              </Link>
-            </p>
-          </section>
+          <section className={style.left}></section>
           <section className={style.right}>
             <form
               className={style.form}
@@ -274,6 +250,21 @@ const Signup = () => {
                     <button type="submit" className={style.loginBtn}>
                       {t("next")}
                     </button>
+                    <p style={{ paddingRight: "20px", textAlign: "center" }}>
+                      By creating a business account on NoteSwap, you agree to
+                      our{" "}
+                      <Link href="/boring/terms-of-service">
+                        <span style={{ textDecoration: "underline" }}>
+                          Terms of Service
+                        </span>
+                      </Link>{" "}
+                      and <span></span>
+                      <Link href="/boring/privacy-policy">
+                        <span style={{ textDecoration: "underline" }}>
+                          Privacy Policy
+                        </span>
+                      </Link>
+                    </p>
                     <p className={style.orText}>-{t("or")}-</p>
                     <button
                       id="login_with_google_btn"
@@ -289,6 +280,7 @@ const Signup = () => {
                       />
                       {t("continue_with")} Google
                     </button>
+                    {/* 
                     <button
                       type="button"
                       className={style.thirdpartyloginBtn}
@@ -304,6 +296,7 @@ const Signup = () => {
                       />
                       {t("continue_with")} Microsoft
                     </button>
+                    */}
                   </>
                 ) : (
                   <>

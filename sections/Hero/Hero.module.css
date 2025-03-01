@@ -1,0 +1,194 @@
+/* Hero Section */
+.heroSection {
+  padding-top: 2rem; /* pt-8 */
+  overflow-x: clip;
+  background: radial-gradient(
+    ellipse 200% 100% at bottom left,
+    #71c9a6,
+    #eaeefe 100%
+  );
+}
+
+/* Responsive adjustments for md screens */
+@media (min-width: 768px) {
+  .heroSection {
+    padding-top: 1.25rem; /* md:pt-5 */
+  }
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* Hero content container */
+.heroContent {
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .heroContent {
+    display: flex;
+    align-items: center;
+  }
+}
+
+/* Left Column */
+.heroText {
+}
+
+@media (min-width: 768px) {
+  .heroText {
+    width: 478px;
+  }
+}
+
+/* Tag */
+.tag {
+  font-size: 0.875rem;
+  color: #555; /* Example color; adjust as needed */
+  margin-bottom: 0.5rem;
+}
+
+/* Hero Title */
+.heroTitle {
+  font-family: "DMSans-Bold";
+  font-size: 3rem; /* text-5xl approx. */
+  font-weight: bold; /* font-bold */
+  letter-spacing: -0.04em; /* tracking-tighter */
+  margin-top: 1rem; /* mt-6 */
+  line-height: 90%; /* leading-tight */
+  background: linear-gradient(to bottom, black, #222423);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 20px;
+  padding-bottom: 0px;
+}
+
+@media (min-width: 768px) {
+  .heroTitle {
+    font-size: 4.5rem; /* md:text-7xl approx. */
+  }
+}
+
+/* Hero Description */
+.heroDescription {
+  padding-top: 0px;
+  margin-top: 0px;
+  font-size: 1.2rem; /* text-xl */
+  color: #010d3e;
+  letter-spacing: -0.025em; /* tracking-tight */
+}
+
+/* Hero Buttons Container */
+.heroButtons {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem; /* gap-1 */
+  margin-top: 30px; /* mt-[30px] */
+}
+
+/* Primary Button */
+.btnPrimary {
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  border: none;
+  cursor: pointer;
+  background-color: #000;
+  color: #fff;
+  font-size: 1rem;
+}
+
+/* Text Button */
+.btnText {
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  border: none;
+  cursor: pointer;
+  background: transparent;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* Arrow Icon */
+.arrowIcon {
+  width: 1.25rem; /* h-5 */
+  height: 1.25rem; /* w-5 */
+}
+
+/* Right Column (Images) */
+.heroImages {
+  position: relative;
+  margin-top: 5rem; /* mt-20 approx. */
+}
+
+@media (min-width: 768px) {
+  .heroImages {
+    margin-top: 0;
+    height: 648px;
+    flex: 1;
+  }
+}
+
+/* Cog Image */
+.cogImage {
+  /* Default styles on small screens if needed */
+  margin-left: 30px;
+}
+
+@media (min-width: 768px) {
+  .cogImage {
+    position: absolute;
+    height: auto;
+    width: 100%;
+    max-width: 70vw;
+    top: 4rem; /* md:-top-8 */
+    left: -1.5rem; /* md:-left-6 */
+  }
+}
+
+@media (min-width: 1024px) {
+  .cogImage {
+    left: 0; /* lg:left-0 */
+  }
+}
+
+/* Cylinder Image */
+.cylinderImage {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .cylinderImage {
+    display: block;
+    position: absolute;
+    top: -2rem; /* -top-8 (8/4 = 2rem) */
+    left: -8rem; /* -left-32 (32/4 = 8rem) */
+  }
+}
+
+/* Noodle Image */
+.noodleImage {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .noodleImage {
+    display: block;
+    position: absolute;
+    top: 374px;
+    left: 448px;
+    transform: rotate(30deg);
+  }
+}
+
+@media (min-width: 768px) {
+  .noodleImage {
+    position: absolute;
+  }
+}

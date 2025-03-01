@@ -23,7 +23,7 @@ export default function PageNotFound() {
       <section
         style={{
           width: "100%",
-          height: "calc(100vh - var(--header-height))",
+          height: "calc(100vh )",
           background: "whitesmoke",
         }}
       >

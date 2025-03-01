@@ -1,7 +1,6 @@
 // pages/tickets.js
 import { useEffect, useState } from "react";
 import QRCode from "qrcode.react";
-import { requireAuthentication } from "../middleware/authenticate";
 import Link from "next/link";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
@@ -203,4 +202,4 @@ function TicketsPage() {
   );
 }
 
-export default requireAuthentication(TicketsPage);
+export default TicketsPage;

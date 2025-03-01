@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import style from "../styles/Supervisor.module.css";
 import LoadingCircle from "../components/Extra/LoadingCircle";
-import { requireAuthentication } from "../middleware/authenticate";
 import { useRouter } from "next/router";
 
 const Supervisor = () => {
@@ -62,29 +61,7 @@ const Supervisor = () => {
     getCurrentTutors();
     getTutoringSessions();
   }, []);
-  useEffect(() => {
-    if (localStorage) {
-      const data = JSON.parse(localStorage.getItem("userInfo"));
-      if (
-        data.email.toLowerCase() != "sami.laayouni@asi.aui.ma" &&
-        data.email.toLowerCase() != "sam.laayouni@aui.ma" &&
-        data.email.toLowerCase() != "al.zaid@asi.aui.ma" &&
-        data.email.toLowerCase() != "h.elhilali@aui.ma" &&
-        data.email.toLowerCase() != "hiamelhilali@asi.aui.ma" &&
-        data.email.toLowerCase() != "b.elheggach@asi.aui.ma" &&
-        data.email.toLowerCase() != "ra.elbelkacemi@asi.aui.ma" &&
-        data.email.toLowerCase() != "yoobi.kim@asi.aui.ma" &&
-        data.email.toLowerCase() != "fa.rbia@asi.aui.ma" &&
-        data.email.toLowerCase() != "ic.arhror@asi.aui.ma" &&
-        data.email.toLowerCase() != "ol.kettani@asi.aui.ma" &&
-        data.email.toLowerCase() != "hi.elidrissi@asi.aui.ma" &&
-        data.email.toLowerCase() != "y.chalkhaoui@aui.ma" &&
-        data.email.toLowerCase() != "al.elalam@asi.aui.ma"
-      ) {
-        router.push("/dashboard");
-      }
-    }
-  }, [router]);
+
   function calculateTimeDifference(startTime, endTime) {
     const [startHour, startMinute] = startTime.split(":").map(Number);
     const [endHour, endMinute] = endTime.split(":").map(Number);
@@ -421,4 +398,4 @@ const Supervisor = () => {
     </div>
   );
 };
-export default requireAuthentication(Supervisor);
+export default Supervisor;

@@ -12,7 +12,7 @@ import Image from "next/image";
 import Footer from "../components/Layout/Footer";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import Warning from "../components/Modals/Warning";
+import Header from "../components/New/Header";
 
 // Used for translation reasons
 export async function getStaticProps({ locale }) {
@@ -151,14 +151,9 @@ const Signup = () => {
           selectedRole,
           schoolId
         );
-        if (response.token) {
-          localStorage.setItem("userInfo", JSON.stringify(response.user));
-          localStorage.setItem("token", response.token); // Store the token in local storage
-          if (JSON.parse(localStorage.getItem("userInfo")).role === "teacher") {
-            router.push("/rewardcs");
-          } else {
-            router.push("/dashboard");
-          }
+
+        if (response) {
+          router.push("/login");
         } else {
           // An error has occured
           setError(response.error);
@@ -231,51 +226,37 @@ const Signup = () => {
   // Return the JSX
   return (
     <>
-      <div
-        className={style.background}
-        style={{
-          background: !schoolId
-            ? "var(--accent-color)"
-            : `url("${getSchoolBackgroundImage(schoolId)}")`,
-        }}
-      >
+      <Header />
+
+      <div className={style.background}>
         <Head>
           <title>Signup | NoteSwap</title> {/* Title of the page */}
         </Head>
-        <Warning />
-        {schoolId && (
-          <Image
-            src={getSchoolLogoImage(schoolId)}
-            alt="School Logo"
-            width={150}
-            height={150}
-            style={{
-              marginTop: "30px",
-              marginLeft: "30px",
-              boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
-            }}
-          ></Image>
-        )}
+
         <div className={style.container}>
-          <section className={style.left}>
-            <h1>{t("sign_up_to_noteswap")}</h1>
-
-            <p>{t("slogan")}</p>
-
-            <p style={{ paddingRight: "20px" }}>
-              {t("by_signing_up")}{" "}
-              <Link href="/boring/terms-of-service">
-                <span style={{ textDecoration: "underline" }}>
-                  {t("terms_of_service")}
-                </span>
-              </Link>{" "}
-              {t("and")} <span></span>
-              <Link href="/boring/privacy-policy">
-                <span style={{ textDecoration: "underline" }}>
-                  {t("privacy_policy")}
-                </span>
-              </Link>
-            </p>
+          <section
+            className={style.left}
+            style={{
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "cover",
+              background: !schoolId
+                ? "linear-gradient(to bottom right, #a7f3d0, #6ee7b7, #34d399)"
+                : `url("${getSchoolBackgroundImage(schoolId)}")`,
+            }}
+          >
+            {schoolId && (
+              <Image
+                src={getSchoolLogoImage(schoolId)}
+                alt="School Logo"
+                width={150}
+                height={150}
+                style={{
+                  marginTop: "30px",
+                  marginLeft: "30px",
+                  boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+                }}
+              ></Image>
+            )}
           </section>
           <section className={style.right}>
             <form
@@ -549,6 +530,20 @@ const Signup = () => {
                     >
                       {t("next")}
                     </button>
+                    <p style={{ paddingRight: "20px", textAlign: "center" }}>
+                      {t("by_signing_up")}{" "}
+                      <Link href="/boring/terms-of-service">
+                        <span style={{ textDecoration: "underline" }}>
+                          {t("terms_of_service")}
+                        </span>
+                      </Link>{" "}
+                      {t("and")} <span></span>
+                      <Link href="/boring/privacy-policy">
+                        <span style={{ textDecoration: "underline" }}>
+                          {t("privacy_policy")}
+                        </span>
+                      </Link>
+                    </p>
                     <p className={style.orText}>-{t("or")}-</p>
                     <button
                       id="login_with_google_btn"
@@ -564,6 +559,7 @@ const Signup = () => {
                       />
                       {t("continue_with")} Google
                     </button>
+                    {/*
                     <button
                       type="button"
                       className={style.thirdpartyloginBtn}
@@ -578,7 +574,7 @@ const Signup = () => {
                         height={24}
                       />
                       {t("continue_with")} Microsoft
-                    </button>
+                    </button> */}
                   </>
                 ) : (
                   <>
@@ -616,6 +612,7 @@ const Signup = () => {
                       autoFocus
                     />
                     <p className={style.error}>{error}</p>
+
                     <button
                       type="submit"
                       className={style.loginBtn}
