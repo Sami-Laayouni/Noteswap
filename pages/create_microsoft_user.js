@@ -27,7 +27,7 @@ function CreateMicrosoftUserPage() {
   const { errorSignup } = useContext(AuthContext);
   const [ran, setRan] = useState(false);
   const [error, setError] = errorSignup; // Assuming errorSignup is an array; adjust if needed
-  const AuthServices = new AuthService(setLoggedIn);
+  const AuthServices = new AuthService();
 
   const { t } = useTranslation("common");
 
@@ -103,7 +103,7 @@ function CreateMicrosoftUserPage() {
         setRan(true);
       }
     }
-  }, [ran, router, setLoggedIn, setError]);
+  }, [ran, router, setError]);
 
   return (
     <div

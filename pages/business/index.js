@@ -4,8 +4,6 @@ import Image from "next/image";
 import Footer from "../../components/Layout/Footer";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { isAuthenticated } from "../../utils/auth";
-import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { MdGroups } from "react-icons/md";
 import { FaRegClock } from "react-icons/fa";
@@ -39,19 +37,7 @@ export async function getStaticProps({ locale }) {
  */
 export default function Business() {
   const { t } = useTranslation("common");
-  const [loggedIn, setLoggedIn] = useState(false);
   const router = useRouter();
-
-  useEffect(() => {
-    const isLoggedIn = isAuthenticated();
-    setLoggedIn(isLoggedIn);
-  }, [setLoggedIn]);
-
-  useEffect(() => {
-    if (loggedIn) {
-      router.push("/dashboard");
-    }
-  }, [router, loggedIn]);
 
   // Return the JSX
   return (

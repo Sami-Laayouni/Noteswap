@@ -31,9 +31,7 @@ export async function getStaticProps({ locale }) {
  */
 function LoginMicrosoftUserPage() {
   const router = useRouter();
-  const { isLoggedIn } = useContext(AuthContext);
-  const [loggedIn, setLoggedIn] = isLoggedIn;
-  const AuthServices = new AuthService(setLoggedIn);
+  const AuthServices = new AuthService();
   const { errorLogin } = useContext(AuthContext);
 
   const [error, setError] = errorLogin;
@@ -60,7 +58,6 @@ function LoginMicrosoftUserPage() {
           if (response?.school) {
             localStorage.setItem("schoolInfo", JSON.stringify(response.school));
           }
-          setLoggedIn(true);
 
           // Redirect to the dashboard page after successful login
           if (

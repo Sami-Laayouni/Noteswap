@@ -4,7 +4,6 @@ import style from "./Header.module.css";
 import Link from "next/link";
 import Image from "next/image";
 import { useContext, useState, useEffect } from "react";
-import AuthContext from "../../../context/AuthContext";
 import ProfilePicture from "../../Extra/ProfilePicture";
 import { useRouter } from "next/router";
 import { useSession, signOut } from "next-auth/react";
@@ -27,14 +26,12 @@ import { useTranslation } from "next-i18next";
 import OneSignal from "react-onesignal";
 
 export default function Header() {
-  const { isLoggedIn } = useContext(AuthContext);
   const { certificateModal, addMembers } = useContext(ModalContext);
-  const [loggedIn, setLoggedIn] = isLoggedIn;
   const [isCertificate, setCertificate] = certificateModal;
   const [open, setOpen] = addMembers;
   const [userData, setUserData] = useState(null); // Initialize as null
   const router = useRouter();
-  const AuthServices = new AuthService(setLoggedIn);
+  const AuthServices = new AuthService();
   const { data: session, status } = useSession();
   const { t } = useTranslation("common");
 

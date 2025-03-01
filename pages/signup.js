@@ -70,12 +70,10 @@ const Signup = () => {
   const [schools, setSchools] = useState(null);
   const [teacherCode, setTeacherCode] = useState("- - - - - ");
 
-  const { isLoggedIn } = useContext(AuthContext);
   const { errorSignup } = useContext(AuthContext);
-  const [loggedIn, setLoggedIn] = isLoggedIn;
   const [error, setError] = errorSignup;
   const { isFromSchool } = useContext(ModalContext);
-  const AuthServices = new AuthService(setLoggedIn);
+  const AuthServices = new AuthService();
   const [isFromSchoolState, setIsFromSchoolState] = isFromSchool;
   const { t } = useTranslation("common");
 

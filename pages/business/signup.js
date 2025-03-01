@@ -42,11 +42,9 @@ const Signup = () => {
   const [method, setMethod] = useState("email");
   const [selectedRole, setSelectedRole] = useState();
 
-  const { isLoggedIn } = useContext(AuthContext);
   const { errorSignup } = useContext(AuthContext);
-  const [loggedIn, setLoggedIn] = isLoggedIn;
   const [error, setError] = errorSignup;
-  const AuthServices = new AuthService(setLoggedIn);
+  const AuthServices = new AuthService();
   const { t } = useTranslation("common");
 
   /**

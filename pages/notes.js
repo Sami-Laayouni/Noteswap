@@ -54,7 +54,6 @@ export default function Note() {
   const [url, setUrl] = imagesUrl;
   const [error, setError] = imageError;
   const [title, setTitle] = useState("");
-  const [loggedIn, setLoggedIn] = useState(false);
   const [role, setRole] = useState(null);
 
   const [notes, setNotes] = useState();
@@ -85,15 +84,13 @@ export default function Note() {
   }
 
   useEffect(() => {
-    const isLoggedIn = isAuthenticated();
-    setLoggedIn(isLoggedIn);
     if (localStorage) {
       if (localStorage.getItem("userInfo")) {
         setRole(JSON.parse(localStorage?.getItem("userInfo")).role);
         setCourses(JSON.parse(localStorage.getItem("schoolInfo"))?.courses);
       }
     }
-  }, [setLoggedIn]);
+  }, []);
 
   useEffect(() => {
     if (title) {
@@ -249,7 +246,7 @@ export default function Note() {
         </section>
         <section className={style.notes}>
           <ul>
-            {loggedIn && (
+            {/* (
               <li
                 style={{
                   background:
@@ -265,7 +262,7 @@ export default function Note() {
               >
                 {t("for_you")}
               </li>
-            )}
+            )}*/}
             <li
               style={{
                 background:
@@ -330,17 +327,13 @@ export default function Note() {
         <div
           className={style.create_notes}
           onClick={() => {
-            if (loggedIn) {
-              if (
-                document.getElementById("select").style.display == "none" ||
-                !document.getElementById("select").style.display
-              ) {
-                document.getElementById("select").style.display = "block";
-              } else {
-                document.getElementById("select").style.display = "none";
-              }
+            if (
+              document.getElementById("select").style.display == "none" ||
+              !document.getElementById("select").style.display
+            ) {
+              document.getElementById("select").style.display = "block";
             } else {
-              router.push("/login");
+              document.getElementById("select").style.display = "none";
             }
           }}
         >

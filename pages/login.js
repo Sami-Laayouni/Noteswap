@@ -46,10 +46,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const { errorLogin } = useContext(AuthContext);
-  const { isLoggedIn } = useContext(AuthContext);
   const [error, setError] = errorLogin;
-  const [loggedIn, setLoggedIn] = isLoggedIn;
-  const AuthServices = new AuthService(setLoggedIn);
   const { t } = useTranslation("common");
 
   /**

@@ -6,7 +6,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { useTranslation } from "next-i18next";
 // Import from React
-import { useEffect, useState } from "react";
 
 /**
  * Footer
@@ -23,18 +22,6 @@ import { useEffect, useState } from "react";
  */
 export default function Footer({ type }) {
   const { t } = useTranslation("common");
-  const [loggedIn, setLogggedIn] = useState(false); // Store if user is logged in
-
-  // Check if user is logged in
-  useEffect(() => {
-    if (localStorage) {
-      if (localStorage.getItem("token")) {
-        setLogggedIn(true);
-      } else {
-        setLogggedIn(false);
-      }
-    }
-  }, []);
 
   // Return the JSX
   return (

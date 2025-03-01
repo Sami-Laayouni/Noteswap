@@ -7,7 +7,6 @@ import { useContext, useState } from "react";
 import { useRouter } from "next/router";
 
 import ModalContext from "../../../context/ModalContext";
-import AuthContext from "../../../context/AuthContext";
 import AuthService from "../../../services/AuthService";
 
 // Import style
@@ -18,12 +17,10 @@ import { UseTranslation, useTranslation } from "next-i18next";
 export default function DeleteAccount() {
   // Used to store wether the Modal is opened or closed
   const { deleteModal } = useContext(ModalContext);
-  const { isLoggedIn } = useContext(AuthContext);
-  const [loggedIn, setLoggedIn] = isLoggedIn;
   const [open, setOpen] = deleteModal;
 
   const [disabled, setDisabled] = useState(true); // Disabled if user has not typed in their id
-  const AuthServices = new AuthService(setLoggedIn);
+  const AuthServices = new AuthService();
   const router = useRouter();
   const { t } = useTranslation();
 

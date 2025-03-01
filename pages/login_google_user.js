@@ -31,9 +31,7 @@ export async function getStaticProps({ locale }) {
  */
 function LoginGoogleUserPage() {
   const router = useRouter();
-  const { isLoggedIn } = useContext(AuthContext);
-  const [loggedIn, setLoggedIn] = isLoggedIn;
-  const AuthServices = new AuthService(setLoggedIn);
+  const AuthServices = new AuthService();
   const { errorLogin } = useContext(AuthContext);
 
   const [error, setError] = errorLogin;
@@ -60,7 +58,6 @@ function LoginGoogleUserPage() {
           if (response?.school) {
             localStorage.setItem("schoolInfo", JSON.stringify(response.school));
           }
-          setLoggedIn(true);
           if (
             router.pathname !== "/dashboard" &&
             localStorage.getItem("userInfo") &&
