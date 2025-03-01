@@ -2,18 +2,7 @@ import { useContext, useState, useEffect } from "react";
 import ModalContext from "../../../context/ModalContext";
 import Modal from "../../Template/Modal";
 import { useRouter } from "next/router";
-import {
-  PayPalScriptProvider,
-  PayPalCardFieldsProvider,
-  PayPalNameField,
-  PayPalNumberField,
-  PayPalExpiryField,
-  PayPalCVVField,
-  usePayPalCardFields,
-  PayPalButtons,
-} from "@paypal/react-paypal-js";
-import { CreditCard, PaymentForm } from "react-square-web-payments-sdk";
-import { submitPayment } from "../../../actions/actions";
+
 import style from "./ticketModal.module.css";
 function Message({ content }) {
   return <p>{content}</p>;
@@ -429,30 +418,6 @@ export default function TicketModal() {
                 <CreditCard />
               </PaymentForm>
               */}
-              <div>
-                <PayPalScriptProvider
-                  options={{
-                    clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
-                    currency: "USD",
-                    intent: "capture",
-                    components: "buttons,card-fields",
-                  }}
-                >
-                  <div>
-                    <PayPalButtons
-                      style={{
-                        color: "gold",
-                        shape: "pill",
-                        label: "pay",
-                        height: 50,
-                      }}
-                      createOrder={createOrder}
-                      onApprove={onApprove}
-                      onError={onError}
-                    />
-                  </div>
-                </PayPalScriptProvider>
-              </div>
 
               <Message content={message} />
             </div>
