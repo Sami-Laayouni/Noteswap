@@ -45,7 +45,6 @@ export default function Footer({ type }) {
         <Link href="/signup">
           <li>Sign up</li>
         </Link>
-        <li>Help</li>
       </ul>
       <div className={style.borderLine}></div>
 

@@ -378,7 +378,7 @@ const RewardCommunityService = () => {
   const filteredStudents = students.filter((student) =>
     (student.first_name + " " + student.last_name)
       .toLowerCase()
-      .includes(search)
+      .includes(search.toLowerCase())
   );
   const sortedStudents = [...filteredStudents].sort((a, b) => {
     const totalA = Math.floor(a.points / 20) + Math.floor(a.tutor_hours / 60);
@@ -715,13 +715,23 @@ const RewardCommunityService = () => {
           </div>
         ) : (
           <>
-            {/* --- Beautiful Smart AI Dashboard --- */}
+            {/* Add Search Bar Here */}
+            <div className={styles.searchContainer}>
+              <input
+                type="text"
+                placeholder={t("search_students")}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className={styles.searchInput}
+              />
+            </div>
+            {/*  {/* --- Beautiful Smart AI Dashboard --- 
             {students.length > 0 && (
               <section className={styles.beautifulDashboard}>
                 <h2 className={styles.dashboardTitle}>
                   {t("analytics_dashboard")}
                 </h2>
-                {/* Beautiful Summary Cards */}
+                {/* Beautiful Summary Cards 
                 <div className={styles.summaryCards}>
                   <div className={styles.summaryCard}>
                     <h3>{t("total_community_service")}</h3>
@@ -748,7 +758,7 @@ const RewardCommunityService = () => {
                     <p>{summaryStats.averageMinutes.toFixed(2)}</p>
                   </div>
                 </div>
-                {/* Smart AI Insights */}
+                {/* Smart AI Insights 
                 <div className={styles.smartInsights}>
                   <h3>{t("smart_ai_insights")}</h3>
                   <ul>
@@ -757,7 +767,7 @@ const RewardCommunityService = () => {
                     ))}
                   </ul>
                 </div>
-                {/* Beautiful Charts Grid */}
+                {/* Beautiful Charts Grid 
                 <div className={styles.chartsGrid}>
                   <div className={styles.chartContainer}>
                     <h3>{t("service_vs_tutoring")}</h3>
@@ -776,7 +786,7 @@ const RewardCommunityService = () => {
                     <Radar data={radarData} />
                   </div>
                 </div>
-                {/* Engagement Leaderboard */}
+                {/* Engagement Leaderboard 
                 <div className={styles.leaderboardSection}>
                   <h3>{t("engagement_leaderboard")}</h3>
                   <table className={styles.leaderboardTable}>
@@ -802,7 +812,7 @@ const RewardCommunityService = () => {
                     </tbody>
                   </table>
                 </div>
-                {/* Student Insights (At-Risk & Top Performers) */}
+                
                 <div className={styles.insightsSection}>
                   <div className={styles.insightCard}>
                     <h3>{t("students_needing_help")}</h3>
@@ -850,9 +860,8 @@ const RewardCommunityService = () => {
                   </div>
                 </div>
               </section>
-            )}
+            )} */}
 
-            {/* Controls, Downloads & Sorting */}
             <div className={styles.controls}>
               <div className={styles.leftControls}>
                 <p className={styles.downloadText}>{t("download_cs_as")}</p>

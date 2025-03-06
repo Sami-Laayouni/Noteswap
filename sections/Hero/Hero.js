@@ -17,7 +17,6 @@ export const Hero = () => {
       <div className={styles.container}>
         <div className={styles.heroContent}>
           <div className={styles.heroText}>
-            <div className={styles.tag}>Experience</div>
             <h1 className={styles.heroTitle}>Effortless Student Portfolios</h1>
             <p className={styles.heroDescription}>
               We create your students' portfolios, managing all their
@@ -28,7 +27,7 @@ export const Hero = () => {
               <Link href="/signup">
                 <button className={styles.btnPrimary}>Sign up</button>
               </Link>
-              <Link href="/demo">
+              <Link href="/book_a_demo">
                 <button className={styles.btnText}>
                   <span>Book demo</span>
                   <FaArrowRight className={styles.arrowIcon} />

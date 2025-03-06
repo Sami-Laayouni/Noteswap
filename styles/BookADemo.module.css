@@ -1,0 +1,158 @@
+/* General Page Styling */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #f9f5f0;
+  padding: 40px;
+  background: radial-gradient(
+    ellipse 200% 100% at bottom left,
+    #71c9a6,
+    #eaeefe 100%
+  );
+}
+
+/* Main Wrapper */
+.wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  padding: 50px;
+  border-radius: 12px;
+  max-width: 1100px;
+  width: 100%;
+}
+
+/* Left Section - Info */
+.infoSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
+  width: 400px;
+  margin-right: 100px;
+}
+
+.infoTitle {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+  font-family: "DMSans-Bold";
+}
+
+.infoDescription {
+  font-size: 1rem;
+  color: #666;
+  margin-top: 10px;
+  line-height: 1.5;
+}
+
+.infoList {
+  margin-top: 20px;
+  list-style: none;
+  text-decoration: none;
+}
+
+.infoList li {
+  font-size: 1rem;
+  color: #444;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  list-style: none;
+  margin-bottom: 8px;
+}
+
+.infoList li::before {
+  content: "✔";
+  color: var(--primary-color);
+  margin-right: 8px;
+}
+
+/* Right Section - Form */
+.formSection {
+  background: #f8f9fc;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.formTitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #222;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form input {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: 0.3s ease-in-out;
+}
+
+.inputField:focus {
+  border-color: var(--accent-color);
+  outline: none;
+}
+
+.selectField {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: white;
+  cursor: pointer;
+}
+
+.textArea {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  height: 80px;
+  resize: none;
+}
+
+.checkboxLabel {
+  font-size: 0.9rem;
+  margin-top: 10px;
+}
+
+/* Submit Button */
+.submitButton {
+  background: var(--accent-color);
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+  margin-top: 15px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .wrapper {
+    grid-template-columns: 1fr;
+    padding: 30px;
+  }
+
+  .infoSection {
+    text-align: center;
+  }
+}

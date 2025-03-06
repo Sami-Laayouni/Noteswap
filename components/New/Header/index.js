@@ -15,10 +15,12 @@ function Header() {
         <p className={style["banner-text"]}>
           Effortlessly manage extracurriculars with our all-in-one platform.
         </p>
-        <div className={style["banner-link"]}>
-          <p>Get started for free</p>
-          <FiArrowRight width={16} height={16} />
-        </div>
+        <Link href="/book_a_demo">
+          <div className={style["banner-link"]}>
+            <p>Get started for free</p>
+            <FiArrowRight width={16} height={16} />
+          </div>
+        </Link>
       </div>
 
       {/* Main Header */}
@@ -39,7 +41,7 @@ function Header() {
             <nav className={style["nav-links"]}>
               <Link href="/login">Login</Link>
               <Link href="/signup">Sign up</Link>
-              <Link href="/demo">
+              <Link href="/book_a_demo">
                 <button className={style["demo-btn"]}>Book a demo</button>
               </Link>
             </nav>

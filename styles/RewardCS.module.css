@@ -150,6 +150,7 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  color: black;
 }
 
 .editButton {
@@ -157,22 +158,22 @@
   position: relative;
   top: 0px;
   left: 1px;
-  color: #fff;
+  color: black;
 }
 
 .removeButton {
   background-color: var(--tertiary-color);
-  color: #fff;
+  color: black;
 }
 
 .saveButton {
   background-color: var(--accent-color);
-  color: #fff;
+  color: black;
 }
 
 .cancelButton {
   background-color: #6c757d;
-  color: #fff;
+  color: black;
 }
 
 .editInput {
@@ -403,7 +404,6 @@
 
 .summaryCard {
   flex: 1 1 220px;
-  background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
   color: #fff;
   padding: 20px;
   border-radius: 10px;
@@ -520,7 +520,6 @@
   flex: 1 1 300px;
   background: #fff;
   padding: 20px;
-  border-left: 5px solid #66a6ff;
   border-radius: 5px;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
 }
@@ -569,7 +568,7 @@
 }
 
 .downloadButton {
-  background: #66a6ff;
+  background: var(--accent-color);
   color: #fff;
   border: none;
   padding: 10px 20px;
@@ -579,8 +578,22 @@
   transition: background 0.3s ease;
 }
 
+.searchContainer {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.searchInput {
+  width: 100%;
+  max-width: 400px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 .downloadButton:hover {
-  background: #4a90e2;
+  background: var(--accent-color);
 }
 
 .sortLabel {
@@ -640,7 +653,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #66a6ff;
+  background: var(--accent-color);
   padding: 15px 20px;
   color: #fff;
 }
@@ -701,7 +714,7 @@
 }
 
 .rewardButton {
-  background: #66a6ff;
+  background: var(--accent-color);
   color: #fff;
   border: none;
   padding: 10px 15px;
@@ -735,12 +748,9 @@
   background: #f1f1f1;
   padding: 8px 12px;
   border-radius: 5px;
+  color: black;
   margin-bottom: 8px;
   transition: background 0.3s ease;
-}
-
-.beautifulBreakdownItem:hover {
-  background: #e1e1e1;
 }
 
 .buttonGroup {
@@ -773,13 +783,14 @@
   padding: 5px;
   font-size: 0.9rem;
   border: 1px solid #ccc;
+  width: 100%;
   border-radius: 3px;
   width: 80px;
   margin-right: 5px;
 }
 .saveButton,
 .cancelButton {
-  background: #66a6ff;
+  background: var(--accent-color);
   border: none;
   color: #fff;
   padding: 5px 10px;
