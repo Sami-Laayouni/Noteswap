@@ -1,181 +1,67 @@
-/* Pricing Section */
-.pricingSection {
-  padding-top: 6rem; /* py-24 (24 x 0.25rem = 6rem) */
-  padding-bottom: 6rem;
-  background-color: #fdfffe;
-}
-
-/* Container */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
-/* Section Description Box */
-.sectionDescriptionBox {
-  max-width: 540px;
-  margin: 0 auto;
-}
-
-/* Section Title */
-.sectionTitle {
+.featuresSection {
+  padding: 4rem 2rem;
+  background: #f9f9f9;
   text-align: center;
-  font-size: 3.2rem; /* adjust as needed */
-  font-weight: 700;
-  letter-spacing: -0.05em; /* tracking-tighter */
-  background-image: linear-gradient(to bottom, black, #000000);
-  color: transparent;
-  -webkit-background-clip: text;
-  background-clip: text;
-  font-family: "DMSans-Bold";
 }
 
-/* Section Description */
-.sectionDescription {
-  text-align: center;
-  font-size: 1.3rem; /* adjust as needed */
-  line-height: 30px;
-  letter-spacing: -0.025em; /* tracking-tight */
-  color: #010d3e;
-  margin-top: 1.25rem; /* mt-5 */
-}
-
-/* Pricing Tiers Container */
-.pricingTiersContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem; /* gap-6 */
-  align-items: center;
-  margin-top: 2.5rem; /* mt-10 */
-}
-
-@media (min-width: 1024px) {
-  .pricingTiersContainer {
-    flex-direction: row;
-    align-items: flex-end;
-    justify-content: center;
-  }
-}
-
-/* Card */
-.card {
-  padding: 2.5rem;
-  border: 1px solid rgba(34, 34, 34, 0.1);
-  border-radius: 1.5rem;
-  box-shadow: 0 7px 14px #eaeaea;
-  max-width: 20rem;
-  width: 100%;
-}
-.cardInverse {
-  border-color: black;
-  background-color: black;
-  color: white;
-}
-
-/* Card Header */
-.cardHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* Card Title */
-.cardTitle {
-  font-size: 1.125rem;
+.title {
+  font-size: 2.5rem;
   font-weight: bold;
-  color: rgba(0, 0, 0, 0.5);
-}
-.cardTitleInverse {
-  color: rgba(255, 255, 255, 0.6);
-}
-
-/* Popular Badge */
-.popularBadge {
-  display: inline-flex;
-  font-size: 0.875rem;
-  padding: 0.375rem 1rem;
-  border-radius: 0.75rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-.popularBadgeText {
-  background-image: linear-gradient(
-    to right,
-    #dd7ddf,
-    #e1cd86,
-    #bbcb92,
-    #71c2ef,
-    #3bffff,
-    #dd7ddf
-  );
-  color: transparent;
-  -webkit-background-clip: text;
-  background-clip: text;
-  font-weight: 500;
+  margin-bottom: 1rem;
+  font-family: "DMSans-Bold", "Noto Sans", "Helvetica", "sans-serif";
+  color: #333;
 }
 
-/* Price Info */
-.priceInfo {
+.description {
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 3rem;
+}
+
+.featuresContainer {
   display: flex;
-  align-items: baseline;
-  gap: 0.25rem;
-  margin-top: 30px;
-}
-
-/* Price Amount */
-.priceAmount {
-  font-size: 2.25rem;
-  font-weight: bold;
-  letter-spacing: -0.05em;
-  line-height: 1;
-}
-
-/* Price Suffix */
-.priceSuffix {
-  font-weight: bold;
-  letter-spacing: -0.025em;
-  color: rgba(0, 0, 0, 0.5);
-}
-
-/* Pricing Button */
-.pricingButton {
-  width: 100%;
-  margin-top: 30px;
-  background-color: #222423;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  font-weight: 500;
-  display: inline-flex;
-  align-items: center;
   justify-content: center;
-  letter-spacing: -0.025em;
-  border: none;
-  cursor: pointer;
-}
-.pricingButtonInverse {
-  background-color: white;
-  color: black;
+  gap: 2rem;
+  flex-wrap: wrap;
 }
 
-/* Features List */
-.featuresList {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  margin-top: 2rem;
+.featureCard {
+  background: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  width: 300px;
+  text-align: center;
 }
 
-/* Feature Item */
+.icon {
+  font-size: 3rem;
+  color: var(--accent-color);
+  margin-bottom: 1rem;
+}
+
+.categoryName {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.featureList {
+  list-style: none;
+  padding: 0;
+}
+
 .featureItem {
-  font-size: 0.875rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 0.5rem;
 }
 
-/* Check Icon */
-.checkIcon {
-  height: 1.5rem;
-  width: 1.5rem;
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .featuresContainer {
+    flex-direction: column;
+    align-items: center;
+  }
 }

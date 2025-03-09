@@ -10,6 +10,7 @@ import { LogoTicker } from "../sections/LogoTicker/LogoTicker";
 import { ProductShowcase } from "../sections/ProductShowcase/ProductShowcase";
 import { Features } from "../sections/Features/Features";
 import { Testimonials } from "../sections/Testimonials/Testimonials";
+import { LogoTickerSchools } from "../sections/LogoTickerSchools/LogoTicker";
 import { CallToAction } from "../sections/CallToAction/CallToAction";
 export async function getStaticProps({ locale }) {
   return {
@@ -44,6 +45,7 @@ export default function Home() {
       <Hero />
       <LogoTicker />
       <ProductShowcase />
+      <LogoTickerSchools />
       <Features />
       <Testimonials />
       <CallToAction />

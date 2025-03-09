@@ -3,7 +3,7 @@ import { useState } from "react";
 import styles from "../styles/BookADemo.module.css";
 import Footer from "../components/Layout/Footer";
 import Image from "next/image";
-
+import { FaGraduationCap } from "react-icons/fa";
 export default function BookADemo() {
   const [formData, setFormData] = useState({
     fullName: "",
@@ -14,14 +14,47 @@ export default function BookADemo() {
     heardFrom: "",
     message: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Data Submitted: ", formData);
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    try {
+      const response = await fetch("/api/email/book_a_demo", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setSubmitStatus("success");
+        setFormData({
+          fullName: "",
+          email: "",
+          phone: "",
+          school: "",
+          position: "",
+          heardFrom: "",
+          message: "",
+        });
+      } else {
+        setSubmitStatus("error");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      setSubmitStatus("error");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -63,9 +96,9 @@ export default function BookADemo() {
             <h2 style={{ color: "var(--primary-color)" }}>
               Leading Schools Use NoteSwap
             </h2>
-            <Image src={"/asi.jpeg"} width={50} height={50} />
           </div>
           <div className={styles.formSection}>
+            <FaGraduationCap className={styles.gradCapIcon} />
             <h2>Book a Demo</h2>
             <form onSubmit={handleSubmit} className={styles.form}>
               <input
@@ -133,10 +166,23 @@ export default function BookADemo() {
                 onChange={handleChange}
                 className={styles.textArea}
               ></textarea>
-
-              <button type="submit" className={styles.submitButton}>
-                Request a Demo
+              <button
+                type="submit"
+                className={styles.submitButton}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Submitting..." : "Request a Demo"}
               </button>
+              {submitStatus === "success" && (
+                <p style={{ color: "green" }}>
+                  Demo request submitted successfully!
+                </p>
+              )}
+              {submitStatus === "error" && (
+                <p style={{ color: "red" }}>
+                  Failed to submit demo request. Please try again.
+                </p>
+              )}
             </form>
           </div>
         </div>

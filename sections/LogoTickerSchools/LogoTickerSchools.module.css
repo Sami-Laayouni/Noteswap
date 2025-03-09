@@ -1,0 +1,48 @@
+/* Outer wrapper with responsive vertical padding and white background */
+.logoTickerWrapper {
+  padding-top: 2rem; /* py-8 */
+  padding-bottom: 2rem; /* py-8 */
+  background-color: #f9f9f9; /* bg-white */
+}
+
+@media (min-width: 768px) {
+  .logoTickerWrapper {
+    padding-top: 3rem; /* md:py-12 */
+    padding-bottom: 3rem; /* md:py-12 */
+  }
+}
+
+/* Container with max-width and horizontal padding */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* Ticker container: flex layout, hidden overflow, and mask-image */
+.tickerContainer {
+  display: flex;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black,
+    transparent
+  );
+  mask-image: linear-gradient(to right, transparent, black, transparent);
+}
+
+/* Motion container for the ticker items */
+.tickerAnimation {
+  display: flex;
+  gap: 3rem; /* gap-14 (14 * 0.25rem = 3.5rem) */
+  flex: none; /* flex-none */
+  padding-right: 3.5rem; /* pr-14 */
+}
+
+/* Logo image styling for the ticker */
+.logoTickerImage {
+  max-height: 80px;
+  object-fit: contain;
+}

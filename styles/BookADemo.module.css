@@ -75,8 +75,17 @@
   background: #f8f9fc;
   padding: 20px;
   border-radius: 12px;
+  position: relative; /* Added to make this the positioning context */
 }
 
+.gradCapIcon {
+  position: absolute;
+  top: -52px;
+  left: -33px;
+  font-size: 7rem; /* 32px, adjustable as needed */
+  color: var(--primary-color); /* Matches your brand color */
+  transform: rotate(-15deg); /* Rotates the hat 15 degrees */
+}
 .formTitle {
   font-size: 1.5rem;
   font-weight: bold;

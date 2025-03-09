@@ -69,18 +69,6 @@ export default function Footer({ type }) {
               height={33}
             />
           </Link>
-          <Link
-            title="Visit our Twitter/X"
-            href="https://twitter.com/NoteSwap_Ifrane"
-            target="_blank"
-          >
-            <Image
-              src="/assets/images/footer/Twitter.svg"
-              alt="Twitter"
-              width={33}
-              height={33}
-            />
-          </Link>
         </div>
       </section>
     </footer>

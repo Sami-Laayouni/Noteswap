@@ -40,7 +40,7 @@ function Header() {
             {/* Navigation Links */}
             <nav className={style["nav-links"]}>
               <Link href="/login">Login</Link>
-              <Link href="/signup">Sign up</Link>
+              {/*<Link href="/signup">Sign up</Link>*/}
               <Link href="/book_a_demo">
                 <button className={style["demo-btn"]}>Book a demo</button>
               </Link>
