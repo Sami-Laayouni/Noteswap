@@ -37,12 +37,11 @@
 }
 
 /* Left Column */
-.heroText {
-}
 
 @media (min-width: 768px) {
   .heroText {
-    width: 478px;
+    width: 500px;
+    font-size: 1rem;
   }
 }
 
@@ -56,14 +55,12 @@
 /* Hero Title */
 .heroTitle {
   font-family: "DMSans-Bold";
-  font-size: 3rem; /* text-5xl approx. */
+  font-size: 1rem; /* text-5xl approx. */
   font-weight: bold; /* font-bold */
   letter-spacing: -0.04em; /* tracking-tighter */
   margin-top: 1rem; /* mt-6 */
   line-height: 90%; /* leading-tight */
-  background: linear-gradient(to bottom, black, #222423);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  width: 430px;
   margin-bottom: 20px;
   padding-bottom: 0px;
 }

@@ -42,7 +42,7 @@ define(["exports"], function (exports) {
       }
       const styles = [
         `background: ${methodToColorMap[method]}`,
-        `border-radius: 0.5em`,
+        `border-radius: 0.3em`,
         `color: white`,
         `font-weight: bold`,
         `padding: 2px 0.5em`,

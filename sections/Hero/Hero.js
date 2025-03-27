@@ -4,6 +4,7 @@ import { useRef } from "react";
 import styles from "./Hero.module.css";
 import { FaArrowRight } from "react-icons/fa6";
 import Link from "next/link";
+
 export const Hero = () => {
   const heroRef = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -17,7 +18,22 @@ export const Hero = () => {
       <div className={styles.container}>
         <div className={styles.heroContent}>
           <div className={styles.heroText}>
-            <h1 className={styles.heroTitle}>Effortless Student Portfolios</h1>
+            <h1
+              className={styles.heroTitle}
+              style={{ fontSize: "4rem", paddingRight: "1rem" }}
+            >
+              Managing{" "}
+              <span
+                style={{
+                  color: "var(--accent-color)",
+                  lineHeight: "100%",
+                  fontSize: "5rem",
+                }}
+              >
+                Your
+              </span>{" "}
+              Extracurriculars
+            </h1>
             <p className={styles.heroDescription}>
               We create your students' portfolios, managing all their
               extracurriculars while providing your school with valuable

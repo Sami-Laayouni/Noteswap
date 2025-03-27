@@ -96,6 +96,7 @@ export default function BookADemo() {
             <h2 style={{ color: "var(--primary-color)" }}>
               Leading Schools Use NoteSwap
             </h2>
+            <img width={110} height={110} src="/assets/asi.png"></img>
           </div>
           <div className={styles.formSection}>
             <FaGraduationCap className={styles.gradCapIcon} />

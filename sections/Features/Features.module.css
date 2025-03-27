@@ -1,67 +1,150 @@
 .featuresSection {
-  padding: 4rem 2rem;
-  background: #f9f9f9;
+  padding: 40px 20px;
+  background-color: #f9f9f9; /* White background for the section */
   text-align: center;
 }
 
 .title {
   font-size: 2.5rem;
   font-weight: bold;
-  margin-bottom: 1rem;
-  font-family: "DMSans-Bold", "Noto Sans", "Helvetica", "sans-serif";
-  color: #333;
+  color: #000000; /* Black text */
+  display: inline-block;
+  padding: 5px 20px;
+  margin-bottom: 20px;
+  font-family: "DMSans-Bold";
 }
 
-.description {
-  font-size: 1.2rem;
-  color: #666;
-  margin-bottom: 3rem;
-}
-
-.featuresContainer {
+.tabsContainer {
   display: flex;
   justify-content: center;
-  gap: 2rem;
-  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 30px;
 }
 
-.featureCard {
-  background: #fff;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 2rem;
-  width: 300px;
-  text-align: center;
+.tabButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #000000; /* Black text */
+  background-color: #ffffff; /* White background */
+  border: 1px solid #000000; /* Black border */
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-.icon {
-  font-size: 3rem;
-  color: var(--accent-color);
-  margin-bottom: 1rem;
+.activeTab {
+  background-color: var(--accent-color); /* Green background for active tab */
+  color: #ffffff; /* White text for active tab */
+  border-color: var(--accent-color); /* Green border */
 }
 
-.categoryName {
+.tabIcon {
+  font-size: 1.2rem;
+}
+
+.badge {
+  font-size: 0.8rem;
+  background-color: #000000; /* Black background for badges */
+  color: #ffffff; /* White text for badges */
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-left: 5px;
+}
+
+.contentContainer {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.keyFeatures {
+  flex: 1;
+  background-color: #f0f0f0; /* Light gray background for key features */
+  padding: 20px;
+  border-radius: 10px;
+  text-align: left;
+}
+
+.keyFeatures h3 {
   font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-  color: #333;
+  color: #000000; /* Black text */
+  margin-bottom: 10px;
+}
+
+.note {
+  font-size: 0.9rem;
+  color: #333333; /* Dark gray text for note */
+  margin-bottom: 15px;
 }
 
 .featureList {
   list-style: none;
   padding: 0;
+  margin: 0 0 20px 0;
 }
 
 .featureItem {
+  padding: 10px 0;
   font-size: 1rem;
-  color: #555;
-  margin-bottom: 0.5rem;
+  color: #000000; /* Black text */
+  border-bottom: 1px solid #000000; /* Black border */
+  cursor: pointer;
+  transition: background-color 0.3s;
+  padding-left: 10px;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .featuresContainer {
-    flex-direction: column;
-    align-items: center;
-  }
+.featureItem:last-child {
+  border-bottom: none;
+}
+
+.highlighted {
+  background-color: var(
+    --accent-color
+  ); /* Green background for highlighted feature */
+  color: #ffffff; /* White text for highlighted feature */
+  font-weight: bold;
+}
+
+.learnMore {
+  color: var(--accent-color); /* Green text for "Learn more" link */
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.learnMore:hover {
+  text-decoration: underline;
+}
+
+.tabContent {
+  flex: 2;
+  background-color: #ffffff; /* White background for tab content */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle black shadow */
+  text-align: left;
+}
+
+.tabContent h3 {
+  font-size: 1.5rem;
+  color: #000000; /* Black text */
+  margin-bottom: 10px;
+}
+
+.tabContent p {
+  font-size: 1rem;
+  color: #333333; /* Dark gray text for description */
+  margin-bottom: 20px;
+}
+
+.contentImage {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+  border: 1px solid #000000; /* Black border for image */
 }
