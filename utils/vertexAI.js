@@ -1,6 +1,9 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
-
-// Access your API key as an environment variable (see "Set up your API key" above)
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY);
-
+import { GoogleGenAI } from "@google/genai";
+const genAI = new GoogleGenAI({
+  vertexai: false,
+  apiKey: process.env.GOOGLE_AI_API_KEY,
+});
+if (!process.env.GOOGLE_AI_API_KEY) {
+  console.error("No GOOGLE_AI_API_KEY found in environment variables");
+}
 export default genAI;

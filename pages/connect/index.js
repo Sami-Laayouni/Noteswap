@@ -95,7 +95,9 @@ export default function Connect() {
             ) {
               setTakeSelfie(true);
             }
-            document.getElementById("lastSaidText").innerText = currentSpeech;
+            if (document.getElementById("lastSaidText")) {
+              document.getElementById("lastSaidText").innerText = currentSpeech;
+            }
             setAllSpeech(speech);
             setNumberTimes(1);
           }
@@ -103,7 +105,9 @@ export default function Connect() {
 
         newRecognition.onend = (event) => {
           setTimeout(() => {
-            recognition.start();
+            if (recognition) {
+              recognition.start();
+            }
           }, 2000); // Adjust delay to find a suitable interval
         };
 
