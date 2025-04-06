@@ -54,6 +54,16 @@
   margin-left: 300px;
   margin-right: 300px;
 }
+@media (max-width: 768px) {
+  .sectionTitle {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  .sectionDescription {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+}
 
 /* Relative container for positioning images */
 .relativeContainer {

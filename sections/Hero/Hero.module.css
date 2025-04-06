@@ -15,6 +15,12 @@
     padding-top: 1.25rem; /* md:pt-5 */
   }
 }
+/* Responsive adjustments for md screens */
+@media (max-width: 768px) {
+  .heroSection {
+    padding-bottom: 1.25rem; /* md:pt-5 */
+  }
+}
 
 /* Container */
 .container {
@@ -152,6 +158,12 @@
 @media (min-width: 1024px) {
   .cogImage {
     left: 0; /* lg:left-0 */
+  }
+}
+
+@media (max-width: 768px) {
+  .cogImage {
+    display: none;
   }
 }
 

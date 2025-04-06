@@ -7,6 +7,16 @@ export const LogoTicker = () => {
   return (
     <div className={styles.logoTickerWrapper}>
       <div className={styles.container}>
+        <p
+          style={{
+            textAlign: "center",
+            fontFamily: "DMSans-Bold",
+            fontSize: "1.5rem",
+          }}
+        >
+          Compatible with
+        </p>
+
         <div className={styles.tickerContainer}>
           <motion.div
             className={styles.tickerAnimation}
