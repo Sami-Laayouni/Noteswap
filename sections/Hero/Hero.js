@@ -20,14 +20,14 @@ export const Hero = () => {
           <div className={styles.heroText}>
             <h1
               className={styles.heroTitle}
-              style={{ fontSize: "4rem", paddingRight: "1rem" }}
+              style={{ fontSize: "3.6rem", paddingRight: "1rem" }}
             >
               Managing{" "}
               <span
                 style={{
                   color: "var(--accent-color)",
                   lineHeight: "100%",
-                  fontSize: "5rem",
+                  fontSize: "4.9rem",
                 }}
               >
                 Your

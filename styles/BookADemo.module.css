@@ -160,9 +160,24 @@
   .wrapper {
     grid-template-columns: 1fr;
     padding: 30px;
+    width: 100%;
   }
-
+  .container {
+    padding-left: auto;
+    padding-right: auto;
+  }
   .infoSection {
     text-align: center;
+    margin-right: 0px;
+    padding: 0px;
+    width: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .logoSection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }

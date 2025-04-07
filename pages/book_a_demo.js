@@ -2,7 +2,7 @@ import Header from "../components/New/Header";
 import { useState } from "react";
 import styles from "../styles/BookADemo.module.css";
 import Footer from "../components/Layout/Footer";
-import Image from "next/image";
+import { IoClose } from "react-icons/io5";
 import { FaGraduationCap } from "react-icons/fa";
 export default function BookADemo() {
   const [formData, setFormData] = useState({
@@ -95,8 +95,10 @@ export default function BookADemo() {
             </ul>
             <h2 style={{ color: "var(--primary-color)" }}>
               Leading Schools Use NoteSwap
-            </h2>
-            <img width={110} height={110} src="/assets/asi.png"></img>
+            </h2>{" "}
+            <div className={styles.logoSection}>
+              <img width={110} height={110} src="/assets/asi.png"></img>
+            </div>
           </div>
           <div className={styles.formSection}>
             <FaGraduationCap className={styles.gradCapIcon} />

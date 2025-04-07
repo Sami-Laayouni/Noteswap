@@ -61,6 +61,10 @@
 /* Mobile Menu: visible on small screens, hidden on medium+ */
 .mobile-menu {
   display: inline-block;
+  background-color: white;
+  outline: none;
+  border: none;
+  cursor: pointer;
 }
 
 @media (min-width: 768px) {
@@ -94,4 +98,34 @@
   border: none;
   cursor: pointer;
   font-size: medium;
+}
+.mobile-nav {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  padding: 1rem;
+  gap: 1rem;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 100%;
+  z-index: 100;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-menu {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-menu {
+    display: block;
+  }
+
+  .nav-links {
+    display: none;
+  }
 }

@@ -46,7 +46,6 @@ export default function Home() {
       <LogoTicker />
       <ProductShowcase />
       <LogoTickerSchools />
-      <Features />
       <Testimonials />
       <CallToAction />
       <Footer /> {/* Footer component */}
