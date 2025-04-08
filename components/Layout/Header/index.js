@@ -29,7 +29,7 @@ export default function Header() {
   const [isCertificate, setCertificate] = certificateModal;
   const [open, setOpen] = addMembers;
   const [userData, setUserData] = useState(null);
-  const [menuOpen, setMenuOpen] = useState(false); // State for fullscreen menu
+  const [menuOpen, setMenuOpen] = useState(false);
   const router = useRouter();
   const AuthServices = new AuthService();
   const { data: session, status } = useSession();
@@ -81,11 +81,17 @@ export default function Header() {
     return () => clearInterval(interval);
   }, [session, status]);
 
+  // Handler to close menu
+  const handleMenuItemClick = () => {
+    setMenuOpen(false);
+  };
+
   return (
     <header className={style.header_main_container}>
       <div className={style.header_logo}>
         <Link
           href={userData?.role === "association" ? "/shortcuts" : "/dashboard"}
+          onClick={handleMenuItemClick}
         >
           <Image
             src="/assets/icons/Logo_dark-cropped.svg"
@@ -97,14 +103,12 @@ export default function Header() {
         </Link>
       </div>
 
-      {/* Hamburger Menu Button */}
       <div className={style.hamburger} onClick={() => setMenuOpen(true)}>
         <span></span>
         <span></span>
         <span></span>
       </div>
 
-      {/* Navigation */}
       <nav
         className={`${style.header_nav} ${
           menuOpen ? `${style.fullscreen} ${style.open}` : ""
@@ -121,6 +125,7 @@ export default function Header() {
               title="Visit notes"
               className={style.header_nav_a}
               href="/notes"
+              onClick={handleMenuItemClick}
             >
               <FaStickyNote size={20} />
             </Link>
@@ -130,6 +135,7 @@ export default function Header() {
                   title="Visit Tutor"
                   className={style.header_nav_a}
                   href="/tutor"
+                  onClick={handleMenuItemClick}
                 >
                   <BiBookOpen size={20} />
                 </Link>
@@ -141,6 +147,7 @@ export default function Header() {
             title="Visit events"
             className={style.header_nav_a}
             href="/event"
+            onClick={handleMenuItemClick}
           >
             <BsCalendarEvent size={20} />
           </Link>
@@ -152,6 +159,7 @@ export default function Header() {
             href={`/association/${
               userData?.associations[userData?.associations.length - 1]
             }`}
+            onClick={handleMenuItemClick}
           >
             <HiUserGroup size={20} />
           </Link>
@@ -161,6 +169,7 @@ export default function Header() {
             title="My Events"
             className={style.header_nav_a}
             href="/teacher/events"
+            onClick={handleMenuItemClick}
           >
             <MdOutlineEmojiEvents size={20} />
           </Link>
@@ -170,6 +179,7 @@ export default function Header() {
             title="Reward CS"
             className={style.header_nav_a}
             href="/rewardcs"
+            onClick={handleMenuItemClick}
           >
             <RiCopperCoinLine size={20} />
           </Link>
@@ -179,12 +189,18 @@ export default function Header() {
             title="My Productivity"
             className={style.header_nav_a}
             href="/productivity"
+            onClick={handleMenuItemClick}
           >
             <IoMdTime size={20} />
           </Link>
         )}
         {userData?.admin === true && (
-          <Link title="Admin Page" className={style.header_nav_a} href="/admin">
+          <Link
+            title="Admin Page"
+            className={style.header_nav_a}
+            href="/admin"
+            onClick={handleMenuItemClick}
+          >
             <MdOutlineAdminPanelSettings size={20} />
           </Link>
         )}
@@ -193,6 +209,7 @@ export default function Header() {
             title="Edit Association"
             className={style.header_nav_a}
             href="/business/edit"
+            onClick={handleMenuItemClick}
           >
             <MdEdit size={20} />
           </Link>
@@ -202,6 +219,7 @@ export default function Header() {
             title="Create New School"
             className={style.header_nav_a}
             href="for_schools"
+            onClick={handleMenuItemClick}
           >
             <MdEdit size={20} />
           </Link>
@@ -210,6 +228,7 @@ export default function Header() {
           title="Settings"
           className={style.header_nav_a}
           href="/settings/account"
+          onClick={handleMenuItemClick}
         >
           <FiSettings size={20} />
         </Link>
@@ -217,7 +236,10 @@ export default function Header() {
           <div
             title="Transcript"
             className={style.header_nav_a}
-            onClick={() => setCertificate(true)}
+            onClick={() => {
+              setCertificate(true);
+              handleMenuItemClick();
+            }}
           >
             <FiAward size={20} />
           </div>
@@ -230,11 +252,12 @@ export default function Header() {
             signOut();
             await AuthServices.logout();
             router.push("/login");
+            handleMenuItemClick();
           }}
         >
           <FiLogOut size={20} />
         </div>
-        <Link href={`/profile/${userData?._id}`}>
+        <Link href={`/profile/${userData?._id}`} onClick={handleMenuItemClick}>
           <div className={style.userInfo}>
             <ProfilePicture
               src={userData?.profile_picture}
