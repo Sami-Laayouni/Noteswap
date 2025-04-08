@@ -1,4 +1,3 @@
-/* Header component displayed on every page. Used for navigation */
 "use client";
 import style from "./Header.module.css";
 import Link from "next/link";
@@ -29,253 +28,213 @@ export default function Header() {
   const { certificateModal, addMembers } = useContext(ModalContext);
   const [isCertificate, setCertificate] = certificateModal;
   const [open, setOpen] = addMembers;
-  const [userData, setUserData] = useState(null); // Initialize as null
+  const [userData, setUserData] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(false); // New state for mobile menu
   const router = useRouter();
   const AuthServices = new AuthService();
   const { data: session, status } = useSession();
   const { t } = useTranslation("common");
 
-  // Fetch and update user data
+  // Fetch user data (unchanged)
   useEffect(() => {
     async function fetchUserData() {
       if (status === "authenticated" && session?.user?.id) {
         try {
           const response = await fetch("/api/profile/get_user_profile", {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
+            headers: { "Content Vie-Type": "application/json" },
             body: JSON.stringify({ information: session.user.id }),
           });
-
           if (response.ok) {
-            console.log(session.user.id);
             const data = await response.json();
             setUserData(data);
-            localStorage.setItem("userInfo", JSON.stringify(data)); // Sync with localStorage
-            if (data.role != "association") {
-              const schoolRequestInfo = {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ id: data?.schoolId }),
-              };
-              // Get School Info
+            localStorage.setItem("userInfo", JSON.stringify(data));
+            if (data.role !== "association") {
               const schoolResponse = await fetch(
                 "/api/schools/get_single_school",
-                schoolRequestInfo
+                {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ id: data?.schoolId }),
+                }
               );
-
               if (schoolResponse.ok) {
                 const schoolData = await schoolResponse.json();
                 localStorage.setItem("schoolInfo", JSON.stringify(schoolData));
               }
             }
           } else {
-            console.error("Failed to fetch user data:", response.status);
-            // Fallback to localStorage if API fails
             const storedData = localStorage.getItem("userInfo");
-            if (storedData) {
-              setUserData(JSON.parse(storedData));
-            }
+            if (storedData) setUserData(JSON.parse(storedData));
           }
         } catch (error) {
-          console.error("Error fetching user data:", error);
-          // Fallback to localStorage on error
           const storedData = localStorage.getItem("userInfo");
-          if (storedData) {
-            setUserData(JSON.parse(storedData));
-          }
+          if (storedData) setUserData(JSON.parse(storedData));
         }
       } else if (status === "unauthenticated") {
         setUserData(null);
-        localStorage.removeItem("userInfo"); // Clear on logout
+        localStorage.removeItem("userInfo");
       }
     }
-
     fetchUserData();
-
-    // Optional: Poll for updates every 5 minutes (300000 ms)
     const interval = setInterval(fetchUserData, 300000);
-    return () => clearInterval(interval); // Cleanup on unmount
+    return () => clearInterval(interval);
   }, [session, status]);
 
   return (
-    <>
-      <header className={style.header_main_container}>
-        <div className={style.header_logo}>
-          <Link
-            href={
-              userData?.role === "association" ? "/shortcuts" : "/dashboard"
-            }
-          >
-            <Image
-              src="/assets/icons/Logo_dark-cropped.svg"
-              alt="NoteSwap Logo light"
-              width={40}
-              height={40}
-              priority
-            />
-          </Link>
-        </div>
+    <header className={style.header_main_container}>
+      <div className={style.header_logo}>
+        <Link
+          href={userData?.role === "association" ? "/shortcuts" : "/dashboard"}
+        >
+          <Image
+            src="/assets/icons/Logo_dark-cropped.svg"
+            alt="NoteSwap Logo light"
+            width={40}
+            height={40}
+            priority
+          />
+        </Link>
+      </div>
 
-        <nav className={style.header_nav}>
-          {userData?.role !== "volunteer" &&
-            userData?.role !== "association" && (
-              <>
+      {/* Hamburger Menu Button */}
+      <div className={style.hamburger} onClick={() => setMenuOpen(!menuOpen)}>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+      {/* Navigation */}
+      <nav className={`${style.header_nav} ${menuOpen ? style.open : ""}`}>
+        {userData?.role !== "volunteer" && userData?.role !== "association" && (
+          <>
+            <Link
+              title="Visit notes"
+              className={style.header_nav_a}
+              href="/notes"
+            >
+              <FaStickyNote size={20} />
+            </Link>
+            {userData?.role !== "teacher" &&
+              userData?.schoolId === "649d661a3a5a9f73e9e3fa62" && (
                 <Link
-                  title="Visit notes"
+                  title="Visit Tutor"
                   className={style.header_nav_a}
-                  href="/notes"
+                  href="/tutor"
                 >
-                  <FaStickyNote size={20} />
+                  <BiBookOpen size={20} />
                 </Link>
-                {userData?.role !== "teacher" &&
-                  userData?.schoolId === "649d661a3a5a9f73e9e3fa62" && (
-                    <Link
-                      title="Visit Tutor"
-                      className={style.header_nav_a}
-                      href="/tutor"
-                    >
-                      <BiBookOpen size={20} />
-                    </Link>
-                  )}
-              </>
-            )}
-          {userData?.role !== "association" && (
-            <Link
-              title="Visit events"
-              className={style.header_nav_a}
-              href="/event"
-            >
-              <BsCalendarEvent size={20} />
-            </Link>
-          )}
-
-          {userData?.role === "association" && userData?.associations?.[0] && (
-            <Link
-              title="My Association"
-              className={style.header_nav_a}
-              href={`/association/${
-                userData?.associations[userData?.associations.length - 1]
-              }`}
-            >
-              <HiUserGroup size={20} />
-            </Link>
-          )}
-
-          {userData?.role === "teacher" && (
-            <Link
-              title="My Events"
-              className={style.header_nav_a}
-              href="/teacher/events"
-            >
-              <MdOutlineEmojiEvents size={20} />
-            </Link>
-          )}
-
-          {(userData?.role === "teacher" || userData?.role === "school") && (
-            <Link
-              title="Reward CS"
-              className={style.header_nav_a}
-              href="/rewardcs"
-            >
-              <RiCopperCoinLine size={20} />
-            </Link>
-          )}
-          {/*
-          {userData?.role !== "association" && (
-            <Link
-              title="My Tickets"
-              className={style.header_nav_a}
-              href="/tickets"
-            >
-              <IoTicketOutline size={20} />
-            </Link>
-          )}*/}
-
-          {userData?.role === "student" && (
-            <Link
-              title="My Productivity"
-              className={style.header_nav_a}
-              href="/productivity"
-            >
-              <IoMdTime size={20} />
-            </Link>
-          )}
-
-          {userData?.admin === true && (
-            <Link
-              title="Admin Page"
-              className={style.header_nav_a}
-              href="/admin"
-            >
-              <MdOutlineAdminPanelSettings size={20} />
-            </Link>
-          )}
-
-          {userData?.role === "association" && (
-            <Link
-              title="Edit Association"
-              className={style.header_nav_a}
-              href="/business/edit"
-            >
-              <MdEdit size={20} />
-            </Link>
-          )}
-
-          {userData?.role === "school" && (
-            <Link
-              title="Create New School"
-              className={style.header_nav_a}
-              href="for_schools"
-            >
-              <MdEdit size={20} />
-            </Link>
-          )}
-
+              )}
+          </>
+        )}
+        {userData?.role !== "association" && (
           <Link
-            title="Settings"
+            title="Visit events"
             className={style.header_nav_a}
-            href="/settings/account"
+            href="/event"
           >
-            <FiSettings size={20} />
+            <BsCalendarEvent size={20} />
           </Link>
-
-          {userData?.role === "student" && (
-            <div
-              title="Transcript"
-              className={style.header_nav_a}
-              onClick={() => setCertificate(true)}
-            >
-              <FiAward size={20} />
-            </div>
-          )}
-
+        )}
+        {userData?.role === "association" && userData?.associations?.[0] && (
+          <Link
+            title="My Association"
+            className={style.header_nav_a}
+            href={`/association/${
+              userData?.associations[userData?.associations.length - 1]
+            }`}
+          >
+            <HiUserGroup size={20} />
+          </Link>
+        )}
+        {userData?.role === "teacher" && (
+          <Link
+            title="My Events"
+            className={style.header_nav_a}
+            href="/teacher/events"
+          >
+            <MdOutlineEmojiEvents size={20} />
+          </Link>
+        )}
+        {(userData?.role === "teacher" || userData?.role === "school") && (
+          <Link
+            title="Reward CS"
+            className={style.header_nav_a}
+            href="/rewardcs"
+          >
+            <RiCopperCoinLine size={20} />
+          </Link>
+        )}
+        {userData?.role === "student" && (
+          <Link
+            title="My Productivity"
+            className={style.header_nav_a}
+            href="/productivity"
+          >
+            <IoMdTime size={20} />
+          </Link>
+        )}
+        {userData?.admin === true && (
+          <Link title="Admin Page" className={style.header_nav_a} href="/admin">
+            <MdOutlineAdminPanelSettings size={20} />
+          </Link>
+        )}
+        {userData?.role === "association" && (
+          <Link
+            title="Edit Association"
+            className={style.header_nav_a}
+            href="/business/edit"
+          >
+            <MdEdit size={20} />
+          </Link>
+        )}
+        {userData?.role === "school" && (
+          <Link
+            title="Create New School"
+            className={style.header_nav_a}
+            href="for_schools"
+          >
+            <MdEdit size={20} />
+          </Link>
+        )}
+        <Link
+          title="Settings"
+          className={style.header_nav_a}
+          href="/settings/account"
+        >
+          <FiSettings size={20} />
+        </Link>
+        {userData?.role === "student" && (
           <div
-            title="Log Out"
+            title="Transcript"
             className={style.header_nav_a}
-            onClick={async () => {
-              await OneSignal.logout();
-              signOut();
-              await AuthServices.logout();
-              router.push("/login");
-            }}
+            onClick={() => setCertificate(true)}
           >
-            <FiLogOut size={20} />
+            <FiAward size={20} />
           </div>
-          <Link href={`/profile/${userData?._id}`}>
-            <div className={style.userInfo}>
-              <ProfilePicture
-                src={userData?.profile_picture}
-                alt={userData?.first_name || "User"}
-                id={userData?._id}
-              />
-            </div>
-          </Link>
-        </nav>
-      </header>
-    </>
+        )}
+        <div
+          title="Log Out"
+          className={style.header_nav_a}
+          onClick={async () => {
+            await OneSignal.logout();
+            signOut();
+            await AuthServices.logout();
+            router.push("/login");
+          }}
+        >
+          <FiLogOut size={20} />
+        </div>
+        <Link href={`/profile/${userData?._id}`}>
+          <div className={style.userInfo}>
+            <ProfilePicture
+              src={userData?.profile_picture}
+              alt={userData?.first_name || "User"}
+              id={userData?._id}
+            />
+          </div>
+        </Link>
+      </nav>
+    </header>
   );
 }

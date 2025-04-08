@@ -140,19 +140,22 @@
   visibility: visible;
 }
 
+/* Existing styles remain unchanged until the media query */
+
 /* Mobile adjustments */
 @media all and (max-width: 767px) {
   .header_main_container {
     flex-direction: row;
     height: 70px;
     width: 100%;
-    padding: 0 1.5rem;
+    padding: 0 1rem;
     justify-content: space-between;
     align-items: center;
-    position: fixed; /* Keep fixed for mobile too */
+    position: fixed;
     top: 0;
     left: 0;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    z-index: 10;
   }
 
   .header_main_container:hover {
@@ -165,13 +168,66 @@
     margin-bottom: 0;
   }
 
+  /* Hamburger menu button */
+  .hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+
+  .hamburger span {
+    width: 25px;
+    height: 3px;
+    background: white;
+    margin: 2px 0;
+    transition: all 0.3s ease;
+  }
+
+  /* Navigation adjustments */
   .header_nav {
-    display: none; /* Hide nav items on mobile */
+    display: none; /* Hidden by default */
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    background: #2a2a2a;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    z-index: 9;
+  }
+
+  .header_nav.open {
+    display: flex; /* Show when toggled */
+  }
+
+  .header_nav_a {
+    width: 80%;
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    justify-content: flex-start; /* Align icon and potential text */
+  }
+
+  .header_nav_a:hover::before {
+    width: 0;
+    height: 0; /* Disable ripple effect on mobile for simplicity */
+  }
+
+  .header_nav_a[data-tooltip]::after {
+    display: none; /* Hide tooltips on mobile */
   }
 
   .userInfo {
     width: 50px;
     height: 50px;
-    margin-top: 0; /* Reset margin for mobile */
+    margin-top: 0;
   }
 }
