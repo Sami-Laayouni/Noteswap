@@ -4,9 +4,8 @@ import { ModalProvider } from "../context/ModalContext";
 import { SocketProvider } from "../context/SocketContext";
 import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
-import styles from "./DefaultLayout.module.css"; // Add CSS module for layout
+import styles from "./DefaultLayout.module.css";
 
-// Dynamic imports for modals and Header
 const Transcript = dynamic(
   () => import("../components/Modals/TranscriptModal"),
   {
@@ -42,7 +41,7 @@ const DefaultLayout = ({ children }) => {
           <BusinessModal />
           <div className={styles.layoutContainer}>
             {status === "authenticated" && (
-              <div style={{ marginRight: "80px" }}>
+              <div className={styles.headerWrapper}>
                 <Header />
               </div>
             )}

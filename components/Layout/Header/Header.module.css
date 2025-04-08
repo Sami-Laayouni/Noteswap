@@ -1,282 +1,193 @@
-/* components/Layout/Header.module.css */
-.header_main_container {
+.header {
+  width: 100%;
+}
+
+/* Desktop Sidebar */
+.desktop_sidebar {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 1.5rem 0;
-  width: 70px; /* Slightly wider for better spacing */
+  width: 70px;
   height: 100vh;
-  background: linear-gradient(
-    180deg,
-    #1a1a1a 0%,
-    #2a2a2a 100%
-  ); /* Subtle gradient */
+  background: linear-gradient(180deg, #1a1a1a 0%, #2a2a2a 100%);
   color: white;
-  min-height: 100vh; /* Full height */
   position: fixed;
   top: 0;
   left: 0;
   z-index: 10;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3); /* Soft shadow for depth */
-  transition: width 0.3s ease; /* Smooth width transition */
+  padding: 1.5rem 0;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+  transition: width 0.3s ease;
 }
 
-.header_main_container:hover {
-  width: 100px; /* Slightly expands on hover for a dynamic feel */
+.desktop_sidebar:hover {
+  width: 100px;
 }
 
 .header_logo img {
   width: 50px;
   height: 50px;
   margin-bottom: 2rem;
-  user-select: none;
-  border-radius: 10px; /* Rounded logo */
+  border-radius: 10px;
   transition: transform 0.3s ease;
 }
 
 .header_logo img:hover {
-  transform: rotate(10deg) scale(1.1); /* Fun hover effect */
+  transform: rotate(10deg) scale(1.1);
 }
 
-.header_nav {
+.desktop_nav {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem; /* Increased gap for breathing room */
+  gap: 1.5rem;
   width: 100%;
   align-items: center;
 }
 
-.header_nav_a {
+.nav_item {
   cursor: pointer;
   text-decoration: none;
-  user-select: none;
   color: #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 50px;
   height: 50px;
-  background: rgba(255, 255, 255, 0.1); /* Subtle background */
-  border-radius: 12px; /* Rounded edges */
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
   transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
 }
 
-.header_nav_a:hover {
-  color: var(--accent-color); /* Bright cyan for hover */
+.nav_item:hover {
+  color: var(--accent-color);
   transform: scale(1.15);
   background: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 15px rgba(0, 255, 13, 0.3); /* Glowing effect */
+  box-shadow: 0 4px 15px rgba(0, 255, 13, 0.3);
 }
 
-.header_nav_a::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  transition: width 0.4s ease, height 0.4s ease;
-}
-
-.header_nav_a:hover::before {
-  width: 100px;
-  height: 100px; /* Ripple effect on hover */
-}
-
-.userInfo {
-  user-select: none;
-  margin-top: auto; /* Pushes to bottom */
+.user_info {
+  margin-top: auto;
+  width: 60px;
+  height: 60px;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 60px; /* Square shape */
-  height: 60px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  padding: 5px; /* Padding for better spacing */
 }
 
-.userInfo img {
+.user_info img {
   width: 100%;
   height: 100%;
-  border-radius: 12px; /* Rounded edges instead of full circle */
+  border-radius: 12px;
   object-fit: cover;
-  border: 2px solid rgba(255, 255, 255, 0.2); /* Subtle border */
+  border: 2px solid rgba(255, 255, 255, 0.2);
   transition: all 0.3s ease;
 }
 
-.userInfo:hover img {
-  border-color: var(--accent-color); /* Cyan border on hover */
+.user_info:hover img {
+  border-color: var(--accent-color);
   transform: scale(1.05);
-  box-shadow: 0 0 15px rgba(0, 255, 60, 0.5); /* Glow effect */
+  box-shadow: 0 0 15px rgba(0, 255, 60, 0.5);
 }
 
-/* Tooltip for nav items (optional beauty enhancement) */
-.header_nav_a[data-tooltip]::after {
-  content: attr(data-tooltip);
+/* Mobile Navbar */
+.mobile_navbar {
+  display: none;
+}
+
+.mobile_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 70px;
+  background: linear-gradient(180deg, #1a1a1a 0%, #2a2a2a 100%);
+  padding: 0 1rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+
+.hamburger span {
+  width: 25px;
+  height: 3px;
+  background: white;
+  margin: 2px 0;
+  transition: all 0.3s ease;
+}
+
+.mobile_menu {
+  position: fixed;
+  top: 70px;
+  left: -100%;
+  width: 100%;
+  height: calc(100vh - 70px);
+  background: #2a2a2a;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2rem;
+  transition: left 0.3s ease;
+  z-index: 999;
+  overflow-y: auto;
+}
+
+.mobile_menu.active {
+  left: 0;
+}
+
+.mobile_menu .nav_item {
+  width: 100%;
+  height: auto;
+  background: none;
+  border-radius: 0;
+  justify-content: flex-start;
+  padding: 1rem;
+  font-size: 1.1rem;
+  gap: 1rem;
+}
+
+.mobile_menu .nav_item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: none;
+  box-shadow: none;
+}
+
+.mobile_menu .nav_item img {
+  width: 30px;
+  height: 30px;
+}
+
+.close_btn {
   position: absolute;
-  left: 110%;
-  top: 50%;
-  transform: translateY(-50%);
-  background: #333;
+  top: 1rem;
+  right: 1rem;
+  width: 40px;
+  height: 40px;
   color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  white-space: nowrap;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.2s ease;
-  z-index: 100;
+  font-size: 24px;
+  line-height: 40px;
+  text-align: center;
+  cursor: pointer;
 }
 
-.header_nav_a:hover::after {
-  opacity: 1;
-  visibility: visible;
-}
-
-/* Existing styles remain unchanged until the media query */
-
-/* Mobile adjustments */
-/* Existing styles remain unchanged until the media query */
-
-/* Existing styles remain unchanged until the media query */
-
-/* Mobile adjustments */
-@media all and (max-width: 767px) {
-  .header_main_container {
-    flex-direction: row;
-    height: 70px;
-    width: 100%;
-    padding: 0 1rem;
-    justify-content: space-between;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    z-index: 10;
-  }
-
-  .header_main_container:hover {
-    width: 100%; /* No expansion on mobile */
-  }
-
-  .header_logo img {
-    width: 40px;
-    height: 40px;
-    margin-bottom: 0;
-  }
-
-  /* Hamburger menu button */
-  .hamburger {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    transition: all 0.3s ease;
-  }
-
-  .hamburger span {
-    width: 25px;
-    height: 3px;
-    background: white;
-    margin: 2px 0;
-    transition: all 0.3s ease;
-  }
-
-  /* Navigation adjustments */
-  .header_nav {
-    display: flex; /* Keep icons visible by default */
-    flex-direction: row;
-    gap: 0.5rem; /* Tighten gap for mobile */
-    width: auto;
-    overflow-x: auto; /* Allow horizontal scrolling if needed */
-    padding: 0 0.5rem;
-  }
-
-  .header_nav.fullscreen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background: #2a2a2a;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 2rem;
-    z-index: 20;
-    padding: 2rem;
-    transform: translateY(-100%);
-    transition: transform 0.3s ease;
-  }
-
-  .header_nav.fullscreen.open {
-    transform: translateY(0); /* Slide in when open */
-  }
-
-  .header_nav_a {
-    width: 40px;
-    height: 40px;
-    padding: 0;
-  }
-
-  .header_nav.fullscreen .header_nav_a {
-    width: 60px;
-    height: 60px;
-    background: rgba(255, 255, 255, 0.15);
-  }
-
-  .header_nav_a:hover::before {
-    width: 0;
-    height: 0; /* Disable ripple effect on mobile */
-  }
-
-  .header_nav_a[data-tooltip]::after {
-    display: none; /* Hide tooltips on mobile */
-  }
-
-  /* Close button */
-  .close_btn {
+@media (max-width: 767px) {
+  .desktop_sidebar {
     display: none;
   }
-
-  .header_nav.fullscreen .close_btn {
+  .mobile_navbar {
     display: block;
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    width: 40px;
-    height: 40px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    cursor: pointer;
-    color: white;
-    font-size: 24px;
-    line-height: 40px;
-    text-align: center;
-    transition: all 0.3s ease;
-  }
-
-  .header_nav.fullscreen .close_btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: scale(1.1);
-  }
-
-  .userInfo {
-    width: 50px;
-    height: 50px;
-    margin-top: 0;
   }
 }

@@ -1,12 +1,20 @@
-/* layouts/DefaultLayout.module.css */
+/* DefaultLayout.module.css */
 .layoutContainer {
   display: flex;
-  flex-direction: row; /* Side-by-side layout */
-  min-height: 100vh; /* Full viewport height */
-  overflow-x: hidden;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.headerWrapper {
+  margin-right: 80px; /* Default margin for desktop */
 }
 
 .mainContent {
-  flex: 1; /* Take remaining space */
-  overflow-x: hidden;
+  flex: 1;
+}
+
+@media (max-width: 767px) {
+  .headerWrapper {
+    margin-right: 0; /* Remove margin on mobile */
+  }
 }
