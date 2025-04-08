@@ -29,7 +29,7 @@ export default function Header() {
   const [isCertificate, setCertificate] = certificateModal;
   const [open, setOpen] = addMembers;
   const [userData, setUserData] = useState(null);
-  const [menuOpen, setMenuOpen] = useState(false); // New state for mobile menu
+  const [menuOpen, setMenuOpen] = useState(false); // State for fullscreen menu
   const router = useRouter();
   const AuthServices = new AuthService();
   const { data: session, status } = useSession();
@@ -42,7 +42,7 @@ export default function Header() {
         try {
           const response = await fetch("/api/profile/get_user_profile", {
             method: "POST",
-            headers: { "Content Vie-Type": "application/json" },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ information: session.user.id }),
           });
           if (response.ok) {
@@ -98,14 +98,23 @@ export default function Header() {
       </div>
 
       {/* Hamburger Menu Button */}
-      <div className={style.hamburger} onClick={() => setMenuOpen(!menuOpen)}>
+      <div className={style.hamburger} onClick={() => setMenuOpen(true)}>
         <span></span>
         <span></span>
         <span></span>
       </div>
 
       {/* Navigation */}
-      <nav className={`${style.header_nav} ${menuOpen ? style.open : ""}`}>
+      <nav
+        className={`${style.header_nav} ${
+          menuOpen ? `${style.fullscreen} ${style.open}` : ""
+        }`}
+      >
+        {menuOpen && (
+          <div className={style.close_btn} onClick={() => setMenuOpen(false)}>
+            ×
+          </div>
+        )}
         {userData?.role !== "volunteer" && userData?.role !== "association" && (
           <>
             <Link
