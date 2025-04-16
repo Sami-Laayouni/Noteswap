@@ -725,97 +725,58 @@ const RewardCommunityService = () => {
                 className={styles.searchInput}
               />
             </div>
-            {/*  {/* --- Beautiful Smart AI Dashboard --- 
+
             {students.length > 0 && (
               <section className={styles.beautifulDashboard}>
-                <h2 className={styles.dashboardTitle}>
-                  {t("analytics_dashboard")}
-                </h2>
-                {/* Beautiful Summary Cards 
                 <div className={styles.summaryCards}>
                   <div className={styles.summaryCard}>
-                    <h3>{t("total_community_service")}</h3>
+                    <h3>Total Community Service</h3>
                     <p>
                       {summaryStats.totalCommunityService}{" "}
-                      {t("minute", {
-                        count: summaryStats.totalCommunityService,
-                      })}
+                      {summaryStats.totalCommunityService === 1
+                        ? "minute"
+                        : "minutes"}
                     </p>
                   </div>
                   <div className={styles.summaryCard}>
-                    <h3>{t("total_tutoring")}</h3>
+                    <h3>Total Tutoring</h3>
                     <p>
                       {summaryStats.totalTutoring}{" "}
-                      {t("minute", { count: summaryStats.totalTutoring })}
+                      {summaryStats.totalTutoring === 1 ? "minute" : "minutes"}
                     </p>
                   </div>
                   <div className={styles.summaryCard}>
-                    <h3>{t("total_tasks")}</h3>
+                    <h3>Total Tasks</h3>
                     <p>{summaryStats.totalTasks}</p>
                   </div>
                   <div className={styles.summaryCard}>
-                    <h3>{t("average_minutes_per_student")}</h3>
+                    <h3>Average Minutes per Student</h3>
                     <p>{summaryStats.averageMinutes.toFixed(2)}</p>
                   </div>
                 </div>
-                {/* Smart AI Insights 
-                <div className={styles.smartInsights}>
-                  <h3>{t("smart_ai_insights")}</h3>
-                  <ul>
-                    {smartInsights.map((insight, idx) => (
-                      <li key={idx}>{insight}</li>
-                    ))}
-                  </ul>
-                </div>
-                {/* Beautiful Charts Grid 
+
                 <div className={styles.chartsGrid}>
                   <div className={styles.chartContainer}>
-                    <h3>{t("service_vs_tutoring")}</h3>
+                    <h3>Service vs Tutoring</h3>
                     <Pie data={pieData} />
                   </div>
                   <div className={styles.chartContainer}>
-                    <h3>{t("tasks_over_time")}</h3>
+                    <h3>Tasks Over Time</h3>
                     <Line data={lineChartData} />
                   </div>
                   <div className={styles.chartContainer}>
-                    <h3>{t("risk_distribution")}</h3>
+                    <h3>Risk Distribution</h3>
                     <Doughnut data={doughnutData} />
                   </div>
                   <div className={styles.chartContainer}>
-                    <h3>{t("performance_comparison")}</h3>
+                    <h3>Performance Comparison</h3>
                     <Radar data={radarData} />
                   </div>
                 </div>
-                {/* Engagement Leaderboard 
-                <div className={styles.leaderboardSection}>
-                  <h3>{t("engagement_leaderboard")}</h3>
-                  <table className={styles.leaderboardTable}>
-                    <thead>
-                      <tr>
-                        <th>{t("rank")}</th>
-                        <th>{t("student_name")}</th>
-                        <th>{t("total_minutes")}</th>
-                        <th>{t("engagement_score")}</th>
-                        <th>{t("badge")}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {leaderboard.map((student, idx) => (
-                        <tr key={idx}>
-                          <td>{idx + 1}</td>
-                          <td>{student.name}</td>
-                          <td>{student.totalMinutes}</td>
-                          <td>{student.engagementScore.toFixed(2)}</td>
-                          <td>{assignBadge(idx, leaderboard.length)}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-                
+
                 <div className={styles.insightsSection}>
                   <div className={styles.insightCard}>
-                    <h3>{t("students_needing_help")}</h3>
+                    <h3>Students Needing Help</h3>
                     {studentPerformances.filter(
                       (s) => s.totalMinutes < summaryStats.averageMinutes
                     ).length > 0 ? (
@@ -828,16 +789,17 @@ const RewardCommunityService = () => {
                           .slice(0, 5)
                           .map((s, idx) => (
                             <li key={idx}>
-                              {s.name} - {s.totalMinutes} {t("minute")}
+                              {s.name} - {s.totalMinutes}{" "}
+                              {s.totalMinutes === 1 ? "minute" : "minutes"}
                             </li>
                           ))}
                       </ul>
                     ) : (
-                      <p>{t("no_at_risk_students")}</p>
+                      <p>No At-Risk Students</p>
                     )}
                   </div>
                   <div className={styles.insightCard}>
-                    <h3>{t("top_performers")}</h3>
+                    <h3>Top Performers</h3>
                     {studentPerformances.filter(
                       (s) => s.totalMinutes >= summaryStats.averageMinutes
                     ).length > 0 ? (
@@ -850,17 +812,18 @@ const RewardCommunityService = () => {
                           .slice(0, 5)
                           .map((s, idx) => (
                             <li key={idx}>
-                              {s.name} - {s.totalMinutes} {t("minute")}
+                              {s.name} - {s.totalMinutes}{" "}
+                              {s.totalMinutes === 1 ? "minute" : "minutes"}
                             </li>
                           ))}
                       </ul>
                     ) : (
-                      <p>{t("no_top_performers")}</p>
+                      <p>No Top Performers</p>
                     )}
                   </div>
                 </div>
               </section>
-            )} */}
+            )}
 
             <div className={styles.controls}>
               <div className={styles.leftControls}>

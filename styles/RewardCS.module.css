@@ -381,7 +381,6 @@
 .beautifulDashboard {
   background: #fff;
   padding: 30px;
-  margin-bottom: 40px;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
@@ -404,11 +403,13 @@
 
 .summaryCard {
   flex: 1 1 220px;
-  color: #fff;
+  color: black;
   padding: 20px;
   border-radius: 10px;
   text-align: center;
   transition: transform 0.3s ease;
+  cursor: pointer;
+  background-color: whitesmoke;
 }
 
 .summaryCard:hover {
@@ -431,7 +432,6 @@
   padding: 20px;
   border-left: 5px solid #66a6ff;
   border-radius: 5px;
-  margin-bottom: 30px;
 }
 
 .smartInsights h3 {
