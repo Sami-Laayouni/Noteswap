@@ -1,217 +1,478 @@
-.background {
-  width: 100%;
-  height: 450px;
-  object-fit: cover;
-  object-position: bottom;
-}
-.search {
-  border: 2px solid var(--default-black-color);
-  position: absolute;
-  top: 330px;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 70vw;
-  display: grid;
-  grid-template-columns: 33% 1% 33% 1% 33%;
-  height: 75px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 40px;
-  border: none;
-  border-radius: 10px;
-  background-color: white;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-}
+/* Container for the entire component */
 .container {
-  height: 75px;
-  width: 100%;
-  display: inline-block;
-  vertical-align: middle;
-  border-radius: 10px;
-  padding-left: 20px;
-  padding-top: 10px;
-}
-.container span {
-  color: var(--default-light-grey-color);
-  text-transform: uppercase;
-  font-size: 0.8rem;
-  display: inline-block;
-}
-
-.line {
-  height: 50%;
-  vertical-align: middle;
-  display: inline-block;
-  margin-top: auto;
-  margin-bottom: auto;
-  border-radius: 1px;
-  width: 1px;
-  background-color: var(--default-light-grey-color);
-}
-.title {
-  position: absolute;
-  top: 200px;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white;
-  font-family: var(--manrope-bold-font);
-  font-size: 3rem;
-  text-shadow: 1px 1px 2px black;
-}
-
-.dropdown {
-  cursor: pointer;
-  font-family: var(--manrope-font);
-  user-select: none;
-  margin-top: 5px;
-}
-.dropdownMenu {
-  position: absolute;
-  left: 0px;
-  bottom: 60px;
-  width: 203px;
-  background-color: white;
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-  overflow-y: auto;
+  min-height: 100vh;
+  background: var(--background-color);
+  font-family: var(--font-primary);
+  color: var(--text-color);
   overflow-x: hidden;
-
-  height: 250px;
-  border-radius: 5px;
 }
 
-.dropdownMenu ul {
-  list-style: none;
-  width: 193px;
-  padding: 0;
+/* Main content area */
+.main {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
 }
-.dropdownMenu ul span {
-  width: 100%;
-  background-color: green;
+
+/* Banner section with animated gradient */
+.banner {
+  position: relative;
   text-align: center;
+  padding: 4rem 1rem;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color) 0%,
+    var(--secondary-color) 100%
+  );
+  background-size: 200% 200%;
+  animation: gradientShift 15s ease infinite;
+  color: var(--accent-color);
+  border-radius: 50px;
+  box-shadow: var(--shadow);
+  margin-bottom: 3rem;
+  overflow: hidden;
+  padding-bottom: 150px;
 }
-.dropdownMenu ul li {
-  width: 100%;
-  cursor: pointer;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  text-align: center;
+
+.banner::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("/images/hero-bg.jpg") center/cover no-repeat;
+  opacity: 0.15;
+  z-index: 0;
 }
-.searchButton {
-  display: inline-block;
-  width: 90%;
-  height: 50px;
-  border-radius: 8px;
-  border: none;
-  color: var(--default-white-color);
-  background-color: var(--accent-color);
-  cursor: pointer;
+
+/* Gradient animation */
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
-.becomeButton {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  padding: 15px 30px;
-  cursor: pointer;
-  border-radius: 8px;
-  border: none;
-  background-color: var(--accent-color);
-  color: var(--default-white-color);
-  font-family: var(--manrope-font);
+
+/* Title styling */
+.title {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 2rem;
+  z-index: 1;
+  position: relative;
+  color: white;
+  animation: fadeInUp 1s ease-out;
 }
-.becomeButtonHide {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  padding: 15px 30px;
-  cursor: pointer;
-  border-radius: 8px;
-  border: none;
-  background-color: var(--accent-color);
-  color: var(--default-white-color);
-  font-family: var(--manrope-font);
+
+/* Search bar styling */
+.search {
+  display: flex;
+  align-items: center;
+  max-width: 700px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 50px;
+  height: 60px;
+  padding: 0.15rem;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
 }
-.time {
-  font-family: var(--manrope-font);
-  user-select: none;
+
+.search:hover {
+  transform: translateY(-4px);
+}
+
+.searchInput {
+  flex: 1;
   border: none;
   outline: none;
-  border-bottom: 1px solid black;
+  padding: 1rem 1.5rem;
+  font-size: 1.1rem;
+  color: black;
+  background: transparent;
 }
-.time:focus {
-  border-bottom: 1px solid var(--accent-color);
+
+.searchInput::placeholder {
+  color: #888;
+  animation: pulsePlaceholder 2s infinite;
 }
-/* Tutor */
-.tutor_section {
-  width: 100%;
-  background-color: whitesmoke;
-  height: fit-content;
-  padding-bottom: 90px;
+
+.searchIcon {
+  margin: 0 1.5rem;
+  color: var(--primary-color);
+  font-size: 1.4rem;
+  transition: transform 0.3s ease;
 }
-.grid {
-  display: grid;
-  grid-template-columns: 33% 33% 33%;
+
+.search:hover .searchIcon {
+  transform: scale(1.2);
 }
-.loading_section {
-  width: 100%;
-  height: 60vh;
-  justify-content: center;
+
+/* Placeholder animation */
+@keyframes pulsePlaceholder {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Filters section */
+.filters {
+  display: flex;
+  gap: 1.5rem;
+  margin-left: 1rem;
+}
+
+/* Dropdown wrapper */
+.dropdownWrapper {
+  position: relative;
+  z-index: 999999999999;
+  text-align: center;
   align-items: center;
+  justify-content: center;
+}
+
+.filterButton {
+  border: none;
+  padding-top: 10px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  width: 100px;
+  background-color: white;
+  transition: all 0.3s ease;
+}
+
+.filterButton:hover {
+  transform: translateY(-2px);
+}
+
+/* Dropdown menu */
+.dropdownMenu {
+  position: absolute;
+
+  top: 100%;
+  left: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 50px;
+  box-shadow: var(--shadow);
+  max-height: 250px;
+  overflow-y: auto;
+  z-index: 10000000000000000;
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0;
+  width: 200px;
+}
+
+.dropdownMenu li {
+  padding: 1rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background 0.2s ease;
+}
+
+.dropdownMenu li:hover {
+  background: rgba(107, 72, 255, 0.1);
+  color: var(--primary-color);
+}
+
+/* Time filter */
+.timeFilter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.timeInput {
+  padding: 0.75rem;
+  border: none;
+  width: 80%;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+/* Tutors section */
+.tutors {
+  padding: 3rem 0;
+}
+
+/* Results text */
+.results {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  color: var(--text-color);
+  animation: fadeIn 1s ease-out;
+}
+
+/* Tutor grid with load animation */
+.tutorGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+  animation: fadeInUp 1s ease-out;
+}
+
+.tutorGrid > * {
+  animation: cardEnter 0.5s ease-out forwards;
+  animation-delay: calc(var(--index) * 0.1s);
+}
+
+/* Loading state */
+.loading {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  animation: fadeIn 1s ease-out;
 }
-.loading_section h2 {
-  color: var(--default-black-color);
-  font-family: var(--manrope-font);
+
+.loading h2 {
+  margin-top: 1.5rem;
+  font-size: 1.3rem;
+  color: var(--text-color);
 }
-.loading_text {
-  font-style: italic;
-  font-family: var(--manrope-font);
-  color: var(--default-light-grey-color);
+
+/* No tutors state */
+.noTutors {
+  text-align: center;
+  padding: 4rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 50px;
+  box-shadow: var(--shadow);
+  animation: fadeIn 1s ease-out;
 }
-.result {
-  font-family: var(--manrope-font);
+
+.noTutors h3 {
+  font-size: 1.5rem;
+  color: var(--text-color);
+  font-weight: 500;
 }
-.tutorSection {
-  width: 70%;
-  margin-left: auto;
-  margin-right: auto;
-  padding-top: 100px;
+
+/* Tutor dashboard */
+.tutorDashboard {
+  padding: 4rem 0;
+  background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
 }
-@media all and (max-width: 808px) {
+
+.tutorDashboard h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: var(--text-color);
+  text-align: center;
+}
+
+.dashboardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.dashboardCard {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border-radius: 50px;
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  transition: transform 0.3s ease;
+}
+
+.dashboardCard:hover {
+  transform: translateY(-4px);
+}
+
+.dashboardCard h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--primary-color);
+}
+
+.dashboardCard ul {
+  list-style: none;
+  padding: 0;
+}
+
+.dashboardCard li {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #eee;
+  font-size: 0.95rem;
+  color: var(--text-color);
+}
+
+.dashboardCard p {
+  font-size: 1rem;
+  color: var(--text-color);
+  margin: 0.5rem 0;
+}
+
+/* Action button (FAB) */
+.actionButton {
+  position: fixed;
+  bottom: 2.5rem;
+  right: 2.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background-color: var(--accent-color);
+
+  color: white;
+  border: none;
+  border-radius: 50px;
+  box-shadow: var(--shadow);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.actionButton:hover {
+  transform: scale(1.1);
+}
+
+.actionButton:active::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50px;
+  transform: translate(-50%, -50%) scale(0);
+  animation: ripple 0.6s linear;
+}
+
+/* Animations */
+@keyframes ripple {
+  to {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .main {
+    padding: 1.5rem;
+  }
+
+  .banner {
+    padding: 3rem 1.5rem;
+  }
+
   .title {
-    text-align: center;
-    top: 25%;
-    width: 100%;
-    font-size: 2.5rem;
+    font-size: 2.2rem;
   }
-  .subTitle {
-    display: none;
-  }
+
   .search {
-    width: 95%;
-    grid-template-columns: 49% 1% 49% 1%;
+    max-width: 100%;
+    flex-direction: column;
+    gap: 1rem;
   }
-  .container {
+
+  .filters {
+    flex-direction: column;
+    margin-left: 0;
     width: 100%;
   }
 
-  .container:last-child {
-    display: none;
+  .dropdownWrapper {
+    width: 100%;
   }
-  .result {
+
+  .filterButton {
+    width: 100%;
     text-align: center;
   }
-  .tutorSection {
-    width: 90%;
-  }
-  .becomeButtonHide {
-    display: none;
-  }
-  .grid {
-    grid-template-columns: 100%;
-    display: flex;
+
+  .timeFilter {
     justify-content: center;
-    align-items: center;
-    flex-direction: column;
+  }
+
+  .tutorGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboardGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .actionButton {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.8rem;
+  }
+
+  .searchInput {
+    font-size: 0.95rem;
+  }
+
+  .timeInput {
+    font-size: 0.95rem;
+  }
+
+  .filterButton {
+    font-size: 0.9rem;
+  }
+
+  .actionButton {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
   }
 }

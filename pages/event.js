@@ -12,15 +12,68 @@ import OneSignal from "react-onesignal";
 import { useTranslation } from "next-i18next";
 import { FaSearch, FaPlus } from "react-icons/fa";
 
-/**
- * Get Static props
- * @date 8/13/2023 - 4:53:53 PM
- *
- * @export
- * @async
- * @param {{ locale: any; }} { locale }
- * @return {unknown}
- */
+// Hardcoded events (adapted for EventCard compatibility)
+const hardcodedEvents = [
+  {
+    _id: "event_1",
+    title:
+      "فرصة للشباب من جميع جهات المغرب للمشاركة في برنامج تطويري مميز مع Ken.",
+    desc: "تطلق Ken. دعوة لتقديم الترشيحات لبرنامج وطني موجه للشباب المغاربة الذين تتراوح أعمارهم بين 18 و 30 سنة. يهدف هذا البرنامج إلى تعزيز المهارات القيادية، تشجيع المشاركة المجتمعية، تحفيز الابتكار الاجتماعي، وإنشاء شبكة من القادة الشباب.",
+    eventImage:
+      "https://res.cloudinary.com/dghbzamnp/image/upload/v1744898724/opportunities/covers/z5gwkg07ad6rxapqktsf.jpg",
+    userInfo: [{ profile_picture: "/images/default_user.jpg" }],
+    sponsored: true,
+    type_of_event: "hybrid",
+    tickets: [
+      { price: "0", currency: "MAD" },
+      { price: "50", currency: "MAD" },
+    ],
+    community_service_offered: 10,
+    date_of_events: "2025-06-10 to 2025-06-15",
+    eventMode: "physical",
+    locationName: "Casablanca, Morocco",
+    teacher_id: null,
+    associationId: "assoc_1",
+    additional: "allowAll",
+  },
+  {
+    _id: "event_2",
+    title: "PLURAL+ Youth Video Festival 2025",
+    desc: "The PLURAL+ Youth Video Festival invites young people worldwide to submit creative videos on migration, diversity, and social inclusion. Winners join a prestigious awards ceremony and network with global changemakers.",
+    eventImage:
+      "https://res.cloudinary.com/dghbzamnp/image/upload/v1744752315/opportunities/covers/olwduca1utro9oagsdsu.jpg",
+    userInfo: [{ profile_picture: "/images/default_user.jpg" }],
+    sponsored: true,
+    type_of_event: "ticketed",
+    tickets: [{ price: "20", currency: "USD" }],
+    community_service_offered: 0,
+    date_of_events: "2025-07-25 to 2025-08-01",
+    eventMode: "physical",
+    locationName: "New York, USA",
+    teacher_id: null,
+    associationId: "assoc_2",
+    additional: "allowAll",
+  },
+  {
+    _id: "event_3",
+    title: "4.7 Day ESD Chalk Art Competition 2025",
+    desc: "The 4.7 Day ESD Chalk Art Competition encourages learners to use chalk art to promote Education for Sustainable Development, inspiring conversations on global citizenship, climate action, and equity.",
+    eventImage:
+      "https://res.cloudinary.com/dghbzamnp/image/upload/v1744751963/opportunities/covers/amsoa5l3ztivhdhmsobt.jpg",
+    userInfo: [{ profile_picture: "/images/default_user.jpg" }],
+    sponsored: true,
+    type_of_event: "volunteer",
+    tickets: [],
+    community_service_offered: 15,
+    date_of_events: "2025-03-15 to 2025-03-20",
+    eventMode: "physical",
+    locationName: "Paris, France",
+    teacher_id: null,
+    associationId: "assoc_3",
+    additional: "allowAll",
+  },
+];
+
 export async function getStaticProps({ locale }) {
   return {
     props: {
@@ -28,56 +81,13 @@ export async function getStaticProps({ locale }) {
     },
   };
 }
-/**
- * Description placeholder
- * @date 8/13/2023 - 4:53:53 PM
- *
- * @export
- * @return {*}
- */
-/**
- * Event component that handles the display and search functionality for events.
- *
- * @component
- *
- * @returns {JSX.Element} The rendered component.
- *
- * @example
- * return (
- *   <Event />
- * )
- *
- * @description
- * This component allows users to search for events based on title and location.
- * It also integrates with OneSignal for push notifications and uses the user's
- * geolocation to find events near them. The component maintains various states
- * for handling user input, suggestions, and loading states.
- *
- * @function
- * @name Event
- *
- * @requires useRouter
- * @requires useContext
- * @requires useState
- * @requires useEffect
- * @requires useTranslation
- * @requires ModalContext
- * @requires OneSignal
- * @requires FaSearch
- * @requires FaPlus
- * @requires CreateEvent
- * @requires EventCard
- * @requires LoadingCircle
- * @requires Footer
- *
- * @returns {JSX.Element} The rendered component.
- */
+
 const Event = () => {
   const router = useRouter();
   const { eventStatus } = useContext(ModalContext);
   const [open, setOpen] = eventStatus;
   const [data, setData] = useState("");
-  const [events, setEvents] = useState();
+  const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState("");
   const { t } = useTranslation("common");
@@ -92,12 +102,23 @@ const Event = () => {
   }, [title]);
 
   useEffect(() => {
+    const handleScroll = () => {
+      const banner = document.querySelector(`.${style.banner}`);
+      if (banner) {
+        const scroll = window.scrollY;
+        banner.style.setProperty("--scroll", scroll);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
     if (localStorage.getItem("userInfo")) {
       setData(JSON.parse(localStorage.getItem("userInfo")));
     }
   }, []);
 
-  // Add path to the route
   function addRoutePath(route, value) {
     router.push(
       {
@@ -115,34 +136,32 @@ const Event = () => {
 
   useEffect(() => {
     async function getUserData(title) {
-      const data = await fetch("/api/events/search_events", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title: title,
-          school:
-            JSON.parse(localStorage?.getItem("userInfo"))?.schoolId || "null",
-          location: location || null,
-          locationName: locationName || null,
-        }),
-      });
+      try {
+        const response = await fetch("/api/events/search_events", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            title: title,
+            school:
+              JSON.parse(localStorage?.getItem("userInfo"))?.schoolId || "null",
+            location: location || null,
+            locationName: locationName || null,
+          }),
+        });
 
-      console.log({
-        title: title,
-        school: JSON.parse(localStorage?.getItem("userInfo"))?.schoolId || null,
-        location: location,
-        locationName: locationName,
-      });
-
-      if (data.ok) {
-        const result = await data.json();
-        setEvents(result.tutors);
+        if (response.ok) {
+          const result = await response.json();
+          setEvents([...(result.tutors || []), ...hardcodedEvents]);
+        } else {
+          setEvents(hardcodedEvents);
+        }
+      } catch (error) {
+        console.error("Error fetching events:", error);
+        setEvents(hardcodedEvents);
+      } finally {
         setLoading(false);
-      } else {
-        setLoading(false);
-        setEvents([]);
       }
     }
     getUserData(title);
@@ -151,69 +170,52 @@ const Event = () => {
   useEffect(() => {
     if (localStorage && localStorage.getItem("userInfo")) {
       const initializeOneSignal = async () => {
-        await OneSignal.init({
-          appId: "3b28d10b-3b88-426f-8025-507667803b2a",
-          safari_web_id:
-            "web.onesignal.auto.65a2ca34-f112-4f9d-a5c6-253c0b61cb9f",
-          notifyButton: {
-            enable: false,
-          },
-          promptOptions: {
-            slidedown: {
-              prompts: [
-                {
-                  type: "push", // current types are "push" & "category"
-                  autoPrompt: true,
-                  text: {
-                    // limited to 90 characters
-                    actionMessage:
-                      "Stay updated on the latest opportunities and updates: Allow notifications to never miss out!",
-                    // acceptButton limited to 15 characters
-                    acceptButton: "Allow",
-                    // cancelButton limited to 15 characters
-                    cancelButton: "Cancel",
-                  },
-                  delay: {
-                    pageViews: 1,
-                    timeDelay: 20,
-                  },
-                },
-              ],
-            },
-          },
-          allowLocalhostAsSecureOrigin: true,
-        });
-
-        // Attempt to tag the user with their schoolId after successful subscription
         try {
-          // Assuming userInfo is stored in localStorage and contains _id and schoolId
+          await OneSignal.init({
+            appId: "3b28d10b-3b88-426f-8025-507667803b2a",
+            safari_web_id:
+              "web.onesignal.auto.65a2ca34-f112-4f9d-a5c6-253c0b61cb9f",
+            notifyButton: {
+              enable: false,
+            },
+            promptOptions: {
+              slidedown: {
+                prompts: [
+                  {
+                    type: "push",
+                    autoPrompt: true,
+                    text: {
+                      actionMessage:
+                        "Stay updated on the latest opportunities: Allow notifications!",
+                      acceptButton: "Allow",
+                      cancelButton: "Cancel",
+                    },
+                    delay: {
+                      pageViews: 1,
+                      timeDelay: 20,
+                    },
+                  },
+                ],
+              },
+            },
+            allowLocalhostAsSecureOrigin: true,
+          });
+
           const userInfo = JSON.parse(localStorage.getItem("userInfo"));
           if (userInfo && userInfo.schoolId) {
             await OneSignal.login(userInfo._id);
-
-            // Add email and tags
             if (userInfo.email) {
               OneSignal.User.addEmail(userInfo.email);
             }
-            // Information on user
-            OneSignal.User.addTags({
-              schoolId: userInfo.schoolId,
-            })
-              .then(() => {
-                console.log(`User tagged with schoolId: ${userInfo.schoolId}`);
-              })
-              .catch((error) => {
-                console.error("Error tagging user with schoolId:", error);
-              });
+            OneSignal.User.addTags({ schoolId: userInfo.schoolId });
           }
         } catch (error) {
-          console.error("Error retrieving userInfo from localStorage:", error);
+          console.error("Error initializing OneSignal:", error);
         }
       };
 
       initializeOneSignal();
 
-      // We'll use this function to prompt the user for notification permissions
       const askForNotificationPermission = async () => {
         try {
           await OneSignal.showSlidedownPrompt();
@@ -222,7 +224,6 @@ const Event = () => {
         }
       };
 
-      // Add event listener to the 'container' element for user interaction
       const containerElement = document.getElementById("container");
       if (containerElement) {
         containerElement.addEventListener(
@@ -231,7 +232,6 @@ const Event = () => {
         );
       }
 
-      // Cleanup function to remove event listener
       return () => {
         if (containerElement) {
           containerElement.removeEventListener(
@@ -239,8 +239,6 @@ const Event = () => {
             askForNotificationPermission
           );
         }
-
-        //window.OneSignal = undefined;
       };
     }
   }, [router]);
@@ -261,13 +259,15 @@ const Event = () => {
       }`
     );
   };
-  // Handle suggestion click
+
   const handleSuggestionClick = (suggestion) => {
     setInput(suggestion.label);
+    setLocation([suggestion.lat, suggestion.lon]);
+    setLocationName(suggestion.label);
     setSuggestions([]);
     setShowSuggestions(false);
   };
-  // Handle input change
+
   const handleChangeLocation = (e) => {
     const value = e.target.value;
     setInput(value);
@@ -299,129 +299,120 @@ const Event = () => {
   };
 
   return (
-    <div id="container">
+    <div id="container" className={style.container}>
       <Head>
         <title>NoteSwap | Events</title>
+        <meta
+          name="description"
+          content="Discover amazing events and opportunities on NoteSwap."
+        />
       </Head>
       <CreateEvent business={false} meeting={false} />
 
-      {/* Events */}
-      <main className={style.padding}>
-        <section className={style.search}>
-          <button className={style.buttonSearch}>
-            <FaSearch color="#60606c" size={30} />
-          </button>
-          <input
-            value={title}
-            onChange={(e) => {
-              setTitle(e.target.value);
-            }}
-            style={{ borderRadius: "50px", width: "100%" }}
-            placeholder={"Find your next big event!"}
-            autoFocus
-          />
-        </section>
-        <section className={style.banner}></section>
-
-        <div className={style.containers}>
-          <b className={style.bold}>Browsing Events in</b>
-          <input
-            type="text"
-            className={style.input}
-            value={input}
-            onChange={handleChangeLocation}
-            placeholder="Enter location"
-            onBlur={() => setShowSuggestions(false)}
-            onFocus={() => input && setShowSuggestions(true)}
-          />
-          {suggestions.length > 0 && (
-            <ul
-              className={style.listFlow}
-              style={{
-                listStyleType: "none",
-                padding: 0,
-              }}
+      <main className={style.main}>
+        <div className={style.banner}>
+          <h1 className={style.title}>Discover Opportunities</h1>
+          <section className={style.search}>
+            <FaSearch className={style.searchIcon} aria-hidden="true" />
+            <input
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className={style.searchInput}
+              placeholder={t("search_opportunities")}
+              autoFocus
+              aria-label={t("search_opportunities")}
+            />
+          </section>
+          <div className={style.filters}>
+            <div className={style.locationWrapper}>
+              <input
+                type="text"
+                className={style.locationInput}
+                value={input}
+                onChange={handleChangeLocation}
+                placeholder={t("enter_location")}
+                onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                onFocus={() => input && setShowSuggestions(true)}
+                aria-label={t("enter_location")}
+              />
+              {showSuggestions && suggestions.length > 0 && (
+                <ul className={style.suggestions}>
+                  {suggestions.map((suggestion, index) => (
+                    <li
+                      key={index}
+                      onClick={() => handleSuggestionClick(suggestion)}
+                      className={style.suggestionItem}
+                      role="option"
+                      aria-selected="false"
+                    >
+                      {suggestion.label}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            <button
+              onClick={() =>
+                navigator.geolocation.getCurrentPosition(showPosition)
+              }
+              className={style.filterButton}
+              aria-label={t("use_current_location")}
             >
-              {suggestions.map((suggestion, index) => (
-                <li
-                  key={index}
-                  onClick={() => {
-                    setInput(suggestion.label);
-                    setLocation([suggestion.lat, suggestion.lon]);
-                    setLocationName(suggestion.label);
-                    handleSuggestionClick(suggestion);
-                  }}
-                >
-                  {suggestion.label}
-                </li>
-              ))}
-            </ul>
-          )}
-          <button
-            onClick={async () => {
-              navigator.geolocation.getCurrentPosition(showPosition);
-            }}
-            type="button"
-            className={style.button}
-          >
-            Current Location
-          </button>
-          <button
-            onClick={() => {
-              setLocationName("Online");
-              setLocation("Online");
-              setInput("Online");
-            }}
-            className={style.button}
-          >
-            {t("online")}
-          </button>
+              {t("current_location")}
+            </button>
+            <button
+              onClick={() => {
+                setLocationName("Online");
+                setLocation("Online");
+                setInput("Online");
+              }}
+              className={style.filterButton}
+              aria-label={t("online")}
+            >
+              {t("online")}
+            </button>
+          </div>
         </div>
 
-        {events && events.length == 0 ? (
-          <>
-            <section className={style.loading_section}>
-              <h3 className={style.loading_text}>{t("no_events")}</h3>
-            </section>
-          </>
-        ) : (
-          <>
-            <p style={{ paddingTop: "10px" }}>
-              {events?.length} {t("result")}
-              {events?.length == 1 ? "" : "s"} {t("found")}
-            </p>
-            <div className={style.adapt}>
-              {events?.map(function (value) {
-                return <EventCard key={value.id} data={value} />;
-              })}
+        <section className={style.events}>
+          {loading ? (
+            <div className={style.loading}>
+              <LoadingCircle />
+              <h2>{t("loading")}</h2>
             </div>
-          </>
-        )}
-        {loading && (
-          <section className={style.loading_section}>
-            <LoadingCircle />
-
-            <h2>{t("looking")}</h2>
-          </section>
-        )}
+          ) : events.length === 0 ? (
+            <div className={style.noEvents}>
+              <h3>{t("no_events")}</h3>
+            </div>
+          ) : (
+            <>
+              <p className={style.results}>
+                {events.length} {t("result")}
+                {events.length === 1 ? "" : "s"} {t("found")}
+              </p>
+              <div className={style.eventGrid}>
+                {events.map((event) => (
+                  <EventCard key={event._id} data={event} />
+                ))}
+              </div>
+            </>
+          )}
+        </section>
       </main>
 
-      {data && data?.role == "teacher" && (
-        <section
-          onClick={() => {
-            setOpen(true);
-          }}
-          className={style.createNewEvent}
-          style={{ borderRadius: "50px" }}
+      {data?.role === "teacher" && (
+        <button
+          onClick={() => setOpen(true)}
+          className={style.createEventButton}
+          aria-label={t("create_new_event")}
+          title={t("create_new_event")}
         >
-          <FaPlus
-            size={20}
-            style={{ verticalAlign: "middle", marginRight: "10px" }}
-          />
-          {t("create_new_event")}
-        </section>
+          <FaPlus size={24} />
+          <span>{t("create_new_event")}</span>
+        </button>
       )}
     </div>
   );
 };
+
 export default Event;

@@ -151,6 +151,7 @@ export default function Header() {
               <RiCopperCoinLine size={20} />
             </Link>
           )}
+          {/*
           {userData?.role === "student" && (
             <Link
               href="/productivity"
@@ -159,7 +160,7 @@ export default function Header() {
             >
               <IoMdTime size={20} />
             </Link>
-          )}
+          )}*/}
           {userData?.admin === true && (
             <Link href="/admin" className={style.nav_item} title="Admin">
               <MdOutlineAdminPanelSettings size={20} />
@@ -304,7 +305,7 @@ export default function Header() {
               <RiCopperCoinLine size={20} /> Reward CS
             </Link>
           )}
-          {userData?.role === "student" && (
+          {/*{userData?.role === "student" && (
             <Link
               href="/productivity"
               className={style.nav_item}
@@ -312,7 +313,7 @@ export default function Header() {
             >
               <IoMdTime size={20} /> Productivity
             </Link>
-          )}
+          )}*/}
           {userData?.admin === true && (
             <Link href="/admin" className={style.nav_item} onClick={toggleMenu}>
               <MdOutlineAdminPanelSettings size={20} /> Admin
