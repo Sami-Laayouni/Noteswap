@@ -7,6 +7,7 @@
   padding: 0 30px;
   min-height: 100vh;
   animation: fadeIn 1s ease-out;
+  margin-left: 70px;
 }
 
 /* Keyframe for fadeIn animation */
