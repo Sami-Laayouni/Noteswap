@@ -24,9 +24,10 @@ const sampleTutors = [
     userInfo: [
       {
         _id: "user1",
-        first_name: "John",
+        first_name: "Brian",
         last_name: "Doe",
-        profile_picture: "https://randomuser.me/api/portraits/men/22.jpg",
+        profile_picture:
+          "https://static.vecteezy.com/system/resources/previews/046/836/814/non_2x/smiling-teenage-boy-in-classroom-setting-russian-high-school-student-educational-environment-study-session-learning-and-academic-achievement-photo.jpg",
         rating: [4.5, 5.0, 4.8],
       },
     ],
@@ -41,7 +42,8 @@ const sampleTutors = [
         _id: "user2",
         first_name: "Jane",
         last_name: "Smith",
-        profile_picture: "https://randomuser.me/api/portraits/women/90.jpg",
+        profile_picture:
+          "https://patch.com/img/cdn/users/512443/2013/05/raw/e339648fca517c7697f00898b8f645dd.jpg",
         rating: [4.9, 5.0, 4.7],
       },
     ],
@@ -56,7 +58,8 @@ const sampleTutors = [
         _id: "user3",
         first_name: "Emily",
         last_name: "Johnson",
-        profile_picture: "https://randomuser.me/api/portraits/women/27.jpg",
+        profile_picture:
+          "https://media.istockphoto.com/id/1437816897/photo/business-woman-manager-or-human-resources-portrait-for-career-success-company-we-are-hiring.jpg?s=612x612&w=0&k=20&c=tyLvtzutRh22j9GqSGI33Z4HpIwv9vL_MZw_xOE19NQ=",
         rating: [2, 5.0],
       },
     ],

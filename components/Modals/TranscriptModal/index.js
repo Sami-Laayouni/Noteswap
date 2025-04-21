@@ -1,8 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import Modal from "../../Template/Modal";
 import ModalContext from "../../../context/ModalContext";
-
-// External libs for DOCX, PDF, file saving
 import PizZip from "pizzip";
 import PizZipUtils from "pizzip/utils/index.js";
 import Docxtemplater from "docxtemplater";
@@ -76,6 +74,13 @@ function getCollegeOptimizedSummaries(college, itemMessage) {
   return { commonApp, bullet, reflection };
 }
 
+const themeColors = {
+  Modern: { primary: "var(--accent-color)", secondary: "#e8f0fe" },
+  Classic: { primary: "#b58900", secondary: "#fdf6e3" },
+  Minimalist: { primary: "#333", secondary: "#fff" },
+  Elegant: { primary: "#8e806a", secondary: "#f7f1e1" },
+};
+
 const MagicalTranscriptModal = () => {
   const { certificateModal } = useContext(ModalContext);
   const [open, setOpen] = certificateModal;
@@ -104,15 +109,13 @@ const MagicalTranscriptModal = () => {
   const [generationProgress, setGenerationProgress] = useState(0);
   const [showConfetti, setShowConfetti] = useState(false);
 
-  // --- NEW: Design Theme Selection ---
-  // Let the user choose from multiple design themes
+  // Design Theme Selection
   const [theme, setTheme] = useState("Modern"); // Options: Modern, Classic, Minimalist, Elegant
 
-  // --- NEW: College Selection ---
+  // College Selection
   const [selectedCollege, setSelectedCollege] = useState("None");
 
   // Load user data from localStorage (or use fallback demo data)
-  // and create events while computing note sharing minutes as “leftover” points.
   useEffect(() => {
     if (localStorage.getItem("userInfo")) {
       const uData = JSON.parse(localStorage.getItem("userInfo"));
@@ -121,7 +124,6 @@ const MagicalTranscriptModal = () => {
       setSchoolData(sData);
 
       let events = [];
-      // Process any breakdown events if they exist.
       if (uData.breakdown && Array.isArray(uData.breakdown)) {
         events = uData.breakdown.map((act, idx) => ({
           id: idx + 1,
@@ -135,26 +137,19 @@ const MagicalTranscriptModal = () => {
         0
       );
 
-      console.log("Allocated Points:", allocatedPoints);
-
-      // Leftover points for note sharing:
       const leftoverPoints = Math.max(uData.points / 200 - allocatedPoints, 0);
-      console.log(uData.points);
-      console.log("Leftover Points:", leftoverPoints);
 
       if (leftoverPoints > 0) {
         events.unshift({
           id: events.length + 1,
           category: "activity",
           message: "Sharing notes on NoteSwap",
-          // Calculate minutes based on leftover points:
           minutes: Math.round(leftoverPoints / 20),
           organization: "NoteSwap",
           rewardedOn: new Date().toLocaleDateString("en-US"),
         });
       }
 
-      // Add tutoring event if tutor_hours is provided.
       if (uData.tutor_hours && uData.tutor_hours !== 0) {
         events.unshift({
           id: events.length + 1,
@@ -168,13 +163,12 @@ const MagicalTranscriptModal = () => {
 
       setPortfolioItems(events);
     } else {
-      // Fallback demo data (for which breakdown events may not have point details)
       setUserData({
         first_name: "Jane",
         last_name: "Doe",
         createdAt: "2022-10-01",
-        points: 40, // Total points earned
-        tutor_hours: 120, // Tutoring hours earned
+        points: 40,
+        tutor_hours: 120,
       });
       setSchoolData({
         schoolFullName: "NoteSwap Academy",
@@ -187,7 +181,7 @@ const MagicalTranscriptModal = () => {
           minutes: 120,
           organization: "City Animal Shelter",
           rewardedOn: "2023-05-01",
-          points: 0, // No points allocated here
+          points: 0,
         },
         {
           id: 2,
@@ -224,9 +218,7 @@ const MagicalTranscriptModal = () => {
     });
   };
 
-  // ------------------------------
-  // MAGIC AI: Generate "perfect" summaries
-  // ------------------------------
+  // Generate all summaries
   const handleGenerateAllSummaries = async () => {
     setIsGenerating(true);
     setGenerationProgress(0);
@@ -238,10 +230,8 @@ const MagicalTranscriptModal = () => {
 
     for (let i = 0; i < total; i++) {
       const item = finalItems[i];
-      // Simulate a delay to mimic an AI call
       await new Promise((res) => setTimeout(res, 500));
 
-      // Get a college-optimized summary based on the selected college.
       const { commonApp, bullet, reflection } = getCollegeOptimizedSummaries(
         selectedCollege,
         item.message
@@ -262,9 +252,7 @@ const MagicalTranscriptModal = () => {
     setTimeout(() => setShowConfetti(false), 4000);
   };
 
-  // ------------------------------
-  // DOCX, PDF, and TXT Generation Functions
-  // ------------------------------
+  // DOCX Generation
   const generateDocx = async () => {
     loadFile(
       `${
@@ -288,7 +276,6 @@ const MagicalTranscriptModal = () => {
 
         const finalItems = getFilteredItems();
 
-        // Sum up the minutes for all events.
         const totalCommunityService = finalItems.reduce(
           (sum, entry) => sum + parseInt(entry.minutes, 10),
           0
@@ -305,7 +292,7 @@ const MagicalTranscriptModal = () => {
           total_community_service: `${totalCommunityService} minute${
             totalCommunityService === 1 ? "" : "s"
           }`,
-          theme, // include theme if your docx template supports it
+          theme,
         });
 
         try {
@@ -321,7 +308,6 @@ const MagicalTranscriptModal = () => {
             const result = reader.result;
             const sha256Hash = await computeSHA256(result);
             console.log("SHA-256 for docx:", sha256Hash);
-            // Send the certificate info for verification (integrity check)
             await fetch("/api/certificate/download_certificate", {
               method: "POST",
               headers: {
@@ -345,11 +331,35 @@ const MagicalTranscriptModal = () => {
     );
   };
 
+  // PDF Generation
   const generatePDF = () => {
     const doc = new jsPDF();
-    doc.setFontSize(16);
-    doc.text("NoteSwap Magical Portfolio", 10, 10);
 
+    // Set font based on theme
+    if (theme === "Modern" || theme === "Minimalist") {
+      doc.setFont("helvetica");
+    } else if (theme === "Classic" || theme === "Elegant") {
+      doc.setFont("times");
+    }
+
+    // Set text color for Minimalist theme
+    if (theme === "Minimalist") {
+      doc.setTextColor(100, 100, 100); // Medium gray
+    } else {
+      doc.setTextColor(0, 0, 0); // Black
+    }
+
+    // Header
+    doc.setFontSize(16);
+    if (theme === "Elegant") {
+      doc.setFont("times", "bold");
+    }
+    doc.text("NoteSwap Magical Portfolio", 10, 10);
+    if (theme === "Elegant") {
+      doc.setFont("times", "normal");
+    }
+
+    // User Info
     doc.setFontSize(12);
     let yPos = 20;
     doc.text(`Name: ${userData?.first_name} ${userData?.last_name}`, 10, yPos);
@@ -357,32 +367,91 @@ const MagicalTranscriptModal = () => {
     doc.text(`School: ${schoolData?.schoolFullName}`, 10, yPos);
     yPos += 6;
     doc.text(`Theme: ${theme}`, 10, yPos);
+    yPos += 6;
+
+    // Total Community Service
+    const finalItems = getFilteredItems();
+    const totalCommunityService = finalItems.reduce(
+      (sum, entry) => sum + parseInt(entry.minutes, 10),
+      0
+    );
+    doc.text(
+      `Total Community Service: ${totalCommunityService} minutes`,
+      10,
+      yPos
+    );
     yPos += 10;
 
-    const finalItems = getFilteredItems();
+    // Items with Pagination and Text Wrapping
     finalItems.forEach((item, index) => {
-      doc.text(`${index + 1}. ${item.message} (${item.category})`, 10, yPos);
-      yPos += 6;
-      if (summaries[item.id]) {
-        doc.text(`   CommonApp: ${summaries[item.id].commonApp}`, 10, yPos);
-        yPos += 6;
-        doc.text(`   Bullet: ${summaries[item.id].bullet}`, 10, yPos);
-        yPos += 6;
-        doc.text(`   Reflection: ${summaries[item.id].reflection}`, 10, yPos);
-        yPos += 6;
+      if (yPos > 280) {
+        doc.addPage();
+        yPos = 10;
       }
-      yPos += 2;
+      if (theme === "Elegant") {
+        doc.setFont("times", "bold");
+      }
+      const itemTitle = `${index + 1}. ${item.message} (${item.category})`;
+      const itemTitleLines = doc.splitTextToSize(itemTitle, 180);
+      doc.text(itemTitleLines, 10, yPos);
+      yPos += itemTitleLines.length * 6;
+      if (theme === "Elegant") {
+        doc.setFont("times", "normal");
+      }
+
+      if (summaries[item.id]) {
+        const commonAppText = doc.splitTextToSize(
+          `CommonApp: ${summaries[item.id].commonApp}`,
+          170
+        );
+        if (yPos + commonAppText.length * 6 > 280) {
+          doc.addPage();
+          yPos = 10;
+        }
+        doc.text(commonAppText, 15, yPos);
+        yPos += commonAppText.length * 6;
+
+        const bulletText = doc.splitTextToSize(
+          `Bullet: ${summaries[item.id].bullet}`,
+          170
+        );
+        if (yPos + bulletText.length * 6 > 280) {
+          doc.addPage();
+          yPos = 10;
+        }
+        doc.text(bulletText, 15, yPos);
+        yPos += bulletText.length * 6;
+
+        const reflectionText = doc.splitTextToSize(
+          `Reflection: ${summaries[item.id].reflection}`,
+          170
+        );
+        if (yPos + reflectionText.length * 6 > 280) {
+          doc.addPage();
+          yPos = 10;
+        }
+        doc.text(reflectionText, 15, yPos);
+        yPos += reflectionText.length * 6;
+      }
+      yPos += 4; // Extra spacing between items
     });
+
     const pdfBlob = doc.output("blob");
     saveAs(pdfBlob, "NoteSwap_Portfolio.pdf");
   };
 
+  // Plain Text Generation
   const generatePlainText = () => {
+    const finalItems = getFilteredItems();
+    const totalCommunityService = finalItems.reduce(
+      (sum, entry) => sum + parseInt(entry.minutes, 10),
+      0
+    );
     let content = "NoteSwap Magical Portfolio\n\n";
     content += `Name: ${userData?.first_name} ${userData?.last_name}\n`;
     content += `School: ${schoolData?.schoolFullName}\n`;
-    content += `Theme: ${theme}\n\n`;
-    const finalItems = getFilteredItems();
+    content += `Theme: ${theme}\n`;
+    content += `Total Community Service: ${totalCommunityService} minutes\n\n`;
     finalItems.forEach((item, i) => {
       content += `- ${item.message} (${item.category}) [${item.minutes} minutes]\n`;
       if (summaries[item.id]) {
@@ -396,6 +465,7 @@ const MagicalTranscriptModal = () => {
     saveAs(blob, "NoteSwap_Portfolio.txt");
   };
 
+  // Handle Download
   const handleDownload = () => {
     setShowConfetti(true);
     setTimeout(() => setShowConfetti(false), 3000);
@@ -405,7 +475,37 @@ const MagicalTranscriptModal = () => {
     else generatePlainText();
   };
 
-  // --- Return the Modal with all the magical UI ---
+  // Button Styles
+  const generateButtonStyle = {
+    padding: "8px 14px",
+    backgroundColor: themeColors[theme].primary,
+    color: "white",
+    border: "none",
+    borderRadius: "4px",
+    cursor: "pointer",
+    fontWeight: 600,
+    transition: "background-color 0.2s ease",
+  };
+
+  const downloadButtonStyle = {
+    marginTop: "1.5rem",
+    padding: "10px 16px",
+    backgroundColor: themeColors[theme].primary,
+    color: "#fff",
+    border: "none",
+    borderRadius: "4px",
+    cursor: "pointer",
+    fontWeight: 600,
+    transition: "background-color 0.2s ease",
+  };
+
+  // Calculate filtered items and total community service for preview
+  const finalItems = getFilteredItems();
+  const totalCommunityService = finalItems.reduce(
+    (sum, entry) => sum + parseInt(entry.minutes, 10),
+    0
+  );
+
   return (
     <Modal
       isOpen={open}
@@ -465,7 +565,7 @@ const MagicalTranscriptModal = () => {
           </select>
         </div>
 
-        {/* NEW: College Selection Dropdown */}
+        {/* College Selection Dropdown */}
         <div style={{ margin: "1rem 0" }}>
           <label style={styles.formatLabel}>Select College:</label>
           <select
@@ -483,7 +583,7 @@ const MagicalTranscriptModal = () => {
 
         {/* One-click AI Summaries */}
         <button
-          style={styles.generateButton}
+          style={generateButtonStyle}
           onClick={handleGenerateAllSummaries}
           disabled={isGenerating}
         >
@@ -517,35 +617,102 @@ const MagicalTranscriptModal = () => {
 
         {/* Portfolio Preview */}
         <h4 style={{ marginTop: "2rem" }}>Portfolio Preview ({theme} Theme)</h4>
-        <div style={styles.portfolioPreview}>
-          {getFilteredItems().map((item) => (
-            <div
-              key={item.id}
-              style={{ ...styles.itemCard, ...getThemeCardStyles(theme) }}
-            >
-              <div style={styles.itemHeader}>
-                <strong>{item.message}</strong>
-                <em style={styles.itemCategory}>({item.category})</em>
-              </div>
-              <div style={styles.itemMeta}>
-                <span>Minutes: {item.minutes}</span>
-                <span>Org: {item.organization}</span>
-                <span>Date: {item.rewardedOn}</span>
-              </div>
+        <div
+          style={{
+            ...styles.portfolioPreview,
+            backgroundColor: "#fff",
+            padding: "20px",
+            boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+            borderRadius: "8px",
+          }}
+        >
+          <h2
+            style={{
+              textAlign: "center",
+              marginBottom: "20px",
+              fontFamily:
+                theme === "Elegant" ? "'Georgia', serif" : "Roboto, sans-serif",
+            }}
+          >
+            NoteSwap Portfolio
+          </h2>
+          <p>
+            <strong>Name:</strong> {userData?.first_name} {userData?.last_name}
+          </p>
+          <p>
+            <strong>School:</strong> {schoolData?.schoolFullName}
+          </p>
+          <p>
+            <strong>Theme:</strong> {theme}
+          </p>
+          <p>
+            <strong>Total Community Service:</strong> {totalCommunityService}{" "}
+            minutes
+          </p>
+          <hr
+            style={{
+              margin: "15px 0",
+              borderColor: themeColors[theme].primary,
+            }}
+          />
+          {finalItems.map((item, index) => (
+            <div key={item.id} style={{ marginBottom: "20px" }}>
+              <h3
+                style={{
+                  color: themeColors[theme].primary,
+                  fontSize: "1.1rem",
+                  marginBottom: "8px",
+                }}
+              >
+                {index + 1}. {item.message} ({item.category})
+              </h3>
+              <p style={{ fontSize: "0.9rem" }}>
+                <strong>Minutes:</strong> {item.minutes}
+              </p>
+              <p style={{ fontSize: "0.9rem" }}>
+                <strong>Organization:</strong> {item.organization}
+              </p>
+              <p style={{ fontSize: "0.9rem" }}>
+                <strong>Date:</strong> {item.rewardedOn}
+              </p>
               {summaries[item.id] && (
-                <div style={styles.summarySection}>
-                  <p style={{ fontWeight: "bold", marginBottom: 4 }}>
+                <div
+                  style={{
+                    marginTop: "10px",
+                    paddingLeft: "10px",
+                    borderLeft: `2px solid ${themeColors[theme].primary}`,
+                  }}
+                >
+                  <p style={{ fontWeight: "bold", fontSize: "0.9rem" }}>
                     Common App Summary:
                   </p>
-                  <p>{summaries[item.id].commonApp}</p>
-                  <p style={{ fontWeight: "bold", margin: "8px 0 4px 0" }}>
+                  <p style={{ fontSize: "0.9rem" }}>
+                    {summaries[item.id].commonApp}
+                  </p>
+                  <p
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "0.9rem",
+                      marginTop: "8px",
+                    }}
+                  >
                     Bullet Point:
                   </p>
-                  <p>{summaries[item.id].bullet}</p>
-                  <p style={{ fontWeight: "bold", margin: "8px 0 4px 0" }}>
+                  <p style={{ fontSize: "0.9rem" }}>
+                    {summaries[item.id].bullet}
+                  </p>
+                  <p
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "0.9rem",
+                      marginTop: "8px",
+                    }}
+                  >
                     Reflective Paragraph:
                   </p>
-                  <p>{summaries[item.id].reflection}</p>
+                  <p style={{ fontSize: "0.9rem" }}>
+                    {summaries[item.id].reflection}
+                  </p>
                 </div>
               )}
             </div>
@@ -553,7 +720,7 @@ const MagicalTranscriptModal = () => {
         </div>
 
         {/* Download Button */}
-        <button style={styles.downloadButton} onClick={handleDownload}>
+        <button style={downloadButtonStyle} onClick={handleDownload}>
           Download Portfolio
         </button>
       </div>
@@ -563,33 +730,25 @@ const MagicalTranscriptModal = () => {
 
 export default MagicalTranscriptModal;
 
-// -------------------------------
-// Base Styles & Theme Overrides
-// -------------------------------
+// Styles
 const styles = {
   container: {
     width: "100%",
     minHeight: "400px",
-    padding: "1rem",
+    padding: "2rem",
     position: "relative",
+    fontFamily: "Roboto, sans-serif",
   },
   description: {
-    marginBottom: "1rem",
-    fontSize: "1rem",
+    marginBottom: "1.5rem",
+    fontSize: "1.1rem",
+    color: "#333",
   },
   toggles: {
     display: "flex",
-    gap: "1rem",
-    marginBottom: "1rem",
-  },
-  generateButton: {
-    padding: "8px 14px",
-    backgroundColor: "#4CAF50",
-    color: "white",
-    border: "none",
-    borderRadius: "4px",
-    cursor: "pointer",
-    fontWeight: 600,
+    gap: "1.5rem",
+    marginBottom: "1.5rem",
+    fontSize: "1rem",
   },
   progressBarContainer: {
     width: "100%",
@@ -609,59 +768,21 @@ const styles = {
   formatLabel: {
     display: "block",
     marginBottom: "0.5rem",
+    fontSize: "1rem",
   },
   select: {
-    padding: "8px",
-    borderRadius: "4px",
+    padding: "10px",
+    borderRadius: "6px",
     border: "1px solid #ccc",
+    width: "200px",
+    fontSize: "1rem",
   },
   portfolioPreview: {
     marginTop: "1rem",
-    maxHeight: "250px",
+    maxHeight: "300px",
     overflowY: "auto",
     border: "1px solid #ddd",
-    borderRadius: "4px",
     padding: "8px",
-  },
-  itemCard: {
-    border: "1px solid #ddd",
-    borderRadius: "4px",
-    padding: "8px",
-    marginBottom: "8px",
-    backgroundColor: "#fff",
-  },
-  itemHeader: {
-    display: "flex",
-    gap: "8px",
-    alignItems: "baseline",
-    marginBottom: "4px",
-  },
-  itemCategory: {
-    color: "#888",
-    fontSize: "0.85rem",
-  },
-  itemMeta: {
-    display: "flex",
-    gap: "1rem",
-    fontSize: "0.85rem",
-    color: "#666",
-    marginBottom: "6px",
-  },
-  summarySection: {
-    backgroundColor: "#f9f9f9",
-    borderRadius: "4px",
-    padding: "8px",
-    marginTop: "6px",
-  },
-  downloadButton: {
-    marginTop: "1.5rem",
-    padding: "10px 16px",
-    backgroundColor: "#0070f3",
-    color: "#fff",
-    border: "none",
-    borderRadius: "4px",
-    cursor: "pointer",
-    fontWeight: 600,
   },
   confettiContainer: {
     position: "fixed",
@@ -691,33 +812,3 @@ const styles = {
     };
   },
 };
-
-function getThemeCardStyles(theme) {
-  switch (theme) {
-    case "Classic":
-      return {
-        backgroundColor: "#fdf6e3",
-        borderColor: "#b58900",
-        fontFamily: "'Times New Roman', serif",
-      };
-    case "Minimalist":
-      return {
-        backgroundColor: "#ffffff",
-        borderColor: "#ddd",
-        fontFamily: "Arial, sans-serif",
-      };
-    case "Elegant":
-      return {
-        backgroundColor: "#f7f1e1",
-        borderColor: "#8e806a",
-        fontFamily: "'Georgia', serif",
-      };
-    case "Modern":
-    default:
-      return {
-        backgroundColor: "#e8f0fe",
-        borderColor: "#4285f4",
-        fontFamily: "Roboto, sans-serif",
-      };
-  }
-}
