@@ -16,19 +16,22 @@
   background-color: var(--accent-color);
   color: var(--default-white-color);
   border-radius: 5px;
+  position: fixed;
   bottom: 20px;
   right: 20px;
-  position: absolute;
   cursor: pointer;
+  z-index: 1000; /* Ensures button stays above other content */
 }
 
 .back {
   color: var(--accent-color);
   cursor: pointer;
-  bottom: 10px;
-  left: 20px;
-  position: absolute;
+  position: fixed;
+  bottom: 60px; /* Increased to avoid overlap with .next button */
+  right: 20px;
+  z-index: 1000; /* Ensures button stays above other content */
 }
+
 .back:hover {
   text-decoration: underline;
 }
@@ -150,5 +153,14 @@
     border-radius: 10px;
     width: 68vw;
     height: 300px;
+  }
+  .next {
+    padding: 10px 20px; /* Smaller padding for smaller screens */
+    bottom: 15px;
+    right: 15px;
+  }
+  .back {
+    bottom: 50px; /* Maintain spacing above .next */
+    right: 15px;
   }
 }

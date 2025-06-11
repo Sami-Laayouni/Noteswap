@@ -76,96 +76,134 @@ export default async function handler(req, res) {
     `,
 
       html: ReactDOMServer.renderToString(
-        <section>
-          <section
+        <section
+          style={{
+            fontFamily: "Arial, sans-serif",
+            backgroundColor: "#f4f4f4",
+            padding: "20px",
+          }}
+        >
+          {/* Header */}
+          <header
             style={{
-              width: "100%",
-              height: "8vh",
               backgroundColor: "#40b385",
-              textAlign: "left",
               color: "white",
-              fontFamily: "Manrope",
-              paddingLeft: "20px",
-              display: "flex",
-              alignItems: "center",
-              marginBottom: "20px",
+              padding: "20px",
+              textAlign: "center",
+              borderRadius: "8px 8px 0 0",
             }}
           >
-            <h1>NoteSwap Tutoring</h1>
-          </section>
+            <h1 style={{ margin: 0, fontSize: "24px" }}>
+              NoteSwap Tutoring Request
+            </h1>
+          </header>
+
+          {/* Main Content */}
           <main
             style={{
-              whiteSpace: "pre-line",
-              wordBreak: "break-all",
-              fontFamily: "Manrope",
-              lineHeight: "200%",
-              paddingRight: "50px",
+              backgroundColor: "white",
+              padding: "20px",
+              maxWidth: "600px",
+              margin: "20px auto",
+              borderRadius: "0 0 8px 8px",
+              boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
             }}
           >
-            <b>Hello {receiverName},</b>
-            <p>
-              Thank you for your interest in becoming a tutor on NoteSwap. We
-              have received a request from a student who is looking to be
-              tutored by you.
-            </p>{" "}
-            <p>
-              Student’s Name: {name}
-              Student’s Email: {senderEmail}
-              Preferred Tutoring Schedule: {date} from {time}
+            <p style={{ fontSize: "16px", color: "#333" }}>
+              <strong>Hello {receiverName},</strong>
             </p>
-            <p>
-              {" "}
-              Additionally, a personalized message from {name} has been sent to
-              you: {message}
+
+            <p style={{ fontSize: "16px", color: "#333" }}>
+              Thank you for your interest in becoming a tutor on NoteSwap. We’ve
+              received a request from a student who would like to be tutored by
+              you.
             </p>
-            <p>
-              {" "}
-              If you are interested in tutoring this student, please click the
-              link below:
+
+            <ul
+              style={{ fontSize: "16px", color: "#333", paddingLeft: "20px" }}
+            >
+              <li>
+                <strong>Student’s Name:</strong> {name}
+              </li>
+              <li>
+                <strong>Student’s Email:</strong> {senderEmail}
+              </li>
+              <li>
+                <strong>Preferred Time:</strong> {date} from {time}
+              </li>
+            </ul>
+
+            <p style={{ fontSize: "16px", color: "#333" }}>
+              <strong>{name}&apos;s Message:</strong>
+              <br />
+              <span style={{ whiteSpace: "pre-line" }}>{message}</span>
             </p>
-            <a href={`${process.env.NEXT_PUBLIC_URL}confirm`}>
-              <button
+
+            <p style={{ textAlign: "center", margin: "30px 0" }}>
+              <a
+                href={`${process.env.NEXT_PUBLIC_URL}confirm`}
                 style={{
+                  display: "inline-block",
                   backgroundColor: "#40b385",
                   color: "white",
-                  border: "none",
-                  padding: "12px 32px",
-                  borderRadius: "2px",
-                  cursor: "pointer",
+                  padding: "12px 25px",
+                  textDecoration: "none",
+                  borderRadius: "5px",
+                  fontSize: "16px",
+                  fontWeight: "bold",
                 }}
               >
-                Accept{" "}
-              </button>
-            </a>
-            <p>
-              {" "}
-              In case you need to further contact {name} please reach out to the
-              email address provided above. We thank you again for considering
-              the opportunity to make a positive impact on a student’s academic
-              journey.
+                Accept Tutoring Request
+              </a>
             </p>
-            <p>Best regards,</p>
-            <p>The NoteSwap team</p>
+
+            <p style={{ fontSize: "16px", color: "#333" }}>
+              If you&apos;d like to reach out directly to {name}, you can email
+              them at{" "}
+              <a href={`mailto:${senderEmail}`} style={{ color: "#40b385" }}>
+                {senderEmail}
+              </a>
+              .
+            </p>
+
+            <p style={{ fontSize: "16px", color: "#333" }}>Best regards,</p>
+            <p style={{ fontSize: "16px", color: "#333" }}>The NoteSwap Team</p>
           </main>
+
+          {/* Footer */}
           <footer
             style={{
-              width: "100%",
-              height: "8vh",
-              backgroundColor: "#40b385",
               textAlign: "center",
-              color: "white",
-              border: "none",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontFamily: "Manrope",
-              marginTop: "20px",
+              fontSize: "12px",
+              color: "#888",
+              paddingTop: "10px",
             }}
           >
-            © {new Date().getFullYear()} All Rights Reserved
+            <p style={{ marginBottom: "4px" }}>
+              © {new Date().getFullYear()} NoteSwap. All rights reserved.
+            </p>
+            <p>
+              <a
+                href="mailto:support@noteswap.org"
+                style={{ color: "#40b385", textDecoration: "none" }}
+              >
+                Contact Support
+              </a>{" "}
+              |
+              <a
+                href="https://noteswap.org"
+                style={{
+                  color: "#40b385",
+                  textDecoration: "none",
+                  marginLeft: "5px",
+                }}
+              >
+                Visit Website
+              </a>
+            </p>
           </footer>
         </section>
-      ), // html body
+      ),
     };
 
     // Send the email

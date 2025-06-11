@@ -33,7 +33,7 @@ const sampleTutors = [
     ],
     subject: "Mathematics",
     desc: "Experienced tutor specializing in algebra, calculus, and geometry. Passionate about helping students excel in math.",
-    availability: ["Monday", "Wednesday"],
+    days_available: "Monday, Wednesday",
   },
   {
     _id: "tutor2",
@@ -49,7 +49,7 @@ const sampleTutors = [
     ],
     subject: "Physics",
     desc: "Physics tutor with a knack for making complex concepts simple. Skilled in mechanics, thermodynamics, and electromagnetism.",
-    availability: ["Tuesday", "Thursday"],
+    days_available: "Tuesday, Thursday",
   },
   {
     _id: "tutor3",
@@ -65,7 +65,7 @@ const sampleTutors = [
     ],
     subject: "Chemistry",
     desc: "Chemistry tutor with expertise in organic and inorganic chemistry. Dedicated to fostering a love for science.",
-    availability: ["Friday"],
+    days_available: "Friday",
   },
 ];
 
@@ -90,23 +90,16 @@ const samplePreviousSessions = [
     student: "Charlie Davis",
     subject: "Chemistry",
     date: "2025-04-05",
-    earnings: 50,
+    earnings: 1,
   },
   {
     id: "session4",
     student: "David Lee",
     subject: "Mathematics",
     date: "2025-04-07",
-    earnings: 60,
+    earnings: 2,
   },
 ];
-
-const samplePortfolio = {
-  totalEarnings: 110,
-  strengths: ["Mathematics", "Physics", "Chemistry"],
-  sessionsCompleted: 2,
-  averageRating: 4.85,
-};
 
 // Used for translation reasons
 export async function getStaticProps({ locale }) {
@@ -122,8 +115,8 @@ export default function Tutor() {
   const [open, setOpen] = tutor;
   const [schoolClass, setSchoolClass] = useState("");
   const [time, setTime] = useState("");
-  const [tutors, setTutor] = useState(sampleTutors); // Use hardcoded tutors
-  const [loading, setLoading] = useState(false); // No loading for hardcoded data
+  const [tutors, setTutor] = useState({}); // Use hardcoded tutors
+  const [loading, setLoading] = useState(true); // No loading for hardcoded data
   const [startTime, setStartTime] = useState("15:40");
   const [endTime, setEndTime] = useState("16:30");
   const [pause, setPaused] = useState("");
@@ -152,6 +145,25 @@ export default function Tutor() {
     );
   }
 
+  async function getTutors() {
+    setLoading(true);
+    console.log(localStorage.getItem("schoolInfo"));
+    const response = await fetch("/api/tutor/get_current_tutors", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        school: JSON.parse(localStorage.getItem("schoolInfo"))._id,
+      }),
+    });
+    const result = await response.json();
+    if (response.ok) {
+      setTutor(result.tutors);
+      setLoading(false);
+    }
+  }
+
   useEffect(() => {
     if (localStorage) {
       const userInfo = JSON.parse(localStorage.getItem("userInfo"));
@@ -159,7 +171,8 @@ export default function Tutor() {
       setCourses(JSON.parse(localStorage.getItem("schoolInfo"))?.courses || {});
       // Simulate tutor status for testing
       if (userInfo) {
-        setDataFromLocalStorage({ ...userInfo, is_tutor: true }); // Force is_tutor for demo
+        setDataFromLocalStorage({ ...userInfo });
+        getTutors();
       }
     }
   }, [router.query]);
@@ -318,7 +331,8 @@ export default function Tutor() {
                     {samplePreviousSessions.map((session) => (
                       <li key={session.id}>
                         {session.student} - {session.subject} ({session.date}) -
-                        ${session.earnings}
+                        {""}
+                        {session.earnings} Community Service Hours Earned
                       </li>
                     ))}
                   </ul>
@@ -328,6 +342,7 @@ export default function Tutor() {
           </section>
         )}
         <section className={style.tutors}>
+          <h1>Tutor Profiles</h1>
           {loading ? (
             <div className={style.loading}>
               <LoadingCircle />

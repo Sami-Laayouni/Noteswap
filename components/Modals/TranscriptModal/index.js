@@ -75,7 +75,7 @@ function getCollegeOptimizedSummaries(college, itemMessage) {
 }
 
 const themeColors = {
-  Modern: { primary: "var(--accent-color)", secondary: "#e8f0fe" },
+  Modern: { primary: "#1a3c34", secondary: "#e8f0fe" },
   Classic: { primary: "#b58900", secondary: "#fdf6e3" },
   Minimalist: { primary: "#333", secondary: "#fff" },
   Elegant: { primary: "#8e806a", secondary: "#f7f1e1" },
@@ -102,7 +102,6 @@ const MagicalTranscriptModal = () => {
 
   // “Magic AI” summaries (multiple formats per item)
   const [summaries, setSummaries] = useState({});
-  // Example: { itemId: { commonApp: "", bullet: "", reflection: "" } }
 
   // Visual effects states
   const [isGenerating, setIsGenerating] = useState(false);
@@ -169,6 +168,7 @@ const MagicalTranscriptModal = () => {
         createdAt: "2022-10-01",
         points: 40,
         tutor_hours: 120,
+        counselorApproval: { status: "pending" }, // Default to pending for demo
       });
       setSchoolData({
         schoolFullName: "NoteSwap Academy",
@@ -467,6 +467,9 @@ const MagicalTranscriptModal = () => {
 
   // Handle Download
   const handleDownload = () => {
+    if (userData?.approved !== true) {
+      return; // Prevent download if not approved
+    }
     setShowConfetti(true);
     setTimeout(() => setShowConfetti(false), 3000);
 
@@ -490,11 +493,12 @@ const MagicalTranscriptModal = () => {
   const downloadButtonStyle = {
     marginTop: "1.5rem",
     padding: "10px 16px",
-    backgroundColor: themeColors[theme].primary,
-    color: "#fff",
+    backgroundColor:
+      userData?.approved === true ? themeColors[theme].primary : "#d1d9e6",
+    color: userData?.approved === true ? "#fff" : "#718096",
     border: "none",
     borderRadius: "4px",
-    cursor: "pointer",
+    cursor: userData?.approved === true ? "pointer" : "not-allowed",
     fontWeight: 600,
     transition: "background-color 0.2s ease",
   };
@@ -510,16 +514,56 @@ const MagicalTranscriptModal = () => {
     <Modal
       isOpen={open}
       onClose={() => setOpen(false)}
-      title="Your Epic NoteSwap Portfolio Builder"
+      title="NoteSwap Portfolio Builder"
       small={false}
     >
       <Confetti show={showConfetti} />
 
       <div style={styles.container}>
+        {/* Warning Message */}
+        {userData?.approved !== true && (
+          <div
+            style={{
+              backgroundColor: "#fff3cd",
+              color: "#856404",
+              padding: "15px",
+              borderRadius: "8px",
+              marginBottom: "20px",
+              border: "1px solid #ffeeba",
+              boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+              textAlign: "center",
+              fontSize: "14px",
+              fontWeight: "500",
+              animation: "fadeIn 0.5s ease-in-out",
+            }}
+          >
+            <h3
+              style={{
+                fontSize: "16px",
+                fontWeight: "600",
+                color: "#856404",
+                marginBottom: "10px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "8px",
+              }}
+            >
+              <span style={{ fontSize: "18px" }}>⚠</span> Not Verified
+            </h3>
+            <p>
+              Your extracurricular activities have not been approved by your
+              counselor. Please ensure your counselor verifies your transcript.
+            </p>
+          </div>
+        )}
+
         <p style={styles.description}>
-          Welcome to your magical portfolio builder. Toggle which categories to
-          include, pick a design theme, generate perfect Common App summaries,
-          and download your portfolio in multiple formats.
+          Create Your Personalized NoteSwap Transcript for Your Dream University
+          NoteSwap can tailor your portfolio to match your ideal college. Toggle
+          which categories to include, choose a design theme, generate
+          compelling Common App summaries, and download your portfolio in
+          multiple formats.
         </p>
 
         {/* Category Toggles */}
@@ -587,7 +631,9 @@ const MagicalTranscriptModal = () => {
           onClick={handleGenerateAllSummaries}
           disabled={isGenerating}
         >
-          {isGenerating ? "Generating Summaries..." : "Generate All Summaries"}
+          {isGenerating
+            ? "Generating Summaries..."
+            : "Generate AI Summary for Your College"}
         </button>
 
         {/* Progress Bar */}
@@ -670,7 +716,7 @@ const MagicalTranscriptModal = () => {
                 <strong>Minutes:</strong> {item.minutes}
               </p>
               <p style={{ fontSize: "0.9rem" }}>
-                <strong>Organization:</strong> {item.organization}
+                <strong>Organization/Person:</strong> {item.organization}
               </p>
               <p style={{ fontSize: "0.9rem" }}>
                 <strong>Date:</strong> {item.rewardedOn}
@@ -720,10 +766,24 @@ const MagicalTranscriptModal = () => {
         </div>
 
         {/* Download Button */}
-        <button style={downloadButtonStyle} onClick={handleDownload}>
+        <button
+          style={downloadButtonStyle}
+          onClick={handleDownload}
+          disabled={!(userData?.approved == true)}
+        >
           Download Portfolio
         </button>
       </div>
+
+      {/* Inline CSS Animation */}
+      <style>
+        {`
+          @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+        `}
+      </style>
     </Modal>
   );
 };

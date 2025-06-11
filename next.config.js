@@ -48,6 +48,7 @@ const nextConfig = {
       "lh3.googleusercontent.com",
       "storage.googleapis.com",
       "source.unsplash.com",
+      "www.carbonbrief.org",
     ],
   },
   i18n,

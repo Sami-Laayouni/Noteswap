@@ -43,74 +43,121 @@ export default async function handler(req, res) {
     `,
 
       html: ReactDOMServer.renderToString(
-        <section>
-          <section
+        <section
+          style={{
+            fontFamily: "Arial, sans-serif",
+            backgroundColor: "#f4f4f4",
+            padding: "20px",
+          }}
+        >
+          {/* Header */}
+          <header
             style={{
-              width: "100%",
-              height: "8vh",
               backgroundColor: "#40b385",
-              textAlign: "left",
               color: "white",
-              fontFamily: "Manrope",
-              paddingLeft: "20px",
-              display: "flex",
-              alignItems: "center",
-              marginBottom: "20px",
+              padding: "20px",
+              textAlign: "center",
+              borderRadius: "8px 8px 0 0",
             }}
           >
-            <h1>NoteSwap Events</h1>
-          </section>
+            <h1 style={{ margin: 0, fontSize: "24px" }}>NoteSwap Events</h1>
+          </header>
+
+          {/* Main Content */}
           <main
             style={{
-              whiteSpace: "pre-line",
-              wordBreak: "break-all",
-              fontFamily: "Manrope",
-              lineHeight: "200%",
-              paddingRight: "50px",
+              backgroundColor: "white",
+              padding: "20px",
+              margin: "20px auto",
+              maxWidth: "600px",
+              borderRadius: "0 0 8px 8px",
+              boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
             }}
           >
-            <b>Hello {name},</b>
-            <p>
-              Thank you for your interest in NoteSwap for Events. In order to
-              award community service to volunteers for the {event}, please
-              check out this page.
-            </p>{" "}
-            <a href={url}>
-              <button
+            <p
+              style={{ fontSize: "16px", color: "#333", marginBottom: "15px" }}
+            >
+              <strong>Hello {name},</strong>
+            </p>
+
+            <p
+              style={{ fontSize: "16px", color: "#333", marginBottom: "20px" }}
+            >
+              Thank you for your interest in{" "}
+              <strong>NoteSwap for Events</strong>. In order to award community
+              service to volunteers for <strong>{event}</strong>, please check
+              out the page linked below:
+            </p>
+
+            <p style={{ textAlign: "center", margin: "30px 0" }}>
+              <a
+                href={url}
                 style={{
+                  display: "inline-block",
                   backgroundColor: "#40b385",
                   color: "white",
-                  border: "none",
-                  padding: "12px 32px",
-                  borderRadius: "2px",
-                  cursor: "pointer",
+                  padding: "12px 25px",
+                  textDecoration: "none",
+                  borderRadius: "5px",
+                  fontSize: "16px",
+                  fontWeight: "bold",
                 }}
               >
-                Visit{" "}
-              </button>
-            </a>
-            <p>Best regards,</p>
-            <p>The NoteSwap team</p>
+                Visit Event Page
+              </a>
+            </p>
+
+            <p style={{ fontSize: "14px", color: "#888", textAlign: "center" }}>
+              Or copy and paste this link into your browser: <br />
+              <a
+                href={url}
+                style={{ color: "#40b385", wordBreak: "break-all" }}
+              >
+                {url}
+              </a>
+            </p>
+
+            <p style={{ fontSize: "16px", color: "#333", marginTop: "30px" }}>
+              Best regards,
+            </p>
+            <p style={{ fontSize: "16px", color: "#333" }}>The NoteSwap Team</p>
           </main>
+
+          {/* Footer */}
           <footer
             style={{
-              width: "100%",
-              height: "8vh",
-              backgroundColor: "#40b385",
               textAlign: "center",
-              color: "white",
-              border: "none",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontFamily: "Manrope",
-              marginTop: "20px",
+              padding: "10px",
+              color: "#777",
+              fontSize: "12px",
             }}
           >
-            © {new Date().getFullYear()} All Rights Reserved
+            <p style={{ margin: "5px 0" }}>
+              © {new Date().getFullYear()} NoteSwap. All rights reserved.
+            </p>
+            <p style={{ margin: "5px 0" }}>
+              <a
+                href="mailto:support@noteswap.org"
+                style={{ color: "#40b385", textDecoration: "none" }}
+              >
+                Contact Support
+              </a>{" "}
+              |
+              <a
+                href="https://noteswap.org"
+                style={{
+                  color: "#40b385",
+                  textDecoration: "none",
+                  marginLeft: "5px",
+                }}
+              >
+                Visit Website
+              </a>
+            </p>
           </footer>
         </section>
       ),
+
       // html body
     };
 

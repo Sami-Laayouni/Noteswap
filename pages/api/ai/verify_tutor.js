@@ -39,7 +39,7 @@ export default async function handler(req, res) {
     )} return true or false
 `;
     const response = await genAI.models.generateContent({
-      model: "gemini-2.0-flash",
+      model: "gemini-2.0-flash-lite",
       contents: prompt,
     });
     console.log(response);

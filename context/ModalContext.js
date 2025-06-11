@@ -39,10 +39,18 @@ export const ModalProvider = ({ children }) => {
   const [signedUpVolunteers, setSignedUpVolunteers] = useState(null);
   const [warning, setWarning] = useState(true);
   const [isFromSchool, setIsFromSchool] = useState(true);
+  const [takeSurvey, setTakeSurvey] = useState(false);
 
   const [ticketModal, setTicketModal] = useState(false);
   const [applyAsVolunteer, setApplyAsVolunteer] = useState(false);
   const [eventData, setEventData] = useState("");
+
+  const [certificateShow, setCertificateShow] = useState(false);
+  const [certificateData, setCertificateData] = useState("");
+  const [removeCertificate, setRemoveCertificate] = useState(false);
+
+  const [approve, setApprove] = useState(false); // Stores whether the approve modal is opened or closed
+  const [requestRevision, setRequestRevision] = useState(false);
 
   // Return the JSX
   return (
@@ -81,6 +89,12 @@ export const ModalProvider = ({ children }) => {
         applyAsVolunteer: [applyAsVolunteer, setApplyAsVolunteer],
         warning: [warning, setWarning],
         isFromSchool: [isFromSchool, setIsFromSchool],
+        takeSurvey: [takeSurvey, setTakeSurvey],
+        certificateShow: [certificateShow, setCertificateShow],
+        certificateData: [certificateData, setCertificateData],
+        removeCertificate: [removeCertificate, setRemoveCertificate],
+        approve: [approve, setApprove],
+        requestRevision: [requestRevision, setRequestRevision],
       }}
     >
       {children}

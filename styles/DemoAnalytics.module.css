@@ -1,20 +1,20 @@
 /* Global Container & Typography */
 .dashboardContainer {
-  background: linear-gradient(135deg, #fdfdfd 0%, #fdfdfd 100%);
-  color: #3a3a3a;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #ffffff 0%, #f6f9fc 100%);
+  color: #2d3748;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
   margin: 0;
-  padding: 0 30px;
+  padding: 0 40px;
   min-height: 100vh;
-  animation: fadeIn 1s ease-out;
-  margin-left: 70px;
+  animation: fadeIn 0.8s ease-out;
+  margin-left: 80px;
 }
 
 /* Keyframe for fadeIn animation */
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateY(-15px);
   }
   to {
     opacity: 1;
@@ -24,78 +24,85 @@
 
 /* Header Styles */
 .header {
-  background: linear-gradient(90deg, #4d4d4d, #3a3a3a);
-  color: #fdfdfd;
-  padding: 30px;
+  background: var(--accent-color);
+  color: #ffffff;
+  padding: 40px 20px;
   text-align: center;
-  border-bottom: 4px solid #40b385;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-bottom: 4px solid #68d391;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
   position: relative;
-  z-index: 2;
+  z-index: 1;
 }
 
 .header h1 {
   margin: 0;
-  font-size: 2.5rem;
-  letter-spacing: 1px;
+  font-size: 2.75rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 
 .subtitle {
-  font-size: 1.25rem;
-  margin-top: 10px;
-  color: #fdfdfd;
+  font-size: 1.2rem;
+  font-weight: 400;
+  margin-top: 12px;
+  color: #e2e8f0;
+  line-height: 1.6;
 }
 
 /* Navigation Styles */
 .navContainer {
   display: flex;
   justify-content: center;
-  background-color: #3a3a3a;
+  background: #1a202c;
   padding: 15px 0;
   margin-top: -10px;
-  border-bottom: 2px solid #40b385;
+  border-bottom: 2px solid #68d391;
   z-index: 1;
-  position: relative;
+  position: sticky;
+  top: 0;
 }
 
 .navContainer button {
   background: none;
   border: none;
-  color: #fdfdfd;
-  font-size: 1.1rem;
-  margin: 0 20px;
-  padding: 10px 20px;
+  color: #e2e8f0;
+  font-size: 1.15rem;
+  font-weight: 500;
+  margin: 0 25px;
+  padding: 12px 24px;
   cursor: pointer;
   position: relative;
   transition: all 0.3s ease;
-  outline: none;
+  border-radius: 8px;
 }
 
 .navContainer button:hover,
 .navContainer button:focus {
-  color: #40b385;
-  transform: translateY(-3px);
+  color: #68d391;
+  background: rgba(104, 211, 145, 0.1);
+  transform: translateY(-2px);
 }
 
 .navContainer .active {
-  color: #40b385;
-  border-bottom: 3px solid #40b385;
-  transform: translateY(-3px);
+  color: #68d391;
+  background: rgba(104, 211, 145, 0.2);
+  border-bottom: 3px solid #68d391;
 }
 
 /* Loading Screen */
 .loading {
   text-align: center;
-  padding: 100px 0;
-  font-size: 2rem;
-  color: #3a3a3a;
-  animation: pulse 1.5s infinite;
+  padding: 120px 0;
+  font-size: 1.75rem;
+  font-weight: 500;
+  color: #4a5568;
+  animation: pulse 1.8s infinite;
 }
 
 @keyframes pulse {
   0%,
   100% {
-    opacity: 0.8;
+    opacity: 0.7;
   }
   50% {
     opacity: 1;
@@ -105,99 +112,88 @@
 /* Chart & Content Grids */
 .chartGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 30px;
-  margin: 30px 0;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 40px;
+  margin: 40px 0;
 }
 
 /* Chart Containers */
 .chartItem {
-  background-color: #fdfdfd;
-  border: 2px solid #4d4d4d;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .chartItem:hover {
-  transform: scale(1.02);
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.chartItem h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 15px;
 }
 
 /* Student Cards */
 .studentCard {
-  background-color: #fdfdfd;
-  border: 2px solid #4d4d4d;
-  border-radius: 10px;
-  margin: 20px 0;
-  padding: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  margin: 25px 0;
+  padding: 25px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
   transition: transform 0.3s ease;
 }
 
 .studentCard:hover {
-  transform: translateY(-3px);
+  transform: translateY(-5px);
 }
 
 /* Metrics Screen Container */
-/* ==================================================
-   Metrics Screen Styles
-   ================================================== */
-
-/* Container for the entire Metrics Screen */
 .metricsScreen {
-  background-color: #fdfdfd; /* Off-white background */
-  border: 2px solid #4d4d4d; /* Dark border */
-  border-radius: 10px;
-  padding: 40px 30px;
-  margin: 40px auto;
-  max-width: 1200px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  animation: fadeIn 1s ease-out;
-}
-
-/* Fade In Animation */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 50px 40px;
+  margin: 50px auto;
+  max-width: 1280px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.8s ease-out;
 }
 
 /* Metrics Screen Heading and Paragraphs */
 .metricsScreen h2 {
   text-align: center;
-  color: #4d4d4d;
-  margin-bottom: 20px;
-  font-size: 2rem;
+  color: #2d3748;
+  margin-bottom: 25px;
+  font-size: 2.25rem;
+  font-weight: 700;
 }
 
 .metricsScreen p {
-  font-size: 1rem;
-  color: #3a3a3a;
-  line-height: 1.6;
-  margin-bottom: 20px;
+  font-size: 1.1rem;
+  color: #4a5568;
+  line-height: 1.7;
+  margin-bottom: 25px;
 }
 
-/* ==================================================
-   Metric Item (Each Metric Block)
-   ================================================== */
+/* Metric Item (Each Metric Block) */
 .metricItem {
-  margin-bottom: 50px;
-  padding-bottom: 30px;
-  border-bottom: 1px solid #4d4d4d;
-  animation: slideUp 0.8s ease-out;
+  margin-bottom: 60px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid #e2e8f0;
+  animation: slideUp 0.7s ease-out;
 }
 
 @keyframes slideUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(15px);
   }
   to {
     opacity: 1;
@@ -206,111 +202,455 @@
 }
 
 .metricItem h3 {
-  font-size: 1.75rem;
-  color: #4d4d4d;
-  margin-bottom: 10px;
-  border-left: 4px solid #40b385;
-  padding-left: 10px;
+  font-size: 1.85rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 15px;
+  border-left: 5px solid #68d391;
+  padding-left: 15px;
 }
 
 .metricItem p {
-  font-size: 1rem;
-  color: #3a3a3a;
-  margin-bottom: 15px;
+  font-size: 1.05rem;
+  color: #4a5568;
+  margin-bottom: 20px;
 }
 
-/* ==================================================
-   Chart Pair Container (for Bar & Doughnut Charts)
-   ================================================== */
+/* Chart Pair Container (for Bar & Doughnut Charts) */
 .chartPair {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 20px;
-  margin-top: 20px;
-  height: 550px;
+  gap: 30px;
+  margin-top: 25px;
+  height: 600px; /* Adjusted for responsiveness */
 }
 
 .chartPair canvas {
-  flex: 1 1 300px; /* Minimum width of 300px; grows as needed */
-  max-width: 48%; /* Ensures two charts can sit side by side */
-  border: 1px solid #4d4d4d;
-  border-radius: 10px;
-  background-color: #fdfdfd;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  flex: 1 1 320px;
+  max-width: 48%;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 10px;
 }
 
-/* ==================================================
-   Intervention Section
-   ================================================== */
+/* Intervention Section */
 .interventionSection {
-  background: linear-gradient(135deg, #3a3a3a, #4d4d4d);
-  border-radius: 10px;
-  padding: 30px;
-  margin-top: 50px;
-  color: #fdfdfd;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+  border-radius: 12px;
+  padding: 40px;
+  margin-top: 60px;
+  color: #e2e8f0;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
 }
 
 .interventionSection h2 {
   text-align: center;
-  margin-bottom: 20px;
-  font-size: 2rem;
-  color: #fdfdfd;
+  margin-bottom: 25px;
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #ffffff;
 }
 
 .interventionCard {
-  background-color: #4d4d4d;
-  border-radius: 8px;
-  padding: 20px;
-  margin: 20px 0;
-  color: #fdfdfd;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background: #2d3748;
+  border-radius: 10px;
+  padding: 25px;
+  margin: 25px 0;
+  color: #e2e8f0;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
 }
 
 .interventionCard:hover {
-  transform: translateX(5px);
+  transform: translateX(8px);
 }
 
 .interventionCard h3 {
   margin-top: 0;
-  font-size: 1.5rem;
-  border-left: 4px solid #40b385;
-  padding-left: 10px;
+  font-size: 1.65rem;
+  font-weight: 600;
+  border-left: 5px solid #68d391;
+  padding-left: 15px;
+  color: #ffffff;
 }
 
 .interventionCard ul {
-  margin: 15px 0;
-  padding-left: 20px;
+  margin: 20px 0;
+  padding-left: 25px;
 }
 
 .interventionCard li {
-  margin-bottom: 8px;
-  font-size: 0.95rem;
+  margin-bottom: 10px;
+  font-size: 1rem;
+  line-height: 1.6;
 }
 
 /* Button for Updating NoteSWAP in Intervention Cards */
 .interventionCard button {
-  background-color: #40b385;
-  color: #fdfdfd;
+  background: #68d391;
+  color: #1a202c;
   border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
+  padding: 12px 24px;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.3s, transform 0.3s;
+  font-size: 1.05rem;
+  font-weight: 500;
+  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
 }
 
 .interventionCard button:hover,
 .interventionCard button:focus {
-  background-color: #3a3a3a;
-  transform: translateY(-2px);
+  background: #48bb78;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   outline: none;
 }
 
-/* ==================================================
-   Additional Enhancements & Accessibility
-   ================================================== */
+/* Additional Enhancements & Accessibility */
+.chartItem:focus,
+.studentCard:focus,
+.interventionCard button:focus {
+  outline: 3px solid #68d391;
+  outline-offset: 2px;
+}
+/* AI Assistant Section */
+.aiSection {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 30px;
+  margin-top: 40px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
 
-/* Ensure all interactive elements have focus styles */
+.aiSection h2 {
+  font-size: 1.85rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.aiSection p {
+  font-size: 1.05rem;
+  color: #4a5568;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Chat Container */
+.chatContainer {
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 20px;
+  max-height: 500px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #a0aec0 #f7fafc;
+}
+
+/* Custom Scrollbar for Webkit Browsers */
+.chatContainer::-webkit-scrollbar {
+  width: 8px;
+}
+
+.chatContainer::-webkit-scrollbar-track {
+  background: #f7fafc;
+  border-radius: 10px;
+}
+
+.chatContainer::-webkit-scrollbar-thumb {
+  background: #a0aec0;
+  border-radius: 10px;
+}
+
+.chatContainer::-webkit-scrollbar-thumb:hover {
+  background: #718096;
+}
+
+/* Chat Window */
+.chatWindow {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  min-height: 200px;
+}
+
+/* Placeholder for Empty Chat */
+.chatPlaceholder {
+  text-align: center;
+  color: #718096;
+  font-size: 1rem;
+  padding: 20px;
+  font-style: italic;
+}
+
+/* Chat Message */
+.chatMessage {
+  display: flex;
+  flex-direction: column;
+  max-width: 80%;
+  margin: 10px;
+}
+
+.userMessage {
+  align-self: flex-end;
+}
+
+.aiMessage {
+  align-self: flex-start;
+}
+
+.messageContent {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  position: relative;
+}
+
+.userMessage .messageContent {
+  background: #68d391;
+  color: #1a202c;
+}
+
+.aiMessage .messageContent {
+  background: #edf2f7;
+  color: #2d3748;
+}
+
+/* Message Role and Timestamp */
+.messageRole {
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.messageTimestamp {
+  font-size: 0.75rem;
+  color: #718096;
+  margin-top: 8px;
+  display: block;
+  text-align: right;
+}
+
+/* Typing Indicator */
+.typingIndicator {
+  font-style: italic;
+  color: #718096;
+  position: relative;
+}
+
+.typingIndicator::after {
+  content: ".";
+  animation: dots 1.5s infinite;
+}
+
+@keyframes dots {
+  0% {
+    content: ".";
+  }
+  33% {
+    content: "..";
+  }
+  66% {
+    content: "...";
+  }
+}
+
+/* Action Buttons */
+.actionButtons {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.actionButton {
+  background: #2b6cb0;
+  color: #ffffff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+
+.actionButton:hover,
+.actionButton:focus {
+  background: #2c5282;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  outline: none;
+}
+
+/* Chat Form */
+.chatForm {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.chatInput {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #2d3748;
+  background: #ffffff;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.chatInput:focus {
+  border-color: #68d391;
+  box-shadow: 0 0 0 3px rgba(104, 211, 145, 0.2);
+  outline: none;
+}
+
+.chatInput:disabled {
+  background: #edf2f7;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.sendButton {
+  background: #68d391;
+  color: #1a202c;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+
+.sendButton:hover,
+.sendButton:focus {
+  background: #48bb78;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  outline: none;
+}
+
+.sendButton:disabled {
+  background: #cbd5e0;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Accessibility Enhancements */
+.chatMessage:focus,
+.actionButton:focus,
+.chatInput:focus,
+.sendButton:focus {
+  outline: 3px solid #68d391;
+  outline-offset: 2px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .aiSection {
+    padding: 20px;
+    max-width: 100%;
+  }
+  .chatContainer {
+    max-height: 400px;
+  }
+  .chatMessage {
+    max-width: 90%;
+  }
+  .chatForm {
+    flex-direction: column;
+  }
+  .chatInput,
+  .sendButton {
+    width: 100%;
+  }
+  .sendButton {
+    padding: 12px;
+  }
+}
+
+/* High Contrast Mode for Accessibility */
+@media (prefers-contrast: high) {
+  .aiSection {
+    background: #ffffff;
+    border: 2px solid #1a202c;
+  }
+  .chatContainer {
+    background: #ffffff;
+    border-color: #1a202c;
+  }
+  .userMessage .messageContent {
+    background: #68d391;
+    color: #000000;
+  }
+  .aiMessage .messageContent {
+    background: #e2e8f0;
+    color: #000000;
+  }
+  .actionButton {
+    background: #1a202c;
+    color: #ffffff;
+  }
+  .sendButton {
+    background: #1a202c;
+    color: #ffffff;
+  }
+}
+
+/* High contrast for accessibility */
+@media (prefers-contrast: high) {
+  .dashboardContainer {
+    background: #ffffff;
+  }
+  .header {
+    background: #1a202c;
+    border-bottom-color: #68d391;
+  }
+  .navContainer {
+    background: #1a202c;
+  }
+  .chartItem,
+  .studentCard,
+  .metricsScreen {
+    border-color: #1a202c;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .dashboardContainer {
+    padding: 0 20px;
+    margin-left: 0;
+  }
+  .header h1 {
+    font-size: 2rem;
+  }
+  .subtitle {
+    font-size: 1rem;
+  }
+  .navContainer button {
+    margin: 0 10px;
+    padding: 10px 15px;
+    font-size: 1rem;
+  }
+  .chartGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .chartPair canvas {
+    max-width: 100%;
+  }
+}

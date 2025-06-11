@@ -66,7 +66,6 @@ export default function TutorCard({ data }) {
         </div>
 
         <span className={style.lightText}>
-          <CiStar style={{ verticalAlign: "middle" }} />{" "}
           {ratings != 0 && (
             <>
               <StarRating rating={ratings} />

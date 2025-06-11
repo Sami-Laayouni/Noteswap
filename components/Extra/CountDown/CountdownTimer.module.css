@@ -1,0 +1,31 @@
+/* styles/CountdownTimer.module.css */
+.countdownContainer {
+  display: flex;
+  gap: 8px; /* Gap between time sections */
+  justify-content: flex-start;
+  margin-top: 8px;
+}
+
+.timeSection {
+  background-color: #eef2f5; /* Light greyish background from image */
+  padding: 8px 12px;
+  border-radius: 5px;
+  text-align: center;
+  min-width: 55px;
+  border: 1px solid #d0d9e0; /* Subtle border */
+}
+
+.timeValue {
+  font-size: 22px;
+  font-weight: bold;
+  color: #333; /* Dark color for numbers */
+  display: block;
+  line-height: 1.2;
+}
+
+.timeLabel {
+  font-size: 9px;
+  color: #555; /* Medium grey for labels */
+  text-transform: uppercase;
+  display: block;
+}

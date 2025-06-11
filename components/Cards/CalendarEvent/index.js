@@ -22,8 +22,6 @@ export default function CalendarEvent({ data }) {
   const endDate = parseISO(data?.end?.date); // End date of the event
   const nextDayDate = addDays(startDate, 1); // The day after the event
   const { t } = useTranslation("common");
-
-  // Return the JSX (a link that opens the event in their Google calendar)
   return (
     <Link href={data?.htmlLink} target="_blank">
       <li key={data?.id} className={style.container}>

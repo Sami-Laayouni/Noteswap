@@ -6,9 +6,11 @@ export default async function handler(req, res) {
   const { text, school_id } = req.body;
 
   async function getEmbedding(text) {
-    const model = genAI.getGenerativeModel({ model: "embedding-001" });
-    const result = await model.embedContent(text);
-    const embedding = result.embedding;
+    const response = await genAI.models.embedContent({
+      model: "gemini-embedding-exp-03-07",
+      contents: text,
+    });
+    const embedding = response.embeddings?.[0];
 
     if (embedding) {
       const data = embedding.values;

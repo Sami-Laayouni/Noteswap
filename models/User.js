@@ -98,6 +98,22 @@ const userSchema = new mongoose.Schema(
       type: Array,
       required: false,
     },
+    bookmarks: {
+      type: Array,
+      required: false,
+    },
+    universities: {
+      type: Array,
+      required: false,
+    },
+    seenSurvey: {
+      type: Boolean,
+      required: false,
+    },
+    approved: {
+      type: Boolean,
+      required: false,
+    },
     hidden: {
       type: Boolean,
       default: false,

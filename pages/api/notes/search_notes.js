@@ -120,6 +120,22 @@ export default async function handler(req, res) {
     query.push({ $sort: { createdAt: -1 } }, { $limit: 15 });
   } else if (type == "popular") {
     query.push({ $sort: { hot: -1, createdAt: -1 } }, { $limit: 15 });
+  } else if (type === "bookmark") {
+    const user = await User.findById(id);
+    console.log("User Bookmarks:", user.bookmark);
+
+    if (!user || !user.bookmarks || user.bookmarks.length === 0) {
+      return res.status(200).json({ notes: [] }); // No bookmarks
+    }
+
+    // Filter notes that are in user's bookmarks
+    query.push({
+      $match: {
+        _id: { $in: user.bookmarks.map((id) => new ObjectId(id)) },
+      },
+    });
+
+    query.push({ $sort: { createdAt: -1 } });
   } else {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_URL}api/ai/filtering/collaborative`,

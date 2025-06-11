@@ -17,7 +17,7 @@ export default async function handler(req, res) {
   const body = req.body;
   const { title, school, location, locationName } = body;
   res.setHeader("Cache-Control", "public, max-age=120");
-  if (school != "null" && school != "none") {
+  /*if (school != "null" && school != "none") {
     options = {
       $match: {
         $or: [
@@ -27,14 +27,14 @@ export default async function handler(req, res) {
       },
     };
     query.push(options);
-  } else {
-    options = {
-      $match: {
-        only_allow_school_see: false,
-      },
-    };
-    query.push(options);
-  }
+  } else {*/
+  options = {
+    $match: {
+      only_allow_school_see: false,
+    },
+  };
+  query.push(options);
+
   if (locationName === "Online") {
     options = {
       $match: {

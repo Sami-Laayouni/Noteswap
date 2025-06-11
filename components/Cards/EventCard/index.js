@@ -135,7 +135,9 @@ export default function EventCard({ data }) {
                 ? "Tickets & Volunteering"
                 : data?.type_of_event == "ticketed"
                 ? "Tickets Only"
-                : "Volunteering Only"}
+                : data?.event_kind
+                ? data.event_kind
+                : "Volunteering"}
             </div>
           )}
         </div>

@@ -1,4 +1,4 @@
-/* Notes Modal which user uses to type and share notes through typing */
+"use client";
 
 // Import Style
 import style from "./NotesModal.module.css";
@@ -9,6 +9,7 @@ import ModalContext from "../../../context/ModalContext";
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { MdOutlineArrowDropDown } from "react-icons/md";
 import dynamic from "next/dynamic";
+import ReactMarkdown from "react-markdown";
 
 // Import katex style used for mathematical notation
 import katex from "katex";
@@ -23,8 +24,7 @@ import { useTranslation } from "next-i18next";
  *
  * @type {*}
  */
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
-
+const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 // Custom Quill module for KaTeX rendering
 /**
  * Custom Quill module for KaTeX rendering
@@ -433,9 +433,7 @@ export default function NotesModal() {
         <div id="feedback" style={{ width: "65vw" }}>
           {/* AI feedback*/}
           <h1 className={style.title}>{t("ai_feedback")}</h1>
-          <p id="feedbackText" className={style.feedback}>
-            {feedback}
-          </p>
+          <ReactMarkdown>{feedback}</ReactMarkdown>
         </div>
       ) : (
         <>
@@ -499,22 +497,6 @@ export default function NotesModal() {
           </>
         )}
         {error ? `Error: ${error} ` : ""}
-      </p>
-
-      {/* Give feedback/report bug */}
-      <p
-        className={style.error}
-        style={{
-          left: "100px",
-          color: "lightgray",
-          textDecoration: "underline",
-        }}
-      >
-        {current != 0 && (
-          <a target="_blank" href="https://forms.gle/sT3ir1FEgBCbLWnd8">
-            Give feedback or report a bug
-          </a>
-        )}
       </p>
 
       {/* Next button */}

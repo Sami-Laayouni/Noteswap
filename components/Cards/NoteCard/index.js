@@ -7,6 +7,7 @@ import Image from "next/image";
 import { BiRightArrow, BiLeftArrow } from "react-icons/bi";
 import { FiMoreHorizontal } from "react-icons/fi";
 import { FaShare } from "react-icons/fa";
+import { FaBookmark } from "react-icons/fa";
 import { BsFillTrashFill } from "react-icons/bs";
 import { MdModeEditOutline } from "react-icons/md";
 import ModalContext from "../../../context/ModalContext";
@@ -86,6 +87,7 @@ export default function NoteCard({ data, padding }) {
           event.target.id != `dropdownItem${data?._id}` &&
           event.target.id != `dropdownItem2${data?._id}` &&
           event.target.id != `dropdownItem3${data?._id}` &&
+          event.target.id != `dropdownItemB${data?._id}` &&
           event.target.id != "right1" &&
           event.target.id != "left" &&
           event.target.id != `more${data?._id}` &&
@@ -161,6 +163,33 @@ export default function NoteCard({ data, padding }) {
           >
             <FaShare style={{ marginRight: "10px" }} />
             {t("share_notes")}
+          </li>
+          <li
+            key={`dropdownItemB${data?._id}`}
+            id={`dropdownItemB${data?._id}`}
+            onClick={async () => {
+              const response = await fetch("/api/notes/bookmark_note", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  userId: JSON.parse(localStorage?.getItem("userInfo"))._id,
+                  noteId: data?._id,
+                }),
+              });
+              if (response.ok) {
+                const result = await response.json();
+                console.log(result);
+                document.getElementById(`dropdownItemB${data?._id}`).innerText =
+                  "Successfully Bookmarked";
+              } else {
+                console.error("Failed to bookmark note");
+              }
+            }}
+          >
+            <FaBookmark style={{ marginRight: "10px" }} />
+            Bookmark
           </li>
           {localStorage?.getItem("userInfo") &&
             JSON.parse(localStorage?.getItem("userInfo"))._id ==

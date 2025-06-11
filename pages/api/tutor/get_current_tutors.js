@@ -14,25 +14,14 @@ export default async function handler(req, res) {
   const query = [];
   const body = req.body;
   const { school } = body;
+  let options = {};
 
-  if (school == "649d661a3a5a9f73e9e3fa62") {
-    options = {
-      $match: {
-        $or: [
-          { school_id: { $regex: school } },
-          { school_id: { $exists: false } },
-        ],
-      },
-    };
-    query.push(options);
-  } else {
-    options = {
-      $match: {
-        school_id: { $regex: school },
-      },
-    };
-    query.push(options);
-  }
+  options = {
+    $match: {
+      school_id: { $regex: school },
+    },
+  };
+  query.push(options);
 
   query.push({
     $match: {
@@ -50,6 +39,7 @@ export default async function handler(req, res) {
 
   try {
     const result = await Tutor.aggregate(query).limit(15);
+    console.log("result", result);
     if (result) {
       const final = {
         tutors: result,
@@ -59,6 +49,7 @@ export default async function handler(req, res) {
       res.status(200).send({});
     }
   } catch (error) {
+    console.error("Error fetching tutors:", error);
     res.status(500).send(error);
   }
 }

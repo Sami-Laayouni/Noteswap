@@ -1,7 +1,9 @@
+"use client";
 import style from "../styles/Notes.module.css";
 import { IoIosCreate } from "react-icons/io";
 import { TbFileUpload } from "react-icons/tb";
 import { FiType } from "react-icons/fi";
+import { FaTrophy, FaStar, FaMedal } from "react-icons/fa"; // Added for trophy icons
 import React, { useContext, useEffect, useState } from "react";
 import ModalContext from "../context/ModalContext";
 import { useRouter } from "next/router";
@@ -10,7 +12,6 @@ import NoteCard from "../components/Cards/NoteCard";
 import LoadingCircle from "../components/Extra/LoadingCircle";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
-import { isAuthenticated } from "../utils/auth";
 
 import dynamic from "next/dynamic";
 
@@ -66,6 +67,31 @@ export default function Note() {
   const [courses, setCourses] = useState({});
 
   const { t } = useTranslation("common");
+
+  // Mock leaderboard data
+  // Mock leaderboard data with avatars
+  const leaderboardData = [
+    {
+      username: "Sami Laayouni",
+      points: 1500,
+      avatar: "https://api.dicebear.com/9.x/shapes/svg?seed=Mason",
+    },
+    {
+      username: "Ali Zaid",
+      points: 1200,
+      avatar: "https://api.dicebear.com/9.x/shapes/svg?seed=Riley",
+    },
+    {
+      username: "Hiba El Idrissi",
+      points: 900,
+      avatar: "https://api.dicebear.com/9.x/shapes/svg?seed=Vivian",
+    },
+    {
+      username: "Onyou Chou",
+      points: 700,
+      avatar: "https://api.dicebear.com/9.x/shapes/svg?seed=Sophia",
+    },
+  ];
 
   // Add path to the route
   function addRoutePath(route, value) {
@@ -246,47 +272,283 @@ export default function Note() {
         </section>
         <section className={style.notes}>
           <ul>
-            {/* (
-              <li
-                style={{
-                  background:
-                    router?.query?.type == "foryou" || !router?.query?.type
-                      ? "white"
-                      : "var(--accent-color)",
-                  color:
-                    router?.query?.type == "foryou" || !router?.query?.type
-                      ? "var(--accent-color)"
-                      : "white",
-                }}
-                onClick={() => addRoutePath("type", "foryou")}
-              >
-                {t("for_you")}
-              </li>
-            )}*/}
             <li
               style={{
                 background:
-                  router?.query?.type == "latest"
+                  router?.query?.type == "popular"
                     ? "white"
                     : "var(--accent-color)",
                 color:
-                  router?.query?.type == "latest"
+                  router?.query?.type == "popular"
                     ? "var(--accent-color)"
                     : "white",
               }}
-              onClick={() => addRoutePath("type", "latest")}
+              onClick={() => addRoutePath("type", "popular")}
             >
-              {t("latest")}
+              Most Helpful Notes
+            </li>
+            <li
+              style={{
+                background:
+                  router?.query?.type == "bookmark"
+                    ? "white"
+                    : "var(--accent-color)",
+                color:
+                  router?.query?.type == "bookmark"
+                    ? "var(--accent-color)"
+                    : "white",
+              }}
+              onClick={() => addRoutePath("type", "bookmark")}
+            >
+              Bookmarked
+            </li>
+            <li
+              style={{
+                background:
+                  router?.query?.type == "leaderboard"
+                    ? "white"
+                    : "var(--accent-color)",
+                color:
+                  router?.query?.type == "leaderboard"
+                    ? "var(--accent-color)"
+                    : "white",
+              }}
+              onClick={() => addRoutePath("type", "leaderboard")}
+            >
+              Leaderboard
             </li>
           </ul>
           <p className={style.results}>
-            {notes?.length} {t("result")}
-            {notes?.length == 1 ? "" : "s"} {t("found")}
+            {router?.query?.type === "leaderboard"
+              ? "Top Contributors"
+              : `${notes?.length} ${t("result")}${
+                  notes?.length == 1 ? "" : "s"
+                } ${t("found")}`}
           </p>
 
           <section className={style.note}>
             {!loading ? (
-              notes?.length ? (
+              router?.query?.type === "leaderboard" ? (
+                <div
+                  className={style.leaderboard}
+                  style={{
+                    padding: "30px",
+                    color: "black",
+                    position: "relative",
+                    overflow: "hidden",
+                    animation: "glow 2s ease-in-out infinite alternate",
+                  }}
+                >
+                  <style jsx>{`
+                    @keyframes bounceIn {
+                      0% {
+                        opacity: 0;
+                        transform: translateY(20px);
+                      }
+                      60% {
+                        opacity: 1;
+                        transform: translateY(-5px);
+                      }
+                      100% {
+                        transform: translateY(0);
+                      }
+                    }
+                    .leaderboard-row {
+                      animation: bounceIn 0.5s ease-out forwards;
+                      animation-delay: calc(0.1s * var(--index));
+                    }
+                    .leaderboard-row:hover {
+                      transform: scale(1.03);
+                      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+                      color: white;
+                      cursor: pointer;
+                      color: black;
+                      transition: all 0.3s ease;
+                    }
+
+                    .progress-bar {
+                      background: #e0e0e0;
+                      border-radius: 10px;
+                      overflow: hidden;
+                      height: 10px;
+                      width: 100%;
+                    }
+                    .progress-fill {
+                      background: linear-gradient(90deg, var(--accent-color));
+                      height: 100%;
+                      transition: width 1s ease-in-out;
+                    }
+                  `}</style>
+                  <table
+                    style={{
+                      width: "100%",
+                      borderCollapse: "separate",
+                      borderSpacing: "0 12px",
+                      fontFamily: "'Poppins', sans-serif",
+                      color: "#fff",
+                    }}
+                  >
+                    <thead>
+                      <tr
+                        style={{
+                          background: "var(--accent-color)",
+                          borderRadius: "12px",
+                        }}
+                      >
+                        <th
+                          style={{
+                            padding: "20px",
+                            textAlign: "left",
+                            fontSize: "1.2rem",
+                            fontWeight: "600",
+                          }}
+                        >
+                          Rank
+                        </th>
+                        <th
+                          style={{
+                            padding: "20px",
+                            textAlign: "left",
+                            fontSize: "1.2rem",
+                            fontWeight: "600",
+                          }}
+                        >
+                          User
+                        </th>
+                        <th
+                          style={{
+                            padding: "20px",
+                            textAlign: "right",
+                            fontSize: "1.2rem",
+                            fontWeight: "600",
+                          }}
+                        >
+                          Points
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {leaderboardData.map((user, index) => (
+                        <tr
+                          key={index}
+                          className="leaderboard-row"
+                          style={{
+                            borderRadius: "10px",
+                            "--index": index,
+                            position: "relative",
+                            color: "black",
+                            animation:
+                              index === 0 ? "pulse 1.5s infinite" : undefined,
+                          }}
+                        >
+                          <td
+                            style={{
+                              padding: "20px",
+                              fontWeight: "bold",
+                              fontSize: "1.1rem",
+                            }}
+                          >
+                            {index < 3 ? (
+                              <>
+                                {index === 0 && (
+                                  <FaTrophy
+                                    color="#ffd700"
+                                    size={24}
+                                    style={{
+                                      verticalAlign: "middle",
+                                      marginRight: "8px",
+                                    }}
+                                  />
+                                )}
+                                {index === 1 && (
+                                  <FaStar
+                                    color="#c0c0c0"
+                                    size={24}
+                                    style={{
+                                      verticalAlign: "middle",
+                                      marginRight: "8px",
+                                    }}
+                                  />
+                                )}
+                                {index === 2 && (
+                                  <FaMedal
+                                    color="#cd7f32"
+                                    size={24}
+                                    style={{
+                                      verticalAlign: "middle",
+                                      marginRight: "8px",
+                                    }}
+                                  />
+                                )}
+                              </>
+                            ) : (
+                              index + 1
+                            )}
+                          </td>
+                          <td style={{ padding: "20px", fontSize: "1.1rem" }}>
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "10px",
+                              }}
+                            >
+                              <img
+                                src={user.avatar}
+                                alt={`${user.username} avatar`}
+                                style={{
+                                  width: "40px",
+                                  height: "40px",
+                                  borderRadius: "50%",
+                                  objectFit: "cover",
+                                }}
+                              />
+                              <span
+                                className="username"
+                                style={{
+                                  cursor: "pointer",
+                                  color: "black",
+                                  fontWeight: "500",
+                                }}
+                              >
+                                {user.username}
+                              </span>
+                            </div>
+                          </td>
+                          <td style={{ padding: "20px", textAlign: "right" }}>
+                            <div
+                              style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "flex-end",
+                                gap: "5px",
+                              }}
+                            >
+                              <span
+                                style={{
+                                  fontWeight: "bold",
+                                  fontSize: "1.1rem",
+                                  color: "black",
+                                }}
+                              >
+                                {user.points} pts
+                              </span>
+                              <div className="progress-bar">
+                                <div
+                                  className="progress-fill"
+                                  style={{
+                                    width: `${(user.points / 1500) * 100}%`,
+                                  }}
+                                ></div>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : notes?.length ? (
                 notes?.map(function (value) {
                   return (
                     <>

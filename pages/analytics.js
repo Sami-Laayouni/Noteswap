@@ -14,6 +14,7 @@ import {
   LineElement,
   RadialLinearScale,
 } from "chart.js/auto";
+import NoteSwapBot from "../components/Overlay/NoteSwapBot";
 import styles from "../styles/DemoAnalytics.module.css";
 
 // ----------------------
@@ -955,29 +956,68 @@ const DemoAnalyticsDashboard = () => {
   const [aiResponse, setAiResponse] = useState("");
   const [interventionsApplied, setInterventionsApplied] = useState(false);
 
+  const [chatHistory, setChatHistory] = useState([]);
+  const [isAIProcessing, setIsAIProcessing] = useState(false);
+
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 500);
     return () => clearTimeout(timer);
   }, []);
 
-  // --------------------- AI Assistant Handler ---------------------
-  const handleAIChat = (e) => {
+  // Handle AI Chat with API Integration
+  const handleAIChat = async (e) => {
     e.preventDefault();
-    // Hardcoded AI response with list of at-risk students and recommended interventions
-    setAiResponse(
-      `AI Insight: The following students are at risk: Sami Laayouni.
+    if (!aiInput.trim()) return;
 
-Risks: 
-- Low community service participation
-- Little community service outside of sports
-Recommended interventions:
-• Increase community service notifications
-• Recommend less sports activities.
+    // Add user message to chat history
+    const userMessage = {
+      role: "user",
+      content: aiInput,
+      timestamp: new Date().toISOString(),
+    };
+    setChatHistory((prev) => [...prev, userMessage]);
+    setIsAIProcessing(true);
 
-Press "Apply Interventions" to update NoteSwap.`
-    );
+    try {
+      // Simulate API call to a hypothetical /api/ai-insights endpoint
+      // You can replace this with your actual API endpoint
+      const response = await fetch("/api/ai-insights", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          query: aiInput,
+          analyticsData: demoAnalyticsData,
+          computedMetrics: computedMetrics,
+        }),
+      });
+
+      const data = await response.json();
+      const aiMessage = {
+        role: "ai",
+        content:
+          data.insights || "Sorry, I couldn't generate insights at this time.",
+        timestamp: new Date().toISOString(),
+        actions: data.actions || [], // Expecting actions like { label: "Apply Intervention", action: () => {...} }
+      };
+
+      setChatHistory((prev) => [...prev, aiMessage]);
+    } catch (error) {
+      const errorMessage = {
+        role: "ai",
+        content: "Error connecting to AI service. Please try again later.",
+        timestamp: new Date().toISOString(),
+      };
+      setChatHistory((prev) => [...prev, errorMessage]);
+    }
+
     setAiInput("");
+    setIsAIProcessing(false);
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 500);
+    return () => clearTimeout(timer);
+  }, []);
 
   const applyInterventions = () => {
     setInterventionsApplied(true);
@@ -1161,40 +1201,6 @@ Press "Apply Interventions" to update NoteSwap.`
             {/* SCREEN 1: NOTES */}
             {activeScreen === "notes" && (
               <section className={styles.notesScreen}>
-                <h2>Summary Metrics & Student Details</h2>
-                <div className={styles.summaryCards}>
-                  <div className={styles.card}>
-                    <h3>Total Community Service</h3>
-                    <p>
-                      {demoAnalyticsData.students.reduce(
-                        (sum, s) => sum + s.communityService.totalMinutes,
-                        0
-                      )}{" "}
-                      minutes
-                    </p>
-                  </div>
-                  <div className={styles.card}>
-                    <h3>Total Tutoring</h3>
-                    <p>
-                      {demoAnalyticsData.students.reduce(
-                        (sum, s) => sum + s.tutoring.totalMinutes,
-                        0
-                      )}{" "}
-                      minutes
-                    </p>
-                  </div>
-                  <div className={styles.card}>
-                    <h3>Opportunities &amp; Funding</h3>
-                    <p>
-                      {demoAnalyticsData.overall.scholarshipAwards} Scholarship
-                      Awards &amp; {demoAnalyticsData.overall.fundingAllocation}
-                    </p>
-                  </div>
-                  <div className={styles.card}>
-                    <h3>Teacher-Student Ratio</h3>
-                    <p>{demoAnalyticsData.overall.teacherStudentRatio}</p>
-                  </div>
-                </div>
                 <div>
                   <h2>Notes Data Charts</h2>
                   <div className={styles.chartGrid}>
@@ -1248,107 +1254,6 @@ Press "Apply Interventions" to update NoteSwap.`
                     </div>
                   </div>
                 </div>
-
-                {demoAnalyticsData.students.map((student) => (
-                  <div key={student.id} className={styles.studentCard}>
-                    <h3>
-                      {student.firstName} {student.lastName}
-                    </h3>
-                    <p>
-                      <strong>Community Service:</strong>{" "}
-                      {student.communityService.totalMinutes} minutes over{" "}
-                      {student.communityService.events} events (Quality:{" "}
-                      {student.communityService.qualityRating}, Participation:{" "}
-                      {student.communityService.participationRate})
-                      <br />
-                      <em>Monthly Trends:</em>{" "}
-                      {student.communityService.monthlyTrends.join(", ")}
-                    </p>
-                    <p>
-                      <strong>Tutoring:</strong> {student.tutoring.totalMinutes}{" "}
-                      minutes in {student.tutoring.sessions} sessions,
-                      Effectiveness: {student.tutoring.effectiveness}%, Quality:{" "}
-                      {student.tutoring.qualityRating} (Trend:{" "}
-                      {student.tutoring.improvementTrend})
-                      <br />
-                      <em>Baseline Comparisons:</em> Previous Minutes:{" "}
-                      {
-                        student.tutoring.baselineComparisons
-                          .previousTotalMinutes
-                      }
-                      , Improvement:{" "}
-                      {
-                        student.tutoring.baselineComparisons
-                          .improvementPercentage
-                      }
-                      %
-                    </p>
-                    <p>
-                      <strong>Opportunities:</strong>{" "}
-                      {student.opportunities.applied} applied /{" "}
-                      {student.opportunities.offered} offered, Conversion:{" "}
-                      {student.opportunities.conversionRate} (Categories:{" "}
-                      {Object.keys(student.opportunities.categories).join(", ")}
-                      )
-                    </p>
-                    <p>
-                      <strong>Internship:</strong>{" "}
-                      {student.intern.active
-                        ? `Active (Rating: ${student.intern.rating})`
-                        : "Not Active"}
-                    </p>
-                    <p>
-                      <strong>Leadership:</strong>{" "}
-                      {student.leadership.positions} positions (Rating:{" "}
-                      {student.leadership.rating})
-                    </p>
-                    <p>
-                      <strong>Extracurricular:</strong> Clubs:{" "}
-                      {student.extracurricular.clubs}, Sports:{" "}
-                      {student.extracurricular.sports}, Arts:{" "}
-                      {student.extracurricular.arts}
-                      <br />
-                      <em>Hours:</em> Clubs:{" "}
-                      {student.extracurricular.hours.clubs}, Sports:{" "}
-                      {student.extracurricular.hours.sports}, Arts:{" "}
-                      {student.extracurricular.hours.arts}
-                      <br />
-                      <em>Involvement Quality:</em>{" "}
-                      {student.extracurricular.involvementQuality}
-                      <br />
-                      <em>Activity Trends:</em>{" "}
-                      {student.extracurricular.activityTrends.join(", ")}
-                    </p>
-                    <p>
-                      <strong>Research:</strong> {student.research.projects}{" "}
-                      projects (Quality: {student.research.qualityRating})
-                    </p>
-                    <p>
-                      <strong>Engagement:</strong> Score:{" "}
-                      {student.engagement.score}, Attendance:{" "}
-                      {student.engagement.attendanceRate}, Satisfaction:{" "}
-                      {student.engagement.satisfaction}
-                    </p>
-                    <p>
-                      <strong>Digital Usage:</strong> Online Attendance:{" "}
-                      {student.digitalUsage.onlineClassAttendance}, Submission
-                      Rate: {student.digitalUsage.assignmentSubmissionRate}
-                    </p>
-                    <p>
-                      <strong>Demographics:</strong> Grade:{" "}
-                      {student.demographics.gradeLevel}, Gender:{" "}
-                      {student.demographics.gender}, Ethnicity:{" "}
-                      {student.demographics.ethnicity}
-                    </p>
-                    <p>
-                      <strong>Notes:</strong> Shared: {student.notes.shared},
-                      Community Service Earned:{" "}
-                      {student.notes.communityServiceEarned}, Cited:{" "}
-                      {student.notes.cited}, Visited: {student.notes.visited},
-                      Comments: {student.notes.comments}
-                    </p>
-                  </div>
-                ))}
               </section>
             )}
 
@@ -1487,78 +1392,6 @@ Press "Apply Interventions" to update NoteSwap.`
                     />
                   </div>
                 </div>
-
-                <section className={styles.overallMetrics}>
-                  <h2>Overall School Metrics</h2>
-                  <p>
-                    <strong>Teacher-Student Ratio:</strong>{" "}
-                    {demoAnalyticsData.overall.teacherStudentRatio}
-                  </p>
-                  <p>
-                    <strong>Scholarship Awards &amp; Funding:</strong>{" "}
-                    {demoAnalyticsData.overall.scholarshipAwards} awards,{" "}
-                    {demoAnalyticsData.overall.fundingAllocation}
-                  </p>
-                  <p>
-                    <strong>Risk Distribution:</strong> High:{" "}
-                    {demoAnalyticsData.overall.riskDistribution.high}, Medium:{" "}
-                    {demoAnalyticsData.overall.riskDistribution.medium}, Low:{" "}
-                    {demoAnalyticsData.overall.riskDistribution.low}
-                  </p>
-                  <h3>Smart Insights</h3>
-                  <ul>
-                    {demoAnalyticsData.overall.smartInsights.map(
-                      (insight, idx) => (
-                        <li key={idx}>{insight}</li>
-                      )
-                    )}
-                  </ul>
-                </section>
-
-                <section className={styles.teacherSection}>
-                  <h2>Teacher &amp; Operational Metrics</h2>
-                  <p>
-                    <strong>Teacher Effectiveness Ratings:</strong>{" "}
-                    {demoAnalyticsData.teacherMetrics.teacherEffectivenessRatings.join(
-                      ", "
-                    )}
-                  </p>
-                  <p>
-                    <strong>Professional Development Sessions:</strong>{" "}
-                    {
-                      demoAnalyticsData.teacherMetrics
-                        .professionalDevelopmentSessions
-                    }
-                  </p>
-                </section>
-
-                {/* AI Assistant Section */}
-                <section className={styles.aiSection}>
-                  <h2>AI Assistant</h2>
-                  <p>Ask our AI for insights on school data:</p>
-                  <form onSubmit={handleAIChat}>
-                    <input
-                      type="text"
-                      value={aiInput}
-                      onChange={(e) => setAiInput(e.target.value)}
-                      placeholder="Enter your question..."
-                    />
-                    <button type="submit">Ask AI</button>
-                  </form>
-                  {aiResponse && (
-                    <div className={styles.aiResponse}>
-                      <p>{aiResponse}</p>
-                      {!interventionsApplied && (
-                        <button onClick={applyInterventions}>
-                          Apply Interventions
-                        </button>
-                      )}
-                      {interventionsApplied && (
-                        <p>Interventions applied: NoteSwap updated.</p>
-                      )}
-                    </div>
-                  )}
-                </section>
               </section>
             )}
 
@@ -2267,11 +2100,11 @@ Press "Apply Interventions" to update NoteSwap.`
 
                 {/* ---------------- Personalized Interventions Section ---------------- */}
                 <div className={styles.interventionSection}>
-                  <h2>Personalized Interventions &amp; NoteSWAP Updates</h2>
-                  <p>
+                  <h2>Personalized Interventions &amp; NoteSwap Updates</h2>
+                  <p style={{ color: "white" }}>
                     Based on the computed metrics above, the following
                     actionable recommendations have been identified. Click
-                    “Update NoteSWAP” for each student to modify their learning
+                    “Update NoteSwap” for each student to modify their learning
                     plan to address areas needing improvement.
                   </p>
                   {computedMetrics.map((student) => (
@@ -2340,9 +2173,7 @@ Press "Apply Interventions" to update NoteSwap.`
                           </li>
                         )}
                       </ul>
-                      <button onClick={() => modifyNoteSwapForStudent(student)}>
-                        Update NoteSWAP for {student.name}
-                      </button>
+                      <button>Update NoteSwap for {student.name}</button>
                     </div>
                   ))}
                   <p>
@@ -2359,6 +2190,7 @@ Press "Apply Interventions" to update NoteSwap.`
           </>
         )}
       </div>
+      <NoteSwapBot />
     </>
   );
 };

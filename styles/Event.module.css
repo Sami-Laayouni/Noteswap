@@ -1,111 +1,484 @@
-.container {
-  padding-left: auto;
-  padding-right: auto;
+/* Event.module.css */
+/* Ensure var(--accent-color) and font variables like var(--manrope-font) are defined globally or at the top */
+.main {
+  padding-left: 70px;
+}
+.banner {
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    var(--accent-color);
+  z-index: 33;
+}
+/* New Banner Styles */
+.topBanner {
+  z-index: 1;
+  padding: 90px 4vw;
+  color: white;
+  margin-bottom: 25px;
+  border-radius: 0 0 16px 16px;
+}
+
+.bannerNav {
+  margin-bottom: 8px;
+}
+
+.bannerTag {
+  background-color: rgba(255, 255, 255, 0.15);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  margin-right: 8px;
+  text-transform: capitalize;
+  font-family: var(--manrope-font);
+  display: inline-block;
+  margin-bottom: 5px;
+}
+
+.bannerTitle {
+  font-size: 32px;
+  font-family: var(--manrope-bold-font); /* Make sure this font is loaded */
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+
+.bannerMeta {
+  font-size: 13px;
+  margin-bottom: 18px;
+  opacity: 0.9;
+  font-family: var(--manrope-font);
+}
+.bannerMetaDivider {
+  margin: 0 8px;
+}
+
+.bannerActions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.bannerButtonPrimary,
+.bannerButtonSecondary {
+  padding: 9px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  border: none;
+  font-weight: 500; /* Adjusted from 500 */
+  font-family: var(--manrope-font);
+  transition: background-color 0.2s ease, color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.bannerButtonPrimary {
+  background-color: #fff;
+  color: var(--accent-color);
+}
+.bannerButtonPrimary:hover:not(:disabled) {
+  background-color: #f0f0f0;
+}
+.bannerButtonPrimary:disabled {
+  background-color: #ccc;
+  color: #777;
+  cursor: not-allowed;
+}
+
+.bannerButtonSecondary {
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  color: white;
+}
+.bannerButtonSecondary:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.8);
+}
+
+/* Main Content Layout */
+.mainContentContainer {
+  display: flex;
+  gap: 25px;
+  padding: 0 4vw;
+  max-width: 100%;
   margin-left: auto;
   margin-right: auto;
-  width: 100%;
-  max-width: 75vw;
-  display: grid;
-  height: 100px;
-  grid-template-columns: 50% 50%;
-  height: 400px;
 }
-.button {
-  padding: 10px 35px;
-  border: 1px solid #ccc;
-  border-radius: 20px;
-  margin-top: 15px;
+
+.leftColumn {
+  flex: 0 0 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.organizedBy,
+.countdownSection {
+  background-color: white;
+  padding: 18px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.03); /* Softer shadow */
+}
+.organizedBy h2,
+.countdownSection h2 {
+  font-size: 17px;
+  margin-bottom: 12px;
+  font-family: var(--manrope-bold-font);
+  color: #333;
+}
+.organizedBy a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+}
+.organizerImage {
+  /* Class for the organizer's image */
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.organizerInfo h3 {
+  font-size: 15px;
+  font-family: var(--manrope-font);
+  font-weight: 600;
+  margin: 0;
+  color: #333;
+}
+
+.centerColumn {
+  flex: 1;
+  min-width: 0;
+  background-color: white;
+  padding: 18px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid #e5e7eb; /* Lighter border */
+  margin-bottom: 18px;
+}
+
+.tabButton {
+  padding: 10px 15px; /* Adjusted padding */
+  border: none;
   background-color: transparent;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px; /* Slightly smaller */
+  color: #6b7280; /* Grey for inactive */
+  position: relative;
+  font-family: var(--manrope-font);
+  font-weight: 500;
+  margin-bottom: -1px; /* Align with border */
+}
+
+.tabButton.activeTab {
+  color: var(--accent-color);
+  font-weight: 600; /* Bolder for active */
+  border-bottom: 2px solid var(--accent-color);
+}
+.tabButton:hover:not(.activeTab) {
+  color: #374151; /* Darker grey on hover */
+}
+
+.overviewSection h2 {
+  font-size: 20px;
+  font-family: var(--manrope-bold-font);
+  margin-top: 15px;
+  margin-bottom: 10px;
+  color: #111827; /* Darker heading */
+}
+.overviewSection p {
+  font-family: var(--manrope-font);
+  line-height: 1.65;
+  color: #374151; /* Main text color */
+  margin-bottom: 15px;
+}
+
+.eventHighlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 15px 0;
+}
+.infoBox {
+  padding: 6px 12px;
+  color: white;
+  font-family: var(--manrope-font);
+  border-radius: 6px;
+  width: fit-content;
+  display: inline-flex; /* Use flex for icon alignment */
+  align-items: center;
+  font-size: 13px;
+}
+.ticketInfoBox {
+  background: var(--accent-color);
+}
+.volunteerInfoBox {
+  background: rgb(23, 23, 69);
+}
+.eventLogistics p {
+  font-size: 14px;
+  color: #4b5563;
+  font-family: var(--manrope-font);
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Gap between icon and text */
+  margin-bottom: 8px;
+}
+.eventLogistics svg {
+  flex-shrink: 0; /* Prevent icon from shrinking */
+}
+
+.actionsRow {
+  margin-top: 25px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.actionButton {
+  /* New class for Share, Calendar, Directions for consistency */
+  padding: 9px 18px;
+  border: 1px solid #d1d5db; /* Light grey border */
+  color: #374151; /* Dark grey text */
+  background-color: white;
+  border-radius: 6px;
+  font-family: var(--manrope-font);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none; /* For Link components */
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px; /* Adjust space between text and arrow */
-  transition: all 0.3s ease;
-  max-width: 280px;
 }
-.button:hover {
-  padding: 10px 45px;
+.actionButton:hover {
+  border-color: #9ca3af; /* Darker border on hover */
+  background-color: #f9fafb; /* Slight background change */
+}
+
+.rightColumn {
+  flex: 0 0 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.rightColumn h2 {
+  font-size: 17px;
+  margin-bottom: 0px; /* Adjusted from 15px as cards have their own spacing */
+  font-family: var(--manrope-bold-font);
+  color: #333;
+  /* padding-left: 5px; */
+}
+.suggestionCard {
+  background-color: white;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.03);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.suggestionCard img {
+  width: 70px; /* Slightly smaller */
+  height: 50px;
+  object-fit: cover;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+.suggestionCard div h4 {
+  /* Targeting the div inside suggestionCard for text */
+  font-size: 13px;
+  margin: 0 0 4px 0;
+  font-family: var(--manrope-font);
+  font-weight: 600;
+  color: #111827;
+  line-height: 1.3;
+}
+.suggestionCard div p {
+  font-size: 11px;
+  color: #6b7280;
+  margin: 0;
+  font-family: var(--manrope-font);
+  line-height: 1.4;
+}
+
+/* Original .button, .basic, .sideButton styles - Keep if used by original buttons retained in .additionalActions */
+/* Original .button style */
+.button {
+  padding: 9px 25px; /* Slightly adjusted */
+  border: 1px solid #ccc;
+  border-radius: 16px; /* Adjusted to be less round if desired */
+  margin-top: 10px; /* Adjusted */
+  background-color: transparent;
+  color: #333;
+  cursor: pointer;
+  font-size: 14px; /* Adjusted */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* Adjusted */
+  transition: all 0.3s ease;
+  max-width: 260px; /* Adjusted */
+  font-family: var(--manrope-font);
+  font-weight: 500;
+}
+.button:hover:not(:disabled) {
+  padding: 9px 30px; /* Adjusted */
   background: var(--accent-color);
   color: white;
   border: 1px solid var(--accent-color);
 }
-
-.icon {
+.button .icon {
   transition: transform 0.3s ease;
 }
-
 .button:hover .icon {
-  transform: translateX(5px); /* Move the arrow to the right on hover */
+  transform: translateX(4px); /* Adjusted */
 }
+.button:disabled {
+  background-color: #e5e7eb;
+  border-color: #d1d5db;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+.button:disabled .icon {
+  transform: none;
+}
+
 .basic {
-  margin-left: 20px;
+  /* Original .basic button style */
+  margin-left: 15px; /* Adjusted */
   background: transparent;
   border: none;
   outline: none;
+  color: var(--accent-color);
   cursor: pointer;
   text-decoration: underline;
-  margin-top: 20px;
+  margin-top: 12px; /* Adjusted */
+  font-family: var(--manrope-font);
+  font-size: 14px;
 }
-.sideButton {
-  padding: 10px 35px;
-  border: 0px;
-  color: white;
-  border-radius: 20px;
-  margin-top: 15px;
-  background-color: var(--accent-color);
-  cursor: pointer;
-  font-size: 16px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px; /* Adjust space between text and arrow */
-  transition: all 0.3s ease;
-  max-width: 280px;
-  margin-right: 20px;
-  margin-bottom: 20px;
-}
-.sideButton:hover {
-  padding: 10px 50px;
-}
-.image {
-  width: 100%;
-  object-fit: cover;
-  height: 600px;
-  margin-top: 50px;
-  border-radius: 20px;
-}
-.hidden {
-  display: block;
-}
-.hiddenI {
-  display: inline-block;
-}
-.hiddenO {
-  display: none;
-}
-.small {
-  width: 50vw;
+.basic:hover {
+  text-decoration: none;
 }
 
-@media all and (max-width: 808px) {
-  .container {
-    grid-template-columns: 100%;
+.additionalActions {
+  /* Container for old buttons if you keep them */
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Removing old layout-specific classes as their purpose is achieved with new structure */
+.container,
+.image,
+.hidden,
+.hiddenI,
+.hiddenO,
+.small {
+  display: none; /* Effectively remove them */
+}
+
+/* Responsive Design */
+@media all and (max-width: 1024px) {
+  /* Tablet */
+  .mainContentContainer {
+    flex-direction: column;
+    gap: 20px; /* Spacing when stacked */
   }
-  .small {
-    width: 80vw;
+  .leftColumn,
+  .rightColumn {
+    flex: 1 1 auto;
+    width: 100%;
+    max-width: none;
   }
-  .image {
-    height: 200px;
+  .rightColumn {
+    order: 3;
   }
-  .hidden {
+  .centerColumn {
+    order: 1;
+  } /* Main content first */
+  .leftColumn {
+    order: 2;
+  }
+
+  .bannerTitle {
+    font-size: 28px;
+  }
+}
+
+@media all and (max-width: 768px) {
+  /* Smaller tablets / Large phones */
+  .bannerActions {
+    flex-direction: column;
+    align-items: stretch; /* Make buttons full width of their container */
+  }
+  .bannerButtonPrimary,
+  .bannerButtonSecondary {
+    width: auto; /* Let them size to content or stretch if parent is flex-start */
+    text-align: center;
+  }
+  .bannerMeta span {
+    display: block;
+    margin-bottom: 4px;
+  }
+  .bannerMetaDivider {
     display: none;
   }
-  .hiddenI {
-    display: none;
+
+  .tabs {
+    overflow-x: auto; /* Allow tabs to scroll horizontally if they don't fit */
+    white-space: nowrap;
   }
-  .hiddenO {
-    display: inline-block;
+  .tabButton {
+    font-size: 13px;
+    padding: 8px 10px;
+  }
+
+  .actionsRow {
+    flex-direction: column; /* Stack action buttons */
+    align-items: stretch;
+  }
+  .actionButton {
+    width: 100%;
+  }
+}
+
+@media all and (max-width: 480px) {
+  /* Mobile */
+  .topBanner {
+    padding: 20px 4vw;
+  }
+  .bannerTitle {
+    font-size: 24px;
+  }
+
+  .leftColumn,
+  .centerColumn,
+  .rightColumn {
+    padding: 15px;
+  }
+  .organizedBy a {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .organizerImage {
+    margin-bottom: 8px;
+  }
+
+  .suggestionCard {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .suggestionCard img {
+    width: 100%;
+    height: auto;
+    max-height: 120px;
+    margin-bottom: 8px;
   }
 }
